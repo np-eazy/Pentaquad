@@ -115,6 +115,7 @@ const CoreState = class {
                 }
             }
             this.currPiece.activeMove(action.props.angle)
+
         } else if (action.type == ActionType.PLACE) {
             this.placeBlock = true
         }

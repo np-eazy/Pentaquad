@@ -1,5 +1,5 @@
 import Cell from "./Cell";
-import { randint, getPID, Direction, DXN } from "./Utils";
+import { randint, getPID, Direction, DXN, NULL_DXN } from "./Utils";
 import { Color } from "../graphics/Colors";
 
 // A single piece in the game, which can move in different directions and detect collisions
@@ -39,23 +39,6 @@ class Piece {
                 }
             }
         }
-
-        // Create 4 different sets to check hitboxes in different gravity
-        this.collisionSets = [];
-        dxn = new Direction(0);
-        var [x, y] = [0, 0]
-        var collisionSet;
-        for (var a = 0; a < 4; a++) {
-            collisionSet = new Map();
-            this.cells.forEach((val) => {
-                [x, y] = [val[0] + dxn.dx, val[1] + dxn.dy]
-                pid = getPID(x, y, this.pidSize);
-                collisionSet.set(pid, [x, y]);
-            })
-            this.collisionSets.push(collisionSet)
-            dxn.turnLeft(1);
-        }
-
         // Set this piece's color based on its initial direction; there will be more
         // room to customize this.
         if (angle % 4 == DXN.RIGHT) {
@@ -77,15 +60,22 @@ class Piece {
     }
 
     // Return whether or not the block has a collision with this angle.
+    // Null angle option is for rotation collision check, only to make sure that the piece
+    // doesn't rotate into any overlaps with filled cells.
     checkCollision(angle, board, boundarySets) {
         var [xSize, ySize] = [board.length, board[0].length];
-        var collisionSet = this.collisionSets[angle];
+
+        var collisionDxn = angle == null ? { dx: 0, dy: 0 } : new Direction(angle)
+
         var boundarySet = boundarySets[angle];
         var collision = false;
 
         // Check for a boundary collision
-        collisionSet.forEach((val) => {
-            var globalPid = getPID(val[0] + this.cx, val[1] + this.cy, this.pidSize)
+        this.cells.forEach((val) => {
+            var globalPid = getPID(
+                val[0] + this.cx + collisionDxn.dx, 
+                val[1] + this.cy + collisionDxn.dy, 
+                this.pidSize)
             if (!collision && boundarySet.has(globalPid)) {
                 collision = true;
             }
@@ -100,8 +90,11 @@ class Piece {
                 if (board[y][x].type > 0) {
                     // x, y generate global PIDs
                     // Subtract cx and cy from PIDs to localize
-                    var globalPid = getPID(x - this.cx, y - this.cy, this.pidSize)
-                    if (!collision && collisionSet.has(globalPid)) {
+                    var globalPid = getPID(
+                        x - this.cx - collisionDxn.dx, 
+                        y - this.cy - collisionDxn.dy, 
+                        this.pidSize)
+                    if (!collision && this.cells.has(globalPid)) {
                         return true;
                     }
                 }
@@ -121,6 +114,12 @@ class Piece {
     idleMove() {
         this.cx += this.dxn.dx;
         this.cy += this.dxn.dy;
+    }
+
+    rotate(angle) {
+        if (angle  -1) {
+
+        } 
     }
 }
 
