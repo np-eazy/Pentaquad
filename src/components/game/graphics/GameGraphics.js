@@ -39,19 +39,21 @@ const GameGraphics = (props) => {
         for (var t of props.gameState.coreState.targetBlocks) {
             outlineRect(canvas, t.x0 * xCellSize, t.y0 * yCellSize, (t.x1 - t.x0) * xCellSize, (t.y1 - t.y0) * yCellSize, "#000000")
         }
-
         [x, y] = props.gameState.controller.gridCursor(props.windowSize, board.length)
         outlineRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, "#000000")
+    }
+
+    function renderNull(canvas) {
 
     }
 
     // Canvas and context wiring
-    var canv = document.getElementById("gameGraphics");
-    var ctx = canv != null ? canv.getContext('2d') : null;
+    var canv = document.getElementById("gameGraphics")
+    var ctx = canv != null ? canv.getContext('2d') : null
     if (ctx != null && props.gameState != undefined) {
-        ctx.clearRect(0, 0, props.windowSize, props.windowSize);
-        render(ctx, props.gameState.coreState.board);
+        ctx.clearRect(0, 0, props.windowSize, props.windowSize)
+        props.gameState ? render(ctx, props.gameState.coreState.board) : renderNull(ctx)
     }
-};
+}
 
 export default GameGraphics;
