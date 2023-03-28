@@ -34,7 +34,13 @@ class GameController {
         } else if (key == "e") { // E
             action = new GameAction(ActionType.ROTATE, {angle: -1})
 
+        } else if (key == "f") { // E
+            action = new GameAction(ActionType.FLIP, {})
+
         } else if (key == " ") { // SPACE
+            action = new GameAction(ActionType.DROP, {})
+        
+        } else if (key == "r") { // SPACE
             action = new GameAction(ActionType.PLACE, {})
         }
         if (action != null) {

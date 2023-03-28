@@ -72,12 +72,14 @@ const CoreState = class {
     executeAction(action) {
         // TODO: Revise the action logic to map types/props to separate functions, will look cleaner
         if (action.type == ActionType.MOVE) {
-            if (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
-                while (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
-                    this.currPiece.activeMove((action.props.angle + 2) % 4)
+            if (action.props.angle % 2 != this.currPiece.dxn.angle % 2) {
+                if (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
+                    while (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
+                        this.currPiece.activeMove((action.props.angle + 2) % 4)
+                    }
                 }
+                this.currPiece.activeMove(action.props.angle)
             }
-            this.currPiece.activeMove(action.props.angle)
 
         } else if (action.type == ActionType.ROTATE) {
             this.currPiece.rotate(action.props.angle)
@@ -97,11 +99,21 @@ const CoreState = class {
                 iterationsLeft -= 1
             }
 
-        } else if (action.type == ActionType.PLACE) {
+        } else if (action.type == ActionType.FLIP) {
+            console.log("flip")
+            this.currPiece.flip()
+            if (this.currPiece.checkCollision(null, this.board, this.boundarySets)) {
+                this.currPiece.flip()
+            }
+
+        } else if (action.type == ActionType.DROP) {
             while (!this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
                 this.currPiece.activeMove(this.currPiece.dxn.angle)
             }
             this.collisionTimer = COLLISION_TIME_LIMIT
+
+        } else if (action.type == ActionType.PLACE) {
+            this.placeBlock = true
         }
         return this;
     }

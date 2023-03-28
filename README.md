@@ -9,13 +9,12 @@ Controls
 - A: move piece left
 - S: move piece down
 - D: move piece right
-- Space: force-place current piece by dropping it all the way down
+- Space: drop the current piece towards its boundary
 - Q: rotate piece left 
 - E: rotate piece right
-- F: mirror the piece (TODO: implement mirroring)
-- E: hold the current piece, if a piece is already held then swap that one in. A block must be placed before this can happen again
-- F: force-place current piece where it is
-- Q: activate an ability and/or spike the next blocksd
+- F: flip the piece 
+- R: place the piece in mid-air
+- C: hold the current piece, if a piece is already held then swap that one in. A block must be placed before this can happen again (TODO)
 
 Initial Release Game Rules 
 Mode 0: "base" game (TODO: Implement better GameController and CoreState, and set k, h, f, t, etc. as CONSTANT_VALUES)
