@@ -92,17 +92,16 @@ const CoreState = class {
             var iterationsLeft = this.gravity.angle % 2 == 0 ?
                 Math.abs(this.currPiece.cy - action.props.y) :
                 Math.abs(this.currPiece.cx - action.props.x)
-            while (iterationsLeft > 0 && !this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
+            while (iterationsLeft > 0 && !this.currPiece.checkCollision(moveAngle, this.board, this.boundarySets)) {
                 this.currPiece.activeMove(moveAngle)
                 iterationsLeft -= 1
             }
-            while (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
-                this.currPiece.activeMove((moveAngle + 2) % 4)
-            }
-
 
         } else if (action.type == ActionType.PLACE) {
-            this.placeBlock = true
+            while (!this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
+                this.currPiece.activeMove(this.currPiece.dxn.angle)
+            }
+            this.collisionTimer = COLLISION_TIME_LIMIT
         }
         return this;
     }
