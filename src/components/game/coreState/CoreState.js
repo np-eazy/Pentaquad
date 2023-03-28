@@ -66,27 +66,29 @@ const CoreState = class {
 
     // TODO: Actually design balanced game mechanisms. The current code demonstrates the
     // core rules of the game but is not very playable at all, nor does it have good objectives.
-    update() {
-        if (this.placeBlock) {
-            // Place the current piece, create a new one, and check for new filled lines
-            this.placeBlock = false;
-            this.placeCurrentPiece();
-            this.gravity.turnLeft(1);
-            this.createNewPiece();
-            this.checkFilledLines(this.boardSize / 4);
+    update(move) {
+        if (move) {
+            if (this.placeBlock) {
+                // Place the current piece, create a new one, and check for new filled lines
+                this.placeBlock = false;
+                this.placeCurrentPiece();
+                this.gravity.turnLeft(1);
+                this.createNewPiece();
+                this.checkFilledLines(this.boardSize / 4);
+            } else {
+                // Move the current piece, first in its direction of gravity and second according to the player.
+                if (this.currPiece) {
+                    this.currPiece.idleMove()
+                }
+            }
+        }
+        if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
+            this.placeBlock = true
         } else {
-            // Move the current piece, first in its direction of gravity and second according to the player.
-            if (this.currPiece) {
-                this.currPiece.idleMove()
-                if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
-                    this.placeBlock = true
-                } else {
-                    if (this.controller && !this.placeBlock) {
-                        var action = this.controller.consumeAction()
-                        if (action) {
-                            this.executeAction(action)
-                        }
-                    }
+            if (this.currPiece && this.controller && !this.placeBlock) {
+                var action = this.controller.consumeAction()
+                if (action) {
+                    this.executeAction(action)
                 }
             }
         }
@@ -98,12 +100,10 @@ const CoreState = class {
     // TODO: Do collision checks and backsteps in a way that a user can keep trying to push a piece into a wall but it will keep "sliding down"
     executeAction(action) {
         if (action.type == ActionType.MOVE) {
-            if (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
-                this.placeBlock = true
-            } else {
+            if (!this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
                 this.currPiece.activeMove(action.props.angle)
                 if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets) ) {
-                    this.placeBlock = true
+                    this.currPiece.activeMove((action.props.angle + 2) % 4)
                 }
             }
         } else if (action.type == ActionType.PLACE) {
