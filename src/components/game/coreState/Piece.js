@@ -38,7 +38,6 @@ class Piece {
         center_x, 
         center_y, 
         angle, 
-        pieceSize, 
         pidSize
     }) {
         [this.cx, this.cy, this.dxn] = [center_x, center_y, new Direction(angle)];
@@ -67,11 +66,6 @@ class Piece {
         } else if (angle % 4 == DXN.DOWN) {
             this.color = new Color({ red: 0, green: 200, blue: 235})
         }  
-    }
-
-    // Pass in a list of [x, y] pairs to add to the Cells map.
-    setCells() {
-
     }
 
     // The function to fill the coreState with cells corresponding to this Piece; this will

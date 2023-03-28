@@ -47,6 +47,12 @@ class GameController {
     handleMouseMove(event) {
         this.cursorX = event.clientX - CLIENT_PADDING_X
         this.cursorY = event.clientY - CLIENT_PADDING_Y
+        
+    }
+
+    handleMouseDown(event, windowSize, boardSize) {
+        var [x_, y_] = this.gridCursor(windowSize, boardSize)
+        this.actionQueue.push(new GameAction(ActionType.MOVE_TO, {x: x_, y: y_}))
     }
 
     // Map the global location of the mouse with the in-game grid index of the cursor.

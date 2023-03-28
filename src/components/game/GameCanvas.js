@@ -31,6 +31,9 @@ const GameCanvas = (props) => {
     const handleMouseMove = (event) => {
         gameController.handleMouseMove(event);
     }
+    const handleMouseDown = (event) => {
+        gameController.handleMouseDown(event, WINDOW_SIZE, BOARD_SIZE)
+    }
     // Disable spacebar scrolling down
     window.onkeydown = function(e) {
         return e.keyCode !== 32 && e.key !== " ";
@@ -48,7 +51,7 @@ const GameCanvas = (props) => {
       }, [canvasTimer]);
 
     return (
-        <div id="gameCanvas" tabIndex={0} onKeyDown={handleKeyDown} onMouseMove={handleMouseMove}>
+        <div id="gameCanvas" tabIndex={0} onKeyDown={handleKeyDown} onMouseMove={handleMouseMove} onMouseDown={handleMouseDown}>
             <canvas id="gameGraphics" width={WINDOW_SIZE} height={WINDOW_SIZE}>
                 <GameGraphics gameState={gameState} windowSize={WINDOW_SIZE} />
             </canvas>

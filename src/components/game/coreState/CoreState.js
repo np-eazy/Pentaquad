@@ -69,14 +69,42 @@ const CoreState = class {
         }
     }
 
-    // Set this piece's controller
-    setController(controller) {
-        this.controller = controller
-    }
+    executeAction(action) {
+        // TODO: Revise the action logic to map types/props to separate functions, will look cleaner
+        if (action.type == ActionType.MOVE) {
+            if (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
+                while (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
+                    this.currPiece.activeMove((action.props.angle + 2) % 4)
+                }
+            }
+            this.currPiece.activeMove(action.props.angle)
 
-    // Generate a random index within SPAWN_OFFSET bounds; negative SPAWN_OFFSET guarantees spawnPosition is within the boundaries
-    spawnPosition() {
-        return randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET)
+        } else if (action.type == ActionType.ROTATE) {
+            this.currPiece.rotate(action.props.angle)
+            if (this.currPiece.checkCollision(null, this.board, this.boundarySets)) {
+                this.currPiece.rotate(-action.props.angle)
+            }
+
+        } else if (action.type == ActionType.MOVE_TO) {
+            var moveAngle = this.gravity.angle % 2 == 0 ?
+                (this.currPiece.cy < action.props.y ? 3 : 1) :
+                (this.currPiece.cx < action.props.x ? 0 : 2)
+            var iterationsLeft = this.gravity.angle % 2 == 0 ?
+                Math.abs(this.currPiece.cy - action.props.y) :
+                Math.abs(this.currPiece.cx - action.props.x)
+            while (iterationsLeft > 0 && !this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
+                this.currPiece.activeMove(moveAngle)
+                iterationsLeft -= 1
+            }
+            while (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
+                this.currPiece.activeMove((moveAngle + 2) % 4)
+            }
+
+
+        } else if (action.type == ActionType.PLACE) {
+            this.placeBlock = true
+        }
+        return this;
     }
 
     // core rules of the game but is not very playable at all, nor does it have good objectives.
@@ -141,25 +169,14 @@ const CoreState = class {
         return this; // CoreState.update() returns itself 
     }
 
-    executeAction(action) {
-        if (action.type == ActionType.MOVE) {
-            if (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
-                while (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
-                    this.currPiece.activeMove((action.props.angle + 2) % 4)
-                }
-            }
-            this.currPiece.activeMove(action.props.angle)
+    // Set this piece's controller
+    setController(controller) {
+        this.controller = controller
+    }
 
-        } else if (action.type == ActionType.ROTATE) {
-            this.currPiece.rotate(action.props.angle)
-            if (this.currPiece.checkCollision(null, this.board, this.boundarySets)) {
-                this.currPiece.rotate(-action.props.angle)
-            }
-
-        } else if (action.type == ActionType.PLACE) {
-            this.placeBlock = true
-        }
-        return this;
+    // Generate a random index within SPAWN_OFFSET bounds; negative SPAWN_OFFSET guarantees spawnPosition is within the boundaries
+    spawnPosition() {
+        return randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET)
     }
 
     // Change the CoreState's grid values based on where the current piece is.
