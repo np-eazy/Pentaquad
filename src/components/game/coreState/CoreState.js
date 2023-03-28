@@ -64,8 +64,7 @@ const CoreState = class {
         this.controller = controller
     }
 
-    // TODO: Actually design balanced game mechanisms. The current code demonstrates the
-    // core rules of the game but is not very playable at all, nor does it have good objectives.
+\    // core rules of the game but is not very playable at all, nor does it have good objectives.
     update(move) {
         if (move) {
             if (this.placeBlock) {
@@ -96,13 +95,12 @@ const CoreState = class {
         return this; // CoreState.update() returns itself 
     }
 
-    // TODO: Call this.currPiece.activeMove and check for the collision in both idle and active directions
-    // TODO: Do collision checks and backsteps in a way that a user can keep trying to push a piece into a wall but it will keep "sliding down"
     executeAction(action) {
         if (action.type == ActionType.MOVE) {
             if (!this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
                 this.currPiece.activeMove(action.props.angle)
                 if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets) ) {
+                    // Revert the move if it results in a collision in the active angle
                     this.currPiece.activeMove((action.props.angle + 2) % 4)
                 }
             }
