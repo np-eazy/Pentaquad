@@ -25,7 +25,7 @@ const GameCanvas = (props) => {
     }));
     // The canvas is the root listener for keyDown events, which are delegated to the gameController to map to GameActions.
     const handleKeyDown = (event) => {
-        gameController.handleKeyDown(event.key);
+        gameController.handleKeyDown(event);
     }
     // MouseMove is also delegated to GameController gthough handled differently.
     const handleMouseMove = (event) => {

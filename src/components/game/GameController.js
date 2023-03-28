@@ -17,30 +17,26 @@ class GameController {
     
     // We should have two types of controls: holdable keys which follow the rule above, and single-press keys which already work as
     // intended with keyDown. Holdable keys include WASD movement, and single-press keys include SPACE and QE for placing/rotation.
-    handleKeyDown(key) {
+    handleKeyDown(event) {
         var action = null;
-        if (key == "w") { // W
+        var keycode = event.keyCode
+        if (keycode == 87) { // W
             action = new GameAction(ActionType.MOVE, {angle: 1})
-        } else if (key == "a") { // A
+        } else if (keycode == 65) { // A
             action = new GameAction(ActionType.MOVE, {angle: 2})
-        } else if (key == "s") { // S
+        } else if (keycode == 83) { // S
             action = new GameAction(ActionType.MOVE, {angle: 3})
-        } else if (key == "d") { // D
+        } else if (keycode == 68) { // D
             action = new GameAction(ActionType.MOVE, {angle: 0})
-        
-        // TODO: Change handleKeypress to take in the whole event so keyCode can be invoked for arrow keys.
-        } else if (key == "q") { // Q
+        } else if (keycode == 81) { // Q
             action = new GameAction(ActionType.ROTATE, {angle: 1})
-        } else if (key == "e") { // E
+        } else if (keycode == 69) { // E
             action = new GameAction(ActionType.ROTATE, {angle: -1})
-
-        } else if (key == "f") { // E
+        } else if (keycode == 70) { // F
             action = new GameAction(ActionType.FLIP, {})
-
-        } else if (key == " ") { // SPACE
+        } else if (keycode == 32) { // SPACE
             action = new GameAction(ActionType.DROP, {})
-        
-        } else if (key == "r") { // SPACE
+        } else if (keycode == 82) { // R
             action = new GameAction(ActionType.PLACE, {})
         }
         if (action != null) {
@@ -53,7 +49,6 @@ class GameController {
     handleMouseMove(event) {
         this.cursorX = event.clientX - CLIENT_PADDING_X
         this.cursorY = event.clientY - CLIENT_PADDING_Y
-        
     }
 
     handleMouseDown(event, windowSize, boardSize) {
