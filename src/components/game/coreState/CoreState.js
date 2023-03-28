@@ -116,6 +116,12 @@ const CoreState = class {
             }
             this.currPiece.activeMove(action.props.angle)
 
+        } else if (action.type == ActionType.ROTATE) {
+            this.currPiece.rotate(action.props.angle)
+            if (this.currPiece.checkCollision(null, this.board, this.boundarySets)) {
+                this.currPiece.rotate(-action.props.angle)
+            }
+
         } else if (action.type == ActionType.PLACE) {
             this.placeBlock = true
         }
