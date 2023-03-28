@@ -7,7 +7,7 @@
 // - controller: the GameController of the game
 
 // Game props:
-const DEFAULT_TICKS_TO_MOVE = 10 // Wait this many ticks between each idleMove() call on coreState
+const DEFAULT_TICKS_TO_MOVE = 15 // Wait this many ticks between each idleMove() call on coreState
 
 const GameState = class {
     constructor (props) {
