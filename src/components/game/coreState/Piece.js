@@ -66,8 +66,7 @@ class Piece {
         var [xSize, ySize] = [board.length, board[0].length];
 
         var collisionDxn = angle == null ? { dx: 0, dy: 0 } : new Direction(angle)
-
-        var boundarySet = boundarySets[angle];
+        var boundarySet = angle == null ? new Set() : boundarySets[angle];
         var collision = false;
 
         // Check for a boundary collision
@@ -117,9 +116,23 @@ class Piece {
     }
 
     rotate(angle) {
-        if (angle  -1) {
+        if (angle < 0) {
+            this.signedRotate(angle, -1)
+        } else {
+            this.signedRotate(angle, 1)
+        }
+    }
 
-        } 
+    signedRotate(turns, sign) {
+        for (var t = 0; t < (sign * turns) % 4; t++) {
+            var newCells = new Map()
+            this.cells.forEach((val) => {
+                var [newX, newY] = [val[1] * sign, -val[0] * sign]
+                var pid = getPID(newX, newY, this.pidSize)
+                newCells.set(pid, [newX, newY])
+            })
+            this.cells = newCells
+        }
     }
 }
 
