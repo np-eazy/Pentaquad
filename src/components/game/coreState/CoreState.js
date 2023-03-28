@@ -64,7 +64,7 @@ const CoreState = class {
         this.controller = controller
     }
 
-\    // core rules of the game but is not very playable at all, nor does it have good objectives.
+    // core rules of the game but is not very playable at all, nor does it have good objectives.
     update(move) {
         if (move) {
             if (this.placeBlock) {

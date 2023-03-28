@@ -16,12 +16,28 @@ const GameState = class {
         this.coreState.controller = this.controller
         this.ticksToMove = props.ticksToMove ? props.ticksToMove : DEFAULT_TICKS_TO_MOVE
         this.ticks = 0
+        this.isRunning = true
+        this.delayTimer = 0
     }
 
     update() {
-        this.coreState.update(this.ticks % this.ticksToMove == 0)
-        this.ticks += 1
+        if (this.isRunning && this.delayTimer <= 0) {
+            this.coreState.update(this.ticks % this.ticksToMove == 0)
+            this.ticks += 1
+        } else {
+            this.delayTimer -= 1
+        }
         return this
+    }
+
+    // Delay any actions for the next t ticks to leave room for graphic transitions.
+    setDelayTimer(t) {
+        this.delayTimer = t
+    }
+
+    // Pause/resume the game
+    toggleRunningFlag() {
+        this.isRunning = !this.isRunning
     }
 
     executeAction(action) {
