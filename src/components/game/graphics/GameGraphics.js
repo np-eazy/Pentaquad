@@ -39,6 +39,10 @@ const GameGraphics = (props) => {
         for (var t of props.gameState.coreState.targetBlocks) {
             outlineRect(canvas, t.x0 * xCellSize, t.y0 * yCellSize, (t.x1 - t.x0) * xCellSize, (t.y1 - t.y0) * yCellSize, "#000000")
         }
+
+        [x, y] = props.gameState.controller.gridCursor(props.windowSize, board.length)
+        outlineRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, "#000000")
+
     }
 
     // Canvas and context wiring

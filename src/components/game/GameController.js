@@ -1,8 +1,14 @@
 import { GameAction, ActionType } from "./coreState/GameAction"
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
+
+const CLIENT_PADDING_X = 160;
+const CLIENT_PADDING_Y = 0;
+
 class GameController {
     constructor() {
-        this.actionQueue = [];
+        this.actionQueue = []
+        this.cursorX = 0
+        this.cursorY = 0
     }
 
     // TODO: Right now the default keyDown event doesn't immediately repeat keys held down. Change the implementation for certain keys
@@ -13,28 +19,41 @@ class GameController {
     // intended with keyDown. Holdable keys include WASD movement, and single-press keys include SPACE and QE for placing/rotation.
     handleKeyDown(key) {
         var action = null;
-        if (key == "w") {
+        if (key == "w") { // W
             action = new GameAction(ActionType.MOVE, {angle: 1})
-        } else if (key == "a") {
+        } else if (key == "a") { // A
             action = new GameAction(ActionType.MOVE, {angle: 2})
-        } else if (key == "s") {
+        } else if (key == "s") { // S
             action = new GameAction(ActionType.MOVE, {angle: 3})
-        } else if (key == "d") {
+        } else if (key == "d") { // D
             action = new GameAction(ActionType.MOVE, {angle: 0})
         
         // TODO: Change handleKeypress to take in the whole event so keyCode can be invoked for arrow keys.
-        } else if (key == "q") {
+        } else if (key == "q") { // Q
             action = new GameAction(ActionType.ROTATE, {angle: 1})
-        } else if (key == "e") {
+        } else if (key == "e") { // E
             action = new GameAction(ActionType.ROTATE, {angle: -1})
 
-        } else if (key == " ") {
+        } else if (key == " ") { // SPACE
             action = new GameAction(ActionType.PLACE, {})
         }
         if (action != null) {
             this.actionQueue.push(action)
         }
         return this;
+    }
+
+    // Update the mouse position
+    handleMouseMove(event) {
+        this.cursorX = event.clientX - CLIENT_PADDING_X
+        this.cursorY = event.clientY - CLIENT_PADDING_Y
+    }
+
+    // Map the global location of the mouse with the in-game grid index of the cursor.
+    gridCursor(windowSize, boardSize) {
+        var x = Math.floor((this.cursorX / windowSize) * boardSize)
+        var y = Math.floor((this.cursorY / windowSize) * boardSize)
+        return [x, y]
     }
 
     // Consume the last action registered in the queue.
