@@ -10,6 +10,8 @@ const SPAWN_OFFSET = 2;
 // Extend edge boundaries a bit further out of the grid to make sure
 // pieces spawning on the edge can still hit the ground.
 const BOUNDARY_MARGIN = 4;
+// The number of ticks contact must take place in order to place a piece.
+const COLLISION_TIME_LIMIT = 20;
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -35,6 +37,8 @@ const CoreState = class {
         this.placeBlock = true;
         // The GameState's current unplaced piece
         this.currPiece = null;
+        // Keep track of how long this piece is in contact in its falling direction
+        this.collisionTimer = 0;
 
 
         // Create 4 different sets to check if a boundary has been hit
@@ -76,14 +80,22 @@ const CoreState = class {
                 this.checkFilledLines(this.boardSize / 4);
             } else {
                 // Move the current piece, first in its direction of gravity and second according to the player.
-                if (this.currPiece) {
+                if (this.currPiece && this.collisionTimer == 0) {
                     this.currPiece.idleMove()
                 }
             }
         }
         if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
-            this.placeBlock = true
+            if (move) {
+                this.collisionTimer += 1
+            }
+            if (this.collisionTimer == COLLISION_TIME_LIMIT) {
+                this.placeBlock = true
+            }
         } else {
+            this.collisionTimer = 0
+        }
+        if (!this.placeBlock) {
             if (this.currPiece && this.controller && !this.placeBlock) {
                 var action = this.controller.consumeAction()
                 if (action) {
@@ -97,13 +109,12 @@ const CoreState = class {
 
     executeAction(action) {
         if (action.type == ActionType.MOVE) {
-            if (!this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
-                this.currPiece.activeMove(action.props.angle)
-                if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets) ) {
-                    // Revert the move if it results in a collision in the active angle
+            if (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
+                while (this.currPiece.checkCollision(action.props.angle, this.board, this.boundarySets)) {
                     this.currPiece.activeMove((action.props.angle + 2) % 4)
                 }
             }
+            this.currPiece.activeMove(action.props.angle)
         } else if (action.type == ActionType.PLACE) {
             this.placeBlock = true
         }

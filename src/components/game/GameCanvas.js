@@ -6,7 +6,7 @@ import CoreState from './coreState/CoreState';
 import GameController from './GameController';
 
 const WINDOW_SIZE = 800
-const BOARD_SIZE = 64
+const BOARD_SIZE = 32
 const REFRESH_MS = 10 
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
