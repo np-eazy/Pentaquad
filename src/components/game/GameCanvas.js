@@ -24,8 +24,12 @@ const GameCanvas = (props) => {
         controller: gameController,
     }));
     // The canvas is the root listener for keyDown events, which are delegated to the gameController to map to GameActions.
-    const handleKeypress = (event) => {
+    const handleKeyDown = (event) => {
         gameController.handleKeyDown(event.key);
+    }
+    // MouseMove is also delegated to GameController gthough handled differently.
+    const handleMouseMove = (event) => {
+        gameController.handleMouseMove(event);
     }
     // Disable spacebar scrolling down
     window.onkeydown = function(e) {
@@ -44,7 +48,7 @@ const GameCanvas = (props) => {
       }, [canvasTimer]);
 
     return (
-        <div id="gameCanvas" tabIndex={0} onKeyDown={handleKeypress}>
+        <div id="gameCanvas" tabIndex={0} onKeyDown={handleKeyDown} onMouseMove={handleMouseMove}>
             <canvas id="gameGraphics" width={WINDOW_SIZE} height={WINDOW_SIZE}>
                 <GameGraphics gameState={gameState} windowSize={WINDOW_SIZE} />
             </canvas>
