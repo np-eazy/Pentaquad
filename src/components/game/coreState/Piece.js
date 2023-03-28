@@ -2,6 +2,35 @@ import Cell from "./Cell";
 import { randint, getPID, Direction, DXN, NULL_DXN } from "./Utils";
 import { Color } from "../graphics/Colors";
 
+
+// 5-long piece preset
+const I_PIECE = [[0, -2], [0, -1], [0, 0], [0, 1], [0, 2]]
+
+// 4-long piece presets
+const L1_PIECE = [[0, -2], [0, -1], [0, 0], [0, 1], [1, 1]]
+const S1_PIECE = [[0, -2], [0, -1], [0, 0], [1, 0], [1, 1]]
+const T1_PIECE = [[0, -2], [0, -1], [0, 0], [0, 1], [1, 0]]
+
+// 3-long piece presets
+const L2_PIECE = [[-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]]
+const S2_PIECE = [[-1, -1], [0, -1], [0, 0], [0, 1], [1, 1]]
+const T2_PIECE = [[1, 1], [0, 1], [0, 0], [0, -1], [-1, 1]]
+const X_PIECE = [[0, 0], [0, 1], [1, 0], [0, -1], [-1, 0]]
+const F_PIECE = [[0, 0], [0, 1], [1, 1], [0, -1], [-1, 0]]
+const U_PIECE = [[1, -1], [0, -1], [0, 0], [0, 1], [1, 1]]
+const B_PIECE = [[0, 0], [0, 1], [1, 0], [1, 1], [1, 2]]
+
+// Other pieces
+const W_PIECE = [[-1, 1], [0, 1], [0, 0], [1, 0], [1, -1]]
+
+const PRESETS = [
+    I_PIECE, 
+    L1_PIECE, S1_PIECE, T1_PIECE, 
+    L2_PIECE, S2_PIECE, T2_PIECE, X_PIECE, F_PIECE, U_PIECE, B_PIECE, 
+    W_PIECE
+]
+
+
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
 class Piece {
@@ -17,28 +46,16 @@ class Piece {
 
         // Create some arrangement of 5 contiguous cells.
         // TODO: It would be faster/easier to pull from a set of all possible existing cells
-        this.cells = new Map();
-        var [x, y, dxn] = [0, 0, new Direction(randint(0, 4))];
-        var pid = getPID(x, y, pidSize);
-        var turnAngle;
-        var valid;
-        for (var i = 0; i < pieceSize; i++) {
-            valid = false;
-            while (!valid) {
-                this.cells.set(pid, [x, y])
-                turnAngle = randint(-1, 2)
-                dxn.turn(turnAngle)
-                x += dxn.dx
-                y += dxn.dy
-                pid = getPID(x, y, this.pidSize)
-                valid = this.cells.get(pid) == undefined
-                if (!valid) {
-                    x -= dxn.dx
-                    y -= dxn.dy
-                    dxn.turn(-turnAngle)
-                }
-            }
+        this.cells = new Map()
+        var preset = PRESETS[randint(0, PRESETS.length)]
+        for (var [x, y] of preset) {
+            this.cells.set(getPID(x, y, pidSize), [x, y])
         }
+        this.rotate(randint(0, 4))
+        if (randint(0, 2) == 1) {
+            this.flip()
+        }
+
         // Set this piece's color based on its initial direction; there will be more
         // room to customize this.
         if (angle % 4 == DXN.RIGHT) {
@@ -50,6 +67,11 @@ class Piece {
         } else if (angle % 4 == DXN.DOWN) {
             this.color = new Color({ red: 0, green: 200, blue: 235})
         }  
+    }
+
+    // Pass in a list of [x, y] pairs to add to the Cells map.
+    setCells() {
+
     }
 
     // The function to fill the coreState with cells corresponding to this Piece; this will
@@ -133,6 +155,16 @@ class Piece {
             })
             this.cells = newCells
         }
+    }
+
+    flip() {
+        var newCells = new Map()
+        this.cells.forEach((val) => {
+            var [newX, newY] = [val[0], -val[1]]
+            var pid = getPID(newX, newY, this.pidSize)
+            newCells.set(pid, [newX, newY])
+        })
+        this.cells = newCells
     }
 }
 
