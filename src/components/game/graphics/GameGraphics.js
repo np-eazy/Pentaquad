@@ -1,6 +1,13 @@
 function drawRect(canvas, x, y, xSize, ySize, color) {
-    canvas.fillStyle = color;
-    canvas.fillRect(x, y, xSize, ySize);
+    canvas.fillStyle = color
+    canvas.fillRect(x, y, xSize, ySize)
+}
+
+function outlineRect(canvas, x, y, xSize, ySize, color) {
+    canvas.strokeStyle = color
+    canvas.beginPath()
+    canvas.strokeRect(x, y, xSize, ySize)
+    canvas.closePath()
 }
 
 const GameGraphics = (props) => {
@@ -26,6 +33,11 @@ const GameGraphics = (props) => {
                 [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy]
                 drawRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, piece.color.getHex());
             }
+        }
+
+        // Draw outlines of TargetBlocks
+        for (var t of props.gameState.coreState.targetBlocks) {
+            outlineRect(canvas, t.x0 * xCellSize, t.y0 * yCellSize, (t.x1 - t.x0) * xCellSize, (t.y1 - t.y0) * yCellSize, "#000000")
         }
     }
 
