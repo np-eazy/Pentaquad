@@ -34,7 +34,13 @@ class GameController {
         } else if (key == "e") { // E
             action = new GameAction(ActionType.ROTATE, {angle: -1})
 
+        } else if (key == "f") { // E
+            action = new GameAction(ActionType.FLIP, {})
+
         } else if (key == " ") { // SPACE
+            action = new GameAction(ActionType.DROP, {})
+        
+        } else if (key == "r") { // SPACE
             action = new GameAction(ActionType.PLACE, {})
         }
         if (action != null) {
@@ -47,6 +53,12 @@ class GameController {
     handleMouseMove(event) {
         this.cursorX = event.clientX - CLIENT_PADDING_X
         this.cursorY = event.clientY - CLIENT_PADDING_Y
+        
+    }
+
+    handleMouseDown(event, windowSize, boardSize) {
+        var [x_, y_] = this.gridCursor(windowSize, boardSize)
+        this.actionQueue.push(new GameAction(ActionType.MOVE_TO, {x: x_, y: y_}))
     }
 
     // Map the global location of the mouse with the in-game grid index of the cursor.
