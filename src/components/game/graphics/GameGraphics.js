@@ -19,7 +19,7 @@ const GameGraphics = (props) => {
 
         // Fill in cells from the coreState current piece.
         var [x, y] = [0, 0]
-        var piece = props.gameState.currPiece
+        var piece = props.gameState.coreState.currPiece
         if (piece != null) {
             // Fill in the hitboxes to debug collision detection.
             if (DEBUG) {
@@ -43,7 +43,7 @@ const GameGraphics = (props) => {
     var ctx = canv != null ? canv.getContext('2d') : null;
     if (ctx != null && props.gameState != undefined) {
         ctx.clearRect(0, 0, props.windowSize, props.windowSize);
-        render(ctx, props.gameState.board);
+        render(ctx, props.gameState.coreState.board);
     }
 };
 
