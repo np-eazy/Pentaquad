@@ -1,12 +1,14 @@
 import Cell from "./Cell"
 import Piece from "./Piece"
+import TargetBlock from "./TargetBlock"
+
 import { randint, getPID, Direction, DXN } from "./Utils"
 import { ActionType } from "./GameAction"
 
 // Number of cells in each piece.
 const PIECE_SIZE = 5;
 // The distance from the boundary that each piece 
-const SPAWN_OFFSET = 2;
+const SPAWN_OFFSET = -3;
 // Extend edge boundaries a bit further out of the grid to make sure
 // pieces spawning on the edge can still hit the ground.
 const BOUNDARY_MARGIN = 4;
@@ -30,15 +32,19 @@ const CoreState = class {
         // The main board on which everything happens
         this.board = [...Array(props.boardSize)].map(e => Array(props.boardSize).fill(this.emptyValue()));
         // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
-        this.pidSize = (props.boardSize + SPAWN_OFFSET * 2) * 2;
+        this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2;
         // The direction in which the piece moves, and in which the board moves after a line is cleared.
         this.gravity = new Direction(DXN.LEFT);
         // Flag for placing a block
         this.placeBlock = true;
         // The GameState's current unplaced piece
         this.currPiece = null;
+        // The GameState's roster of target blocks
+        this.targetBlocks = [];
         // Keep track of how long this piece is in contact in its falling direction
         this.collisionTimer = 0;
+        // GameOver flag
+        this.isGameOver = false
 
 
         // Create 4 different sets to check if a boundary has been hit
@@ -68,42 +74,70 @@ const CoreState = class {
         this.controller = controller
     }
 
+    // Generate a random index within SPAWN_OFFSET bounds; negative SPAWN_OFFSET guarantees spawnPosition is within the boundaries
+    spawnPosition() {
+        return randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET)
+    }
+
     // core rules of the game but is not very playable at all, nor does it have good objectives.
     update(move) {
-        if (move) {
-            if (this.placeBlock) {
-                // Place the current piece, create a new one, and check for new filled lines
-                this.placeBlock = false;
-                this.placeCurrentPiece();
-                this.gravity.turnLeft(1);
-                this.createNewPiece();
-                this.checkFilledLines(this.boardSize / 4);
-            } else {
-                // Move the current piece, first in its direction of gravity and second according to the player.
-                if (this.currPiece && this.collisionTimer == 0) {
-                    this.currPiece.idleMove()
-                }
-            }
-        }
-        if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
+        if (!this.isGameOver) {
             if (move) {
-                this.collisionTimer += 1
-            }
-            if (this.collisionTimer == COLLISION_TIME_LIMIT) {
-                this.placeBlock = true
-            }
-        } else {
-            this.collisionTimer = 0
-        }
-        if (!this.placeBlock) {
-            if (this.currPiece && this.controller && !this.placeBlock) {
-                var action = this.controller.consumeAction()
-                if (action) {
-                    this.executeAction(action)
+                if (this.placeBlock) {
+                    // Place the current piece, create a new one, and check for new filled lines
+                    this.placeCurrentPiece();
+                    this.placeBlock = false;
+                    this.gravity.turnLeft(1);
+    
+                    this.createNewPiece();
+                    this.checkFilledLines(this.boardSize);
+    
+                    // TODO: This code can possibly be improved, both in terms of format and in isCleared removal.
+                    this.targetBlocks.forEach(targetBlock => targetBlock.update())
+                    this.targetBlocks.forEach(targetBlock => {
+                        if (targetBlock.isFilled) {
+                            targetBlock.clear(this.board, this.emptyValue)
+                        } else if (targetBlock.isGameOver) {
+                            this.gameOver = true
+                        }
+                    })
+                    var remainingTargets = []
+                    this.targetBlocks.forEach(targetBlock => {
+                        if (!targetBlock.isCleared) {
+                            remainingTargets.push(targetBlock)
+                        }
+                    })
+                    this.targetBlocks = remainingTargets
+    
+                    this.createNewTargetBlock();
+                } else {
+                    // Move the current piece, first in its direction of gravity and second according to the player.
+                    if (this.currPiece && this.collisionTimer == 0) {
+                        this.currPiece.idleMove()
+                    }
                 }
             }
+            if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
+                if (move) {
+                    this.collisionTimer += 1
+                }
+                if (this.collisionTimer == COLLISION_TIME_LIMIT) {
+                    this.placeBlock = true
+                }
+            } else {
+                this.collisionTimer = 0
+            }
+            if (!this.placeBlock) {
+                if (this.currPiece && this.controller && !this.placeBlock) {
+                    var action = this.controller.consumeAction()
+                    if (action) {
+                        this.executeAction(action)
+                    }
+                }
+            }
+            this.timer += 1
         }
-        this.timer += 1
+        
         return this; // CoreState.update() returns itself 
     }
 
@@ -141,10 +175,22 @@ const CoreState = class {
         }
     }
 
+    createNewTargetBlock() {
+        var [x, y] = [this.spawnPosition(), this.spawnPosition()]
+        var targetBlock = new TargetBlock({
+            coreState: this,
+            x0: x - 1,
+            y0: y - 1,
+            x1: x + 1,
+            y1: y + 1,
+        })
+        this.targetBlocks.push(targetBlock)
+    }
+
     // Create a new piece based on this CoreState's gravity, at a random location.
     createNewPiece() {
         var [x, y] = [0, 0]
-        var r = randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET)
+        var r = this.spawnPosition()
         if (this.gravity.angle == DXN.RIGHT) {
             [x, y] = [-SPAWN_OFFSET, r]
         } else if (this.gravity.angle == DXN.UP) {
@@ -237,4 +283,4 @@ const CoreState = class {
     }
 }
 
-export default CoreState;
+export default CoreState
