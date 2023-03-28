@@ -18,7 +18,7 @@ const BOUNDARY_MARGIN = 4;
 const CoreState = class {
     constructor (props) {
         // The GameState's main controller
-        this.controller = props.controller;
+        this.controller = null;
         // A timer that increments once each update; updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
         this.timer = 0;
         // The dimension of the square board on which this game takes place.
@@ -57,6 +57,11 @@ const CoreState = class {
             pid = getPID(i, ySize, this.pidSize);
             this.boundarySets[DXN.DOWN].set(pid, [i, ySize])
         }
+    }
+
+    // Set this piece's controller
+    setController(controller) {
+        this.controller = controller
     }
 
     // TODO: Actually design balanced game mechanisms. The current code demonstrates the

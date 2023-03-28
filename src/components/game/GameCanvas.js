@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 import GameGraphics from'./graphics/GameGraphics';
+import GameState from './GameState';
 import CoreState from './coreState/CoreState';
 import GameController from './GameController';
 
 const WINDOW_SIZE = 800
 const BOARD_SIZE = 64
-const REFRESH_MS = 200 
+const REFRESH_MS = 10 
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.
@@ -16,9 +17,11 @@ const GameCanvas = (props) => {
     // Keypress logic
     const [gameController, setGameController] = useState(new GameController({}));
     // TODO: Create a GameState that wraps around CoreState to control when active game logic takes place
-    const [gameState, setGameState] = useState(new CoreState({
-        boardSize: BOARD_SIZE,
-        controller: gameController
+    const [gameState, setGameState] = useState(new GameState({
+        coreState: new CoreState({
+            boardSize: BOARD_SIZE,
+        }),
+        controller: gameController,
     }));
     // The canvas is the root listener for keyDown events, which are delegated to the gameController to map to GameActions.
     const handleKeypress = (event) => {
