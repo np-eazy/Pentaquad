@@ -1,6 +1,8 @@
 Pentaquad is a web game of a more complex Tetris variant, which features different gravity modes and objectives for clearing
 specific targets rather than filled lines in the original game.
 
+Start game: like any other React App(); npm run start and open localhost:3000
+
 Holdable controls: (TODO: implement different logic for holdable controls)d
 - W: move piece up
 - A: move piece left
