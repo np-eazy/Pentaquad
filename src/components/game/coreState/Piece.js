@@ -34,20 +34,30 @@ const PRESETS = [
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
 class Piece {
-    constructor({
+    constructor() {
+        this.mounted = false
+        this.cx = undefined
+        this.cy = undefined
+        this.dxn = undefined
+        this.pidSize = undefined
+        this.preset = PRESETS[randint(0, PRESETS.length)]
+    }
+
+    // Before the piece is mounted to a global location, it shouldn't be used/updated. 
+    mountPiece({
         center_x, 
         center_y, 
         angle, 
-        pidSize
-    }) {
-        [this.cx, this.cy, this.dxn] = [center_x, center_y, new Direction(angle)];
-        this.pidSize = pidSize;
+        pidSize,}) {
 
-        // Create some arrangement of 5 contiguous cells.
-        // TODO: It would be faster/easier to pull from a set of all possible existing cells
+        this.mounted = true
+        this.cx = center_x 
+        this.cy = center_y
+        this.dxn = new Direction(angle)
+        this.pidSize = pidSize
+
         this.cells = new Map()
-        var preset = PRESETS[randint(0, PRESETS.length)]
-        for (var [x, y] of preset) {
+        for (var [x, y] of this.preset) {
             this.cells.set(getPID(x, y, pidSize), [x, y])
         }
         this.rotate(randint(0, 4))
@@ -68,6 +78,16 @@ class Piece {
         }  
     }
 
+    // Just for formality/convention, we do this each time we move something from the game
+    // back to the stage.
+    unmountPiece() {
+        this.mounted = false
+        this.cx = undefined
+        this.cy = undefined
+        this.dxn = undefined
+        this.pidSie = undefined
+    }
+
     // The function to fill the coreState with cells corresponding to this Piece; this will
     // be used for cases like the render script accessing the color in the parents
     createCell() {
@@ -78,11 +98,11 @@ class Piece {
     // Return whether or not the block has a collision with this angle.
     // Null angle option is for rotation collision check, only to make sure that the piece
     // doesn't rotate into any overlaps with filled cells.
-    checkCollision(angle, board, boundarySets) {
+    checkCollision(angle, board, collisionSets) {
         var [xSize, ySize] = [board.length, board[0].length];
 
         var collisionDxn = angle == null ? { dx: 0, dy: 0 } : new Direction(angle)
-        var boundarySet = angle == null ? new Set() : boundarySets[angle];
+        var boundarySet = angle == null ? new Set() : collisionSets.boundarySets[angle];
         var collision = false;
 
         // Check for a boundary collision

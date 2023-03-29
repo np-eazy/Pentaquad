@@ -10,6 +10,8 @@ function outlineRect(canvas, x, y, xSize, ySize, color) {
     canvas.closePath()
 }
 
+// The code in GameGraphics is short-lived and due for a refactor as soon as core logic is fleshed out.
+// Disregard the spaghetti code, it's only to provide the most minimal UI for testing/debugging.
 const GameGraphics = (props) => {
     function render(canvas, board) {
         // Fill in cells from the coreState board
@@ -39,19 +41,44 @@ const GameGraphics = (props) => {
         for (var t of props.gameState.coreState.targetBlocks) {
             outlineRect(canvas, t.x0 * xCellSize, t.y0 * yCellSize, (t.x1 - t.x0) * xCellSize, (t.y1 - t.y0) * yCellSize, "#000000")
         }
-
         [x, y] = props.gameState.controller.gridCursor(props.windowSize, board.length)
         outlineRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, "#000000")
+
+
+        // Draw outlines
+        var stage = props.gameState.coreState.pieceStage
+        var [xOffset, yOffset] = [0, 0] // These offsets will better be taken care of in Domain classes.
+        for (var i = 0; i < stage.nextPieces.length; i++) {
+            var preset = stage.nextPieces[i].preset
+            var [x_, y_] = [4.5, 4.5 + 6 * i] 
+            for (const [x, y] of preset) {
+                outlineRect(
+                    canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
+                    xCellSize, yCellSize, "#404040");
+            }
+        }
+        if (stage.heldPiece != null) {
+            var preset = stage.heldPiece.preset
+            var [x_, y_] = [10.5, 4.5]
+            for (const [x, y] of preset) {
+                outlineRect(
+                    canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
+                    xCellSize, yCellSize, "#404040");
+            }
+        }
+    }
+
+    function renderNull(canvas) {
 
     }
 
     // Canvas and context wiring
-    var canv = document.getElementById("gameGraphics");
-    var ctx = canv != null ? canv.getContext('2d') : null;
+    var canv = document.getElementById("gameGraphics")
+    var ctx = canv != null ? canv.getContext('2d') : null
     if (ctx != null && props.gameState != undefined) {
-        ctx.clearRect(0, 0, props.windowSize, props.windowSize);
-        render(ctx, props.gameState.coreState.board);
+        ctx.clearRect(0, 0, props.windowSize, props.windowSize)
+        props.gameState ? render(ctx, props.gameState.coreState.board) : renderNull(ctx)
     }
-};
+}
 
 export default GameGraphics;
