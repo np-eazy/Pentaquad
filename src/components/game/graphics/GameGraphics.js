@@ -10,6 +10,8 @@ function outlineRect(canvas, x, y, xSize, ySize, color) {
     canvas.closePath()
 }
 
+// The code in GameGraphics is short-lived and due for a refactor as soon as core logic is fleshed out.
+// Disregard the spaghetti code, it's only to provide the most minimal UI for testing/debugging.
 const GameGraphics = (props) => {
     function render(canvas, board) {
         // Fill in cells from the coreState board
@@ -41,6 +43,29 @@ const GameGraphics = (props) => {
         }
         [x, y] = props.gameState.controller.gridCursor(props.windowSize, board.length)
         outlineRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, "#000000")
+
+
+        // Draw outlines
+        var stage = props.gameState.coreState.pieceStage
+        var [xOffset, yOffset] = [0, 0] // These offsets will better be taken care of in Domain classes.
+        for (var i = 0; i < stage.nextPieces.length; i++) {
+            var preset = stage.nextPieces[i].preset
+            var [x_, y_] = [4.5, 4.5 + 6 * i] 
+            for (const [x, y] of preset) {
+                outlineRect(
+                    canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
+                    xCellSize, yCellSize, "#404040");
+            }
+        }
+        if (stage.heldPiece != null) {
+            var preset = stage.heldPiece.preset
+            var [x_, y_] = [10.5, 4.5]
+            for (const [x, y] of preset) {
+                outlineRect(
+                    canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
+                    xCellSize, yCellSize, "#404040");
+            }
+        }
     }
 
     function renderNull(canvas) {

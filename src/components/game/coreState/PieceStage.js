@@ -10,7 +10,7 @@ class PieceStage {
         this.maxLength = props.maxLength ? props.maxLength : DEFAULT_MAX_LENGTH
         this.nextPieces = []
         this.heldPiece = null
-        for (var i = 0; i < props.maxLength; i++) {
+        for (var i = 0; i < this.maxLength; i++) {
             this.nextPieces.push(new Piece())
         }
     }
