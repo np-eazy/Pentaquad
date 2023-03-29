@@ -4,6 +4,7 @@ import TargetBlock from "./TargetBlock"
 
 import { randint, getPID, Direction, DXN } from "./Utils"
 import { ActionType } from "./GameAction"
+import PieceStage from "./PieceStage"
 
 // Number of cells in each piece.
 const PIECE_SIZE = 5;
@@ -38,6 +39,8 @@ const CoreState = class {
         this.placeBlock = true
         // The GameState's current unplaced piece
         this.currPiece = null
+        // Create a new PieceStage
+        this.pieceStage = new PieceStage({})
         // The GameState's roster of target blocks
         this.targetBlocks = []
         // Keep track of how long this piece is in contact in its falling direction
@@ -97,6 +100,8 @@ const CoreState = class {
                 this.executeDrop()
             } else if (action.type == ActionType.PLACE) {
                 this.executePlace()
+            } else if (action.type == ActionType.HOLD) {
+                this.executeHold()
             }
             action = this.controller.consumeAction()
         }
@@ -152,7 +157,13 @@ const CoreState = class {
         this.collisionTimer = COLLISION_TIME_LIMIT
         this.placeBlock = true
     }
-    
+    // Unmount the current piece into the holding stage, and mount the holding stage in
+    executeHold() {
+        this.currPiece.unmountPiece()
+        this.pieceStage.holdPiece(this.currPiece)
+        this.currPiece = null
+        this.placeBlock = true
+    }
 
     // ===== IDLE ACTIONS =====
     // core rules of the game but is not very playable at all, nor does it have good objectives.
@@ -201,15 +212,21 @@ const CoreState = class {
         } else if (this.gravity.angle == DXN.DOWN) {
             [x, y] = [r, -SPAWN_OFFSET]
         }
-        // Create the new piece
-        this.currPiece = new Piece({
+        // Get the unmounted piece from PieceStage; we need this loop in case async piece
+        // doesn't arrive in time
+        var piece
+        while (!piece) {
+            piece = this.pieceStage.consumePiece()
+        }
+        piece.mountPiece({
             center_x: x,
             center_y: y,
             angle: this.gravity.angle,
-            pieceSize: PIECE_SIZE,
             pidSize: this.pidSize,
         })
+        this.currPiece = piece
     }
+
     // Create a new 2x2 TargetBlock in a random location.
     createNewTargetBlock() {
         var [x, y] = [this.spawnPosition(), this.spawnPosition()]

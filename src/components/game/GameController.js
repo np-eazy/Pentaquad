@@ -38,6 +38,8 @@ class GameController {
             action = new GameAction(ActionType.DROP, {})
         } else if (keycode == 82) { // R
             action = new GameAction(ActionType.PLACE, {})
+        } else if (keycode == 67) { // C
+            action = new GameAction(ActionType.HOLD, {})
         }
         if (action != null) {
             this.actionQueue.push(action)
