@@ -98,11 +98,11 @@ class Piece {
     // Return whether or not the block has a collision with this angle.
     // Null angle option is for rotation collision check, only to make sure that the piece
     // doesn't rotate into any overlaps with filled cells.
-    checkCollision(angle, board, boundarySets) {
+    checkCollision(angle, board, collisionSets) {
         var [xSize, ySize] = [board.length, board[0].length];
 
         var collisionDxn = angle == null ? { dx: 0, dy: 0 } : new Direction(angle)
-        var boundarySet = angle == null ? new Set() : boundarySets[angle];
+        var boundarySet = angle == null ? new Set() : collisionSets.boundarySets[angle];
         var collision = false;
 
         // Check for a boundary collision

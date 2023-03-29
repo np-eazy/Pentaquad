@@ -1,8 +1,9 @@
 import Cell from "./Cell"
+import CollisionSets from "./CollisionSets"
 import Piece from "./Piece"
 import TargetBlock from "./TargetBlock"
 
-import { randint, getPID, Direction, DXN } from "./Utils"
+import { getPID, DXN, Direction, randint } from "./Utils"
 import { ActionType } from "./GameAction"
 import PieceStage from "./PieceStage"
 
@@ -48,7 +49,7 @@ const CoreState = class {
         // GameOver flag
         this.isGameOver = false
         // Create 4 different sets to check if a boundary has been hit
-        this.createBoundarySets(props.boardSize)
+        this.collisionSets = new CollisionSets(props.boardSize, BOUNDARY_MARGIN, this.pidSize)
     }
 
     // ===== INITIALIZATIONS =====
@@ -59,28 +60,6 @@ const CoreState = class {
     // Generate a random index within SPAWN_OFFSET bounds; negative SPAWN_OFFSET guarantees spawnPosition is within the boundaries
     spawnPosition() {
         return randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET)
-    }
-    // Create BoundarySets to assist with board edge collision detections for the piece.
-    createBoundarySets(boardSize) {
-        this.boundarySets = []
-        var [xSize, ySize] = [boardSize, boardSize]
-        var pid
-        for (var i = 0; i < 4; i++) {
-            this.boundarySets.push(new Map())
-        }
-        for (var i = -BOUNDARY_MARGIN; i < ySize + BOUNDARY_MARGIN; i++) {
-            pid = getPID(xSize, i, this.pidSize)
-            this.boundarySets[DXN.RIGHT].set(pid, [xSize, i])
-
-            pid = getPID(i, -1, this.pidSize)
-            this.boundarySets[DXN.UP].set(pid, [i, -1])
-
-            pid = getPID(-1, i, this.pidSize)
-            this.boundarySets[DXN.LEFT].set(pid, [-1, i])
-
-            pid = getPID(i, ySize, this.pidSize)
-            this.boundarySets[DXN.DOWN].set(pid, [i, ySize])
-        }
     }
 
     // ===== ACTIONS =====
@@ -109,8 +88,8 @@ const CoreState = class {
     // Move the current piece one cell in the given direction; rollback if not valid
     executeMove(angle) {
         if (angle % 2 != this.currPiece.dxn.angle % 2) {
-            if (this.currPiece.checkCollision(angle, this.board, this.boundarySets)) {
-                while (this.currPiece.checkCollision(angle, this.board, this.boundarySets)) {
+            if (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
+                while (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
                     this.currPiece.activeMove((angle + 2) % 4)
                 }
             }
@@ -120,7 +99,7 @@ const CoreState = class {
     // Rotate the current piece in the given direction; rollback if not valid
     executeRotate(angle) {
         this.currPiece.rotate(angle)
-        if (this.currPiece.checkCollision(null, this.board, this.boundarySets)) {
+        if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
             this.currPiece.rotate(-angle)
         }
     }
@@ -132,7 +111,7 @@ const CoreState = class {
         var iterationsLeft = this.gravity.angle % 2 == 0 ?
             Math.abs(this.currPiece.cy - y) :
             Math.abs(this.currPiece.cx - x)
-        while (iterationsLeft > 0 && !this.currPiece.checkCollision(moveAngle, this.board, this.boundarySets)) {
+        while (iterationsLeft > 0 && !this.currPiece.checkCollision(moveAngle, this.board, this.collisionSets)) {
             this.currPiece.activeMove(moveAngle)
             iterationsLeft -= 1
         }
@@ -140,13 +119,13 @@ const CoreState = class {
     // Horizontally flip the current piece; rollback if not valid
     executeFlip() {
         this.currPiece.flip()
-        if (this.currPiece.checkCollision(null, this.board, this.boundarySets)) {
+        if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
             this.currPiece.flip()
         }
     }
     // Drop the current piece as far down as possible
     executeDrop() {
-        while (!this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
+        while (!this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
             this.currPiece.activeMove(this.currPiece.dxn.angle)
         }
         this.collisionTimer = COLLISION_TIME_LIMIT
@@ -343,7 +322,7 @@ const CoreState = class {
     }
     // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
     updateCollisionTimer() {
-        if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.boundarySets)) {
+        if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
             this.collisionTimer += 1
             if (this.collisionTimer == COLLISION_TIME_LIMIT) {
                 this.placeBlock = true
