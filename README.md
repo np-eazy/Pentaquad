@@ -9,6 +9,7 @@ Controls
 - A: move piece left
 - S: move piece down
 - D: move piece right
+- For WASD controls, if going in the opposite direction of the falling direction, the piece rotates right instead.
 - Space: drop the current piece towards its boundary
 - Q: rotate piece left 
 - E: rotate piece right

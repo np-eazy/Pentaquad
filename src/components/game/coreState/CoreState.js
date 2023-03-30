@@ -1,11 +1,11 @@
 import Cell from "./Cell"
-import { checkFilledLines, checkFilledTargets } from "./FillCheck"
 import CollisionSets from "./CollisionSets"
-
-import { DXN, Direction, randint } from "./Utils"
-import { ActionType } from "./GameAction"
 import PieceStage from "./piece/PieceStage"
 import TargetStage from "./target/TargetStage"
+
+import { ActionType } from "./GameAction"
+import { checkFilledLines, checkFilledTargets } from "./FillCheck"
+import { DXN, Direction, randint } from "./Utils"
 
 
 // The distance from the boundary that each piece 
@@ -16,7 +16,7 @@ const BOUNDARY_MARGIN = 4
 // Distance from the borders tp spawn in targets
 const TARGET_MARGIN = 4
 // The number of ticks contact must take place in order to place a piece.
-const COLLISION_TIME_LIMIT = 20
+const COLLISION_TIME_LIMIT = 10
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -25,39 +25,41 @@ const CoreState = class {
     constructor (props) {
         // The GameState's main controller
         this.controller = null
-        // A timer that increments once each update; updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
-        this.timer = 0
-        // The dimension of the square board on which this game takes place.
-        this.boardSize = props.boardSize
-        // The default "empty" value of this grid: a type-0 Cell with no props
-        this.emptyValue = () => new Cell(0, {})
-        // The main board on which everything happens
-        this.board = [...Array(props.boardSize)].map(e => Array(props.boardSize).fill(this.emptyValue()))
-        // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
-        this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2
-        // The direction in which the piece moves, and in which the board moves after a line is cleared.
-        this.gravity = new Direction(DXN.DOWN)
-        // Flag for placing a block
-        this.placeBlock = true
-        // The GameState's current unplaced piece
-        this.currPiece = null
         // Create a new PieceStage
         this.pieceStage = new PieceStage({
             coreState: this,
         })
-        this.targets = []
+        // The GameState's current unplaced piece
+        this.currPiece = null
         // The GameState's roster of target blocks
         this.targetStage = new TargetStage({
             coreState: this,
             minBound: TARGET_MARGIN,
             maxBound: props.boardSize - TARGET_MARGIN
         })
+        this.targets = []
+
+        // A timer that increments once each update; updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
+        this.timer = 0
         // Keep track of how long this piece is in contact in its falling direction
         this.collisionTimer = 0
+        // Flag for placing a block
+        this.placeBlock = true
         // GameOver flag
         this.isGameOver = false
+
+        // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
+        this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2
+        // The dimension of the square board on which this game takes place.
+        this.boardSize = props.boardSize
+        // The default "empty" value of this grid: a type-0 Cell with no props
+        this.emptyValue = () => new Cell(0, {})
+        // The main board on which everything happens
+        this.board = [...Array(props.boardSize)].map(e => Array(props.boardSize).fill(this.emptyValue()))
         // Create 4 different sets to check if a boundary has been hit
-        this.collisionSets = new CollisionSets(props.boardSize, BOUNDARY_MARGIN, this.pidSize)
+        this.collisionSets = new CollisionSets(props.boardSize, BOUNDARY_MARGIN, this.pidSize)      
+        // The direction in which the piece moves, and in which the board moves after a line is cleared.
+        this.gravity = new Direction(DXN.DOWN)
     }
 
     // ===== INITIALIZATIONS =====
@@ -76,7 +78,11 @@ const CoreState = class {
         var action = this.controller.consumeAction()
         while (action) {
             if (action.type == ActionType.MOVE) {
-                this.executeMove(action.props.angle)
+                if (action.props.angle == (this.currPiece.dxn.angle + 2) % 4) {
+                    this.executeRotate(1)
+                } else {
+                    this.executeMove(action.props.angle)
+                }
             } else if (action.type == ActionType.ROTATE) {
                 this.executeRotate(action.props.angle)
             } else if (action.type == ActionType.MOVE_TO) {
@@ -95,14 +101,12 @@ const CoreState = class {
     }
     // Move the current piece one cell in the given direction; rollback if not valid
     executeMove(angle) {
-        if (angle % 2 != this.currPiece.dxn.angle % 2) {
-            if (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
-                while (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
-                    this.currPiece.activeMove((angle + 2) % 4)
-                }
+        if (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
+            while (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
+                this.currPiece.activeMove((angle + 2) % 4)
             }
-            this.currPiece.activeMove(angle)
         }
+        this.currPiece.activeMove(angle)
     }
     // Rotate the current piece in the given direction; rollback if not valid
     executeRotate(angle) {
@@ -228,7 +232,6 @@ const CoreState = class {
         })
         this.currPiece = piece
     }
-
     // Create a new 2x2 Target in a random location.
     createNewTarget() {
         var target
@@ -248,9 +251,7 @@ const CoreState = class {
                 }
             }
         }
-    }
-    // Check all Targets and update them as needed
-    
+    }    
     // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
     updateCollisionTimer() {
         if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
