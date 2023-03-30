@@ -1,34 +1,10 @@
 import Cell from "../Cell";
-import { randint, getPID, Direction, DXN, NULL_DXN } from "../Utils";
-import { Color } from "../../graphics/Colors";
+import { randint, getPID } from "../Utils"
+import { Direction, DXN } from "../Direction"
+import { Color } from "../../graphics/Colors"
 
+import { PRESETS } from "../../Constants.js"
 
-// 5-long piece preset
-const I_PIECE = [[0, -2], [0, -1], [0, 0], [0, 1], [0, 2]]
-
-// 4-long piece presets
-const L1_PIECE = [[0, -2], [0, -1], [0, 0], [0, 1], [1, 1]]
-const S1_PIECE = [[0, -2], [0, -1], [0, 0], [1, 0], [1, 1]]
-const T1_PIECE = [[0, -2], [0, -1], [0, 0], [0, 1], [1, 0]]
-
-// 3-long piece presets
-const L2_PIECE = [[-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]]
-const S2_PIECE = [[-1, -1], [0, -1], [0, 0], [0, 1], [1, 1]]
-const T2_PIECE = [[1, 1], [0, 1], [0, 0], [0, -1], [-1, 1]]
-const X_PIECE = [[0, 0], [0, 1], [1, 0], [0, -1], [-1, 0]]
-const F_PIECE = [[0, 0], [0, 1], [1, 1], [0, -1], [-1, 0]]
-const U_PIECE = [[1, -1], [0, -1], [0, 0], [0, 1], [1, 1]]
-const B_PIECE = [[0, 0], [0, 1], [1, 0], [1, 1], [1, 2]]
-
-// Other pieces
-const W_PIECE = [[-1, 1], [0, 1], [0, 0], [1, 0], [1, -1]]
-
-const PRESETS = [
-    I_PIECE, 
-    L1_PIECE, S1_PIECE, T1_PIECE, 
-    L2_PIECE, S2_PIECE, T2_PIECE, X_PIECE, F_PIECE, U_PIECE, B_PIECE, 
-    W_PIECE
-]
 
 
 // A single piece in the game, which can move in different directions and detect collisions

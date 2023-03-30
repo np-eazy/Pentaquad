@@ -1,4 +1,4 @@
-import { DXN } from "./Utils"
+import { DXN } from "./Direction"
 
 // Check for filled lines within a certain threshold and clear them Tetris-style, based
 // on the current direction of gravity.

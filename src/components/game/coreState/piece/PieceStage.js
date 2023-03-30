@@ -1,13 +1,12 @@
 import Piece from "./Piece"
-
-const DEFAULT_MAX_LENGTH = 4
+import { PIECE_STAGE_MAX_LENGTH } from "../../Constants"
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
 class PieceStage {
     constructor(props) {
         this.coreState = props.coreState
-        this.maxLength = props.maxLength ? props.maxLength : DEFAULT_MAX_LENGTH
+        this.maxLength = props.maxLength ? props.maxLength : PIECE_STAGE_MAX_LENGTH
         this.nextPieces = []
         this.heldPiece = null
         for (var i = 0; i < this.maxLength; i++) {

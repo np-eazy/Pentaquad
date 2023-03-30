@@ -1,13 +1,12 @@
 import { randint } from "../Utils"
 import Target from "./Target"
 
-const DEFAULT_MAX_LENGTH = 4
-
-const DEFAULT_GRACE_PERIOD = 8
-
-const DEFAULT_TICKS_TO_SPAWN = 8
-
-const DEFAULT_TICKS_TO_GROWTH = 8
+import {
+    TARGET_STAGE_MAX_LENGTH,
+    TARGET_GRACE_PERIOD,
+    TARGET_SPAWN_TIMER,
+    TARGET_GROWTH_TIMER,
+} from "../../Constants"
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
@@ -16,10 +15,10 @@ class TargetStage {
         this.coreState = props.coreState
         this.minBound = props.minBound
         this.maxBound = props.maxBound
-        this.maxLength = props.maxLength ? props.maxLength : DEFAULT_MAX_LENGTH
+        this.maxLength = props.maxLength ? props.maxLength : TARGET_STAGE_MAX_LENGTH
         this.nextTargets = []
-        this.gracePeriod = props.gracePeriod ? props.gracePeriod : DEFAULT_GRACE_PERIOD
-        this.ticksToSpawn = props.ticksToSpawn ? props.ticksToSpawn : DEFAULT_TICKS_TO_SPAWN
+        this.gracePeriod = props.gracePeriod ? props.gracePeriod : TARGET_GRACE_PERIOD
+        this.ticksToSpawn = props.ticksToSpawn ? props.ticksToSpawn : TARGET_SPAWN_TIMER
         this.ticksLeft = this.gracePeriod
     }
 
@@ -32,7 +31,7 @@ class TargetStage {
                 y0: y - 1,
                 x1: x + 1,
                 y1: y + 1,
-                ticksToGrowth: DEFAULT_TICKS_TO_GROWTH
+                ticksToGrowth: TARGET_GROWTH_TIMER
             })
         }
     }

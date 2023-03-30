@@ -5,19 +5,15 @@ import TargetStage from "./target/TargetStage"
 
 import { ActionType } from "./GameAction"
 import { checkFilledLines, checkFilledTargets } from "./FillCheck"
-import { DXN, Direction, randint } from "./Utils"
-
-
-// The distance from the boundary that each piece 
-const SPAWN_OFFSET = 2
-// Extend edge boundaries a bit further to ensure pieces finish falling.
-const BOUNDARY_MARGIN = 4
-// Distance from the borders tp spawn in targets
-const TARGET_MARGIN = 4
-// The number of ticks contact must take place in order to place a piece.
-const COLLISION_TIME_LIMIT = 100
-// The maximum number of movements to adjust a rotation
-const MAX_ROTATION_ADJUSTMENT = 2
+import { randint } from "./Utils"
+import { DXN, Direction } from "./Direction"
+import {
+    SPAWN_OFFSET,
+    BOUNDARY_MARGIN,
+    TARGET_MARGIN,
+    COLLISION_TIME_LIMIT,
+    MAX_ROTATION_ADJUSTMENT,
+} from "../Constants"
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting

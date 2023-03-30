@@ -5,9 +5,11 @@ import GameState from './GameState';
 import CoreState from './coreState/CoreState';
 import GameController from './GameController';
 
-const WINDOW_SIZE = 800
-const BOARD_SIZE = 20
-const REFRESH_MS = 10 
+import {
+    WINDOW_SIZE,
+    BOARD_SIZE,
+    REFRESH_MS,
+} from "./Constants"
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.

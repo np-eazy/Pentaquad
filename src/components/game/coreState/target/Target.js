@@ -1,4 +1,3 @@
-
 // The primary objective of this game is not to fill up lines but to fill up rectangle-shaped TargetBlocks,
 // which grow over time and end the game once they exceed the bounds of the board. 
 class Target {
