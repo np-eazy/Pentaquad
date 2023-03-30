@@ -73,20 +73,20 @@ export const checkFilledLines = ({threshold, angle, boardSize, board, emptyValue
 
 // Check all filled targets, remove them from targetBlocks, and erase all
 // covered cells to replace with a call to emptyValue
-export const checkFilledTargets = ({targetBlocks, board, emptyValue}) => {
+export const checkFilledTargets = ({targets, board, emptyValue}) => {
     var gameOver = false
-    targetBlocks.forEach(targetBlock => targetBlock.update())
-    targetBlocks.forEach(targetBlock => {
-        if (targetBlock.isFilled) {
-            targetBlock.clear(board, emptyValue)
-        } else if (targetBlock.isGameOver) {
+    targets.forEach(target => target.update())
+    targets.forEach(target => {
+        if (target.isFilled) {
+            target.clear(board, emptyValue)
+        } else if (target.isGameOver) {
             gameOver = true
         }
     })
     var i = 0
-    while (i < targetBlocks.length) {
-        if (targetBlocks[i].isCleared) {
-            targetBlocks.splice(i, 1)
+    while (i < targets.length) {
+        if (targets[i].isCleared) {
+            targets.splice(i, 1)
         } else {
             i += 1
         }

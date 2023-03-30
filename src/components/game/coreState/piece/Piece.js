@@ -1,6 +1,6 @@
-import Cell from "./Cell";
-import { randint, getPID, Direction, DXN, NULL_DXN } from "./Utils";
-import { Color } from "../graphics/Colors";
+import Cell from "../Cell";
+import { randint, getPID, Direction, DXN, NULL_DXN } from "../Utils";
+import { Color } from "../../graphics/Colors";
 
 
 // 5-long piece preset

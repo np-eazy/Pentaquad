@@ -2,7 +2,7 @@ const DEFAULT_TICKS_TO_GROWTH = 4
 
 // The primary objective of this game is not to fill up lines but to fill up rectangle-shaped TargetBlocks,
 // which grow over time and end the game once they exceed the bounds of the board. 
-class TargetBlock {
+class Target {
     constructor(props) {
         [this.x0, this.y0, this.x1, this.y1] = [props.x0, props.y0, props.x1, props.y1]
         this.coreState = props.coreState
@@ -64,4 +64,4 @@ class TargetBlock {
         this.isCleared = true
     }
 }
-export default TargetBlock
+export default Target

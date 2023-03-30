@@ -1,12 +1,11 @@
 import Cell from "./Cell"
 import { checkFilledLines, checkFilledTargets } from "./FillCheck"
 import CollisionSets from "./CollisionSets"
-import TargetBlock from "./TargetBlock"
+import Target from "./target/Target"
 
 import { DXN, Direction, randint } from "./Utils"
 import { ActionType } from "./GameAction"
-import PieceStage from "./PieceStage"
-import { toHaveAccessibleName } from "@testing-library/jest-dom/dist/matchers"
+import PieceStage from "./piece/PieceStage"
 
 // Number of cells in each piece.
 const PIECE_SIZE = 5;
@@ -44,7 +43,7 @@ const CoreState = class {
         // Create a new PieceStage
         this.pieceStage = new PieceStage({})
         // The GameState's roster of target blocks
-        this.targetBlocks = []
+        this.targets = []
         // Keep track of how long this piece is in contact in its falling direction
         this.collisionTimer = 0
         // GameOver flag
@@ -158,7 +157,7 @@ const CoreState = class {
                     
                     // Check and clear any filled targets or lines
                     this.gameOver = checkFilledTargets({
-                        targetBlocks: this.targetBlocks,
+                        targets: this.targets,
                         board: this.board,
                         emptyValue: this.emptyValue,
                     })
@@ -171,7 +170,7 @@ const CoreState = class {
                     
                     // Create new game objects
                     this.createNewPiece()
-                    this.createNewTargetBlock()
+                    this.createNewTarget()
                 } else {
                     // Move the current piece, first in its direction of gravity and second according to the player.
                     if (this.currPiece && this.collisionTimer == 0) {
@@ -218,17 +217,17 @@ const CoreState = class {
         this.currPiece = piece
     }
 
-    // Create a new 2x2 TargetBlock in a random location.
-    createNewTargetBlock() {
+    // Create a new 2x2 Target in a random location.
+    createNewTarget() {
         var [x, y] = [this.spawnPosition(), this.spawnPosition()]
-        var targetBlock = new TargetBlock({
+        var target = new Target({
             coreState: this,
             x0: x - 1,
             y0: y - 1,
             x1: x + 1,
             y1: y + 1,
         })
-        this.targetBlocks.push(targetBlock)
+        this.targets.push(target)
     }
     // Change the CoreState's grid values based on where the current piece is.
     placeCurrentPiece() {
@@ -242,7 +241,7 @@ const CoreState = class {
             }
         }
     }
-    // Check all TargetBlocks and update them as needed
+    // Check all Targets and update them as needed
     
     // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
     updateCollisionTimer() {
