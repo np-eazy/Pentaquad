@@ -2,7 +2,7 @@ const DEFAULT_TICKS_TO_GROWTH = 4
 
 // The primary objective of this game is not to fill up lines but to fill up rectangle-shaped TargetBlocks,
 // which grow over time and end the game once they exceed the bounds of the board. 
-class TargetBlock {
+class Target {
     constructor(props) {
         [this.x0, this.y0, this.x1, this.y1] = [props.x0, props.y0, props.x1, props.y1]
         this.coreState = props.coreState
@@ -29,14 +29,15 @@ class TargetBlock {
     
     // Extend the corners out by one cell. If any corner leaves the bounds of the game's board, GameOver flag goes up.
     grow() {
-        this.x0 -= 1
-        this.y0 -= 1
-        this.x1 += 1
-        this.y1 += 1
+        // Right now for testing purposes this is disabled.
+        // this.x0 -= 1
+        // this.y0 -= 1
+        // this.x1 += 1
+        // this.y1 += 1
 
-        if (this.x0 < 0 || this.y0 < 0 || this.x1 >= this.boardSize || this.y1 >= this.boardSize) {
-            this.isGameOver = true
-        }
+        // if (this.x0 < 0 || this.y0 < 0 || this.x1 >= this.boardSize || this.y1 >= this.boardSize) {
+        //     this.isGameOver = true
+        // }
     }
 
     // Check that every spot covered by this TargetBlock is "filled" with a Cell of type > 0, signifying that 
@@ -44,7 +45,7 @@ class TargetBlock {
     checkFill(board) {
         for (var x = this.x0; x < this.x1; x++) {
             for (var y = this.y0; y < this.y1; y++) {
-                if (board[y][x].type < 1) {
+                if (!board[y][x] || board[y][x].type < 1) {
                     return false
                 }
             }
@@ -63,4 +64,4 @@ class TargetBlock {
         this.isCleared = true
     }
 }
-export default TargetBlock
+export default Target

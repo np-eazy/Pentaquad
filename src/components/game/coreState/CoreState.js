@@ -1,21 +1,22 @@
 import Cell from "./Cell"
 import CollisionSets from "./CollisionSets"
-import Piece from "./Piece"
-import TargetBlock from "./TargetBlock"
+import PieceStage from "./piece/PieceStage"
+import TargetStage from "./target/TargetStage"
 
-import { getPID, DXN, Direction, randint } from "./Utils"
 import { ActionType } from "./GameAction"
-import PieceStage from "./PieceStage"
+import { checkFilledLines, checkFilledTargets } from "./FillCheck"
+import { DXN, Direction, randint } from "./Utils"
 
-// Number of cells in each piece.
-const PIECE_SIZE = 5;
+
 // The distance from the boundary that each piece 
-const SPAWN_OFFSET = -3;
+const SPAWN_OFFSET = 2
 // Extend edge boundaries a bit further out of the grid to make sure
 // pieces spawning on the edge can still hit the ground.
-const BOUNDARY_MARGIN = 4;
+const BOUNDARY_MARGIN = 4
+// Distance from the borders tp spawn in targets
+const TARGET_MARGIN = 4
 // The number of ticks contact must take place in order to place a piece.
-const COLLISION_TIME_LIMIT = 20;
+const COLLISION_TIME_LIMIT = 10
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -24,32 +25,41 @@ const CoreState = class {
     constructor (props) {
         // The GameState's main controller
         this.controller = null
+        // Create a new PieceStage
+        this.pieceStage = new PieceStage({
+            coreState: this,
+        })
+        // The GameState's current unplaced piece
+        this.currPiece = null
+        // The GameState's roster of target blocks
+        this.targetStage = new TargetStage({
+            coreState: this,
+            minBound: TARGET_MARGIN,
+            maxBound: props.boardSize - TARGET_MARGIN
+        })
+        this.targets = []
+
         // A timer that increments once each update; updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
         this.timer = 0
+        // Keep track of how long this piece is in contact in its falling direction
+        this.collisionTimer = 0
+        // Flag for placing a block
+        this.placeBlock = true
+        // GameOver flag
+        this.isGameOver = false
+
+        // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
+        this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2
         // The dimension of the square board on which this game takes place.
         this.boardSize = props.boardSize
         // The default "empty" value of this grid: a type-0 Cell with no props
         this.emptyValue = () => new Cell(0, {})
         // The main board on which everything happens
         this.board = [...Array(props.boardSize)].map(e => Array(props.boardSize).fill(this.emptyValue()))
-        // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
-        this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2
-        // The direction in which the piece moves, and in which the board moves after a line is cleared.
-        this.gravity = new Direction(DXN.LEFT)
-        // Flag for placing a block
-        this.placeBlock = true
-        // The GameState's current unplaced piece
-        this.currPiece = null
-        // Create a new PieceStage
-        this.pieceStage = new PieceStage({})
-        // The GameState's roster of target blocks
-        this.targetBlocks = []
-        // Keep track of how long this piece is in contact in its falling direction
-        this.collisionTimer = 0
-        // GameOver flag
-        this.isGameOver = false
         // Create 4 different sets to check if a boundary has been hit
-        this.collisionSets = new CollisionSets(props.boardSize, BOUNDARY_MARGIN, this.pidSize)
+        this.collisionSets = new CollisionSets(props.boardSize, BOUNDARY_MARGIN, this.pidSize)      
+        // The direction in which the piece moves, and in which the board moves after a line is cleared.
+        this.gravity = new Direction(DXN.DOWN)
     }
 
     // ===== INITIALIZATIONS =====
@@ -68,7 +78,11 @@ const CoreState = class {
         var action = this.controller.consumeAction()
         while (action) {
             if (action.type == ActionType.MOVE) {
-                this.executeMove(action.props.angle)
+                if (action.props.angle == (this.currPiece.dxn.angle + 2) % 4) {
+                    this.executeRotate(1)
+                } else {
+                    this.executeMove(action.props.angle)
+                }
             } else if (action.type == ActionType.ROTATE) {
                 this.executeRotate(action.props.angle)
             } else if (action.type == ActionType.MOVE_TO) {
@@ -87,14 +101,12 @@ const CoreState = class {
     }
     // Move the current piece one cell in the given direction; rollback if not valid
     executeMove(angle) {
-        if (angle % 2 != this.currPiece.dxn.angle % 2) {
-            if (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
-                while (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
-                    this.currPiece.activeMove((angle + 2) % 4)
-                }
+        if (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
+            while (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
+                this.currPiece.activeMove((angle + 2) % 4)
             }
-            this.currPiece.activeMove(angle)
         }
+        this.currPiece.activeMove(angle)
     }
     // Rotate the current piece in the given direction; rollback if not valid
     executeRotate(angle) {
@@ -146,25 +158,40 @@ const CoreState = class {
 
     // ===== IDLE ACTIONS =====
     // core rules of the game but is not very playable at all, nor does it have good objectives.
-    update(move) {
+    update(idleMoveIncluded) {
         if (!this.isGameOver) {
-            if (move) {
+            if (idleMoveIncluded) {
                 if (this.placeBlock) {
                     // Place the current piece, create a new one, and check for new filled lines
-                    this.placeCurrentPiece();
-                    this.placeBlock = false;
-                    this.gravity.turnLeft(1);
-    
-                    this.createNewPiece();
-                    this.checkTargets();
-                    this.checkFilledLines(this.boardSize);
+                    this.placeCurrentPiece()
+                    this.placeBlock = false
+                    if (this.gravity.angle == DXN.DOWN) {
+                        this.gravity.turnLeft(1)
+                    } else {
+                        this.gravity.turnRight(1)
+                    }
                     
-                    this.createNewTargetBlock();
+                    // Check and clear any filled targets or lines
+                    this.gameOver = checkFilledTargets({
+                        targets: this.targets,
+                        board: this.board,
+                        emptyValue: this.emptyValue,
+                    })
+                    checkFilledLines({
+                        threshold: this.boardSize,
+                        angle: this.gravity.angle,
+                        boardSize: this.boardSize,
+                        board: this.board,
+                        emptyValue: this.emptyValue})
+                    
+                    // Create new game objects
+                    this.createNewPiece()
+                    this.createNewTarget()
                 } else {
                     // Move the current piece, first in its direction of gravity and second according to the player.
                     if (this.currPiece && this.collisionTimer == 0) {
                         this.currPiece.idleMove()
-                    }
+                    } 
                 }
                 this.updateCollisionTimer()
             }
@@ -205,18 +232,13 @@ const CoreState = class {
         })
         this.currPiece = piece
     }
-
-    // Create a new 2x2 TargetBlock in a random location.
-    createNewTargetBlock() {
-        var [x, y] = [this.spawnPosition(), this.spawnPosition()]
-        var targetBlock = new TargetBlock({
-            coreState: this,
-            x0: x - 1,
-            y0: y - 1,
-            x1: x + 1,
-            y1: y + 1,
-        })
-        this.targetBlocks.push(targetBlock)
+    // Create a new 2x2 Target in a random location.
+    createNewTarget() {
+        var target
+        while (!target) {
+            target = this.targetStage.consumeTarget()
+        }
+        this.targets.push(target)
     }
     // Change the CoreState's grid values based on where the current piece is.
     placeCurrentPiece() {
@@ -229,97 +251,7 @@ const CoreState = class {
                 }
             }
         }
-    }
-    // Check all TargetBlocks and update them as needed
-    checkTargets() {
-        // TODO: This code can possibly be improved, both in terms of format and in isCleared removal.
-        this.targetBlocks.forEach(targetBlock => targetBlock.update())
-        this.targetBlocks.forEach(targetBlock => {
-            if (targetBlock.isFilled) {
-                targetBlock.clear(this.board, this.emptyValue)
-            } else if (targetBlock.isGameOver) {
-                this.gameOver = true
-            }
-        })
-        var remainingTargets = []
-        this.targetBlocks.forEach(targetBlock => {
-            if (!targetBlock.isCleared) {
-                remainingTargets.push(targetBlock)
-            }
-        })
-        this.targetBlocks = remainingTargets
-    }
-    // Check for filled lines within a certain threshold and clear them Tetris-style, based
-    // on the current direction of gravity.
-    checkFilledLines(threshold) {
-        var angle = this.currPiece.dxn.angle
-        if (angle % 2 == 0) {
-            for (var x = 0; x < this.boardSize; x++) {
-                var count = 0;
-                for (var y = 0; y < this.boardSize; y++) {
-                    if (this.board[y][x].type > 0) {
-                        count += 1;
-                    }
-                }
-                // Horizontally shift the left or the right of the cleared line
-                if (count >= threshold) {
-                    if (angle % 4 == DXN.RIGHT) {
-                        for (var j = 0; j < x; j++) {
-                            i = x - j - 1
-                            for (var y_ = 0; y_ < this.boardSize; y_++) {
-                                this.board[y_][i + 1] = this.board[y_][i]
-                            }
-                        }
-                        for (var y_ = 0; y_ < this.boardSize; y_++) {
-                            this.board[y_][0] = new Cell(0, {})
-                        }
-                    } else {
-                        for (var i = x + 1; i < this.boardSize; i++) {
-                            for (var y_ = 0; y_ < this.boardSize; y_++) {
-                                this.board[y_][i - 1] = this.board[y_][i]
-                            }
-                        }
-                        for (var y_ = 0; y_ < this.boardSize; y_++) {
-                            this.board[y_][this.boardSize - 1] = new Cell(0, {})
-                        }
-                    }
-                }
-            }
-        } else {
-            for (var y = 0; y < this.boardSize; y++) {
-                var count = 0;
-                for (var x = 0; x < this.boardSize; x++) {
-                    if (this.board[y][x].type > 0) {
-                        count += 1;
-                    }
-                }
-                // Horizontally shift the left or the right of the cleared line
-                if (count >= threshold) {
-                    if (angle % 4 == DXN.DOWN) {
-                        for (var j = 0; j < y; j++) {
-                            i = y - j - 1
-                            for (var x_ = 0; x_ < this.boardSize; x_++) {
-                                this.board[i + 1][x_] = this.board[i][x_]
-                            }
-                        }
-                        for (var x_ = 0; x_ < this.boardSize; x_++) {
-                            this.board[0][x_] = new Cell(0, {})
-                        }
-                    } else {
-                        for (var i = y + 1; i < this.boardSize; i++) {
-                            for (var x_ = 0; x_ < this.boardSize; x_++) {
-                                this.board[i - 1][x_] = this.board[i][x_]
-                            }
-                        }
-                        for (var x_ = 0; x_ < this.boardSize; x_++) {
-                            this.board[this.boardSize - 1][x_] = new Cell(0, {})
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-    }
+    }    
     // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
     updateCollisionTimer() {
         if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {

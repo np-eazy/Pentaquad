@@ -5,20 +5,18 @@ const CLIENT_PADDING_X = 160;
 const CLIENT_PADDING_Y = 0;
 
 class GameController {
-    constructor() {
+    constructor({windowSize, boardSize}) {
         this.actionQueue = []
         this.cursorX = 0
         this.cursorY = 0
+        this.toggleMoveTo = false
+        this.windowSize = windowSize
+        this.boardSize = boardSize
     }
-
-    // TODO: Right now the default keyDown event doesn't immediately repeat keys held down. Change the implementation for certain keys
-    // such that a keyDown event adds to a keyset and a corresponding keyUp event removes from the keyset, and replace consumeAction
-    // with a function that simply returns the mapped actions from the.
-    
     // We should have two types of controls: holdable keys which follow the rule above, and single-press keys which already work as
     // intended with keyDown. Holdable keys include WASD movement, and single-press keys include SPACE and QE for placing/rotation.
     handleKeyDown(event) {
-        var action = null;
+        var action = null
         var keycode = event.keyCode
         if (keycode == 87) { // W
             action = new GameAction(ActionType.MOVE, {angle: 1})
@@ -44,7 +42,7 @@ class GameController {
         if (action != null) {
             this.actionQueue.push(action)
         }
-        return this;
+        return this
     }
 
     // Update the mouse position
@@ -53,9 +51,9 @@ class GameController {
         this.cursorY = event.clientY - CLIENT_PADDING_Y
     }
 
-    handleMouseDown(event, windowSize, boardSize) {
-        var [x_, y_] = this.gridCursor(windowSize, boardSize)
-        this.actionQueue.push(new GameAction(ActionType.MOVE_TO, {x: x_, y: y_}))
+    // Toggle the moveTo flag to continuously produce MOVE_TO actions.
+    handleMouseDown(event) {
+        this.toggleMoveTo = !this.toggleMoveTo
     }
 
     // Map the global location of the mouse with the in-game grid index of the cursor.
@@ -67,7 +65,15 @@ class GameController {
 
     // Consume the last action registered in the queue.
     consumeAction() {         
-        return this.actionQueue.shift()
+        var action = this.actionQueue.shift()
+        if (action) {
+            return action
+        } else {
+            if (this.toggleMoveTo) {
+                var [x_, y_] = this.gridCursor(this.windowSize, this.boardSize)
+                this.actionQueue.push(new GameAction(ActionType.MOVE_TO, {x: x_, y: y_}))               
+            }
+        }
     }
 }
 
