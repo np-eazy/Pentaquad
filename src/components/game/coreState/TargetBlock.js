@@ -29,14 +29,15 @@ class TargetBlock {
     
     // Extend the corners out by one cell. If any corner leaves the bounds of the game's board, GameOver flag goes up.
     grow() {
-        this.x0 -= 1
-        this.y0 -= 1
-        this.x1 += 1
-        this.y1 += 1
+        // Right now for testing purposes this is disabled.
+        // this.x0 -= 1
+        // this.y0 -= 1
+        // this.x1 += 1
+        // this.y1 += 1
 
-        if (this.x0 < 0 || this.y0 < 0 || this.x1 >= this.boardSize || this.y1 >= this.boardSize) {
-            this.isGameOver = true
-        }
+        // if (this.x0 < 0 || this.y0 < 0 || this.x1 >= this.boardSize || this.y1 >= this.boardSize) {
+        //     this.isGameOver = true
+        // }
     }
 
     // Check that every spot covered by this TargetBlock is "filled" with a Cell of type > 0, signifying that 

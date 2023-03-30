@@ -147,16 +147,16 @@ const CoreState = class {
 
     // ===== IDLE ACTIONS =====
     // core rules of the game but is not very playable at all, nor does it have good objectives.
-    update(move) {
+    update(idleMoveIncluded) {
         if (!this.isGameOver) {
-            if (move) {
+            if (idleMoveIncluded) {
                 if (this.placeBlock) {
                     // Place the current piece, create a new one, and check for new filled lines
                     this.placeCurrentPiece()
                     this.placeBlock = false
                     this.gravity.turnLeft(1)
-    
-                    this.createNewPiece()
+                    
+                    // Check and clear any filled targets or lines
                     this.gameOver = checkFilledTargets({
                         targetBlocks: this.targetBlocks,
                         board: this.board,
@@ -167,14 +167,16 @@ const CoreState = class {
                         angle: this.gravity.angle,
                         boardSize: this.boardSize,
                         board: this.board,
-                        emptyValue: this.emptyValue()})
+                        emptyValue: this.emptyValue})
                     
+                    // Create new game objects
+                    this.createNewPiece()
                     this.createNewTargetBlock()
                 } else {
                     // Move the current piece, first in its direction of gravity and second according to the player.
                     if (this.currPiece && this.collisionTimer == 0) {
                         this.currPiece.idleMove()
-                    }
+                    } 
                 }
                 this.updateCollisionTimer()
             }
