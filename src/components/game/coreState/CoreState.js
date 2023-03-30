@@ -1,5 +1,5 @@
 import Cell from "./Cell"
-import CollisionSets from "./CollisionSets"
+import BoundarySets from "./BoundarySets"
 import PieceStage from "./piece/PieceStage"
 import TargetStage from "./target/TargetStage"
 
@@ -57,7 +57,7 @@ const CoreState = class {
         // The main board on which everything happens
         this.board = [...Array(props.boardSize)].map(e => Array(props.boardSize).fill(this.emptyValue()))
         // Create 4 different sets to check if a boundary has been hit
-        this.collisionSets = new CollisionSets(props.boardSize, BOUNDARY_MARGIN, this.pidSize)      
+        this.collisionSets = new BoundarySets(props.boardSize, BOUNDARY_MARGIN, this.pidSize)      
         // The direction in which the piece moves, and in which the board moves after a line is cleared.
         this.gravity = new Direction(DXN.DOWN)
     }
@@ -159,19 +159,20 @@ const CoreState = class {
             if (idleMoveIncluded) {
                 if (this.placeBlock) {
                     this.advance()
-                    this.updateCollisionTimer()
+                    this.updateCollisionTimer(idleMoveIncluded)
                 } else {
                     // Move the current piece, first in its direction of gravity and second according to the player.
+                    console.log(this.collisionTimer)
                     if (this.currPiece && this.collisionTimer == 0) {
                         this.currPiece.idleMove()
-                        this.updateCollisionTimer()
+                        this.updateCollisionTimer(idleMoveIncluded)
                     } 
                 }
             } else {
                 if (!this.placeBlock) {
                     if (this.currPiece && this.controller && !this.placeBlock) {
                         this.executeAction()
-                        this.updateCollisionTimer()
+                        this.updateCollisionTimer(idleMoveIncluded)
                     }               
                 }
             }
