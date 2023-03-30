@@ -10,8 +10,7 @@ import { DXN, Direction, randint } from "./Utils"
 
 // The distance from the boundary that each piece 
 const SPAWN_OFFSET = 2
-// Extend edge boundaries a bit further out of the grid to make sure
-// pieces spawning on the edge can still hit the ground.
+// Extend edge boundaries a bit further to ensure pieces finish falling.
 const BOUNDARY_MARGIN = 4
 // Distance from the borders tp spawn in targets
 const TARGET_MARGIN = 4
@@ -255,11 +254,10 @@ const CoreState = class {
     }
     // Create a new 2x2 Target in a random location.
     createNewTarget() {
-        var target
-        while (!target) {
-            target = this.targetStage.consumeTarget()
+        var target = this.targetStage.consumeTarget()
+        if (target) {
+            this.targets.push(target)
         }
-        this.targets.push(target)
     }
     // Change the CoreState's grid values based on where the current piece is.
     placeCurrentPiece() {
