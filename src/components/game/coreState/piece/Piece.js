@@ -112,16 +112,15 @@ class Piece {
                 val[1] + this.cy + collisionDxn.dy, 
                 this.pidSize)
             if (!collision && boundarySet.has(globalPid)) {
-                collision = true;
+                collision = true
             }
         })
         if (collision == true) {
-            return true;
+            return true
         }
 
-        // Check for a board collision
-        for (var y = 0; y < ySize; y++) {
-            for (var x = 0; x < xSize; x++) {
+        for (var y = Math.max(0, this.cy - 3); y < Math.min(this.cy + 4, ySize); y++) {
+            for (var x = Math.max(0, this.cx - 3); x < Math.min(this.cx + 4, xSize); x++) {
                 if (board[y][x].type > 0) {
                     // x, y generate global PIDs
                     // Subtract cx and cy from PIDs to localize
@@ -130,12 +129,12 @@ class Piece {
                         y - this.cy - collisionDxn.dy, 
                         this.pidSize)
                     if (!collision && this.cells.has(globalPid)) {
-                        return true;
+                        return true
                     }
                 }
             }
         }
-        return false;
+        return false
     }
 
     // Move this piece based on a given x and y direction and recheck its appropriate hitbox
