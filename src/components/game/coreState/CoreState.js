@@ -172,7 +172,7 @@ const CoreState = class {
                 if (!this.placeBlock) {
                     if (this.currPiece && this.controller && !this.placeBlock) {
                         this.executeAction()
-                        this.updateCollisionTimer(idleMoveIncluded)
+                        this.updateCollisionTimer(true)
                     }               
                 }
             }
