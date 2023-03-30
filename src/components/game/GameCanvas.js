@@ -15,7 +15,10 @@ const GameCanvas = (props) => {
     // The global flow of tempo to facilitate the useEffect update loop
     const [canvasTimer, setCanvasTimer] = useState(0);
     // Keypress logic
-    const [gameController, setGameController] = useState(new GameController({}));
+    const [gameController, setGameController] = useState(new GameController({
+        boardSize: BOARD_SIZE,
+        windowSize: WINDOW_SIZE,
+    }));
     // TODO: Create a GameState that wraps around CoreState to control when active game logic takes place
     const [gameState, setGameState] = useState(new GameState({
         coreState: new CoreState({
@@ -25,14 +28,14 @@ const GameCanvas = (props) => {
     }));
     // The canvas is the root listener for keyDown events, which are delegated to the gameController to map to GameActions.
     const handleKeyDown = (event) => {
-        gameController.handleKeyDown(event);
+        gameController.handleKeyDown(event)
     }
     // MouseMove is also delegated to GameController gthough handled differently.
     const handleMouseMove = (event) => {
-        gameController.handleMouseMove(event);
+        gameController.handleMouseMove(event)
     }
     const handleMouseDown = (event) => {
-        gameController.handleMouseDown(event, WINDOW_SIZE, BOARD_SIZE)
+        gameController.handleMouseDown(event)
     }
     // Disable spacebar scrolling down
     window.onkeydown = function(e) {
