@@ -275,7 +275,7 @@ const CoreState = class {
     }    
     // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
     updateCollisionTimer(idleMoveIncluded) {
-        if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
+        if (this.currPiece != null && this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
             if (idleMoveIncluded) {
                 this.collisionTimer += 1
             }
