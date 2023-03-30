@@ -66,6 +66,17 @@ const GameGraphics = (props) => {
                     xCellSize, yCellSize, "#404040");
             }
         }
+
+        stage = props.gameState.coreState.targetStage
+        for (const target of stage.nextTargets) {
+            outlineRect(canvas, 
+                target.x0 * xCellSize, 
+                target.y0 * yCellSize, 
+                (target.x1 - target.x0) * xCellSize, 
+                (target.y1 - target.y0) * yCellSize, 
+                "#a0a0a0")
+        }
+
     }
 
     function renderNull(canvas) {

@@ -45,7 +45,7 @@ class Target {
     checkFill(board) {
         for (var x = this.x0; x < this.x1; x++) {
             for (var y = this.y0; y < this.y1; y++) {
-                if (board[y][x].type < 1) {
+                if (!board[y][x] || board[y][x].type < 1) {
                     return false
                 }
             }

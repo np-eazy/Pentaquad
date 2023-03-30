@@ -1,21 +1,22 @@
 import Cell from "./Cell"
 import { checkFilledLines, checkFilledTargets } from "./FillCheck"
 import CollisionSets from "./CollisionSets"
-import Target from "./target/Target"
 
 import { DXN, Direction, randint } from "./Utils"
 import { ActionType } from "./GameAction"
 import PieceStage from "./piece/PieceStage"
+import TargetStage from "./target/TargetStage"
 
-// Number of cells in each piece.
-const PIECE_SIZE = 5;
+
 // The distance from the boundary that each piece 
-const SPAWN_OFFSET = -3;
+const SPAWN_OFFSET = 2
 // Extend edge boundaries a bit further out of the grid to make sure
 // pieces spawning on the edge can still hit the ground.
-const BOUNDARY_MARGIN = 4;
+const BOUNDARY_MARGIN = 4
+// Distance from the borders tp spawn in targets
+const TARGET_MARGIN = 4
 // The number of ticks contact must take place in order to place a piece.
-const COLLISION_TIME_LIMIT = 20;
+const COLLISION_TIME_LIMIT = 20
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -35,15 +36,22 @@ const CoreState = class {
         // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
         this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2
         // The direction in which the piece moves, and in which the board moves after a line is cleared.
-        this.gravity = new Direction(DXN.LEFT)
+        this.gravity = new Direction(DXN.DOWN)
         // Flag for placing a block
         this.placeBlock = true
         // The GameState's current unplaced piece
         this.currPiece = null
         // Create a new PieceStage
-        this.pieceStage = new PieceStage({})
-        // The GameState's roster of target blocks
+        this.pieceStage = new PieceStage({
+            coreState: this,
+        })
         this.targets = []
+        // The GameState's roster of target blocks
+        this.targetStage = new TargetStage({
+            coreState: this,
+            minBound: TARGET_MARGIN,
+            maxBound: props.boardSize - TARGET_MARGIN
+        })
         // Keep track of how long this piece is in contact in its falling direction
         this.collisionTimer = 0
         // GameOver flag
@@ -153,7 +161,11 @@ const CoreState = class {
                     // Place the current piece, create a new one, and check for new filled lines
                     this.placeCurrentPiece()
                     this.placeBlock = false
-                    this.gravity.turnLeft(1)
+                    if (this.gravity.angle == DXN.DOWN) {
+                        this.gravity.turnLeft(1)
+                    } else {
+                        this.gravity.turnRight(1)
+                    }
                     
                     // Check and clear any filled targets or lines
                     this.gameOver = checkFilledTargets({
@@ -219,14 +231,10 @@ const CoreState = class {
 
     // Create a new 2x2 Target in a random location.
     createNewTarget() {
-        var [x, y] = [this.spawnPosition(), this.spawnPosition()]
-        var target = new Target({
-            coreState: this,
-            x0: x - 1,
-            y0: y - 1,
-            x1: x + 1,
-            y1: y + 1,
-        })
+        var target
+        while (!target) {
+            target = this.targetStage.consumeTarget()
+        }
         this.targets.push(target)
     }
     // Change the CoreState's grid values based on where the current piece is.
