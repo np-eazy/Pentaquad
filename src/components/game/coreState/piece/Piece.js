@@ -1,6 +1,6 @@
 import Cell from "../Cell";
-import { randint, getPID } from "../Utils"
-import { Direction, DXN } from "../Direction"
+import { randint, getPID } from "../utils/Functions"
+import { Direction, DXN } from "../utils/Direction"
 import { Color } from "../../graphics/Colors"
 
 import { PRESETS } from "../../Constants.js"

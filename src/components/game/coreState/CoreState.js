@@ -3,10 +3,10 @@ import BoundarySets from "./BoundarySets"
 import PieceStage from "./piece/PieceStage"
 import TargetStage from "./target/TargetStage"
 
-import { ActionType } from "./GameAction"
-import { checkFilledLines, checkFilledTargets } from "./FillCheck"
-import { randint } from "./Utils"
-import { DXN, Direction } from "./Direction"
+import { ActionType } from "../../control/GameAction"
+import { checkFilledLines, checkFilledTargets } from "./utils/FillCheck"
+import { randint } from "./utils/Functions"
+import { DXN, Direction } from "./utils/Direction"
 import {
     SPAWN_OFFSET,
     BOUNDARY_MARGIN,

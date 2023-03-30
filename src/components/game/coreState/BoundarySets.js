@@ -1,5 +1,5 @@
-import { getPID } from "./Utils"
-import { DXN } from "./Direction"
+import { getPID } from "./utils/Functions"
+import { DXN } from "./utils/Direction"
 
 // A container class to hold CollisionSets for quick
 // collision detection.

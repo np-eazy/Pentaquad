@@ -1,4 +1,4 @@
-import { randint } from "../Utils"
+import { randint } from "../utils/Functions"
 import Target from "./Target"
 
 import {

@@ -1,4 +1,4 @@
-import { GameAction, ActionType } from "./coreState/GameAction"
+import { GameAction, ActionType } from "./GameAction"
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 
 const CLIENT_PADDING_X = 160;
