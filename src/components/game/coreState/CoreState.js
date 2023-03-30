@@ -1,12 +1,12 @@
 import Cell from "./Cell"
-import checkFilledLines from "./FillCheck"
+import { checkFilledLines, checkFilledTargets } from "./FillCheck"
 import CollisionSets from "./CollisionSets"
-import Piece from "./Piece"
 import TargetBlock from "./TargetBlock"
 
-import { getPID, DXN, Direction, randint } from "./Utils"
+import { DXN, Direction, randint } from "./Utils"
 import { ActionType } from "./GameAction"
 import PieceStage from "./PieceStage"
+import { toHaveAccessibleName } from "@testing-library/jest-dom/dist/matchers"
 
 // Number of cells in each piece.
 const PIECE_SIZE = 5;
@@ -152,20 +152,24 @@ const CoreState = class {
             if (move) {
                 if (this.placeBlock) {
                     // Place the current piece, create a new one, and check for new filled lines
-                    this.placeCurrentPiece();
-                    this.placeBlock = false;
-                    this.gravity.turnLeft(1);
+                    this.placeCurrentPiece()
+                    this.placeBlock = false
+                    this.gravity.turnLeft(1)
     
-                    this.createNewPiece();
-                    this.checkTargets();
+                    this.createNewPiece()
+                    this.gameOver = checkFilledTargets({
+                        targetBlocks: this.targetBlocks,
+                        board: this.board,
+                        emptyValue: this.emptyValue,
+                    })
                     checkFilledLines({
                         threshold: this.boardSize,
                         angle: this.gravity.angle,
                         boardSize: this.boardSize,
                         board: this.board,
-                        emptyValue: this.emptyValue()});
+                        emptyValue: this.emptyValue()})
                     
-                    this.createNewTargetBlock();
+                    this.createNewTargetBlock()
                 } else {
                     // Move the current piece, first in its direction of gravity and second according to the player.
                     if (this.currPiece && this.collisionTimer == 0) {
@@ -237,24 +241,6 @@ const CoreState = class {
         }
     }
     // Check all TargetBlocks and update them as needed
-    checkTargets() {
-        // TODO: This code can possibly be improved, both in terms of format and in isCleared removal.
-        this.targetBlocks.forEach(targetBlock => targetBlock.update())
-        this.targetBlocks.forEach(targetBlock => {
-            if (targetBlock.isFilled) {
-                targetBlock.clear(this.board, this.emptyValue)
-            } else if (targetBlock.isGameOver) {
-                this.gameOver = true
-            }
-        })
-        var remainingTargets = []
-        this.targetBlocks.forEach(targetBlock => {
-            if (!targetBlock.isCleared) {
-                remainingTargets.push(targetBlock)
-            }
-        })
-        this.targetBlocks = remainingTargets
-    }
     
     // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
     updateCollisionTimer() {

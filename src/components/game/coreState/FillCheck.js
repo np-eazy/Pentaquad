@@ -1,7 +1,7 @@
 import { DXN } from "./Utils"
 // Check for filled lines within a certain threshold and clear them Tetris-style, based
 // on the current direction of gravity.
-const checkFilledLines = ({threshold, angle, boardSize, board, emptyValue}) => {
+export const checkFilledLines = ({threshold, angle, boardSize, board, emptyValue}) => {
     if (angle % 2 == 0) {
         for (var x = 0; x < boardSize; x++) {
             var count = 0
@@ -69,4 +69,24 @@ const checkFilledLines = ({threshold, angle, boardSize, board, emptyValue}) => {
         }
     }
 }
-export default checkFilledLines
+
+export const checkFilledTargets = ({targetBlocks, board, emptyValue}) => {
+    var gameOver = false
+    targetBlocks.forEach(targetBlock => targetBlock.update())
+    targetBlocks.forEach(targetBlock => {
+        if (targetBlock.isFilled) {
+            targetBlock.clear(board, emptyValue)
+        } else if (targetBlock.isGameOver) {
+            gameOver = true
+        }
+    })
+    var i = 0
+    while (i < targetBlocks.length) {
+        if (targetBlocks[i].isCleared) {
+            targetBlocks.splice(i, 1)
+        } else {
+            i += 1
+        }
+    }
+    return gameOver
+}
