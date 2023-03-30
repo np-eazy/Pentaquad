@@ -157,7 +157,12 @@ const CoreState = class {
     
                     this.createNewPiece();
                     this.checkTargets();
-                    this.checkFilledLines(this.boardSize, this.gravity.angle);
+                    this.checkFilledLines({
+                        threshold: this.boardSize,
+                        angle: this.gravity.angle,
+                        boardSize: this.boardSize,
+                        board: this.board,
+                        emptyValue: this.emptyValue()});
                     
                     this.createNewTargetBlock();
                 } else {
@@ -251,7 +256,7 @@ const CoreState = class {
     }
     // Check for filled lines within a certain threshold and clear them Tetris-style, based
     // on the current direction of gravity.
-    checkFilledLines(threshold, angle) {
+    checkFilledLines({threshold, angle, boardSize, board, emptyValue}) {
         var boardSize = this.boardSize
         var board = this.board
         var emptyValue = this.emptyValue
