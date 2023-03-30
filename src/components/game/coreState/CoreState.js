@@ -157,7 +157,7 @@ const CoreState = class {
     
                     this.createNewPiece();
                     this.checkTargets();
-                    this.checkFilledLines(this.boardSize);
+                    this.checkFilledLines(this.boardSize, this.gravity.angle);
                     
                     this.createNewTargetBlock();
                 } else {
@@ -251,14 +251,16 @@ const CoreState = class {
     }
     // Check for filled lines within a certain threshold and clear them Tetris-style, based
     // on the current direction of gravity.
-    checkFilledLines(threshold) {
-        var angle = this.currPiece.dxn.angle
+    checkFilledLines(threshold, angle) {
+        var boardSize = this.boardSize
+        var board = this.board
+        var emptyValue = this.emptyValue
         if (angle % 2 == 0) {
-            for (var x = 0; x < this.boardSize; x++) {
-                var count = 0;
-                for (var y = 0; y < this.boardSize; y++) {
-                    if (this.board[y][x].type > 0) {
-                        count += 1;
+            for (var x = 0; x < boardSize; x++) {
+                var count = 0
+                for (var y = 0; y < boardSize; y++) {
+                    if (board[y][x].type > 0) {
+                        count += 1
                     }
                 }
                 // Horizontally shift the left or the right of the cleared line
@@ -266,30 +268,30 @@ const CoreState = class {
                     if (angle % 4 == DXN.RIGHT) {
                         for (var j = 0; j < x; j++) {
                             i = x - j - 1
-                            for (var y_ = 0; y_ < this.boardSize; y_++) {
-                                this.board[y_][i + 1] = this.board[y_][i]
+                            for (var y_ = 0; y_ < boardSize; y_++) {
+                                board[y_][i + 1] = board[y_][i]
                             }
                         }
-                        for (var y_ = 0; y_ < this.boardSize; y_++) {
-                            this.board[y_][0] = new Cell(0, {})
+                        for (var y_ = 0; y_ < boardSize; y_++) {
+                            board[y_][0] = emptyValue()
                         }
                     } else {
-                        for (var i = x + 1; i < this.boardSize; i++) {
-                            for (var y_ = 0; y_ < this.boardSize; y_++) {
-                                this.board[y_][i - 1] = this.board[y_][i]
+                        for (var i = x + 1; i < boardSize; i++) {
+                            for (var y_ = 0; y_ < boardSize; y_++) {
+                                board[y_][i - 1] = board[y_][i]
                             }
                         }
-                        for (var y_ = 0; y_ < this.boardSize; y_++) {
-                            this.board[y_][this.boardSize - 1] = new Cell(0, {})
+                        for (var y_ = 0; y_ < boardSize; y_++) {
+                            board[y_][boardSize - 1] = emptyValue()
                         }
                     }
                 }
             }
         } else {
-            for (var y = 0; y < this.boardSize; y++) {
+            for (var y = 0; y < boardSize; y++) {
                 var count = 0;
-                for (var x = 0; x < this.boardSize; x++) {
-                    if (this.board[y][x].type > 0) {
+                for (var x = 0; x < boardSize; x++) {
+                    if (board[y][x].type > 0) {
                         count += 1;
                     }
                 }
@@ -298,24 +300,24 @@ const CoreState = class {
                     if (angle % 4 == DXN.DOWN) {
                         for (var j = 0; j < y; j++) {
                             i = y - j - 1
-                            for (var x_ = 0; x_ < this.boardSize; x_++) {
-                                this.board[i + 1][x_] = this.board[i][x_]
+                            for (var x_ = 0; x_ < boardSize; x_++) {
+                                board[i + 1][x_] = board[i][x_]
                             }
                         }
-                        for (var x_ = 0; x_ < this.boardSize; x_++) {
-                            this.board[0][x_] = new Cell(0, {})
+                        for (var x_ = 0; x_ < boardSize; x_++) {
+                            board[0][x_] = emptyValue()
                         }
                     } else {
-                        for (var i = y + 1; i < this.boardSize; i++) {
-                            for (var x_ = 0; x_ < this.boardSize; x_++) {
-                                this.board[i - 1][x_] = this.board[i][x_]
+                        for (var i = y + 1; i < boardSize; i++) {
+                            for (var x_ = 0; x_ < boardSize; x_++) {
+                                board[i - 1][x_] = board[i][x_]
                             }
                         }
-                        for (var x_ = 0; x_ < this.boardSize; x_++) {
-                            this.board[this.boardSize - 1][x_] = new Cell(0, {})
+                        for (var x_ = 0; x_ < boardSize; x_++) {
+                            board[boardSize - 1][x_] = emptyValue()
                         }
                     }
-                    break;
+                    break
                 }
             }
         }
