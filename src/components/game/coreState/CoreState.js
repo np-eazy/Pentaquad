@@ -16,7 +16,9 @@ const BOUNDARY_MARGIN = 4
 // Distance from the borders tp spawn in targets
 const TARGET_MARGIN = 4
 // The number of ticks contact must take place in order to place a piece.
-const COLLISION_TIME_LIMIT = 50
+const COLLISION_TIME_LIMIT = 100
+// The maximum number of movements to adjust a rotation
+const MAX_ROTATION_ADJUSTMENT = 2
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -108,7 +110,18 @@ const CoreState = class {
     executeRotate(angle) {
         this.currPiece.rotate(angle)
         if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
-            this.currPiece.rotate(-angle)
+            var adjustment = 0
+            while (this.currPiece.checkCollision(null, this.board, this.collisionSets) && adjustment < MAX_ROTATION_ADJUSTMENT) {
+                this.currPiece.activeMove((this.currPiece.dxn.angle + 2) % 4)
+                adjustment += 1
+            }
+            // Rollback if max rotation adjustment has been reached
+            if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
+                for (var i = 0; i < adjustment; i++) {
+                    this.currPiece.activeMove(this.currPiece.dxn.angle)
+                }
+                this.currPiece.rotate(-angle)
+            }
         }
     }
     // Move the current piece as far towards the given position as possible before encountering other cells
@@ -162,7 +175,6 @@ const CoreState = class {
                     this.updateCollisionTimer(idleMoveIncluded)
                 } else {
                     // Move the current piece, first in its direction of gravity and second according to the player.
-                    console.log(this.collisionTimer)
                     if (this.currPiece && this.collisionTimer == 0) {
                         this.currPiece.idleMove()
                         this.updateCollisionTimer(idleMoveIncluded)
