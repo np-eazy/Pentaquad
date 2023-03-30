@@ -16,7 +16,7 @@ const BOUNDARY_MARGIN = 4
 // Distance from the borders tp spawn in targets
 const TARGET_MARGIN = 4
 // The number of ticks contact must take place in order to place a piece.
-const COLLISION_TIME_LIMIT = 10
+const COLLISION_TIME_LIMIT = 50
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -66,10 +66,6 @@ const CoreState = class {
     // Set this piece's controller
     setController(controller) {
         this.controller = controller
-    }
-    // Generate a random index within SPAWN_OFFSET bounds; negative SPAWN_OFFSET guarantees spawnPosition is within the boundaries
-    spawnPosition() {
-        return randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET)
     }
 
     // ===== ACTIONS =====
@@ -162,42 +158,21 @@ const CoreState = class {
         if (!this.isGameOver) {
             if (idleMoveIncluded) {
                 if (this.placeBlock) {
-                    // Place the current piece, create a new one, and check for new filled lines
-                    this.placeCurrentPiece()
-                    this.placeBlock = false
-                    if (this.gravity.angle == DXN.DOWN) {
-                        this.gravity.turnLeft(1)
-                    } else {
-                        this.gravity.turnRight(1)
-                    }
-                    
-                    // Check and clear any filled targets or lines
-                    this.gameOver = checkFilledTargets({
-                        targets: this.targets,
-                        board: this.board,
-                        emptyValue: this.emptyValue,
-                    })
-                    checkFilledLines({
-                        threshold: this.boardSize,
-                        angle: this.gravity.angle,
-                        boardSize: this.boardSize,
-                        board: this.board,
-                        emptyValue: this.emptyValue})
-                    
-                    // Create new game objects
-                    this.createNewPiece()
-                    this.createNewTarget()
+                    this.advance()
+                    this.updateCollisionTimer()
                 } else {
                     // Move the current piece, first in its direction of gravity and second according to the player.
                     if (this.currPiece && this.collisionTimer == 0) {
                         this.currPiece.idleMove()
+                        this.updateCollisionTimer()
                     } 
                 }
-                this.updateCollisionTimer()
-            }
-            if (!this.placeBlock) {
-                if (this.currPiece && this.controller && !this.placeBlock) {
-                    this.executeAction()
+            } else {
+                if (!this.placeBlock) {
+                    if (this.currPiece && this.controller && !this.placeBlock) {
+                        this.executeAction()
+                        this.updateCollisionTimer()
+                    }               
                 }
             }
             this.timer += 1
@@ -205,19 +180,52 @@ const CoreState = class {
         return this; // CoreState.update() returns itself 
     }
 
-    // Create a new piece based on this CoreState's gravity, at a random location.
-    createNewPiece() {
+    advance() {
+        // Place the current piece, create a new one, and check for new filled lines
+        this.placeCurrentPiece()
+        this.placeBlock = false
+        if (this.gravity.angle == DXN.DOWN) {
+            this.gravity.turnLeft(1)
+        } else {
+            this.gravity.turnRight(1)
+        }
+        
+        // Check and clear any filled targets or lines
+        this.gameOver = checkFilledTargets({
+            targets: this.targets,
+            board: this.board,
+            emptyValue: this.emptyValue,
+        })
+        checkFilledLines({
+            threshold: this.boardSize,
+            angle: this.gravity.angle,
+            boardSize: this.boardSize,
+            board: this.board,
+            emptyValue: this.emptyValue})
+        
+        // Create new game objects
+        this.createNewPiece()
+        this.createNewTarget()
+    }
+
+    getSpawnPosition(angle) {
         var [x, y] = [0, 0]
-        var r = this.spawnPosition()
-        if (this.gravity.angle == DXN.RIGHT) {
+        var r = randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET)
+        if (angle == DXN.RIGHT) {
             [x, y] = [-SPAWN_OFFSET, r]
-        } else if (this.gravity.angle == DXN.UP) {
+        } else if (angle == DXN.UP) {
             [x, y] = [r, SPAWN_OFFSET + this.boardSize]
-        } else if (this.gravity.angle == DXN.LEFT) {
+        } else if (angle == DXN.LEFT) {
             [x, y] = [SPAWN_OFFSET + this.boardSize, r]
-        } else if (this.gravity.angle == DXN.DOWN) {
+        } else if (angle == DXN.DOWN) {
             [x, y] = [r, -SPAWN_OFFSET]
         }
+        return [x, y]
+    }
+
+    // Create a new piece based on this CoreState's gravity, at a random location.
+    createNewPiece() {
+        var [x, y] = this.getSpawnPosition(this.gravity.angle)
         // Get the unmounted piece from PieceStage; we need this loop in case async piece
         // doesn't arrive in time
         var piece
@@ -253,14 +261,16 @@ const CoreState = class {
         }
     }    
     // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
-    updateCollisionTimer() {
-        if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
-            this.collisionTimer += 1
-            if (this.collisionTimer == COLLISION_TIME_LIMIT) {
-                this.placeBlock = true
+    updateCollisionTimer(idleMoveIncluded) {
+        if (idleMoveIncluded) {
+            if (this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
+                this.collisionTimer += 1
+                if (this.collisionTimer == COLLISION_TIME_LIMIT) {
+                    this.placeBlock = true
+                }
+            } else {
+                this.collisionTimer = 0
             }
-        } else {
-            this.collisionTimer = 0
         }
     }
 }
