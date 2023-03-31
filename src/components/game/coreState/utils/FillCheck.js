@@ -1,9 +1,9 @@
-import { Angle } from "./Direction"
+import { Angle, Dxn } from "./Direction"
 
 // Check for filled lines within a certain threshold and clear them Tetris-style, based
 // on the current direction of gravity.
-export const checkFilledLines = ({threshold, angle, boardSize, board, emptyValue}) => {
-    if (angle % 2 == 0) {
+export const checkFilledLines = ({threshold, dxn, boardSize, board, emptyValue}) => {
+    if (dxn.isHorizontal()) {
         for (var x = 0; x < boardSize; x++) {
             var count = 0
             for (var y = 0; y < boardSize; y++) {
@@ -13,7 +13,7 @@ export const checkFilledLines = ({threshold, angle, boardSize, board, emptyValue
             }
             // Horizontally shift the left or the right of the cleared line
             if (count >= threshold) {
-                if (angle % 4 == Angle.RIGHT) {
+                if (dxn.equals(Dxn[Angle.RIGHT])) {
                     for (var j = 0; j < x; j++) {
                         i = x - j - 1
                         for (var y_ = 0; y_ < boardSize; y_++) {
@@ -45,7 +45,7 @@ export const checkFilledLines = ({threshold, angle, boardSize, board, emptyValue
             }
             // Horizontally shift the left or the right of the cleared line
             if (count >= threshold) {
-                if (angle % 4 == Angle.DOWN) {
+                if (dxn.equals(Dxn[Angle.DOWN])) {
                     for (var j = 0; j < y; j++) {
                         i = y - j - 1
                         for (var x_ = 0; x_ < boardSize; x_++) {
