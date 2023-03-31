@@ -45,29 +45,29 @@ const GameGraphics = (props) => {
         outlineRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, "#000000")
 
 
-        // Draw outlines
-        var stage = props.gameState.coreState.pieceStage
-        var [xOffset, yOffset] = [0, 0] // These offsets will better be taken care of in Domain classes.
-        for (var i = 0; i < stage.nextPieces.length; i++) {
-            var preset = stage.nextPieces[i].preset
-            var [x_, y_] = [4.5, 4.5 + 6 * i] 
-            for (const [x, y] of preset) {
-                outlineRect(
-                    canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
-                    xCellSize, yCellSize, "#404040");
-            }
-        }
-        if (stage.heldPiece != null) {
-            var preset = stage.heldPiece.preset
-            var [x_, y_] = [10.5, 4.5]
-            for (const [x, y] of preset) {
-                outlineRect(
-                    canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
-                    xCellSize, yCellSize, "#404040");
-            }
-        }
+        // Draw outlines of future pieces
+        // var stage = props.gameState.coreState.pieceStage
+        // var [xOffset, yOffset] = [0, 0] // These offsets will better be taken care of in Domain classes.
+        // for (var i = 0; i < stage.nextPieces.length; i++) {
+        //     var preset = stage.nextPieces[i].preset
+        //     var [x_, y_] = [4.5, 4.5 + 6 * i] 
+        //     for (const [x, y] of preset) {
+        //         outlineRect(
+        //             canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
+        //             xCellSize, yCellSize, "#404040");
+        //     }
+        // }
+        // if (stage.heldPiece != null) {
+        //     var preset = stage.heldPiece.preset
+        //     var [x_, y_] = [10.5, 4.5]
+        //     for (const [x, y] of preset) {
+        //         outlineRect(
+        //             canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
+        //             xCellSize, yCellSize, "#404040");
+        //     }
+        // }
 
-        stage = props.gameState.coreState.targetStage
+        var stage = props.gameState.coreState.targetStage
         for (const target of stage.nextTargets) {
             outlineRect(canvas, 
                 target.x0 * xCellSize, 
