@@ -7,10 +7,10 @@
 
 // Use this as a base to add more functionalities and features to the game.
 class Cell {
-    constructor(type, props) {
-        this.type = type
-        this.props = props
-    }
+  constructor(type, props) {
+    this.type = type;
+    this.props = props;
+  }
 }
 
-export default Cell
+export default Cell;
