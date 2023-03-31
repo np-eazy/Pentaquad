@@ -1,11 +1,12 @@
 import Cell from "../Cell";
 import { randint, getPID } from "../utils/Functions"
-import { Direction, DXN } from "../utils/Direction"
+import { randomDxn } from "../utils/Direction"
 import { Color } from "../../graphics/Colors"
 
 import { PRESETS } from "../../Constants.js"
 
-
+// Collision window radius to save on collision calculations
+const CWR = 3
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
@@ -23,35 +24,30 @@ class Piece {
     mountPiece({
         center_x, 
         center_y, 
-        angle, 
+        direction, 
         pidSize,}) {
 
         this.mounted = true
         this.cx = center_x 
         this.cy = center_y
-        this.dxn = new Direction(angle)
+        this.dxn = direction
         this.pidSize = pidSize
 
         this.cells = new Map()
         for (var [x, y] of this.preset) {
             this.cells.set(getPID(x, y, pidSize), [x, y])
         }
-        this.rotate(randint(0, 4))
+        this.rotate(randomDxn())
         if (randint(0, 2) == 1) {
             this.flip()
         }
 
         // Set this piece's color based on its initial direction; there will be more
         // room to customize this.
-        if (angle % 4 == DXN.RIGHT) {
-            this.color = new Color({ red: 225, green: 0, blue: 105})
-        } else if (angle % 4 == DXN.UP) {
-            this.color = new Color({ red: 255, green: 125, blue: 0})
-        } else if (angle % 4 == DXN.LEFT) {
-            this.color = new Color({ red: 0, green: 235, blue: 175})
-        } else if (angle % 4 == DXN.DOWN) {
-            this.color = new Color({ red: 0, green: 200, blue: 235})
-        }  
+
+        // TODO: Define Colors in a more appropriate class and keep it in RenderProps with GameState
+        // when that time comes/
+        this.color = new Color({ red: 100, green: 100, blue: 100})
     }
 
     // Just for formality/convention, we do this each time we move something from the game
@@ -74,11 +70,11 @@ class Piece {
     // Return whether or not the block has a collision with this angle.
     // Null angle option is for rotation collision check, only to make sure that the piece
     // doesn't rotate into any overlaps with filled cells.
-    checkCollision(angle, board, collisionSets) {
+    checkCollision(dxn, board, collisionSets) {
         var [xSize, ySize] = [board.length, board[0].length];
 
-        var collisionDxn = angle == null ? { dx: 0, dy: 0 } : new Direction(angle)
-        var boundarySet = angle == null ? new Set() : collisionSets.boundarySets[angle];
+        var collisionDxn = dxn == null ? { dx: 0, dy: 0 } : dxn
+        var boundarySet = dxn == null ? new Set() : collisionSets.boundarySets[dxn.angle];
         var collision = false;
 
         // Check for a boundary collision
@@ -95,8 +91,8 @@ class Piece {
             return true
         }
 
-        for (var y = Math.max(0, this.cy - 3); y < Math.min(this.cy + 4, ySize); y++) {
-            for (var x = Math.max(0, this.cx - 3); x < Math.min(this.cx + 4, xSize); x++) {
+        for (var y = Math.max(0, this.cy - CWR); y < Math.min(this.cy + CWR + 1, ySize); y++) {
+            for (var x = Math.max(0, this.cx - CWR); x < Math.min(this.cx + CWR + 1, xSize); x++) {
                 if (board[y][x].type > 0) {
                     // x, y generate global PIDs
                     // Subtract cx and cy from PIDs to localize
@@ -114,16 +110,9 @@ class Piece {
     }
 
     // Move this piece based on a given x and y direction and recheck its appropriate hitbox
-    activeMove(angle) {
-        var adxn = new Direction(angle);
-        this.cx += adxn.dx;
-        this.cy += adxn.dy;
-    }
-
-    // Move this piece based on its gravity and recheck its appropriate hitbox.
-    idleMove() {
-        this.cx += this.dxn.dx;
-        this.cy += this.dxn.dy;
+    move(dxn) {
+        this.cx += dxn.dx;
+        this.cy += dxn.dy;
     }
 
     rotate(angle) {
@@ -157,4 +146,4 @@ class Piece {
     }
 }
 
-export default Piece;
+export default Piece

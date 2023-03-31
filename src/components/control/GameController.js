@@ -1,3 +1,4 @@
+import { Angle, Dxn } from "../game/coreState/utils/Direction";
 import { GameAction, ActionType } from "./GameAction"
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 
@@ -19,13 +20,13 @@ class GameController {
         var action = null
         var keycode = event.keyCode
         if (keycode == 87) { // W
-            action = new GameAction(ActionType.MOVE, {angle: 1})
+            action = new GameAction(ActionType.MOVE, {dxn: Dxn[Angle.UP]})
         } else if (keycode == 65) { // A
-            action = new GameAction(ActionType.MOVE, {angle: 2})
+            action = new GameAction(ActionType.MOVE, {dxn: Dxn[Angle.LEFT]})
         } else if (keycode == 83) { // S
-            action = new GameAction(ActionType.MOVE, {angle: 3})
+            action = new GameAction(ActionType.MOVE, {dxn: Dxn[Angle.DOWN]})
         } else if (keycode == 68) { // D
-            action = new GameAction(ActionType.MOVE, {angle: 0})
+            action = new GameAction(ActionType.MOVE, {dxn: Dxn[Angle.RIGHT]})
         } else if (keycode == 81) { // Q
             action = new GameAction(ActionType.ROTATE, {angle: 1})
         } else if (keycode == 69) { // E

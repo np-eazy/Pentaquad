@@ -6,7 +6,7 @@ import TargetStage from "./target/TargetStage"
 import { ActionType } from "../../control/GameAction"
 import { checkFilledLines, checkFilledTargets } from "./utils/FillCheck"
 import { randint } from "./utils/Functions"
-import { DXN, Direction } from "./utils/Direction"
+import { Angle, Direction, Dxn } from "./utils/Direction"
 import {
     SPAWN_OFFSET,
     BOUNDARY_MARGIN,
@@ -56,11 +56,12 @@ const CoreState = class {
         // Create 4 different sets to check if a boundary has been hit
         this.collisionSets = new BoundarySets(props.boardSize, BOUNDARY_MARGIN, this.pidSize)      
         // The direction in which the piece moves, and in which the board moves after a line is cleared.
-        this.gravity = new Direction(DXN.DOWN)
+        this.gravity = new Direction(Angle.DOWN)
     }
 
     // ===== INITIALIZATIONS =====
-    // Set this piece's controller
+    // Set this piece's controller; this is separate from the constructor to avoid
+    // async undefined shenanigans.
     setController(controller) {
         this.controller = controller
     }
@@ -71,13 +72,13 @@ const CoreState = class {
         var action = this.controller.consumeAction()
         while (action) {
             if (action.type == ActionType.MOVE) {
-                if (action.props.angle == (this.currPiece.dxn.angle + 2) % 4) {
+                if (action.props.dxn.equals(this.currPiece.dxn.opposite())) {
                     this.executeRotate(1)
                 } else {
-                    this.executeMove(action.props.angle)
+                    this.executeMove(action.props.dxn)
                 }
             } else if (action.type == ActionType.ROTATE) {
-                this.executeRotate(action.props.angle)
+                this.executeRotate(action.props.dxn)
             } else if (action.type == ActionType.MOVE_TO) {
                 this.executeMoveTo(action.props.x, action.props.y)
             } else if (action.type == ActionType.FLIP) {
@@ -93,13 +94,13 @@ const CoreState = class {
         }
     }
     // Move the current piece one cell in the given direction; rollback if not valid
-    executeMove(angle) {
-        if (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
-            while (this.currPiece.checkCollision(angle, this.board, this.collisionSets)) {
-                this.currPiece.activeMove((angle + 2) % 4)
+    executeMove(dxn) {
+        if (this.currPiece.checkCollision(dxn, this.board, this.collisionSets)) {
+            while (this.currPiece.checkCollision(dxn, this.board, this.collisionSets)) {
+                this.currPiece.move(dxn.opposite())
             }
         }
-        this.currPiece.activeMove(angle)
+        this.currPiece.move(dxn)
     }
     // Rotate the current piece in the given direction; rollback if not valid
     executeRotate(angle) {
@@ -107,13 +108,13 @@ const CoreState = class {
         if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
             var adjustment = 0
             while (this.currPiece.checkCollision(null, this.board, this.collisionSets) && adjustment < MAX_ROTATION_ADJUSTMENT) {
-                this.currPiece.activeMove((this.currPiece.dxn.angle + 2) % 4)
+                this.currPiece.move(this.gravity.opposite())
                 adjustment += 1
             }
             // Rollback if max rotation adjustment has been reached
             if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
                 for (var i = 0; i < adjustment; i++) {
-                    this.currPiece.activeMove(this.currPiece.dxn.angle)
+                    this.currPiece.move(this.currPiece.dxn)
                 }
                 this.currPiece.rotate(-angle)
             }
@@ -121,14 +122,14 @@ const CoreState = class {
     }
     // Move the current piece as far towards the given position as possible before encountering other cells
     executeMoveTo(x, y) {
-        var moveAngle = this.gravity.angle % 2 == 0 ?
-            (this.currPiece.cy < y ? 3 : 1) :
-            (this.currPiece.cx < x ? 0 : 2)
-        var iterationsLeft = this.gravity.angle % 2 == 0 ?
+        var moveAngle = this.gravity.isHorizontal() ?
+            (this.currPiece.cy < y ? Angle.DOWN : Angle.UP) :
+            (this.currPiece.cx < x ? Angle.RIGHT : Angle.LEFT)
+        var iterationsLeft = this.gravity.isHorizontal() ?
             Math.abs(this.currPiece.cy - y) :
             Math.abs(this.currPiece.cx - x)
-        while (iterationsLeft > 0 && !this.currPiece.checkCollision(moveAngle, this.board, this.collisionSets)) {
-            this.currPiece.activeMove(moveAngle)
+        while (iterationsLeft > 0 && !this.currPiece.checkCollision(Dxn[moveAngle], this.board, this.collisionSets)) {
+            this.currPiece.move(Dxn[moveAngle])
             iterationsLeft -= 1
         }
     }
@@ -141,8 +142,8 @@ const CoreState = class {
     }
     // Drop the current piece as far down as possible
     executeDrop() {
-        while (!this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
-            this.currPiece.activeMove(this.currPiece.dxn.angle)
+        while (!this.currPiece.checkCollision(this.gravity, this.board, this.collisionSets)) {
+            this.currPiece.move(this.gravity)
         }
         this.collisionTimer = COLLISION_TIME_LIMIT
         this.placeBlock = true
@@ -171,7 +172,7 @@ const CoreState = class {
                 } else {
                     // Move the current piece, first in its direction of gravity and second according to the player.
                     if (this.currPiece && this.collisionTimer == 0) {
-                        this.currPiece.idleMove()
+                        this.currPiece.move(this.gravity)
                         this.updateCollisionTimer(idleMoveIncluded)
                     } 
                 }
@@ -192,7 +193,7 @@ const CoreState = class {
         // Place the current piece, create a new one, and check for new filled lines
         this.placeCurrentPiece()
         this.placeBlock = false
-        if (this.gravity.angle == DXN.DOWN) {
+        if (this.gravity && this.gravity.equals(Dxn[Angle.DOWN])) {
             this.gravity.turnLeft(1)
         } else {
             this.gravity.turnRight(1)
@@ -206,7 +207,7 @@ const CoreState = class {
         })
         checkFilledLines({
             threshold: this.boardSize,
-            angle: this.gravity.angle,
+            dxn: this.gravity,
             boardSize: this.boardSize,
             board: this.board,
             emptyValue: this.emptyValue})
@@ -216,16 +217,17 @@ const CoreState = class {
         this.createNewTarget()
     }
 
-    getSpawnPosition(angle) {
+    getSpawnPosition(dxn) {
+        console.log(dxn)
         var [x, y] = [0, 0]
         var r = randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET)
-        if (angle == DXN.RIGHT) {
+        if (dxn.equals(Dxn[Angle.RIGHT])) {
             [x, y] = [-SPAWN_OFFSET, r]
-        } else if (angle == DXN.UP) {
+        } else if (dxn.equals(Dxn[Angle.UP])) {
             [x, y] = [r, SPAWN_OFFSET + this.boardSize]
-        } else if (angle == DXN.LEFT) {
+        } else if (dxn.equals(Dxn[Angle.LEFT])) {
             [x, y] = [SPAWN_OFFSET + this.boardSize, r]
-        } else if (angle == DXN.DOWN) {
+        } else if (dxn.equals(Dxn[Angle.DOWN])) {
             [x, y] = [r, -SPAWN_OFFSET]
         }
         return [x, y]
@@ -233,7 +235,7 @@ const CoreState = class {
 
     // Create a new piece based on this CoreState's gravity, at a random location.
     createNewPiece() {
-        var [x, y] = this.getSpawnPosition(this.gravity.angle)
+        var [x, y] = this.getSpawnPosition(this.gravity)
         // Get the unmounted piece from PieceStage; we need this loop in case async piece
         // doesn't arrive in time
         var piece
@@ -243,7 +245,7 @@ const CoreState = class {
         piece.mountPiece({
             center_x: x,
             center_y: y,
-            angle: this.gravity.angle,
+            direction: this.gravity,
             pidSize: this.pidSize,
         })
         this.currPiece = piece
@@ -269,7 +271,7 @@ const CoreState = class {
     }    
     // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
     updateCollisionTimer(idleMoveIncluded) {
-        if (this.currPiece != null && this.currPiece.checkCollision(this.currPiece.dxn.angle, this.board, this.collisionSets)) {
+        if (this.currPiece != null && this.currPiece.checkCollision(this.gravity, this.board, this.collisionSets)) {
             if (idleMoveIncluded) {
                 this.collisionTimer += 1
             }

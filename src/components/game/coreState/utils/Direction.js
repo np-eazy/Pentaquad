@@ -1,5 +1,8 @@
 // A class to manage directionality and rotation in this game. Directions have
 // angles which represent int values for each of 4 grid directions, and associated
+
+import { randint } from "./Functions"
+
 // dx and dy values.
 export class Direction {
     constructor(angle) {
@@ -9,11 +12,24 @@ export class Direction {
 
     // Update the dx and dy after any angle is changed.
     updateDiff() {
-        var diff = getDiff(this.angle)
+        var diff = this.getDiff()
         this.dx = diff[0]
         this.dy = diff[1]
     }
 
+    // Return x and y increments that correspond with the direction
+    getDiff() {
+        if (this.angle % 4 == Angle.RIGHT) {
+            return [1, 0]
+        } else if (this.angle % 4 == Angle.UP) {
+            return [0, -1]
+        } else if (this.angle % 4 == Angle.LEFT) {
+            return [-1, 0]
+        } else if (this.angle % 4 == Angle.DOWN) {
+            return [0, 1]
+        }
+    }
+    
     // Turn left n times
     turnLeft(n) {
         this.angle = (this.angle + n) % 4
@@ -35,25 +51,44 @@ export class Direction {
             this.turnRight(-n)
         }
     }
+
+    equals(other) {
+        return this.angle == other.angle
+    }
+
+    opposite() {
+        var newAngle = (this.angle + 2) % 4
+        return Dxn[newAngle]
+    }
+
+    isHorizontal() {
+        return this.angle % 2 == 0
+    }
+
+    isVertical() {
+        return this.angle % 2 == 1
+    }
 }
 
 // Direction angle conventions for coreState's grid
-export const DXN = {
+export const Angle = {
     RIGHT: 0,
     UP: 1,
     LEFT: 2,
     DOWN: 3,
 }
 
-// Return the corresponding dx and dy with a certain angle.
-export function getDiff(angle) {
-    if (angle % 4 == DXN.RIGHT) {
-        return [1, 0]
-    } else if (angle % 4 == DXN.UP) {
-        return [0, -1]
-    } else if (angle % 4 == DXN.LEFT) {
-        return [-1, 0]
-    } else if (angle % 4 == DXN.DOWN) {
-        return [0, 1]
-    }
+export const Dxn = [
+    new Direction(Angle.RIGHT),
+    new Direction(Angle.UP),
+    new Direction(Angle.LEFT),
+    new Direction(Angle.DOWN),
+]
+
+export const opposite = (angle) => {
+    return (angle + 2) % 4
+}
+
+export const randomDxn = () => {
+    return Dxn[randint(0, 4)]
 }

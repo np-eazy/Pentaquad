@@ -1,5 +1,5 @@
 import { getPID } from "./utils/Functions"
-import { DXN } from "./utils/Direction"
+import { Angle } from "./utils/Direction"
 
 // A container class to hold CollisionSets for quick
 // collision detection.
@@ -16,16 +16,16 @@ class BoundarySets {
         }
         for (var i = -boundaryMargin; i < ySize + boundaryMargin; i++) {
             pid = getPID(xSize, i, pidSize)
-            this.boundarySets[DXN.RIGHT].set(pid, [xSize, i])
+            this.boundarySets[Angle.RIGHT].set(pid, [xSize, i])
 
             pid = getPID(i, -1, pidSize)
-            this.boundarySets[DXN.UP].set(pid, [i, -1])
+            this.boundarySets[Angle.UP].set(pid, [i, -1])
 
             pid = getPID(-1, i, pidSize)
-            this.boundarySets[DXN.LEFT].set(pid, [-1, i])
+            this.boundarySets[Angle.LEFT].set(pid, [-1, i])
 
             pid = getPID(i, ySize, pidSize)
-            this.boundarySets[DXN.DOWN].set(pid, [i, ySize])
+            this.boundarySets[Angle.DOWN].set(pid, [i, ySize])
         }
     }
 }
