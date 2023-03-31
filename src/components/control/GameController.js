@@ -2,9 +2,6 @@ import { Angle, Dxn } from "../game/coreState/utils/Direction";
 import { GameAction, ActionType } from "./GameAction"
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 
-const CLIENT_PADDING_X = 160;
-const CLIENT_PADDING_Y = 0;
-
 class GameController {
     constructor({windowSize, boardSize}) {
         this.actionQueue = []
@@ -48,8 +45,8 @@ class GameController {
 
     // Update the mouse position
     handleMouseMove(event) {
-        this.cursorX = event.clientX - CLIENT_PADDING_X
-        this.cursorY = event.clientY - CLIENT_PADDING_Y
+        this.cursorX = event.clientX
+        this.cursorY = event.clientY
     }
 
     // Toggle the moveTo flag to continuously produce MOVE_TO actions.
