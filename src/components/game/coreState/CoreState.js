@@ -36,7 +36,7 @@ const CoreState = class {
         })
         this.targets = []
 
-        // A timer that increments once each update; updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
+        // A timer that increments once each update updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
         this.timer = 0
         // Keep track of how long this piece is in contact in its falling direction
         this.collisionTimer = 0
@@ -186,7 +186,7 @@ const CoreState = class {
             }
             this.timer += 1
         }
-        return this; // CoreState.update() returns itself 
+        return this // CoreState.update() returns itself 
     }
 
     advance() {

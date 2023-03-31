@@ -14,6 +14,9 @@ export const TARGET_MARGIN = 4
 export const COLLISION_TIME_LIMIT = 100
 // The maximum number of movements to adjust a rotation
 export const MAX_ROTATION_ADJUSTMENT = 2
+// Ticks between each block advancement
+export const ADVANCE_TIME = 15 // Wait this many ticks between each idleMove() call on coreState
+
 
 
 // 5-long piece preset
@@ -45,5 +48,3 @@ export const TARGET_STAGE_MAX_LENGTH = 4
 export const TARGET_GRACE_PERIOD = 8
 export const TARGET_SPAWN_TIMER = 8
 export const TARGET_GROWTH_TIMER = 8
-
-

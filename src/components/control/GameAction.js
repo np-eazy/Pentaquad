@@ -16,4 +16,3 @@ export class GameAction {
         this.props = props
     }
 }
-

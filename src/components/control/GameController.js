@@ -1,4 +1,4 @@
-import { Angle, Dxn } from "../game/coreState/utils/Direction";
+import { Angle, Dxn } from "../game/coreState/utils/Direction"
 import { GameAction, ActionType } from "./GameAction"
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 
@@ -74,5 +74,4 @@ class GameController {
         }
     }
 }
-
-export default GameController;
+export default GameController

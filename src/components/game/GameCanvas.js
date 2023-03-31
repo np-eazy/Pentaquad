@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
-import GameGraphics from'./graphics/GameGraphics';
-import GameState from './GameState';
-import CoreState from './coreState/CoreState';
-import GameController from '../control/GameController';
+import GameGraphics from'./graphics/GameGraphics'
+import GameState from './GameState'
+import CoreState from './coreState/CoreState'
+import GameController from '../control/GameController'
 
 import {
     WINDOW_SIZE,
@@ -15,19 +15,19 @@ import {
 // and to be surrounded by other components that represent menus, settings, etc.
 const GameCanvas = (props) => {
     // The global flow of tempo to facilitate the useEffect update loop
-    const [canvasTimer, setCanvasTimer] = useState(0);
+    const [canvasTimer, setCanvasTimer] = useState(0)
     // Keypress logic
     const [gameController, setGameController] = useState(new GameController({
         boardSize: BOARD_SIZE,
         windowSize: WINDOW_SIZE,
-    }));
+    }))
     // TODO: Create a GameState that wraps around CoreState to control when active game logic takes place
     const [gameState, setGameState] = useState(new GameState({
         coreState: new CoreState({
             boardSize: BOARD_SIZE,
         }),
         controller: gameController,
-    }));
+    }))
     // The canvas is the root listener for keyDown events, which are delegated to the gameController to map to GameActions.
     const handleKeyDown = (event) => {
         gameController.handleKeyDown(event)
@@ -41,19 +41,19 @@ const GameCanvas = (props) => {
     }
     // Disable spacebar scrolling down
     window.onkeydown = function(e) {
-        return e.keyCode !== 32 && e.key !== " ";
+        return e.keyCode !== 32 && e.key !== " "
     }
 
     // Main update loop
     useEffect(() => {
         const interval = setInterval(() => {
             if (gameState != undefined) {
-                setGameState(gameState.update());
+                setGameState(gameState.update())
             }
-            setCanvasTimer(canvasTimer + 1);
-        }, REFRESH_MS);
-        return () => clearInterval(interval);
-      }, [canvasTimer]);
+            setCanvasTimer(canvasTimer + 1)
+        }, REFRESH_MS)
+        return () => clearInterval(interval)
+      }, [canvasTimer])
 
     return (
         <div id="gameCanvas" tabIndex={0} onKeyDown={handleKeyDown} onMouseMove={handleMouseMove} onMouseDown={handleMouseDown}>
@@ -61,7 +61,7 @@ const GameCanvas = (props) => {
                 <GameGraphics gameState={gameState} windowSize={WINDOW_SIZE} />
             </canvas>
         </div>
-    );
-};
+    )
+}
 
-export default GameCanvas;
+export default GameCanvas

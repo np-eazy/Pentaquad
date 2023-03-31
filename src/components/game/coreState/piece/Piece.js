@@ -1,4 +1,4 @@
-import Cell from "../Cell";
+import Cell from "../Cell"
 import { randint, getPID } from "../utils/Functions"
 import { randomDxn } from "../utils/Direction"
 import { Color } from "../../graphics/Colors"
@@ -63,19 +63,19 @@ class Piece {
     // The function to fill the coreState with cells corresponding to this Piece; this will
     // be used for cases like the render script accessing the color in the parents
     createCell() {
-        var cell = new Cell(1, {parent: this});
-        return cell;
+        var cell = new Cell(1, {parent: this})
+        return cell
     }
 
     // Return whether or not the block has a collision with this angle.
     // Null angle option is for rotation collision check, only to make sure that the piece
     // doesn't rotate into any overlaps with filled cells.
     checkCollision(dxn, board, collisionSets) {
-        var [xSize, ySize] = [board.length, board[0].length];
+        var [xSize, ySize] = [board.length, board[0].length]
 
         var collisionDxn = dxn == null ? { dx: 0, dy: 0 } : dxn
-        var boundarySet = dxn == null ? new Set() : collisionSets.boundarySets[dxn.angle];
-        var collision = false;
+        var boundarySet = dxn == null ? new Set() : collisionSets.boundarySets[dxn.angle]
+        var collision = false
 
         // Check for a boundary collision
         this.cells.forEach((val) => {
@@ -111,8 +111,8 @@ class Piece {
 
     // Move this piece based on a given x and y direction and recheck its appropriate hitbox
     move(dxn) {
-        this.cx += dxn.dx;
-        this.cy += dxn.dy;
+        this.cx += dxn.dx
+        this.cy += dxn.dy
     }
 
     rotate(angle) {

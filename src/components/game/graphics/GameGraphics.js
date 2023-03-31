@@ -20,7 +20,7 @@ const GameGraphics = (props) => {
         for (var y = 0; y < ySize; y++) {
             for (var x = 0; x < xSize; x++) {
                 if (board[y][x].type > 0) {
-                    drawRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, board[y][x].props.parent.color.getHex());
+                    drawRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, board[y][x].props.parent.color.getHex())
                 }
             }
         }
@@ -33,7 +33,7 @@ const GameGraphics = (props) => {
             // Fill in the actual cell
             for (const cell of piece.cells) {
                 [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy]
-                drawRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, piece.color.getHex());
+                drawRect(canvas, x * xCellSize, y * yCellSize, xCellSize, yCellSize, piece.color.getHex())
             }
         }
 
@@ -54,7 +54,7 @@ const GameGraphics = (props) => {
         //     for (const [x, y] of preset) {
         //         outlineRect(
         //             canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
-        //             xCellSize, yCellSize, "#404040");
+        //             xCellSize, yCellSize, "#404040")
         //     }
         // }
         // if (stage.heldPiece != null) {
@@ -63,7 +63,7 @@ const GameGraphics = (props) => {
         //     for (const [x, y] of preset) {
         //         outlineRect(
         //             canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize, 
-        //             xCellSize, yCellSize, "#404040");
+        //             xCellSize, yCellSize, "#404040")
         //     }
         // }
 
@@ -92,4 +92,4 @@ const GameGraphics = (props) => {
     }
 }
 
-export default GameGraphics;
+export default GameGraphics

@@ -33,7 +33,7 @@ export class Direction {
     // Turn left n times
     turnLeft(n) {
         this.angle = (this.angle + n) % 4
-        this.updateDiff();
+        this.updateDiff()
     }
 
     // Turn right n times
