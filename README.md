@@ -4,46 +4,25 @@ specific targets rather than filled lines in the original game.
 Start game: like any other React App(); npm run start and open localhost:3000
 
 Controls
-- Click: Move the piece to the mouse position, but only along the axis perpendicular to the piece's falling direction.
+- Click: Toggle whether or not the piece follows the cursor position
 - W: move piece up
 - A: move piece left
 - S: move piece down
 - D: move piece right
 - For WASD controls, if going in the opposite direction of the falling direction, the piece rotates right instead.
+
 - Space: drop the current piece towards its boundary
 - Q: rotate piece left 
 - E: rotate piece right
 - F: flip the piece 
 - R: place the piece in mid-air
-- C: hold the current piece, if a piece is already held then swap that one in. A block must be placed before this can happen again (TODO)
+- C: hold the current piece, if a piece is already held then swap that one in. A block must be placed before this can happen again
 
-Initial Release Game Rules 
-Mode 0: "base" game (TODO: Implement better GameController and CoreState, and set k, h, f, t, etc. as CONSTANT_VALUES)
-- Every k ticks, a piece idly moves in its main direction; if its hitbox in that main direction hits a block, its contact timer goes up by 1
-- If the contact timer reaches a threshold h, the piece is placed. Otherwise, if lost contact in its main direction, reset the timer.
-- Every tick, a piece can take in movement actions; if its hitbox in its active direction hits a block, prevent it from moving any further in the active direction.
-- A row can be fully cleared if it is fully filled, just like the normal game Tetris.
-
-Mode 1: target blocks (TODO: Implement in CoreState)
-- Target blocks are squares that need to be solidly filled to remove and to score points.
-- Every time a block is placed, a new 1x1 target block spawns in a random location.
-- Every time a block is placed, all existing target blocks increment their timers
-- If timers hit a threshold t, their edges each grow out by 1 and the timer resets. 
-- Once a target block covers the whole board, the game is over
-
-Mode 2: target block specializations/patterns (TODO: design)
-- Target blocks can spawn in special patterns, like many consecutive ones in a row or column
-- Some target blocks can grow faster than the others
-- Some blocks don't grow, but if not reached within a certain number of turns will immediately end the game
-
-Special abilities (TODO: design)
-- Force-place: allow the user to force-place a block before it hits an appropriate surface
-- Explosion: blow up a 5x5 area upon contact with an appropriate surface
-- Freeze: Freeze the growth of new target blocks for f block placements
-
-Scoring factors (TODO: design)
-- Filling up lines: same scoring system as Tetris
-- Hitting targets: bonus points for combos
+Game Rules 
+- Basically Tetris, but pieces are 5 blocks large and alternate by falling down or to the right. This makes for more complex thinking/structures than the original game, with room for more interesting objectives.
+- A row or column can be fully cleared if it is fully filled, but it will only clear if it is perpendicular to the current gravity.
+- Overtime, target blocks spawn starting from a 2x2 size. Target blocks need to be filled quickly, otherwise they will grow larger.
+- Once a target block covers the whole board, the game is over. As of now, GameOver is not implemented since the current version is mostly a demo of mechanisms and potential gameplay.
 
 
 # Getting Started with Create React App
