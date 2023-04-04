@@ -84,7 +84,7 @@ const CoreState = class {
           this.executeMove(action.props.dxn);
         }
       } else if (action.type == ActionType.ROTATE) {
-        this.executeRotate(action.props.dxn);
+        this.executeRotate(1);
       } else if (action.type == ActionType.MOVE_TO) {
         this.executeMoveTo(action.props.x, action.props.y);
       } else if (action.type == ActionType.FLIP) {

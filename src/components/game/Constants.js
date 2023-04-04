@@ -15,7 +15,7 @@ export const COLLISION_TIME_LIMIT = 100;
 // The maximum number of movements to adjust a rotation
 export const MAX_ROTATION_ADJUSTMENT = 2;
 // Ticks between each block advancement
-export const ADVANCE_TIME = 15; // Wait this many ticks between each idleMove() call on coreState
+export const ADVANCE_TIME = 30; // Wait this many ticks between each idleMove() call on coreState
 
 // 5-long piece preset
 export const I_PIECE = [

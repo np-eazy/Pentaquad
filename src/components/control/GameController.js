@@ -42,7 +42,7 @@ class GameController {
       action = new GameAction(ActionType.DROP, {});
     } else if (keycode == 82) {
       // R
-      action = new GameAction(ActionType.PLACE, {});
+      action = new GameAction(ActionType.ROTATE, { angle: 1 });
     } else if (keycode == 67) {
       // C
       action = new GameAction(ActionType.HOLD, {});
