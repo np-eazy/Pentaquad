@@ -50,11 +50,16 @@ const CoreState = class {
     // The dimension of the square board on which this game takes place.
     this.boardSize = props.boardSize;
     // The default "empty" value of this grid: a type-0 Cell with no props
-    this.emptyValue = () => new Cell(0, {});
+    this.emptyValue = () => new Cell(0, { t: 0 });
     // The main board on which everything happens
     this.board = [...Array(props.boardSize)].map((e) =>
-      Array(props.boardSize).fill(this.emptyValue())
-    );
+      Array(props.boardSize).fill(null)
+    ); // This loop fails to initialize unique objects all around so I'm using a double for loop instaed
+    for (var y = 0; y < this.board.length; y++) {
+      for (var x = 0; x < this.board.length; x++) {
+        this.board[y][x] = this.emptyValue();
+      }
+    }
     // Create 4 different sets to check if a boundary has been hit
     this.collisionSets = new BoundarySets(
       props.boardSize,
@@ -247,7 +252,6 @@ const CoreState = class {
   }
 
   getSpawnPosition(dxn) {
-    console.log(dxn);
     var [x, y] = [0, 0];
     var r = randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET);
     if (dxn.equals(Dxn[Angle.RIGHT])) {

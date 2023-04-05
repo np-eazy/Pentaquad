@@ -1,14 +1,7 @@
-function drawRect(canvas, x, y, xSize, ySize, color) {
-  canvas.fillStyle = color;
-  canvas.fillRect(x, y, xSize, ySize);
-}
-
-function outlineRect(canvas, x, y, xSize, ySize, color) {
-  canvas.strokeStyle = color;
-  canvas.beginPath();
-  canvas.strokeRect(x, y, xSize, ySize);
-  canvas.closePath();
-}
+import { drawRect, outlineRect } from "./Shapes";
+import Cell from "../coreState/Cell";
+import { drawCell } from "./DrawCell";
+import { updateCell } from "./UpdateCell";
 
 // The code in GameGraphics is short-lived and due for a refactor as soon as core logic is fleshed out.
 // Disregard the spaghetti code, it's only to provide the most minimal UI for testing/debugging.
@@ -20,36 +13,47 @@ const GameGraphics = (props) => {
       props.windowSize / xSize,
       props.windowSize / ySize,
     ];
+
+    // Draw grid cells
     for (var y = 0; y < ySize; y++) {
       for (var x = 0; x < xSize; x++) {
-        if (board[y][x].type > 0) {
-          drawRect(
-            canvas,
-            x * xCellSize,
-            y * yCellSize,
-            xCellSize,
-            yCellSize,
-            board[y][x].props.parent.color.getHex()
-          );
-        }
+        drawCell(
+          canvas,
+          props.gameState.coreState.board[y][x],
+          x * xCellSize,
+          y * yCellSize,
+          xCellSize,
+          yCellSize,
+          {} // TODO: Keep a GraphicProps map
+        );
+      }
+    }
+
+    // Update grid cells
+    for (var y = 0; y < ySize; y++) {
+      for (var x = 0; x < xSize; x++) {
+        updateCell(props.gameState.coreState.board[y][x]);
       }
     }
 
     // Fill in cells from the coreState current piece.
     var [x, y] = [0, 0];
     var piece = props.gameState.coreState.currPiece;
+    // TODO: Improve
+    var mainCell = new Cell(1, { dxn: props.gameState.coreState.gravity });
     if (piece != null) {
       // Fill in the hitboxes to debug collision detection.
       // Fill in the actual cell
       for (const cell of piece.cells) {
         [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];
-        drawRect(
+        drawCell(
           canvas,
+          mainCell,
           x * xCellSize,
           y * yCellSize,
           xCellSize,
           yCellSize,
-          piece.color.getHex()
+          {} // TODO: Keep a GraphicProps map
         );
       }
     }
