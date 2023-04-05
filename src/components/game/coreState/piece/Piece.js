@@ -3,7 +3,7 @@ import { randint, getPID } from "../utils/Functions";
 import { randomDxn } from "../utils/Direction";
 import { Color } from "../../graphics/Colors";
 
-import { PRESETS } from "../../Constants.js";
+import { PRESETS, BASE_COLORS } from "../../Constants.js";
 
 // Collision window radius to save on collision calculations
 const CWR = 3;
@@ -17,7 +17,10 @@ class Piece {
     this.cy = undefined;
     this.dxn = undefined;
     this.pidSize = undefined;
-    this.preset = PRESETS[randint(0, PRESETS.length)];
+    
+    var index = randint(0, PRESETS.length)
+    this.preset = PRESETS[index];
+    this.baseColor = BASE_COLORS[index];
   }
 
   // Before the piece is mounted to a global location, it shouldn't be used/updated.
@@ -58,7 +61,10 @@ class Piece {
   // The function to fill the coreState with cells corresponding to this Piece; this will
   // be used for cases like the render script accessing the color in the parents
   createCell() {
-    var cell = new Cell(1, { parent: this });
+    var cell = new Cell(1, { 
+      parent: this,
+      baseColor: this.baseColor,
+     });
     return cell;
   }
 

@@ -13,11 +13,13 @@ const MARKER_COLOR = new Color({
   green: 50,
   blue: 58,
 });
-const FILLED_COLOR_HEX = new Color({
+const MARKER_COLOR_HEX = MARKER_COLOR.getHex();
+const FILLED_COLOR = new Color({
   red: 125,
   green: 125,
   blue: 145,
-}).getHex();
+})
+const FILLED_COLOR_HEX = FILLED_COLOR.getHex();
 
 // cell.type == 0
 const drawEmptyCell = (canvas, cell, x0, y0, width, height) => {
@@ -26,14 +28,25 @@ const drawEmptyCell = (canvas, cell, x0, y0, width, height) => {
     EMPTY_COLOR,
     MARKER_COLOR,
     cell.props.t,
-    linInt
+    linInt,
   ).getHex();
   drawRect(canvas, x0, y0, width, height, color);
 };
 
 // cell.type == 1
 const drawCellType1 = (canvas, cell, x0, y0, width, height) => {
-  drawRect(canvas, x0, y0, width, height, FILLED_COLOR_HEX);
+  if (cell.props.baseColor != null) {
+      var color = interpolateColor(
+          FILLED_COLOR,
+          cell.props.baseColor,
+          0.2, 
+          linInt,
+      )
+      drawRect(canvas, x0, y0, width, height, color.getHex());
+  } else {
+      drawRect(canvas, x0, y0, width, height, FILLED_COLOR_HEX);
+  }
+  outlineRect(canvas, x0 + 2, y0 + 2, width - 4, height - 4, MARKER_COLOR_HEX);
 };
 
 // The main function to call in order to render a cell within rectangular bounds. The Cell

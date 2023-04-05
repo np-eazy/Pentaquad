@@ -40,24 +40,27 @@ const GameGraphics = (props) => {
     var [x, y] = [0, 0];
     var piece = props.gameState.coreState.currPiece;
     // TODO: Improve
-    var mainCell = new Cell(1, { dxn: props.gameState.coreState.gravity });
-    if (piece != null) {
-      // Fill in the hitboxes to debug collision detection.
-      // Fill in the actual cell
-      for (const cell of piece.cells) {
-        [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];
-        drawCell(
-          canvas,
-          mainCell,
-          x * xCellSize,
-          y * yCellSize,
-          xCellSize,
-          yCellSize,
-          {} // TODO: Keep a GraphicProps map
-        );
+    if (piece) {
+      var mainCell = new Cell(1, {
+        dxn: props.gameState.coreState.gravity,
+        baseColor: piece.baseColor,
+      });
+      if (piece != null) {
+        for (const cell of piece.cells) {
+          [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];
+          drawCell(
+            canvas,
+            mainCell,
+            x * xCellSize,
+            y * yCellSize,
+            xCellSize,
+            yCellSize,
+            {} // TODO: Keep a GraphicProps map
+          );
+        }
       }
     }
-
+    
     // Draw outlines of Targets
     for (var t of props.gameState.coreState.targets) {
       outlineRect(
