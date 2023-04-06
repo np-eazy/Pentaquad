@@ -52,9 +52,11 @@ const drawCellType1 = (canvas, cell, x0, y0, width, height) => {
 // The main function to call in order to render a cell within rectangular bounds. The Cell
 // object and its coordinates are separate entities.
 export const drawCell = (canvas, cell, x0, y0, width, height) => {
+  var x = cell.props.xOffset ? x0 + cell.props.xOffset * width : x0;
+  var y = cell.props.yOffset ? y0 + cell.props.yOffset * height : y0;
   if (cell.type == 0) {
-    drawEmptyCell(canvas, cell, x0, y0, width, height);
+    drawEmptyCell(canvas, cell, x, y, width, height);
   } else if (cell.type == 1) {
-    drawCellType1(canvas, cell, x0, y0, width, height);
+    drawCellType1(canvas, cell, x, y, width, height);
   }
 };

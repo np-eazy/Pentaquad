@@ -7,6 +7,7 @@ import { PRESETS, BASE_COLORS } from "../../Constants.js";
 
 // Collision window radius to save on collision calculations
 const CWR = 3;
+const DEBUG = true;
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
@@ -18,7 +19,10 @@ class Piece {
     this.dxn = undefined;
     this.pidSize = undefined;
     
-    var index = randint(0, PRESETS.length)
+    var index = randint(0, PRESETS.length);
+    if (DEBUG) {
+      index = 0;
+    }
     this.preset = PRESETS[index];
     this.baseColor = BASE_COLORS[index];
   }

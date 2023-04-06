@@ -11,12 +11,20 @@ const updateEmptyCell = (cell) => {
   if (cell.props.t) {
     cell.props.t = cell.props.t * 0.9;
   }
+  
 };
 
 const updateEmptyCellType1 = (cell) => {};
 
 // The main function to export
 export const updateCell = (cell) => {
+  if (cell.props.xOffset) {
+    cell.props.xOffset *= 0.8;
+  }
+  if (cell.props.yOffset) {
+    cell.props.yOffset *= 0.8;
+  }
+  
   if (cell.type == 0) {
     updateEmptyCell(cell);
   } else if (cell.type == 1) {

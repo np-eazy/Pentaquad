@@ -24,7 +24,6 @@ const GameGraphics = (props) => {
           y * yCellSize,
           xCellSize,
           yCellSize,
-          {} // TODO: Keep a GraphicProps map
         );
       }
     }
