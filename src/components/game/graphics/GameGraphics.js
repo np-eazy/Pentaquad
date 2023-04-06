@@ -40,10 +40,7 @@ const GameGraphics = (props) => {
     var piece = props.gameState.coreState.currPiece;
     // TODO: Improve
     if (piece) {
-      var mainCell = new Cell(1, {
-        dxn: props.gameState.coreState.gravity,
-        baseColor: piece.baseColor,
-      });
+      var mainCell = piece.mainCell;
       if (piece != null) {
         for (const cell of piece.cells) {
           [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];

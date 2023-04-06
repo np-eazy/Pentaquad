@@ -25,6 +25,13 @@ class Piece {
     }
     this.preset = PRESETS[index];
     this.baseColor = BASE_COLORS[index];
+    
+    this.mainCell = new Cell(1,
+      {
+        dxn: this.dxn,
+        baseColor: this.baseColor,
+      }
+    )
   }
 
   // Before the piece is mounted to a global location, it shouldn't be used/updated.

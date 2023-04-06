@@ -300,7 +300,9 @@ const CoreState = class {
           cell[1][1] + this.currPiece.cy,
         ];
         if (x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize) {
-          this.board[y][x] = this.currPiece.createCell();
+          this.board[y][x] = new Cell(this.currPiece.mainCell.type,
+            {...this.currPiece.mainCell.props}
+          );
         }
       }
     }
