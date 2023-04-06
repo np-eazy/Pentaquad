@@ -4,7 +4,13 @@ import { drawCell } from "./DrawCell";
 import { updateCell } from "./UpdateCell";
 import { STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
-const STAGE_CELL_SIZE = WINDOW_SIZE / 32;
+import { renderBoard, updateBoard } from "./Board";
+import { renderStage } from "./Stage";
+import { renderPiece } from "./Piece";
+import { renderTargets } from "./Targets";
+import { renderCursor } from "./Cursor";
+
+
 
 // The code in GameGraphics is short-lived and due for a refactor as soon as core logic is fleshed out.
 // Disregard the spaghetti code, it's only to provide the most minimal UI for testing/debugging.
@@ -18,124 +24,32 @@ const GameGraphics = (props) => {
 
   // Fill in cells from the coreState board
   function renderGrid(canvas, board) {
-    // Draw grid cells
-    for (var y = 0; y < ySize; y++) {
-      for (var x = 0; x < xSize; x++) {
-        drawCell(
-          canvas,
-          props.gameState.coreState.board[y][x],
-          x * xCellSize,
-          y * yCellSize,
-          xCellSize,
-          yCellSize
-        );
-      }
-    }
+    renderBoard(canvas, 
+      board, 
+      xCellSize, yCellSize);   
 
-    // Update grid cells
-    for (var y = 0; y < ySize; y++) {
-      for (var x = 0; x < xSize; x++) {
-        updateCell(props.gameState.coreState.board[y][x]);
-      }
-    }
+    renderPiece(canvas, 
+      props.gameState.coreState.currPiece, 
+      xCellSize, yCellSize);
 
-    // Fill in cells from the coreState current piece.
-    var [x, y] = [0, 0];
-    var piece = props.gameState.coreState.currPiece;
-    // TODO: Improve
-    if (piece) {
-      var mainCell = piece.mainCell;
-      if (piece != null) {
-        for (const cell of piece.cells) {
-          [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];
-          drawCell(
-            canvas,
-            mainCell,
-            x * xCellSize,
-            y * yCellSize,
-            xCellSize,
-            yCellSize,
-            {} // TODO: Keep a GraphicProps map
-          );
-        }
-      }
-    }
+    renderTargets(canvas, 
+      props.gameState.coreState.targets, 
+      props.gameState.coreState.targetStage, 
+      xCellSize, yCellSize);
 
-    // Draw outlines of Targets
-    for (var t of props.gameState.coreState.targets) {
-      outlineRect(
-        canvas,
-        t.x0 * xCellSize,
-        t.y0 * yCellSize,
-        (t.x1 - t.x0) * xCellSize,
-        (t.y1 - t.y0) * yCellSize,
-        "#000000"
-      );
-    }
-    [x, y] = props.gameState.controller.gridCursor(
-      props.windowSize,
-      board.length
-    );
-    outlineRect(
-      canvas,
-      x * xCellSize,
-      y * yCellSize,
-      xCellSize,
-      yCellSize,
-      "#000000"
-    );
+    renderCursor(canvas,
+      props.gameState.coreState.board,
+      props.gameState.controller,
+      WINDOW_SIZE,
+      xCellSize, yCellSize);
 
-    var stage = props.gameState.coreState.targetStage;
-    for (const target of stage.nextTargets) {
-      outlineRect(
-        canvas,
-        target.x0 * xCellSize,
-        target.y0 * yCellSize,
-        (target.x1 - target.x0) * xCellSize,
-        (target.y1 - target.y0) * yCellSize,
-        "#a0a0a0"
-      );
-    }
+    updateBoard(board);
   }
 
-  function renderStage(canvas, board) {
-    drawRect(canvas, WINDOW_SIZE, 0, STAGE_WIDTH, WINDOW_SIZE, "#000000");
-    // Draw outlines of future pieces
-    var stage = props.gameState.coreState.pieceStage;
-    var [xOffset, yOffset] = [0, 0]; // These offsets will better be taken care of in Domain classes.
-    for (var i = 0; i < stage.nextPieces.length; i++) {
-      var preset = stage.nextPieces[i].preset;
-      var [x_, y_] = [2.25, 2.5 + 6 * i];
-      for (const [x, y] of preset) {
-        drawCell(
-          canvas,
-          stage.nextPieces[i].mainCell,
-          WINDOW_SIZE + xOffset + (x + x_) * STAGE_CELL_SIZE,
-          yOffset + (y + y_) * STAGE_CELL_SIZE,
-          STAGE_CELL_SIZE,
-          STAGE_CELL_SIZE,
-        );
-      }
-    }
-    if (stage.heldPiece) {
-      var preset = stage.heldPiece.preset;
-      var [x_, y_] = [2.25, 26.5];
-      for (const [x, y] of preset) {
-        drawCell(
-          canvas,
-          stage.heldPiece.mainCell,
-          WINDOW_SIZE + xOffset + (x + x_) * STAGE_CELL_SIZE,
-          yOffset + (y + y_) * STAGE_CELL_SIZE,
-          STAGE_CELL_SIZE,
-          STAGE_CELL_SIZE,
-        );
-      }
-    }
-  }
 
   function render(canvas) {
     renderGrid(canvas, board);
-    renderStage(canvas, board);
+    renderStage(canvas, props.gameState.coreState.pieceStage);
   }
 
   function renderNull(canvas) {}
