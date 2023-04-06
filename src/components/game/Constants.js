@@ -2,10 +2,11 @@ import { Color } from "./graphics/Colors";
 
 // Real time/space parameters
 export const WINDOW_SIZE = 800;
+export const STAGE_WIDTH = 200;
 export const REFRESH_MS = 10;
 
 // Board parameters
-export const BOARD_SIZE = 10;
+export const BOARD_SIZE = 20;
 // The distance from the boundary that each piece
 export const SPAWN_OFFSET = 2;
 // Extend edge boundaries a bit further to ensure pieces finish falling.
@@ -93,11 +94,11 @@ export const U_PIECE = [
   [1, 1],
 ];
 export const B_PIECE = [
+  [0, -1],
   [0, 0],
-  [0, 1],
+  [1, -1],
   [1, 0],
   [1, 1],
-  [1, 2],
 ];
 export const W_PIECE = [
   [-1, 1],
