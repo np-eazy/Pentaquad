@@ -4,7 +4,7 @@ import { drawCell } from "./DrawCell";
 import { updateCell } from "./UpdateCell";
 import { STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
-const STAGE_CELL_SIZE = WINDOW_SIZE / 24;
+const STAGE_CELL_SIZE = WINDOW_SIZE / 32;
 
 // The code in GameGraphics is short-lived and due for a refactor as soon as core logic is fleshed out.
 // Disregard the spaghetti code, it's only to provide the most minimal UI for testing/debugging.
@@ -117,17 +117,17 @@ const GameGraphics = (props) => {
         );
       }
     }
-    if (stage.heldPiece != null) {
+    if (stage.heldPiece) {
       var preset = stage.heldPiece.preset;
-      var [x_, y_] = [10.5, 4.5];
+      var [x_, y_] = [2.25, 26.5];
       for (const [x, y] of preset) {
-        outlineRect(
+        drawCell(
           canvas,
-          xOffset + (x + x_) * STAGE_CELL_SIZE,
+          stage.heldPiece.mainCell,
+          WINDOW_SIZE + xOffset + (x + x_) * STAGE_CELL_SIZE,
           yOffset + (y + y_) * STAGE_CELL_SIZE,
           STAGE_CELL_SIZE,
           STAGE_CELL_SIZE,
-          "#404040"
         );
       }
     }
