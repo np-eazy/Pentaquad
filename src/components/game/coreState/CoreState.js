@@ -320,6 +320,9 @@ const CoreState = class {
             this.board[y][x] = this.emptyValue();
           }
         }
+      } else if (this.currPiece.mainCell.type == 4) {
+      } else if (this.currPiece.mainCell.type == 5) {
+
       } else {
         var [x, y] = [0, 0];
         for (const cell of this.currPiece.cells) {

@@ -1,4 +1,5 @@
 import { ADVANCE_TIME } from "./Constants";
+import { dropzone } from "./coreState/utils/Dropzone";
 import { inBounds } from "./coreState/utils/Functions";
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,
@@ -46,29 +47,14 @@ const GameState = class {
   markDropZone() {
     var piece = this.coreState.currPiece;
     if (piece && piece.mainCell.type != 2) {
-      var alreadyCovered = new Set();
-      var counter = 0;
-      var [dx, dy] = this.coreState.gravity.getDiff();
-      for (const cell of piece.cells) {
-        var [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];
-        var index = this.coreState.gravity.isHorizontal() ? y : x;
-        if (!alreadyCovered.has(index)) {
-          alreadyCovered.add(index);
-          while (
-            inBounds(x, y, this.coreState.boardSize) &&
-            this.coreState.board[y][x].type == 0
-          ) {
-            // Traverse in the falling direction of this piece to mark all empty pieces under it.
-            var cellProps = this.coreState.board[y][x].props;
-            cellProps.marked = true;
-            cellProps.markerAngle = this.coreState.gravity.angle;
-
-            x += dx;
-            y += dy;
-          }
-        }
-        counter += 1;
-      }
+      dropzone(
+        this.coreState.board, 
+        this.coreState.currPiece, 
+        this.coreState.gravity, 
+        (cell) => {
+          cell.props.marked = true;
+          cell.props.markerAngle = this.coreState.gravity.angle;
+        });
     }
   }
 
