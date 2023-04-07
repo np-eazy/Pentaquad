@@ -1,7 +1,7 @@
-import Cell from "./Cell";
+import Cell from "./objects/cell/Cell";
 import BoundarySets from "./BoundarySets";
-import PieceStage from "./piece/PieceStage";
-import TargetStage from "./target/TargetStage";
+import PieceStage from "./objects/piece/PieceStage";
+import TargetStage from "./objects/target/TargetStage";
 
 import { ActionType } from "../control/GameAction";
 import { checkFilledLines, checkFilledTargets } from "./utils/FillCheck";

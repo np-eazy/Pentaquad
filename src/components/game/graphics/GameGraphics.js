@@ -1,7 +1,6 @@
 import { drawRect, outlineRect } from "./utils/Shapes";
-import Cell from "../coreState/Cell";
+import Cell from "../coreState/objects/cell/Cell";
 import { drawCell } from "./objects/cell/DrawCell";
-import { updateCell } from "./objects/cell/UpdateCell";
 import { STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
 import { renderBoard, updateBoard } from "./sections/Board";
@@ -22,11 +21,13 @@ const GameGraphics = (props) => {
     props.windowSize / ySize,
   ];
 
-  // Fill in cells from the coreState board
-  function renderGrid(canvas, board) {
+  function render(canvas) {
     renderBoard(canvas, 
       board, 
-      xCellSize, yCellSize);   
+      xCellSize, yCellSize);
+
+    renderStage(canvas, 
+      props.gameState.coreState.pieceStage);
 
     drawPiece(canvas, 
       props.gameState.coreState.currPiece, 
@@ -46,12 +47,6 @@ const GameGraphics = (props) => {
     updateBoard(board);
   }
 
-
-  function render(canvas) {
-    renderGrid(canvas, board);
-    renderStage(canvas, props.gameState.coreState.pieceStage);
-  }
-
   function renderNull(canvas) {}
 
   // Canvas and context wiring
@@ -64,7 +59,5 @@ const GameGraphics = (props) => {
       : renderNull(ctx);
   }
 };
-
-function renderGrid(canvas, board) {}
 
 export default GameGraphics;

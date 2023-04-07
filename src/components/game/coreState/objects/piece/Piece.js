@@ -1,9 +1,9 @@
-import Cell from "../Cell";
-import { randint, getPID } from "../utils/Functions";
-import { randomDxn } from "../utils/Direction";
-import { Color } from "../../graphics/utils/Colors";
+import Cell from "../cell/Cell";
+import { randint, getPID } from "../../utils/Functions";
+import { randomDxn } from "../../utils/Direction";
+import { Color } from "../../../graphics/utils/Colors";
 
-import { PRESETS, BASE_COLORS } from "../../Constants.js";
+import { PRESETS, BASE_COLORS } from "../../../Constants";
 
 // Collision window radius to save on collision calculations
 const CWR = 3;
