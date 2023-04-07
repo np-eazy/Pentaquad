@@ -1,10 +1,11 @@
 import { STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
 import { renderBoard, updateBoard } from "./objects/board/Board";
-import { renderStage } from "./objects/stage/Stage";
+import { renderStage, updateStage } from "./objects/stage/Stage";
 import { drawPiece } from "./objects/piece/DrawPiece";
 import { drawTargets } from "./objects/target/DrawTargets";
 import { drawCursor } from "./objects/cursor/DrawCursor";
+import { updatePiece } from "./objects/piece/UpdatePiece";
 
 
 
@@ -42,6 +43,8 @@ const GameGraphics = (props) => {
       xCellSize, yCellSize);
 
     updateBoard(board);
+    updatePiece(props.gameState.coreState.currPiece);
+    updateStage(props.gameState.coreState.pieceStage);
   }
 
   function renderNull(canvas) {}

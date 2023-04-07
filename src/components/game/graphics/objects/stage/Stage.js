@@ -1,6 +1,7 @@
 import { STAGE_WIDTH, WINDOW_SIZE } from "../../../Constants";
 import { drawCell } from "../cell/DrawCell";
 import { drawRect, outlineRect } from "../../Pipeline";
+import { updatePiece } from "../piece/UpdatePiece";
 
 const STAGE_CELL_SIZE = WINDOW_SIZE / 32;
 
@@ -36,3 +37,12 @@ export function renderStage(canvas, stage) {
       }
     }
   }
+
+export function updateStage(stage) {
+  for (const piece of stage.nextPieces) {
+    updatePiece(piece);
+  }
+  if (stage.heldPiece) {
+    updatePiece(stage.heldPiece);
+  }
+}

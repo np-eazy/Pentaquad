@@ -4,6 +4,7 @@ import { randomDxn } from "../../utils/Direction";
 import { Color } from "../../../graphics/utils/Colors";
 
 import { PRESETS, BASE_COLORS } from "../../../Constants";
+import { updateCell } from "../../../graphics/objects/cell/UpdateCell";
 
 // Collision window radius to save on collision calculations
 const CWR = 3;
