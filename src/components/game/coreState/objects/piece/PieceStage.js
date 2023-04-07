@@ -11,7 +11,15 @@ class PieceStage {
     this.nextPieces = [];
     this.heldPiece = null;
     for (var i = 0; i < this.maxLength; i++) {
-      this.nextPieces.push(new Piece(randint(1, 3)));
+      this.nextPieces.push(new Piece(this.createType()));
+    }
+  }
+
+  createType() {
+    if (randint(0, 10) == 0) {
+      return 2;
+    } else {
+      return 1;
     }
   }
 
@@ -19,7 +27,7 @@ class PieceStage {
   consumePiece() {
     var piece = this.nextPieces.shift();
     if (this.nextPieces.length < this.maxLength) {
-      this.nextPieces.push(new Piece(randint(1, 3)));
+      this.nextPieces.push(new Piece(this.createType()));
     }
     return piece;
   }

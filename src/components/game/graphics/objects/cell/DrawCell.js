@@ -48,8 +48,8 @@ const drawCellType2 = (canvas, cell, x0, y0, width, height) => {
     var g = 0.5 + 0.2 * Math.sin(cell.props.timer * 0.1)
   
     drawRect(canvas, x0, y0, width, height, interpolateColor(cell.props.currentColor, EMPTY_COLOR, g, linInt).getHex());
-    drawRect(canvas, x0 + 2 * d, y0 + 2 * d, width - 4 * d, height - 4 * d, interpolateColor(cell.props.midLightColor, EMPTY_COLOR, g, linInt).getHex());
-    drawRect(canvas, x0 + 3 * d, y0 + 3 * d, width - 6 * d, height - 6 * d, interpolateColor(cell.props.centerLightColor, EMPTY_COLOR, g, linInt).getHex());
+    drawRect(canvas, x0 + d, y0 + d, width - 2 * d, height - 2 * d, interpolateColor(cell.props.midLightColor, EMPTY_COLOR, g, linInt).getHex());
+    drawRect(canvas, x0 + 2 * d, y0 + 2 * d, width - 4 * d, height - 4 * d, interpolateColor(cell.props.centerLightColor, EMPTY_COLOR, g, linInt).getHex());
     outlineRect(canvas, x0 + 2, y0 + 2, width - 4, height - 4, borderColor.getHex());
   }
 }
