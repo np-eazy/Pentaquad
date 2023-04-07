@@ -21,6 +21,12 @@ const updateCellType1 = (cell) => {
   
 };
 
+const updateCellType2 = (cell) => {
+  // Set meter
+  cell.props.meter = 1 - 0.5 * Math.sin(cell.props.timer * 0.03)
+  //cell.updateColors();
+}
+
 // The main function to export
 export const updateCell = (cell) => {
   // xOffset and yOffset are constantly decaying towards 0
@@ -33,5 +39,7 @@ export const updateCell = (cell) => {
     updateEmptyCell(cell);
   } else if (cell.type == 1) {
     updateCellType1(cell);
+  } else if (cell.type == 2) {
+    updateCellType2(cell);
   }
 };

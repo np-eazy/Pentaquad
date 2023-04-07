@@ -1,5 +1,6 @@
 import Piece from "./Piece";
 import { PIECE_STAGE_MAX_LENGTH } from "../../../Constants";
+import { randint } from "../../utils/Functions";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
@@ -10,7 +11,7 @@ class PieceStage {
     this.nextPieces = [];
     this.heldPiece = null;
     for (var i = 0; i < this.maxLength; i++) {
-      this.nextPieces.push(new Piece());
+      this.nextPieces.push(new Piece(randint(1, 3)));
     }
   }
 
@@ -18,7 +19,7 @@ class PieceStage {
   consumePiece() {
     var piece = this.nextPieces.shift();
     if (this.nextPieces.length < this.maxLength) {
-      this.nextPieces.push(new Piece());
+      this.nextPieces.push(new Piece(randint(1, 3)));
     }
     return piece;
   }

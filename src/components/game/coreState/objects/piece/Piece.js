@@ -13,7 +13,7 @@ const DEBUG = false;
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
 class Piece {
-  constructor() {
+  constructor(cellType = 2) {
     this.mounted = false;
     this.cx = undefined;
     this.cy = undefined;
@@ -27,7 +27,7 @@ class Piece {
     this.preset = PRESETS[index];
     this.baseColor = BASE_COLORS[index];
     
-    this.mainCell = new Cell(1,
+    this.mainCell = new Cell(cellType,
       {
         dxn: this.dxn,
         baseColor: this.baseColor,
@@ -106,26 +106,28 @@ class Piece {
       return true;
     }
 
-    for (
-      var y = Math.max(0, this.cy - CWR);
-      y < Math.min(this.cy + CWR + 1, ySize);
-      y++
-    ) {
+    if (this.mainCell.type != 2) {
       for (
-        var x = Math.max(0, this.cx - CWR);
-        x < Math.min(this.cx + CWR + 1, xSize);
-        x++
+        var y = Math.max(0, this.cy - CWR);
+        y < Math.min(this.cy + CWR + 1, ySize);
+        y++
       ) {
-        if (board[y][x].type > 0) {
-          // x, y generate global PIDs
-          // Subtract cx and cy from PIDs to localize
-          var globalPid = getPID(
-            x - this.cx - collisionDxn.dx,
-            y - this.cy - collisionDxn.dy,
-            this.pidSize
-          );
-          if (!collision && this.cells.has(globalPid)) {
-            return true;
+        for (
+          var x = Math.max(0, this.cx - CWR);
+          x < Math.min(this.cx + CWR + 1, xSize);
+          x++
+        ) {
+          if (board[y][x].type > 0) {
+            // x, y generate global PIDs
+            // Subtract cx and cy from PIDs to localize
+            var globalPid = getPID(
+              x - this.cx - collisionDxn.dx,
+              y - this.cy - collisionDxn.dy,
+              this.pidSize
+            );
+            if (!collision && this.cells.has(globalPid)) {
+              return true;
+            }
           }
         }
       }

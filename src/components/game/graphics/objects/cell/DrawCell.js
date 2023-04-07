@@ -20,7 +20,6 @@ const drawEmptyCell = (canvas, cell, x0, y0, width, height) => {
 // cell.type == 1
 const drawCellType1 = (canvas, cell, x0, y0, width, height) => {
   // TODO: calculate this at initialization, use wrapper OOP
-
   if (cell.props.currentColor) {
     var borderColor = interpolateColor(
       MARKER_COLOR,
@@ -37,6 +36,24 @@ const drawCellType1 = (canvas, cell, x0, y0, width, height) => {
   }
 };
 
+const drawCellType2 = (canvas, cell, x0, y0, width, height) => {
+  if (cell.props.currentColor) {
+    var borderColor = interpolateColor(
+      MARKER_COLOR,
+      cell.props.currentColor,
+      1 - cell.props.meter, 
+      linInt,
+    );
+    var d = cell.props.meter * LIGHT_AMPLITUDE * 0.5 + LIGHT_AMPLITUDE;
+    var g = 0.5 + 0.2 * Math.sin(cell.props.timer * 0.1)
+  
+    drawRect(canvas, x0, y0, width, height, interpolateColor(cell.props.currentColor, EMPTY_COLOR, g, linInt).getHex());
+    drawRect(canvas, x0 + 2 * d, y0 + 2 * d, width - 4 * d, height - 4 * d, interpolateColor(cell.props.midLightColor, EMPTY_COLOR, g, linInt).getHex());
+    drawRect(canvas, x0 + 3 * d, y0 + 3 * d, width - 6 * d, height - 6 * d, interpolateColor(cell.props.centerLightColor, EMPTY_COLOR, g, linInt).getHex());
+    outlineRect(canvas, x0 + 2, y0 + 2, width - 4, height - 4, borderColor.getHex());
+  }
+}
+
 // The main function to call in order to render a cell within rectangular bounds. The Cell
 // object and its coordinates are separate entities.
 export const drawCell = (canvas, cell, x0, y0, width, height) => {
@@ -46,5 +63,7 @@ export const drawCell = (canvas, cell, x0, y0, width, height) => {
     drawEmptyCell(canvas, cell, x, y, width, height);
   } else if (cell.type == 1) {
     drawCellType1(canvas, cell, x, y, width, height);
+  } else if (cell.type == 2) {
+    drawCellType2(canvas, cell, x, y, width, height);
   }
 };

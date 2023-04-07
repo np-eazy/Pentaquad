@@ -16,8 +16,6 @@ import {
 
 // Type 1: Basic filled cells, permanent
 
-// Type 2: cells that die after a lifetime
-
 // Use this as a base to add more functionalities and features to the game.
 
 

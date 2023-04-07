@@ -170,14 +170,16 @@ const CoreState = class {
   }
   // Drop the current piece as far down as possible
   executeDrop() {
-    while (
-      !this.currPiece.checkCollision(
-        this.gravity,
-        this.board,
-        this.collisionSets
-      )
-    ) {
-      this.currPiece.move(this.gravity);
+    if (this.currPiece.mainCell.type != 2) {
+      while (
+        !this.currPiece.checkCollision(
+          this.gravity,
+          this.board,
+          this.collisionSets
+        )
+      ) {
+        this.currPiece.move(this.gravity);
+      }
     }
     this.collisionTimer = COLLISION_TIME_LIMIT;
     this.placeBlock = true;

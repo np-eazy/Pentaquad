@@ -45,7 +45,7 @@ const GameState = class {
   // TODO (opt): make less inBounds calls?
   markDropZone() {
     var piece = this.coreState.currPiece;
-    if (piece) {
+    if (piece && piece.mainCell.type != 2) {
       var alreadyCovered = new Set();
       var counter = 0;
       var [dx, dy] = this.coreState.gravity.getDiff();
