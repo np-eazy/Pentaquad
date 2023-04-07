@@ -258,6 +258,7 @@ const CoreState = class {
               timer: 0,
             }
           } else {
+            this.board[y][x].updateColors()
             this.board[y][x].props.ttl -= 1
           }
         }

@@ -1,15 +1,3 @@
-import { Color, interpolateColor } from "../../utils/Colors";
-import { drawRect, outlineRect } from "../../Pipeline";
-import { linInt } from "../../utils/Functions";
-import {
-  EMPTY_COLOR,
-  MARKER_COLOR,
-  FILLED_COLOR,
-  CELL_MID_LIGHT,
-  CELL_CENTER_LIGHT,
-  CELL_BASE_COLOR_BLEND,
-  LIGHT_AMPLITUDE,
-} from "../../Theme";
 // UpdateCell refers to the graphical state of the cell, which is
 // a level above the CoreState of the game. The graphical state of the
 // cell doesn't have any impact on the CoreState, but is effectively its
@@ -30,32 +18,7 @@ const updateEmptyCell = (cell) => {
 const updateCellType1 = (cell) => {
   // Set meter
   cell.props.meter = 1 - 0.5 * Math.sin(cell.props.timer * 0.03)
-  cell.props.currentColor = interpolateColor(
-    FILLED_COLOR,
-    cell.props.baseColor,
-    CELL_BASE_COLOR_BLEND, 
-    linInt,
-  );
-  if (cell.props.ttl != -1) {
-    cell.props.currentColor = interpolateColor(
-      EMPTY_COLOR,
-      cell.props.currentColor,
-      cell.props.ttl / cell.props.lifetime,
-      linInt,
-    )
-  }
-  if (cell.props.currentColor) {
-    cell.props.midLightColor = new Color({
-      red: cell.props.currentColor.red + CELL_MID_LIGHT,
-      green: cell.props.currentColor.green + CELL_MID_LIGHT,
-      blue: cell.props.currentColor.blue + CELL_MID_LIGHT,
-    })
-    cell.props.centerLightColor = new Color({
-      red: cell.props.currentColor.red + CELL_CENTER_LIGHT,
-      green: cell.props.currentColor.green + CELL_CENTER_LIGHT,
-      blue: cell.props.currentColor.blue + CELL_CENTER_LIGHT,
-    })
-  }
+  
 };
 
 // The main function to export
