@@ -12,18 +12,16 @@ import { Color } from "../../../graphics/utils/Colors";
 const DEFAULT_PROPS = {
   xOffset: 0,
   yOffset: 0,
+  timer: 0,
+  meter: 0,
   baseColor: new Color({ red: 0, green: 0, blue: 0, }),
 }
 
 class Cell {
   constructor(type, props) {
     this.type = type;
-    var defaultProps = {
-      xOffset: 0,
-      yOffset: 0,
-    };
     this.props = {
-      ...defaultProps,
+      ...DEFAULT_PROPS,
       ...props,
     }
   }

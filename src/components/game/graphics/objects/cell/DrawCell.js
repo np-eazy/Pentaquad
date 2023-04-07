@@ -24,29 +24,56 @@ const FILLED_COLOR_HEX = FILLED_COLOR.getHex();
 // cell.type == 0
 const drawEmptyCell = (canvas, cell, x0, y0, width, height) => {
   // TODO: Check that we aren't piling up garbage, or make sure that isn't a problem
-  var color = interpolateColor(
-    EMPTY_COLOR,
-    MARKER_COLOR,
-    cell.props.t,
-    linInt,
-  ).getHex();
-  drawRect(canvas, x0, y0, width, height, color);
+  drawRect(canvas, x0, y0, width, height, EMPTY_COLOR.getHex());
+
+  var d = cell.props.meter * width / 2;
+  drawRect(canvas, x0 + d, y0 + d, width - 2 * d, height - 2 * d, MARKER_COLOR.getHex());
 };
 
 // cell.type == 1
+const BRIGHTNESS = 30;
+const CENTER_BRIGHTNESS = new Color({
+  red: BRIGHTNESS,
+  green: BRIGHTNESS,
+  blue: BRIGHTNESS,
+});
+const LIGHT_FACTOR = 1.6;
+
+
 const drawCellType1 = (canvas, cell, x0, y0, width, height) => {
-  if (cell.props.baseColor != null) {
-      var color = interpolateColor(
-          FILLED_COLOR,
-          cell.props.baseColor,
-          0.2, 
-          linInt,
-      )
-      drawRect(canvas, x0, y0, width, height, color.getHex());
-  } else {
-      drawRect(canvas, x0, y0, width, height, FILLED_COLOR_HEX);
-  }
-  outlineRect(canvas, x0 + 2, y0 + 2, width - 4, height - 4, MARKER_COLOR_HEX);
+  // TODO: calculate this at initialization, use wrapper OOP
+  var color = cell.props.baseColor ? interpolateColor(
+    FILLED_COLOR,
+    cell.props.baseColor,
+    0.2, 
+    linInt,
+  ) : FILLED_COLOR;
+  drawRect(canvas, x0, y0, width, height, color.getHex());
+
+  // TODO: inefficient OOP
+  // TODO: Color.add() function
+  var d = cell.props.meter * 3 + 3;
+  var midColor = new Color({
+    red: color.red + CENTER_BRIGHTNESS.red,
+    green: color.green + CENTER_BRIGHTNESS.green,
+    blue: color.blue + CENTER_BRIGHTNESS.blue,
+  }).getHex()
+  drawRect(canvas, x0 + d, y0 + d, width - 2 * d, height - 2 * d, midColor);
+
+  var centerColor = new Color({
+    red: color.red + CENTER_BRIGHTNESS.red * LIGHT_FACTOR,
+    green: color.green + CENTER_BRIGHTNESS.green * LIGHT_FACTOR,
+    blue: color.blue + CENTER_BRIGHTNESS.blue * LIGHT_FACTOR,
+  }).getHex()
+  drawRect(canvas, x0 + 2 * d, y0 + 2 * d, width - 4 * d, height - 4 * d, centerColor);
+
+  var borderColor = interpolateColor(
+    MARKER_COLOR,
+    color,
+    1 - cell.props.meter, 
+    linInt,
+  );
+  outlineRect(canvas, x0 + 2, y0 + 2, width - 4, height - 4, borderColor.getHex());
 };
 
 // The main function to call in order to render a cell within rectangular bounds. The Cell

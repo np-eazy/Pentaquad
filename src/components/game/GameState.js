@@ -35,6 +35,12 @@ const GameState = class {
   // TODO (opt): only call this when the piece's position changes
   // TODO (opt): make less inBounds calls?
   markDropZone() {
+    for (var x = 0; x < this.coreState.boardSize; x++) {
+      for (var y = 0; y < this.coreState.boardSize; y++) {
+        this.coreState.board[y][x].props.marked = false;
+      }
+    }
+
     var piece = this.coreState.currPiece;
     if (piece) {
       var alreadyCovered = new Set();
@@ -51,7 +57,7 @@ const GameState = class {
           ) {
             // Traverse in the falling direction of this piece to mark all empty pieces under it.
             var cellProps = this.coreState.board[y][x].props;
-            cellProps.t = 1;
+            cellProps.marked = true;
             cellProps.markerAngle = this.coreState.gravity.angle;
 
             x += dx;

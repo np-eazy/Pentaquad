@@ -8,26 +8,28 @@
 // them fade. DrawCell, UpdateCell, and the correct props are the main parts
 // that make these kinds of graphics, and much more, possible.
 const updateEmptyCell = (cell) => {
-  if (cell.props.t) {
-    cell.props.t = cell.props.t * 0.9;
+  if (cell.props.marked) {
+    cell.props.meter *= 0.9;
+  } else {
+    cell.props.meter += (1 - cell.props.meter) * 0.1;
   }
-  
 };
 
-const updateEmptyCellType1 = (cell) => {};
+const updateCellType1 = (cell) => {
+  cell.props.meter = 1 - 0.5 * Math.sin(cell.props.timer * 0.03)
+};
 
 // The main function to export
 export const updateCell = (cell) => {
-  if (cell.props.xOffset) {
-    cell.props.xOffset *= 0.8;
-  }
-  if (cell.props.yOffset) {
-    cell.props.yOffset *= 0.8;
-  }
+  // xOffset and yOffset are constantly decaying towards 0
+  cell.props.xOffset *= 0.8;
+  cell.props.yOffset *= 0.8;
+  // 
+  cell.props.timer += 1;
   
   if (cell.type == 0) {
     updateEmptyCell(cell);
   } else if (cell.type == 1) {
-    updateEmptyCellType1(cell);
+    updateCellType1(cell);
   }
 };
