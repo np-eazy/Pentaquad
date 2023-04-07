@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import GameGraphics from "./graphics/GameGraphics";
 import GameState from "./GameState";
 import CoreState from "./coreState/CoreState";
-import GameController from "../control/GameController";
+import GameController from "../game/control/GameController";
 
 import { WINDOW_SIZE, BOARD_SIZE, REFRESH_MS, STAGE_WIDTH } from "./Constants";
 

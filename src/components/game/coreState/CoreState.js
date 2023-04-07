@@ -3,7 +3,7 @@ import BoundarySets from "./BoundarySets";
 import PieceStage from "./piece/PieceStage";
 import TargetStage from "./target/TargetStage";
 
-import { ActionType } from "../../control/GameAction";
+import { ActionType } from "../control/GameAction";
 import { checkFilledLines, checkFilledTargets } from "./utils/FillCheck";
 import { randint } from "./utils/Functions";
 import { Angle, Direction, Dxn } from "./utils/Direction";
