@@ -7,7 +7,7 @@ import { PRESETS, BASE_COLORS } from "../../Constants.js";
 
 // Collision window radius to save on collision calculations
 const CWR = 3;
-const DEBUG = false;
+const DEBUG = true;
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.

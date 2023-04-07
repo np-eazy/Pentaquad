@@ -1,6 +1,6 @@
-import { drawCell } from "./DrawCell";
+import { drawCell } from "../cell/DrawCell";
 
-export const renderPiece = (canvas, piece, xCellSize, yCellSize) => {
+export const drawPiece = (canvas, piece, xCellSize, yCellSize) => {
     // Fill in cells from the coreState current piece.
     var [x, y] = [0, 0];
     // TODO: Improve

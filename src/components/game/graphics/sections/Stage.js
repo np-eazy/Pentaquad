@@ -1,5 +1,5 @@
 import { STAGE_WIDTH, WINDOW_SIZE } from "../../Constants";
-import { drawCell } from "../sprites/DrawCell";
+import { drawCell } from "../objects/cell/DrawCell";
 import { drawRect, outlineRect } from "../utils/Shapes";
 
 const STAGE_CELL_SIZE = WINDOW_SIZE / 32;

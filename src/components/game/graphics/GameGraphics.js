@@ -1,14 +1,14 @@
 import { drawRect, outlineRect } from "./utils/Shapes";
 import Cell from "../coreState/Cell";
-import { drawCell } from "./sprites/DrawCell";
-import { updateCell } from "./sprites/UpdateCell";
+import { drawCell } from "./objects/cell/DrawCell";
+import { updateCell } from "./objects/cell/UpdateCell";
 import { STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
 import { renderBoard, updateBoard } from "./sections/Board";
 import { renderStage } from "./sections/Stage";
-import { renderPiece } from "./sprites/DrawPiece";
-import { renderTargets } from "./sprites/Targets";
-import { renderCursor } from "./sprites/Cursor";
+import { drawPiece } from "./objects/piece/DrawPiece";
+import { drawTargets } from "./objects/target/DrawTargets";
+import { drawCursor } from "./objects/cursor/DrawCursor";
 
 
 
@@ -28,16 +28,16 @@ const GameGraphics = (props) => {
       board, 
       xCellSize, yCellSize);   
 
-    renderPiece(canvas, 
+    drawPiece(canvas, 
       props.gameState.coreState.currPiece, 
       xCellSize, yCellSize);
 
-    renderTargets(canvas, 
+    drawTargets(canvas, 
       props.gameState.coreState.targets, 
       props.gameState.coreState.targetStage, 
       xCellSize, yCellSize);
 
-    renderCursor(canvas,
+    drawCursor(canvas,
       props.gameState.coreState.board,
       props.gameState.controller,
       WINDOW_SIZE,

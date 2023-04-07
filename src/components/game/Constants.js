@@ -6,7 +6,7 @@ export const STAGE_WIDTH = 200;
 export const REFRESH_MS = 10;
 
 // Board parameters
-export const BOARD_SIZE = 20;
+export const BOARD_SIZE = 10;
 // The distance from the boundary that each piece
 export const SPAWN_OFFSET = 2;
 // Extend edge boundaries a bit further to ensure pieces finish falling.
