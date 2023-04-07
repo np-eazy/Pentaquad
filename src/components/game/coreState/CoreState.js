@@ -314,16 +314,24 @@ const CoreState = class {
   // Change the CoreState's grid values based on where the current piece is.
   placeCurrentPiece() {
     if (this.currPiece != null) {
-      var [x, y] = [0, 0];
-      for (const cell of this.currPiece.cells) {
-        [x, y] = [
-          cell[1][0] + this.currPiece.cx,
-          cell[1][1] + this.currPiece.cy,
-        ];
-        if (x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize) {
-          this.board[y][x] = new Cell(this.currPiece.mainCell.type,
-            {...this.currPiece.mainCell.props}
-          );
+      if (this.currPiece.mainCell.type == 3) {
+        for (var y = Math.max(0, this.currPiece.cy - 2); y < Math.min(this.boardSize, this.currPiece.cy + 3); y++) {
+          for (var x = Math.max(0, this.currPiece.cx - 2); x < Math.min(this.boardSize, this.currPiece.cx + 3); x++) {
+            this.board[y][x] = this.emptyValue();
+          }
+        }
+      } else {
+        var [x, y] = [0, 0];
+        for (const cell of this.currPiece.cells) {
+          [x, y] = [
+            cell[1][0] + this.currPiece.cx,
+            cell[1][1] + this.currPiece.cy,
+          ];
+          if (x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize) {
+            this.board[y][x] = new Cell(this.currPiece.mainCell.type,
+              {...this.currPiece.mainCell.props}
+            );
+          }
         }
       }
     }

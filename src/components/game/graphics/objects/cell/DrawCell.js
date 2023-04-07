@@ -45,12 +45,30 @@ const drawCellType2 = (canvas, cell, x0, y0, width, height) => {
       linInt,
     );
     var d = cell.props.meter * LIGHT_AMPLITUDE * 0.5 + LIGHT_AMPLITUDE;
-    var g = 0.5 + 0.2 * Math.sin(cell.props.timer * 0.1)
+    var g = 0.5 + 0.1 * Math.sin(cell.props.timer * 0.1)
   
     drawRect(canvas, x0, y0, width, height, interpolateColor(cell.props.currentColor, EMPTY_COLOR, g, linInt).getHex());
     drawRect(canvas, x0 + d, y0 + d, width - 2 * d, height - 2 * d, interpolateColor(cell.props.midLightColor, EMPTY_COLOR, g, linInt).getHex());
     drawRect(canvas, x0 + 2 * d, y0 + 2 * d, width - 4 * d, height - 4 * d, interpolateColor(cell.props.centerLightColor, EMPTY_COLOR, g, linInt).getHex());
-    outlineRect(canvas, x0 + 2, y0 + 2, width - 4, height - 4, borderColor.getHex());
+    outlineRect(canvas, x0 + 2, y0 + 2, width - 4, height - 4, EMPTY_COLOR.getHex());
+  }
+}
+
+const drawCellType3 = (canvas, cell, x0, y0, width, height) => {
+  if (cell.props.currentColor) {
+    var borderColor = interpolateColor(
+      MARKER_COLOR,
+      cell.props.currentColor,
+      1 - cell.props.meter, 
+      linInt,
+    );
+    var d = cell.props.meter * LIGHT_AMPLITUDE * 0.5 + LIGHT_AMPLITUDE;
+    var g = 0.5 + 0.2 * Math.sin(cell.props.timer * 1)
+  
+    drawRect(canvas, x0, y0, width, height, interpolateColor(cell.props.currentColor, EMPTY_COLOR, g, linInt).getHex());
+    drawRect(canvas, x0 + d, y0 + d, width - 2 * d, height - 2 * d, interpolateColor(cell.props.midLightColor, EMPTY_COLOR, g, linInt).getHex());
+    drawRect(canvas, x0 + 2 * d, y0 + 2 * d, width - 4 * d, height - 4 * d, interpolateColor(cell.props.centerLightColor, EMPTY_COLOR, g, linInt).getHex());
+    outlineRect(canvas, x0 + 2, y0 + 2, width - 4, height - 4, EMPTY_COLOR.getHex());
   }
 }
 
@@ -65,5 +83,7 @@ export const drawCell = (canvas, cell, x0, y0, width, height) => {
     drawCellType1(canvas, cell, x, y, width, height);
   } else if (cell.type == 2) {
     drawCellType2(canvas, cell, x, y, width, height);
+  } else if (cell.type == 3) {
+    drawCellType3(canvas, cell, x, y, width, height)
   }
 };

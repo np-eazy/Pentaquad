@@ -18,6 +18,8 @@ class PieceStage {
   createType() {
     if (randint(0, 10) == 0) {
       return 2;
+    } else if (randint(0, 10) == 0) {
+      return 3;
     } else {
       return 1;
     }
