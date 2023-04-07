@@ -1,6 +1,3 @@
-import { drawRect, outlineRect } from "./Pipeline";
-import Cell from "../coreState/objects/cell/Cell";
-import { drawCell } from "./objects/cell/DrawCell";
 import { STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
 import { renderBoard, updateBoard } from "./objects/board/Board";
