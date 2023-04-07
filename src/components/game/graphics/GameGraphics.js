@@ -1,14 +1,14 @@
-import { drawRect, outlineRect } from "./Shapes";
+import { drawRect, outlineRect } from "./utils/Shapes";
 import Cell from "../coreState/Cell";
-import { drawCell } from "./DrawCell";
-import { updateCell } from "./UpdateCell";
+import { drawCell } from "./sprites/DrawCell";
+import { updateCell } from "./sprites/UpdateCell";
 import { STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
-import { renderBoard, updateBoard } from "./Board";
-import { renderStage } from "./Stage";
-import { renderPiece } from "./Piece";
-import { renderTargets } from "./Targets";
-import { renderCursor } from "./Cursor";
+import { renderBoard, updateBoard } from "./sections/Board";
+import { renderStage } from "./sections/Stage";
+import { renderPiece } from "./sprites/DrawPiece";
+import { renderTargets } from "./sprites/Targets";
+import { renderCursor } from "./sprites/Cursor";
 
 
 

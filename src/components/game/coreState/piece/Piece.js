@@ -1,7 +1,7 @@
 import Cell from "../Cell";
 import { randint, getPID } from "../utils/Functions";
 import { randomDxn } from "../utils/Direction";
-import { Color } from "../../graphics/Colors";
+import { Color } from "../../graphics/utils/Colors";
 
 import { PRESETS, BASE_COLORS } from "../../Constants.js";
 

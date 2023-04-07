@@ -1,4 +1,4 @@
-import { outlineRect } from "./Shapes";
+import { outlineRect } from "../utils/Shapes";
 
 export const renderCursor = (canvas, board, controller, windowSize, xCellSize, yCellSize) => {
     var [x, y] = controller.gridCursor(

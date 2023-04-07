@@ -1,4 +1,4 @@
-import { drawRect, outlineRect } from "./Shapes";
+import { drawRect, outlineRect } from "../utils/Shapes";
 
 export const renderTargets = (canvas, targets, stage, xCellSize, yCellSize) => {
     // Draw outlines of Targets

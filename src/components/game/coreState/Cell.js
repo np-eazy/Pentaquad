@@ -1,7 +1,7 @@
 // A container for properties of a grid cell. GameState initializes with a 2D array
 // of empty Cells of type 0 and no props.
 
-import { Color } from "../graphics/Colors";
+import { Color } from "../graphics/utils/Colors";
 
 // Type 0: Empty cells
 

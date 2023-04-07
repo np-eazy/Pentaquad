@@ -1,6 +1,6 @@
-import { Color, interpolateColor } from "./Colors";
-import { drawRect, outlineRect } from "./Shapes";
-import { linInt } from "./utils/Functions";
+import { Color, interpolateColor } from "../utils/Colors";
+import { drawRect, outlineRect } from "../utils/Shapes";
+import { linInt } from "../utils/Functions";
 
 // Const colors are defined to be interpolated later
 const EMPTY_COLOR = new Color({

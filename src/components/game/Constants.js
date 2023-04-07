@@ -1,4 +1,4 @@
-import { Color } from "./graphics/Colors";
+import { Color } from "./graphics/utils/Colors";
 
 // Real time/space parameters
 export const WINDOW_SIZE = 800;
