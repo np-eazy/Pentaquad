@@ -10,19 +10,21 @@ class PieceStage {
     this.maxLength = props.maxLength ? props.maxLength : PIECE_STAGE_MAX_LENGTH;
     this.nextPieces = [];
     this.heldPiece = null;
+    this.counter = 0;
+
     for (var i = 0; i < this.maxLength; i++) {
       this.nextPieces.push(new Piece(this.createType()));
     }
   }
 
   createType() {
-    if (randint(0, 10) == 0) {
-      return 2;
-    } else if (randint(0, 10) == 0) {
-      return 3;
-    } else {
-      return 1;
-    }
+    this.counter += 1;
+    return (this.counter % 5) + 1;
+    // if (randint(1, 3) == 1) {
+    //   return randint(2, 6)
+    // } else {
+    //   return 1
+    // }
   }
 
   // To be called by CoreState when it needs another piece

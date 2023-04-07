@@ -1,6 +1,8 @@
 import { inBounds } from "./Functions";
 
-export function dropzone(board, piece, gravity, cellFunction) {
+// A function that finds all the cells under a piece about to be dropped, and calls
+// another function on all the cells within
+export function dropzone(board, piece, gravity, cellFunction, passThrough = false) {
     if (piece && piece.mainCell.type != 2) {
       var alreadyCovered = new Set();
       var [dx, dy] = gravity.getDiff();
@@ -11,7 +13,7 @@ export function dropzone(board, piece, gravity, cellFunction) {
           alreadyCovered.add(index);
           while (
             inBounds(x, y, board.length) &&
-            board[y][x].type == 0
+            (passThrough || board[y][x].type == 0)
           ) {
             // Traverse in the falling direction of this piece to mark all empty pieces under it.
             cellFunction(board[y][x]);

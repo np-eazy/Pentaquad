@@ -15,6 +15,7 @@ import {
   MAX_ROTATION_ADJUSTMENT,
   DEFAULT_CELL_PROPS,
 } from "../Constants";
+import { dropzone } from "./utils/Dropzone";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -170,7 +171,14 @@ const CoreState = class {
   }
   // Drop the current piece as far down as possible
   executeDrop() {
-    if (this.currPiece.mainCell.type != 2) {
+    if (this.currPiece.mainCell.type == 5) {
+      dropzone(this.board, this.currPiece, this.gravity, (cell) => {
+        cell.type = 1;
+        cell.props = {
+          ...this.currPiece.mainCell.props
+        }
+      }, false);
+    } else if (this.currPiece.mainCell.type != 2) {
       while (
         !this.currPiece.checkCollision(
           this.gravity,
@@ -321,8 +329,10 @@ const CoreState = class {
           }
         }
       } else if (this.currPiece.mainCell.type == 4) {
-      } else if (this.currPiece.mainCell.type == 5) {
-
+        dropzone(this.board, this.currPiece, this.gravity, (cell) => {
+          cell.type = 0;
+          cell.props = {...DEFAULT_CELL_PROPS}
+        }, true)
       } else {
         var [x, y] = [0, 0];
         for (const cell of this.currPiece.cells) {
@@ -331,7 +341,7 @@ const CoreState = class {
             cell[1][1] + this.currPiece.cy,
           ];
           if (x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize) {
-            this.board[y][x] = new Cell(this.currPiece.mainCell.type,
+            this.board[y][x] = new Cell(1,
               {...this.currPiece.mainCell.props}
             );
           }
