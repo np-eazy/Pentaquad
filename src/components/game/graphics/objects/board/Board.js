@@ -1,5 +1,5 @@
-import { drawCell } from "../objects/cell/DrawCell";
-import { updateCell } from "../objects/cell/UpdateCell";
+import { drawCell } from "../cell/DrawCell";
+import { updateCell } from "../cell/UpdateCell";
 
 export const renderBoard = (canvas, board, xCellSize, yCellSize) => {
 // Draw grid cells

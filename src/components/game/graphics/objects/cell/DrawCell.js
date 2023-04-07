@@ -1,5 +1,5 @@
 import { Color, interpolateColor } from "../../utils/Colors";
-import { drawRect, outlineRect } from "../../utils/Shapes";
+import { drawRect, outlineRect } from "../../Pipeline";
 import { linInt } from "../../utils/Functions";
 
 // Const colors are defined to be interpolated later

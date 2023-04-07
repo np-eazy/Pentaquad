@@ -1,4 +1,4 @@
-import { outlineRect } from "../../utils/Shapes";
+import { outlineRect } from "../../Pipeline";
 
 export const drawCursor = (canvas, board, controller, windowSize, xCellSize, yCellSize) => {
     var [x, y] = controller.gridCursor(
