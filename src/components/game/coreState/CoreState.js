@@ -13,6 +13,7 @@ import {
   TARGET_MARGIN,
   COLLISION_TIME_LIMIT,
   MAX_ROTATION_ADJUSTMENT,
+  DEFAULT_CELL_PROPS,
 } from "../Constants";
 
 // The most essential level of state in the game. Each update() call either
@@ -245,6 +246,23 @@ const CoreState = class {
       board: this.board,
       emptyValue: this.emptyValue,
     });
+
+    // increment times to live for each cell before converting to empty cell
+    for (var y = 0; y < this.boardSize; y++) {
+      for (var x = 0; x < this.boardSize; x++) {
+        if (this.board[y][x].props.ttl != -1) {
+          if (this.board[y][x].props.ttl == 0) {
+            this.board[y][x].type = 0
+            this.board[y][x].props = {
+              ...DEFAULT_CELL_PROPS,
+              timer: 0,
+            }
+          } else {
+            this.board[y][x].props.ttl -= 1
+          }
+        }
+      }
+    }
 
     // Create new game objects
     this.createNewPiece();

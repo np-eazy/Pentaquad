@@ -25,6 +25,7 @@ const GameState = class {
       this.coreState.update(this.ticks % this.ticksToMove == 0);
       this.ticks += 1;
       // Compute graphic props after core update
+      this.unmarkBoard();
       this.markDropZone();
     } else {
       this.delayTimer -= 1;
@@ -32,15 +33,17 @@ const GameState = class {
     return this;
   }
 
+  unmarkBoard() {
+    var board = this.coreState.board;
+    for (var x = 0; x < this.coreState.boardSize; x++) {
+      for (var y = 0; y < this.coreState.boardSize; y++) {
+        board[y][x].props.marked = false;
+      }
+    }
+  }
   // TODO (opt): only call this when the piece's position changes
   // TODO (opt): make less inBounds calls?
   markDropZone() {
-    for (var x = 0; x < this.coreState.boardSize; x++) {
-      for (var y = 0; y < this.coreState.boardSize; y++) {
-        this.coreState.board[y][x].props.marked = false;
-      }
-    }
-
     var piece = this.coreState.currPiece;
     if (piece) {
       var alreadyCovered = new Set();

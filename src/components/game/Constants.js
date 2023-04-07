@@ -148,3 +148,15 @@ export const TARGET_STAGE_MAX_LENGTH = 4;
 export const TARGET_GRACE_PERIOD = 8;
 export const TARGET_SPAWN_TIMER = 8;
 export const TARGET_GROWTH_TIMER = 8;
+
+export const TEMP_LIFETIME = 8;
+
+export const DEFAULT_CELL_PROPS = {
+  xOffset: 0,
+  yOffset: 0,
+  timer: 0,
+  meter: 0,
+  lifetime: TEMP_LIFETIME,
+  ttl: TEMP_LIFETIME,
+  baseColor: new Color({ red: 0, green: 0, blue: 0, }),
+}

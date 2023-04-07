@@ -9,9 +9,9 @@ const EMPTY_COLOR = new Color({
   blue: 30,
 });
 const MARKER_COLOR = new Color({
-  red: 50,
-  green: 50,
-  blue: 58,
+  red: 35,
+  green: 35,
+  blue: 40,
 });
 const MARKER_COLOR_HEX = MARKER_COLOR.getHex();
 const FILLED_COLOR = new Color({
@@ -38,6 +38,7 @@ const CENTER_BRIGHTNESS = new Color({
   blue: BRIGHTNESS,
 });
 const LIGHT_FACTOR = 1.6;
+const BASE_BLEND = 0.2;
 
 
 const drawCellType1 = (canvas, cell, x0, y0, width, height) => {
@@ -45,9 +46,17 @@ const drawCellType1 = (canvas, cell, x0, y0, width, height) => {
   var color = cell.props.baseColor ? interpolateColor(
     FILLED_COLOR,
     cell.props.baseColor,
-    0.2, 
+    BASE_BLEND, 
     linInt,
   ) : FILLED_COLOR;
+  if (cell.props.ttl != -1) {
+    color = interpolateColor(
+      EMPTY_COLOR,
+      color,
+      cell.props.ttl / cell.props.lifetime,
+      linInt,
+    )
+  }
   drawRect(canvas, x0, y0, width, height, color.getHex());
 
   // TODO: inefficient OOP
