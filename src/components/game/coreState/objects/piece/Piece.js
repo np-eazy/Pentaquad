@@ -10,11 +10,8 @@ import GhostCell from "../cell/GhostCell";
 import BombCell from "../cell/BombCell";
 import DrillCell from "../cell/DrillCell";
 import TowerCell from "../cell/TowerCell";
-
-
-// Collision window radius to save on collision calculations
-const CWR = 3;
-const DEBUG = false;
+import { DEBUG } from "../../../Debug";
+import { CWR } from "../../utils/Params";
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
