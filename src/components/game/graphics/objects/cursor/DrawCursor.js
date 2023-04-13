@@ -16,7 +16,5 @@ export const drawCursor = (canvas, board, controller, windowSize, xCellSize, yCe
       yCellSize,
       FILLED_COLOR.getHex()
     );
-    if (DEBUG && inBounds(x, y, board.length)) {
-      debugCell(canvas, board[y][x], x, y);
-    }
+    
 }

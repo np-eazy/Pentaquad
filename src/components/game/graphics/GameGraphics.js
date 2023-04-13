@@ -6,9 +6,12 @@ import { drawPiece } from "./objects/piece/DrawPiece";
 import { drawTargets } from "./objects/target/DrawTargets";
 import { drawCursor } from "./objects/cursor/DrawCursor";
 import { updatePiece } from "./objects/piece/UpdatePiece";
-import { BOARD_HEIGHT, BOARD_WIDTH, TOTAL_HEIGHT, TOTAL_WIDTH } from "./Layout";
+import { BOARD_HEIGHT, BOARD_WIDTH, SCORESHEET_X0, SCORESHEET_Y0, TOTAL_HEIGHT, TOTAL_WIDTH } from "./Layout";
 import { renderScoresheet, updateScoresheet } from "./compounds/Scoresheet";
 import { renderPalette, updatePalette } from "./compounds/Palette";
+import { DEBUG, debugCell } from "../Debug";
+import { inBounds } from "../coreState/utils/Functions";
+import { useLayoutEffect } from "react";
 
 const GameGraphics = (props) => {
   var board = props.gameState.coreState.board;
@@ -39,6 +42,13 @@ const GameGraphics = (props) => {
     updateStage(props.gameState.coreState.pieceStage);
     //updatePalette(props.gameState.coreState.pieceStage);
     updateScoresheet(undefined);
+
+    if (DEBUG) {
+      var [x, y] = props.gameState.controller.gridCursor(BOARD_HEIGHT, BOARD_SIZE);
+      if (inBounds(x, y, board.length)) {
+        debugCell(canvas, board[y][x], SCORESHEET_X0, SCORESHEET_Y0, x, y);
+      }
+    }
   }
 
   function emptyLoop(canvas) {}
