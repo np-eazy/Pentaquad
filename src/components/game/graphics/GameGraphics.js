@@ -2,10 +2,12 @@ import { BOARD_SIZE, STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
 import { renderBoard, updateBoard } from "./sections/Board";
 import { renderStage, updateStage } from "./sections/Stage";
-import { drawPiece } from "./objects/piece/DrawPiece";
-import { drawTargets } from "./objects/target/DrawTargets";
-import { drawCursor } from "./objects/cursor/DrawCursor";
-import { updatePiece } from "./objects/piece/UpdatePiece";
+
+
+import { drawPiece, updatePiece } from "./objects/Piece";
+import { drawTargets, updateTargets } from "./objects/Targets";
+import { drawCursor, updateCursor } from "./objects/Cursor";
+
 import { BOARD_HEIGHT, BOARD_WIDTH, SCORESHEET_X0, SCORESHEET_Y0, TOTAL_HEIGHT, TOTAL_WIDTH } from "./Layout";
 import { renderScoresheet, updateScoresheet } from "./sections/Scoresheet";
 import { renderPalette, updatePalette } from "./sections/Palette";

@@ -1,8 +1,7 @@
 import { STAGE_WIDTH, WINDOW_SIZE } from "../../Constants";
 import { drawRect, outlineRect } from "../Pipeline";
 import { STAGE_HEIGHT, STAGE_X0, STAGE_Y0, drawBackground, STAGE_CELL_SIZE, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT } from "../Layout";
-import { drawPiece } from "../objects/piece/DrawPiece";
-import { updatePiece } from "../objects/piece/UpdatePiece";
+import { drawPiece, updatePiece } from "../objects/Piece";
 
 
 export function renderPalette(canvas, palette) {

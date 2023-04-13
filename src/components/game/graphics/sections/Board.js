@@ -1,9 +1,8 @@
 import { WINDOW_SIZE } from "../../Constants";
 import { BOARD_HEIGHT, BOARD_WIDTH, BOARD_X0, BOARD_Y0, drawBackground } from "../Layout";
-import { drawCursor } from "../objects/cursor/DrawCursor";
-import { drawPiece } from "../objects/piece/DrawPiece";
-import { updatePiece } from "../objects/piece/UpdatePiece";
-import { drawTargets } from "../objects/target/DrawTargets";
+import { drawCursor } from "../objects/Cursor";
+import { drawPiece, updatePiece } from "../objects/Piece";
+import { drawTargets } from "../objects/Targets";
 
 export const renderBoard = (canvas, board, xCellSize, yCellSize, {
   piece,
