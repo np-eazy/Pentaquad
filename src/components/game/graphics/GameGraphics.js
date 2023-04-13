@@ -7,10 +7,6 @@ import { drawTargets } from "./objects/target/DrawTargets";
 import { drawCursor } from "./objects/cursor/DrawCursor";
 import { updatePiece } from "./objects/piece/UpdatePiece";
 
-
-
-// The code in GameGraphics is short-lived and due for a refactor as soon as core logic is fleshed out.
-// Disregard the spaghetti code, it's only to provide the most minimal UI for testing/debugging.
 const GameGraphics = (props) => {
   var board = props.gameState.coreState.board;
   var [xSize, ySize] = [board[0].length, board.length];
@@ -19,7 +15,7 @@ const GameGraphics = (props) => {
     props.windowSize / ySize,
   ];
 
-  function render(canvas) {
+  function graphicLoop(canvas) {
     renderBoard(canvas, 
       board, 
       xCellSize, yCellSize);
@@ -47,7 +43,7 @@ const GameGraphics = (props) => {
     updateStage(props.gameState.coreState.pieceStage);
   }
 
-  function renderNull(canvas) {}
+  function emptyLoop(canvas) {}
 
   // Canvas and context wiring
   var canv = document.getElementById("gameGraphics");
@@ -55,8 +51,8 @@ const GameGraphics = (props) => {
   if (ctx != null && props.gameState != undefined) {
     ctx.clearRect(0, 0, WINDOW_SIZE + STAGE_WIDTH, props.windowSize);
     props.gameState
-      ? render(ctx, props.gameState.coreState.board)
-      : renderNull(ctx);
+      ? graphicLoop(ctx, props.gameState.coreState.board)
+      : emptyLoop(ctx);
   }
 };
 

@@ -16,7 +16,7 @@ import { COLLISION_RADIUS } from "../../utils/Params";
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
 class Piece {
-  constructor(cellType = 2) {
+  constructor(cellType = CELL_TYPE.NORMAL) {
     this.mounted = false;
     this.cx = undefined;
     this.cy = undefined;
