@@ -1,28 +1,34 @@
 import { TEMP_LIFETIME } from "../../Constants";
+
 import { Color, interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 import {
-  
   EMPTY_COLOR,
   FILLED_COLOR,
-
   CELL_MID_LIGHT,
   CELL_CENTER_LIGHT,
   CELL_BASE_COLOR_BLEND,
-
 } from "../../graphics/Theme";
 
+// Decay rate of X and Y offsets after row breaks.
+const OFFSET_DECAY_RATE = 0.9;
 
+// A Cell is the base unit of this game, which is played on a 2D array of them. The different structures and pieces
+// formed by Cells intercellularly is handled by CoreState, whereas the Cell class itself focuses on intracellular
+// interactions mostly decoupled from everything else, mainly control-system-like variables that change how the piece
+// is rendered and animated.
 class Cell {
   constructor(type) {
     this.type = type;
+    this.setDefaults();
+
     this.baseColor = EMPTY_COLOR; // A non-changing base color for this Cell, which is used to derive all other colors
     this.currentColor = EMPTY_COLOR; // A dynamically changing main color derived from interpolating the baseColor
     this.colorSuite = {
+      // A set of colors derived from the main color and can be updated very sparingly
       midLight: EMPTY_COLOR,
       centerLight: EMPTY_COLOR,
-    }; // A set of colors derived from the main color and can be updated very sparingly
-    this.setDefaults();
+    };
   }
 
   // Default values that a Cell is initialized with
@@ -32,8 +38,8 @@ class Cell {
     this.timer = 0;
     this.meter = 0;
     this.lifetime = TEMP_LIFETIME;
-    this.ttl = TEMP_LIFETIME;  
-    
+    this.ttl = TEMP_LIFETIME;
+
     this.marked = false;
   }
 
@@ -43,7 +49,7 @@ class Cell {
     this.baseColor = other.baseColor;
     this.currentColor = other.currentColor;
     this.colorSuite = other.colorSuite;
-    
+
     this.xOffset = other.xOffset;
     this.yOffset = other.yOffset;
     this.timer = other.timer;
@@ -52,32 +58,34 @@ class Cell {
     this.ttl = other.ttl;
   }
 
+  // Set this Cell's base color and propagate the update to the current color and ColorSuite.
   setBaseColor(color) {
     this.baseColor = interpolateColor(
       FILLED_COLOR,
       color,
       CELL_BASE_COLOR_BLEND,
-      linInt,
+      linInt
     );
     this.updateCurrentColor();
     this.updateColorSuite();
   }
 
-  // Update the cell's main color based on its TTL
+  // Update the cell's main color based on its TTL; this is the default update color but it can
+  // be overridden by extensions for cooler effects.
   updateCurrentColor() {
     if (this.ttl != -1 && this.currentColor) {
       this.currentColor = interpolateColor(
         EMPTY_COLOR,
         this.baseColor,
         this.ttl / this.lifetime,
-        linInt,
-      )
+        linInt
+      );
     } else {
       this.currentColor = this.baseColor;
     }
   }
 
-  // Each time the current color changes, everything else follows suite
+  // Each time the current color changes, everything else follows
   updateColorSuite() {
     this.colorSuite.midLight = new Color({
       red: this.currentColor.red + CELL_MID_LIGHT,
@@ -100,14 +108,12 @@ class Cell {
 
   // Called at the end of each frame to update timers and to control certain variable dynamics.
   idleUpdate() {
-    this.xOffset *= 0.8;
-    this.yOffset *= 0.8;
+    this.xOffset *= OFFSET_DECAY_RATE;
+    this.yOffset *= OFFSET_DECAY_RATE;
     this.timer += 1;
   }
 
-  activeUpdate() {
-
-  }
+  activeUpdate() {}
 
   // Called whenever a piece is placed down and the game advances.
   advanceUpdate(computeColors = false) {
@@ -116,9 +122,8 @@ class Cell {
     this.updateColorSuite();
   }
 
-  render(canvas, x0, y0, width, height) {
-
-  }
+  // No matter what subclass, they should all have render() with these arguments set
+  render(canvas, x0, y0, width, height) {}
 }
 
 export default Cell;

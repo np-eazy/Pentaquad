@@ -21,3 +21,5 @@ export const CELL_BASE_COLOR_BLEND = 0.2;
 export const CELL_MID_LIGHT = 30;
 export const CELL_CENTER_LIGHT = 45;
 export const LIGHT_AMPLITUDE = 3;
+
+export const BORDER_OFFSET = 2;
