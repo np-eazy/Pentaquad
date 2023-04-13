@@ -38,7 +38,7 @@ const GameState = class {
     var board = this.coreState.board;
     for (var x = 0; x < this.coreState.boardSize; x++) {
       for (var y = 0; y < this.coreState.boardSize; y++) {
-        board[y][x].props.marked = false;
+        board[y][x].marked = false;
       }
     }
   }
@@ -52,8 +52,8 @@ const GameState = class {
         this.coreState.currPiece, 
         this.coreState.gravity, 
         (cell) => {
-          cell.props.marked = true;
-          cell.props.markerAngle = this.coreState.gravity.angle;
+          cell.marked = true;
+          cell.markerAngle = this.coreState.gravity.angle;
         });
     }
   }

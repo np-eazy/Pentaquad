@@ -1,4 +1,4 @@
-import { DEFAULT_CELL_PROPS } from "../../../Constants";
+import { TEMP_LIFETIME } from "../../../Constants";
 import { Color, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 import {
@@ -9,52 +9,56 @@ import {
   CELL_BASE_COLOR_BLEND,
 } from "../../../graphics/Theme";
 
-// A container for properties of a grid cell. GameState initializes with a 2D array
-// of empty Cells of type 0 and no props.
 
-// Type 0: Empty cells
-
-// Type 1: Basic filled cells, permanent
-
-// Use this as a base to add more functionalities and features to the game.
 
 
 class Cell {
-  constructor(type, props) {
+  constructor(type) {
     this.type = type;
-    this.props = {
-      ...DEFAULT_CELL_PROPS,
-      ...props,
+    this.baseColor = new Color({ red: 0, green: 0, blue: 0 });
+    this.setDefaults();
+  }
+
+  setDefaults() {
+    this.xOffset = 0;
+    this.yOffset = 0;
+    this.timer = 0;
+    this.meter = 0;
+    this.lifetime = TEMP_LIFETIME;
+    this.ttl = TEMP_LIFETIME;   
+    if (this.baseColor) {
+      this.updateColors();
     }
-    this.updateColors();
   }
 
   updateColors() {
-    this.props.currentColor = interpolateColor(
-      FILLED_COLOR,
-      this.props.baseColor,
-      CELL_BASE_COLOR_BLEND, 
-      linInt,
-    );
-    if (this.props.ttl != -1) {
-      this.props.currentColor = interpolateColor(
-        EMPTY_COLOR,
-        this.props.currentColor,
-        this.props.ttl / this.props.lifetime,
+    if (this.baseColor) {
+      this.currentColor = interpolateColor(
+        FILLED_COLOR,
+        this.baseColor,
+        CELL_BASE_COLOR_BLEND, 
         linInt,
-      )
-    }
-    if (this.props.currentColor) {
-      this.props.midLightColor = new Color({
-        red: this.props.currentColor.red + CELL_MID_LIGHT,
-        green: this.props.currentColor.green + CELL_MID_LIGHT,
-        blue: this.props.currentColor.blue + CELL_MID_LIGHT,
-      })
-      this.props.centerLightColor = new Color({
-        red: this.props.currentColor.red + CELL_CENTER_LIGHT,
-        green: this.props.currentColor.green + CELL_CENTER_LIGHT,
-        blue: this.props.currentColor.blue + CELL_CENTER_LIGHT,
-      })
+      );
+      if (this.ttl != -1) {
+        this.currentColor = interpolateColor(
+          EMPTY_COLOR,
+          this.currentColor,
+          this.ttl / this.lifetime,
+          linInt,
+        )
+      }
+      if (this.currentColor) {
+        this.midLightColor = new Color({
+          red: this.currentColor.red + CELL_MID_LIGHT,
+          green: this.currentColor.green + CELL_MID_LIGHT,
+          blue: this.currentColor.blue + CELL_MID_LIGHT,
+        })
+        this.centerLightColor = new Color({
+          red: this.currentColor.red + CELL_CENTER_LIGHT,
+          green: this.currentColor.green + CELL_CENTER_LIGHT,
+          blue: this.currentColor.blue + CELL_CENTER_LIGHT,
+        })
+      }
     }
   }
 }

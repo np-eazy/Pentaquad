@@ -24,23 +24,23 @@ export const checkFilledLines = ({
             i = x - j - 1;
             for (var y_ = 0; y_ < boardSize; y_++) {
               board[y_][i + 1] = board[y_][i];
-              board[y_][i + 1].props.xOffset = -1;
+              board[y_][i + 1].xOffset = -1;
             }
           }
           for (var y_ = 0; y_ < boardSize; y_++) {
             board[y_][0] = emptyValue();
-            board[y_][0].props.xOffset = -1;
+            board[y_][0].xOffset = -1;
           }
         } else {
           for (var i = x + 1; i < boardSize; i++) {
             for (var y_ = 0; y_ < boardSize; y_++) {
               board[y_][i - 1] = board[y_][i];
-              board[y_][i - 1].props.xOffset = 1;
+              board[y_][i - 1].xOffset = 1;
             }
           }
           for (var y_ = 0; y_ < boardSize; y_++) {
             board[y_][boardSize - 1] = emptyValue();
-            board[y_][boardSize - 1].props.xOffset = 1;
+            board[y_][boardSize - 1].xOffset = 1;
           }
         }
       }
@@ -60,23 +60,23 @@ export const checkFilledLines = ({
             i = y - j - 1;
             for (var x_ = 0; x_ < boardSize; x_++) {
               board[i + 1][x_] = board[i][x_];
-              board[i + 1][x_].props.yOffset = -1;
+              board[i + 1][x_].yOffset = -1;
             }
           }
           for (var x_ = 0; x_ < boardSize; x_++) {
             board[0][x_] = emptyValue();
-            board[0][x_].props.yOffset = -1;
+            board[0][x_].yOffset = -1;
           }
         } else {
           for (var i = y + 1; i < boardSize; i++) {
             for (var x_ = 0; x_ < boardSize; x_++) {
               board[i - 1][x_] = board[i][x_];
-              board[i - 1][x_].props.yOffset = 1;
+              board[i - 1][x_].yOffset = 1;
             }
           }
           for (var x_ = 0; x_ < boardSize; x_++) {
             board[boardSize - 1][x_] = emptyValue();
-            board[boardSize - 1][x_].props.yOffset = 1;
+            board[boardSize - 1][x_].yOffset = 1;
           }
         }
         break;

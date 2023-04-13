@@ -13,7 +13,6 @@ import {
   TARGET_MARGIN,
   COLLISION_TIME_LIMIT,
   MAX_ROTATION_ADJUSTMENT,
-  DEFAULT_CELL_PROPS,
 } from "../Constants";
 import { dropzone } from "./utils/Dropzone";
 
@@ -260,16 +259,14 @@ const CoreState = class {
     // increment times to live for each cell before converting to empty cell
     for (var y = 0; y < this.boardSize; y++) {
       for (var x = 0; x < this.boardSize; x++) {
-        if (this.board[y][x].props.ttl != -1) {
-          if (this.board[y][x].props.ttl == 0) {
-            this.board[y][x].type = 0
-            this.board[y][x].props = {
-              ...DEFAULT_CELL_PROPS,
-              timer: 0,
-            }
+        var cell = this.board[y][x];
+        if (cell.ttl != -1) {
+          if (cell.ttl == 0) {
+            cell.type = 0;
+            cell.timer = 0;
           } else {
-            this.board[y][x].updateColors()
-            this.board[y][x].props.ttl -= 1
+            cell.updateColors();
+            cell.ttl -= 1;
           }
         }
       }
@@ -331,7 +328,7 @@ const CoreState = class {
       } else if (this.currPiece.mainCell.type == 4) {
         dropzone(this.board, this.currPiece, this.gravity, (cell) => {
           cell.type = 0;
-          cell.props = {...DEFAULT_CELL_PROPS}
+          cell.setDefaults();
         }, true)
       } else {
         var [x, y] = [0, 0];
