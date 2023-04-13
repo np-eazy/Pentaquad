@@ -15,6 +15,8 @@ import {
   MAX_ROTATION_ADJUSTMENT,
 } from "../Constants";
 import { dropzone } from "./utils/Dropzone";
+import EmptyCell from "./objects/cell/EmptyCell";
+import NormalCell from "./objects/cell/NormalCell";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -51,7 +53,7 @@ const CoreState = class {
     // The dimension of the square board on which this game takes place.
     this.boardSize = props.boardSize;
     // The default "empty" value of this grid: a type-0 Cell with no props
-    this.emptyValue = () => new Cell(0, { t: 0 });
+    this.emptyValue = () => new EmptyCell();
     // The main board on which everything happens
     this.board = [...Array(props.boardSize)].map((e) =>
       Array(props.boardSize).fill(null)
@@ -265,8 +267,7 @@ const CoreState = class {
             cell.type = 0;
             cell.timer = 0;
           } else {
-            cell.updateColors();
-            cell.ttl -= 1;
+            cell.advanceUpdate(true);
           }
         }
       }
@@ -338,9 +339,7 @@ const CoreState = class {
             cell[1][1] + this.currPiece.cy,
           ];
           if (x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize) {
-            this.board[y][x] = new Cell(1,
-              {...this.currPiece.mainCell.props}
-            );
+            this.board[y][x] = new NormalCell();
           }
         }
       }

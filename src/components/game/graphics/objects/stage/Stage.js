@@ -1,5 +1,4 @@
 import { STAGE_WIDTH, WINDOW_SIZE } from "../../../Constants";
-import { drawCell } from "../cell/DrawCell";
 import { drawRect, outlineRect } from "../../Pipeline";
 import { updatePiece } from "../piece/UpdatePiece";
 
@@ -11,24 +10,24 @@ export function renderStage(canvas, stage) {
     for (var i = 0; i < stage.nextPieces.length; i++) {
       var preset = stage.nextPieces[i].preset;
       var [x_, y_] = [2.25, 2.5 + 6 * i];
+      var cell = stage.nextPieces[i].mainCell;
       for (const [x, y] of preset) {
-        drawCell(
-          canvas,
-          stage.nextPieces[i].mainCell,
+        cell.render(
+          canvas, 
           WINDOW_SIZE + (x + x_) * STAGE_CELL_SIZE,
           (y + y_) * STAGE_CELL_SIZE,
           STAGE_CELL_SIZE,
           STAGE_CELL_SIZE,
-        );
+        )
       }
     }
     if (stage.heldPiece) {
       var preset = stage.heldPiece.preset;
       var [x_, y_] = [2.25, 26.5];
+      var cell = stage.heldPiece.mainCell
       for (const [x, y] of preset) {
-        drawCell(
+        cell.render(
           canvas,
-          stage.heldPiece.mainCell,
           WINDOW_SIZE + (x + x_) * STAGE_CELL_SIZE,
           (y + y_) * STAGE_CELL_SIZE,
           STAGE_CELL_SIZE,

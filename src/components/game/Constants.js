@@ -158,4 +158,4 @@ export const TARGET_GRACE_PERIOD = 8;
 export const TARGET_SPAWN_TIMER = 8;
 export const TARGET_GROWTH_TIMER = 8;
 
-export const TEMP_LIFETIME = 8;
+export const TEMP_LIFETIME = -1;

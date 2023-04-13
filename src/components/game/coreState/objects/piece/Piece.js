@@ -3,8 +3,14 @@ import { randint, getPID } from "../../utils/Functions";
 import { randomDxn } from "../../utils/Direction";
 import { Color } from "../../../graphics/utils/Colors";
 
-import { PRESETS, BASE_COLORS } from "../../../Constants";
-import { updateCell } from "../../../graphics/objects/cell/UpdateCell";
+import { PRESETS, BASE_COLORS, CELL_TYPE } from "../../../Constants";
+import EmptyCell from "../cell/EmptyCell";
+import NormalCell from "../cell/NormalCell";
+import GhostCell from "../cell/GhostCell";
+import BombCell from "../cell/BombCell";
+import DrillCell from "../cell/DrillCell";
+import TowerCell from "../cell/TowerCell";
+
 
 // Collision window radius to save on collision calculations
 const CWR = 3;
@@ -27,12 +33,21 @@ class Piece {
     this.preset = PRESETS[index];
     this.baseColor = BASE_COLORS[index];
     
-    this.mainCell = new Cell(cellType,
-      {
-        dxn: this.dxn,
-        baseColor: this.baseColor,
-      }
-    )
+    if (cellType == CELL_TYPE.EMPTY) {
+      this.mainCell = new EmptyCell();
+    } else if (cellType == CELL_TYPE.NORMAL) {
+      this.mainCell = new NormalCell();
+    } else if (cellType == CELL_TYPE.GHOST) {
+      this.mainCell = new GhostCell();
+    } else if (cellType == CELL_TYPE.BOMB) {
+      this.mainCell = new BombCell();
+    } else if (cellType == CELL_TYPE.DRILL) {
+      this.mainCell = new DrillCell();
+    } else if (cellType == CELL_TYPE.TOWER) {
+      this.mainCell = new TowerCell();
+    }
+    this.mainCell.dxn = this.dxn;
+    this.mainCell.baseColor = this.baseColor;
   }
 
   // Before the piece is mounted to a global location, it shouldn't be used/updated.
