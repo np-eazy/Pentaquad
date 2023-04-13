@@ -38,8 +38,8 @@ class TowerCell extends Cell {
             var g = 0.5 + 0.2 * Math.sin(this.timer * 1)
           
             drawRect(canvas, x, y, width, height, interpolateColor(this.currentColor, EMPTY_COLOR, g, linInt).getHex());
-            drawRect(canvas, x + d, y + d, width - 2 * d, height - 2 * d, interpolateColor(this.midLightColor, EMPTY_COLOR, g, linInt).getHex());
-            drawRect(canvas, x + 2 * d, y + 2 * d, width - 4 * d, height - 4 * d, interpolateColor(this.centerLightColor, EMPTY_COLOR, g, linInt).getHex());
+            drawRect(canvas, x + d, y + d, width - 2 * d, height - 2 * d, interpolateColor(this.colorSuite.midLight, EMPTY_COLOR, g, linInt).getHex());
+            drawRect(canvas, x + 2 * d, y + 2 * d, width - 4 * d, height - 4 * d, interpolateColor(this.colorSuite.centerLight, EMPTY_COLOR, g, linInt).getHex());
             outlineRect(canvas, x + 2, y + 2, width - 4, height - 4, EMPTY_COLOR.getHex());
           }
     }
