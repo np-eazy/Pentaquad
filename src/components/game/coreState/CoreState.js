@@ -13,6 +13,7 @@ import {
   TARGET_MARGIN,
   COLLISION_TIME_LIMIT,
   MAX_ROTATION_ADJUSTMENT,
+  CELL_TYPE,
 } from "../Constants";
 import { dropzone } from "./utils/Dropzone";
 import EmptyCell from "./objects/cell/EmptyCell";
@@ -320,13 +321,13 @@ const CoreState = class {
   // Change the CoreState's grid values based on where the current piece is.
   placeCurrentPiece() {
     if (this.currPiece != null) {
-      if (this.currPiece.mainCell.type == 3) {
+      if (this.currPiece.mainCell.type == CELL_TYPE.BOMB) {
         for (var y = Math.max(0, this.currPiece.cy - 2); y < Math.min(this.boardSize, this.currPiece.cy + 3); y++) {
           for (var x = Math.max(0, this.currPiece.cx - 2); x < Math.min(this.boardSize, this.currPiece.cx + 3); x++) {
             this.board[y][x] = this.emptyValue();
           }
         }
-      } else if (this.currPiece.mainCell.type == 4) {
+      } else if (this.currPiece.mainCell.type == CELL_TYPE.DRILL) {
         dropzone(this.board, this.currPiece, this.gravity, (cell) => {
           cell.type = 0;
           cell.setDefaults();
@@ -339,7 +340,9 @@ const CoreState = class {
             cell[1][1] + this.currPiece.cy,
           ];
           if (x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize) {
-            this.board[y][x] = new NormalCell();
+            var newCell = new NormalCell();
+            newCell.getAttributesFrom(this.currPiece.mainCell);
+            this.board[y][x] = newCell;
           }
         }
       }

@@ -2,9 +2,14 @@ import { TEMP_LIFETIME } from "../../../Constants";
 import { Color, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 import {
+  
   EMPTY_COLOR,
+  FILLED_COLOR,
+
   CELL_MID_LIGHT,
   CELL_CENTER_LIGHT,
+  CELL_BASE_COLOR_BLEND,
+
 } from "../../../graphics/Theme";
 
 
@@ -28,7 +33,32 @@ class Cell {
     this.meter = 0;
     this.lifetime = TEMP_LIFETIME;
     this.ttl = TEMP_LIFETIME;   
-    this.advanceUpdate(true);
+  }
+
+  // Copy props from another Cell, regardless of what type/subclass of cell it is. This is useful for
+  // transition graphics when a Cell changes its type.
+  getAttributesFrom(other) {
+    this.baseColor = other.baseColor;
+    this.currentColor = other.currentColor;
+    this.colorSuite = other.colorSuite;
+    
+    this.xOffset = other.xOffset;
+    this.yOffset = other.yOffset;
+    this.timer = other.timer;
+    this.meter = other.meter;
+    this.lifetime = other.lifetime;
+    this.ttl = other.ttl;
+  }
+
+  setBaseColor(color) {
+    this.baseColor = interpolateColor(
+      FILLED_COLOR,
+      color,
+      CELL_BASE_COLOR_BLEND,
+      linInt,
+    );
+    this.updateCurrentColor();
+    this.updateColorSuite();
   }
 
   // Update the cell's main color based on its TTL
@@ -36,7 +66,7 @@ class Cell {
     if (this.ttl != -1 && this.currentColor) {
       this.currentColor = interpolateColor(
         EMPTY_COLOR,
-        this.currentColor,
+        this.baseColor,
         this.ttl / this.lifetime,
         linInt,
       )

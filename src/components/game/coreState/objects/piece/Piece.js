@@ -47,7 +47,7 @@ class Piece {
       this.mainCell = new TowerCell();
     }
     this.mainCell.dxn = this.dxn;
-    this.mainCell.baseColor = this.baseColor;
+    this.mainCell.setBaseColor(this.baseColor);
   }
 
   // Before the piece is mounted to a global location, it shouldn't be used/updated.
@@ -66,13 +66,6 @@ class Piece {
     if (randint(0, 2) == 1) {
       this.flip();
     }
-
-    // Set this piece's color based on its initial direction; there will be more
-    // room to customize this.
-
-    // TODO: Define Colors in a more appropriate class and keep it in RenderProps with GameState
-    // when that time comes/
-    this.color = new Color({ red: 100, green: 100, blue: 100 });
   }
 
   // Just for formality/convention, we do this each time we move something from the game
