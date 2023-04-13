@@ -2,6 +2,7 @@ import { WINDOW_SIZE } from "../../Constants";
 import { BOARD_HEIGHT, BOARD_WIDTH, BOARD_X0, BOARD_Y0, drawBackground } from "../Layout";
 import { drawCursor } from "../objects/cursor/DrawCursor";
 import { drawPiece } from "../objects/piece/DrawPiece";
+import { updatePiece } from "../objects/piece/UpdatePiece";
 import { drawTargets } from "../objects/target/DrawTargets";
 
 export const renderBoard = (canvas, board, xCellSize, yCellSize, {
@@ -42,7 +43,7 @@ export const renderBoard = (canvas, board, xCellSize, yCellSize, {
       xCellSize, yCellSize);
 }
 
-export const updateBoard = (board) => {
+export const updateBoard = (board, piece) => {
     // Update grid cells
     var [xSize, ySize] = [board[0].length, board.length];
     for (var y = 0; y < ySize; y++) {
@@ -50,5 +51,6 @@ export const updateBoard = (board) => {
         board[y][x].idleUpdate();
       }
     }
+  updatePiece(piece);
 }
 

@@ -7,8 +7,8 @@ import { drawTargets } from "./objects/target/DrawTargets";
 import { drawCursor } from "./objects/cursor/DrawCursor";
 import { updatePiece } from "./objects/piece/UpdatePiece";
 import { BOARD_HEIGHT, BOARD_WIDTH, TOTAL_HEIGHT, TOTAL_WIDTH } from "./Layout";
-import { renderScoresheet } from "./compounds/Scoresheet";
-import { renderPalette } from "./compounds/Palette";
+import { renderScoresheet, updateScoresheet } from "./compounds/Scoresheet";
+import { renderPalette, updatePalette } from "./compounds/Palette";
 
 const GameGraphics = (props) => {
   var board = props.gameState.coreState.board;
@@ -28,19 +28,17 @@ const GameGraphics = (props) => {
         targetStage: props.gameState.coreState.targetStage,
         controller: props.gameState.controller,
       });
-
     renderStage(canvas, 
       props.gameState.coreState.pieceStage);
-
-    // renderScoresheet(canvas, 
-    //   undefined);
-    // renderPalette(canvas, 
-    //   undefined);
+    renderScoresheet(canvas, 
+      undefined);
+    renderPalette(canvas, 
+      props.gameState.coreState.pieceStage);
     
-    updateBoard(board);
-
-    updatePiece(props.gameState.coreState.currPiece);
+    updateBoard(board, props.gameState.coreState.currPiece);
     updateStage(props.gameState.coreState.pieceStage);
+    //updatePalette(props.gameState.coreState.pieceStage);
+    updateScoresheet(undefined);
   }
 
   function emptyLoop(canvas) {}

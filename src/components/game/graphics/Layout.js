@@ -5,11 +5,11 @@ export const COLUMN_SIZE = 200;
 export const BOARD_SIZE = 800;
 export const SCORESHEET_SIZE = 400;
 
-
 export const STAGE_X0 = 0;
 export const STAGE_Y0 = 0;
 export const STAGE_WIDTH = COLUMN_SIZE;
 export const STAGE_HEIGHT = BOARD_SIZE;
+export const STAGE_CELL_SIZE = BOARD_SIZE / 32;
 
 export const BOARD_X0 = STAGE_WIDTH;
 export const BOARD_Y0 = 0;

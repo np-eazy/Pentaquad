@@ -1,15 +1,12 @@
 import { STAGE_WIDTH, WINDOW_SIZE } from "../../Constants";
 import { drawRect, outlineRect } from "../Pipeline";
-import { STAGE_HEIGHT, STAGE_X0, STAGE_Y0, drawBackground } from "../Layout";
+import { STAGE_HEIGHT, STAGE_X0, STAGE_Y0, drawBackground, STAGE_CELL_SIZE } from "../Layout";
 import { drawPiece } from "../objects/piece/DrawPiece";
 import { updatePiece } from "../objects/piece/UpdatePiece";
 
 
-const STAGE_CELL_SIZE = WINDOW_SIZE / 32;
-
 export function renderStage(canvas, stage) {
   drawBackground(canvas, STAGE_X0, STAGE_Y0, STAGE_WIDTH, STAGE_HEIGHT);
-  // Draw outlines of future pieces
   for (var i = 0; i < stage.nextPieces.length; i++) {
     var [x_, y_] = [2.5, 2.5 + 6 * i];
     drawPiece(
