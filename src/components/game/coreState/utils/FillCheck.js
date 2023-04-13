@@ -20,8 +20,7 @@ export const checkFilledLines = ({
       // Horizontally shift the left or the right of the cleared line
       if (count >= threshold) {
         if (dxn.equals(Dxn[Angle.RIGHT])) {
-          for (var j = 0; j < x; j++) {
-            i = x - j - 1;
+          for (var i = x - 1; i >= 0; i--) {
             for (var y_ = 0; y_ < boardSize; y_++) {
               board[y_][i + 1] = board[y_][i];
               board[y_][i + 1].xOffset = -1;
@@ -56,8 +55,7 @@ export const checkFilledLines = ({
       // Horizontally shift the left or the right of the cleared line
       if (count >= threshold) {
         if (dxn.equals(Dxn[Angle.DOWN])) {
-          for (var j = 0; j < y; j++) {
-            i = y - j - 1;
+          for (var i = y - 1; i >= 0; i--) {
             for (var x_ = 0; x_ < boardSize; x_++) {
               board[i + 1][x_] = board[i][x_];
               board[i + 1][x_].yOffset = -1;
