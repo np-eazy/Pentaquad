@@ -5,6 +5,7 @@ import {
     interpolateColor,
 } from "../../../graphics/utils/Colors";
 import {
+    EMPTY_COLOR,
     MARKER_COLOR, 
 } from "../../../graphics/Theme";
 import {
@@ -38,6 +39,11 @@ class DrillCell extends Cell {
             linInt,
           );
           outlineRect(canvas, x + 2, y + 2, width - 4, height - 4, borderColor.getHex());
+
+        var clock = ((this.timer / 100) % 1);
+        var innerLength = clock * width / 2
+        var innerColor = interpolateColor(this.colorSuite.midLight, EMPTY_COLOR, clock, linInt);
+        outlineRect(canvas, x + innerLength, y + innerLength, width - innerLength * 2, height - innerLength * 2, innerColor.getHex());
     }
 }
 
