@@ -16,7 +16,7 @@ export function dropzone(board, piece, gravity, cellFunction, passThrough = fals
             (passThrough || board[y][x].type == 0)
           ) {
             // Traverse in the falling direction of this piece to mark all empty pieces under it.
-            cellFunction(board[y][x]);
+            cellFunction(x, y);
             x += dx;
             y += dy;
           }

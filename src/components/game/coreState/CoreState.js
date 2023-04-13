@@ -173,14 +173,12 @@ const CoreState = class {
   }
   // Drop the current piece as far down as possible
   executeDrop() {
-    if (this.currPiece.mainCell.type == 5) {
-      dropzone(this.board, this.currPiece, this.gravity, (cell) => {
-        cell.type = 1;
-        cell.props = {
-          ...this.currPiece.mainCell.props
-        }
+    if (this.currPiece.mainCell.type == CELL_TYPE.TOWER) {
+      dropzone(this.board, this.currPiece, this.gravity, (x, y) => {
+        this.board[y][x] = new NormalCell();
+        this.board[y][x].getAttributesFrom(this.currPiece.mainCell);
       }, false);
-    } else if (this.currPiece.mainCell.type != 2) {
+    } else if (this.currPiece.mainCell.type != CELL_TYPE.GHOST) {
       while (
         !this.currPiece.checkCollision(
           this.gravity,
@@ -328,9 +326,10 @@ const CoreState = class {
           }
         }
       } else if (this.currPiece.mainCell.type == CELL_TYPE.DRILL) {
-        dropzone(this.board, this.currPiece, this.gravity, (cell) => {
-          cell.type = 0;
-          cell.setDefaults();
+        dropzone(this.board, this.currPiece, this.gravity, (x, y) => {
+          var newCell = new EmptyCell();
+          newCell.getAttributesFrom(this.board[y][x]);
+          this.board[y][x] = newCell;
         }, true)
       } else {
         var [x, y] = [0, 0];

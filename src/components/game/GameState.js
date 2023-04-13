@@ -51,9 +51,9 @@ const GameState = class {
         this.coreState.board, 
         this.coreState.currPiece, 
         this.coreState.gravity, 
-        (cell) => {
-          cell.marked = true;
-          cell.markerAngle = this.coreState.gravity.angle;
+        (x, y) => {
+          this.coreState.board[y][x].marked = true;
+          this.coreState.board[y][x].markerAngle = this.coreState.gravity.angle;
         });
     }
   }

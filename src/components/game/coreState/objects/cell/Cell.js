@@ -32,7 +32,9 @@ class Cell {
     this.timer = 0;
     this.meter = 0;
     this.lifetime = TEMP_LIFETIME;
-    this.ttl = TEMP_LIFETIME;   
+    this.ttl = TEMP_LIFETIME;  
+    
+    this.marked = false;
   }
 
   // Copy props from another Cell, regardless of what type/subclass of cell it is. This is useful for
