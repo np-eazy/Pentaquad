@@ -257,7 +257,15 @@ const CoreState = class {
       emptyValue: this.emptyValue,
     });
 
-    // increment times to live for each cell before converting to empty cell
+    this.advanceCells();
+
+    // Create new game objects
+    this.createNewPiece();
+    this.createNewTarget();
+  }
+
+  // increment times to live for each cell before converting to empty cell
+  advanceCells() {
     for (var y = 0; y < this.boardSize; y++) {
       for (var x = 0; x < this.boardSize; x++) {
         var cell = this.board[y][x];
@@ -272,10 +280,6 @@ const CoreState = class {
         }
       }
     }
-
-    // Create new game objects
-    this.createNewPiece();
-    this.createNewTarget();
   }
 
   getSpawnPosition(dxn) {

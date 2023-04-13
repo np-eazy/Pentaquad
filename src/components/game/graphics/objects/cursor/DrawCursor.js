@@ -1,16 +1,22 @@
+import { DEBUG, MESSAGE_SIZE, MESSAGE_OFFSET, debugCell } from "../../../Debug";
+import { inBounds } from "../../../coreState/utils/Functions";
 import { outlineRect } from "../../Pipeline";
+import { FILLED_COLOR } from "../../Theme";
 
 export const drawCursor = (canvas, board, controller, windowSize, xCellSize, yCellSize) => {
     var [x, y] = controller.gridCursor(
-        windowSize,
-        board.length
-      );
-      outlineRect(
-        canvas,
-        x * xCellSize,
-        y * yCellSize,
-        xCellSize,
-        yCellSize,
-        "#000000"
-      );
+      windowSize,
+      board.length,
+    );
+    outlineRect(
+      canvas,
+      x * xCellSize,
+      y * yCellSize,
+      xCellSize,
+      yCellSize,
+      FILLED_COLOR.getHex()
+    );
+    if (DEBUG && inBounds(x, y, board.length)) {
+      debugCell(canvas, board[y][x], x, y);
+    }
 }

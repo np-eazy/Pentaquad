@@ -42,6 +42,10 @@ export class Color {
     }
     return this.hex;
   }
+
+  toString() {
+    return this.red.toString() + ", " + this.green.toString() + ", " + this.blue.toString();
+  }
 }
 
 export const Black = () => new Color({ red: 0, green: 0, blue: 0 });
