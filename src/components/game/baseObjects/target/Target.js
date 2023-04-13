@@ -1,12 +1,9 @@
-// The primary objective of this game is not to fill up lines but to fill up rectangle-shaped TargetBlocks,
-
 import { outlineRect } from "../../graphics/Pipeline";
 import { FILLED_COLOR } from "../../graphics/Theme";
-import { Color } from "../../graphics/utils/Colors";
-
 
 const BORDER_COLOR = FILLED_COLOR;
-// which grow over time and end the game once they exceed the bounds of the board.
+
+// A single block whose corner bounds must be filled with Cells to achieve game objectives.
 class Target {
   constructor(props) {
     this.coreState = props.coreState;
@@ -16,6 +13,8 @@ class Target {
     this.x1 = props.x1;
     this.y1 = props.y1;
 
+    // Similar to a lifetime-TTL loop, except each time it completes the Target's bounds grow,
+    // making it harder to fill up. This can change
     this.ticksToGrowth = props.ticksToGrowth;
     this.ticksLeft = this.ticksToGrowth;
     this.isGameOver = false;
@@ -23,15 +22,15 @@ class Target {
     this.isCleared = false;
   }
 
-  idleUpdate() {
+  // Update attributes each frame to get animated renders; right now not implemented.
+  idleUpdate() {}
 
-  }
-
-  activeUpdate() {
-
-  }
+  // Not really a relevant method for targets which don't have any meaningful graphics for when a piece falls down a step,
+  // but keeping it here for sake of convention matching with Cell.
+  activeUpdate() {}
 
   // To be called once each time the coreState updates; either the isFilled flag goes up or it continues to grow.
+  // Currently, a Target only grows but others can be implemented to disappear or give the user power-ups upon being cleared.
   advanceUpdate() {
     if (this.checkFill(this.coreState.board)) {
       this.isFilled = true;
@@ -42,6 +41,29 @@ class Target {
         this.grow();
       }
     }
+  }
+
+  // Check that every spot covered by this TargetBlock is "filled" with a Cell of type > 0, signifying that
+  // it is not empty
+  checkFill(board) {
+    for (var x = this.x0; x < this.x1; x++) {
+      for (var y = this.y0; y < this.y1; y++) {
+        if (!board[y][x] || board[y][x].type < 1) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  // Clear the cells this TargetBlock covers and set its cleared flag to True
+  clear(board, fillCell) {
+    for (var x = this.x0; x < this.x1; x++) {
+      for (var y = this.y0; y < this.y1; y++) {
+        board[y][x] = fillCell();
+      }
+    }
+    this.isCleared = true;
   }
 
   // Extend the corners out by one cell. If any corner leaves the bounds of the game's board, GameOver flag goes up.
@@ -60,31 +82,6 @@ class Target {
     }
   }
 
-  // Check that every spot covered by this TargetBlock is "filled" with a Cell of type > 0, signifying that
-  // it is not empty
-  checkFill(board) {
-    for (var x = this.x0; x < this.x1; x++) {
-      for (var y = this.y0; y < this.y1; y++) {
-        if (!board[y][x] || board[y][x].type < 1) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  // Clear the cells this TargetBlock covers and set its cleared flag to True
-  // TODO: Is it better to have this method in CoreState or TargetBlock?
-  clear(board, fillCell) {
-    for (var x = this.x0; x < this.x1; x++) {
-      for (var y = this.y0; y < this.y1; y++) {
-        board[y][x] = fillCell();
-      }
-    }
-    this.isCleared = true;
-  }
-
-
   render(canvas, xCellSize, yCellSize) {
     outlineRect(
       canvas,
@@ -92,7 +89,7 @@ class Target {
       this.y0 * yCellSize,
       (this.x1 - this.x0) * xCellSize,
       (this.y1 - this.y0) * yCellSize,
-      BORDER_COLOR.getHex(),
+      BORDER_COLOR.getHex()
     );
   }
 }
