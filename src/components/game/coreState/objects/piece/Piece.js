@@ -18,8 +18,8 @@ import { COLLISION_RADIUS } from "../../utils/Params";
 class Piece {
   constructor(cellType = CELL_TYPE.NORMAL) {
     this.mounted = false;
-    this.cx = undefined;
-    this.cy = undefined;
+    this.cx = 0;
+    this.cy = 0;
     this.dxn = undefined;
     this.pidSize = undefined;
     
@@ -69,8 +69,8 @@ class Piece {
   // back to the stage.
   unmountPiece() {
     this.mounted = false;
-    this.cx = undefined;
-    this.cy = undefined;
+    this.cx = 0;
+    this.cy = 0;
     this.dxn = undefined;
     this.pidSie = undefined;
   }

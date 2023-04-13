@@ -6,6 +6,7 @@ import CoreState from "./coreState/CoreState";
 import GameController from "../game/control/GameController";
 
 import { WINDOW_SIZE, BOARD_SIZE, REFRESH_MS, STAGE_WIDTH } from "./Constants";
+import { TOTAL_HEIGHT, TOTAL_WIDTH } from "./graphics/Layout";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.
@@ -63,8 +64,8 @@ const GameCanvas = (props) => {
       onMouseMove={handleMouseMove}
       onMouseDown={handleMouseDown}
     >
-      <canvas id="gameGraphics" width={WINDOW_SIZE + STAGE_WIDTH} height={WINDOW_SIZE}>
-        <GameGraphics gameState={gameState} windowSize={WINDOW_SIZE} />
+      <canvas id="gameGraphics" width={TOTAL_WIDTH} height={TOTAL_HEIGHT}>
+        <GameGraphics gameState={gameState}/>
       </canvas>
     </div>
   );
