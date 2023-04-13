@@ -1,4 +1,11 @@
 // The primary objective of this game is not to fill up lines but to fill up rectangle-shaped TargetBlocks,
+
+import { outlineRect } from "../../graphics/Pipeline";
+import { FILLED_COLOR } from "../../graphics/Theme";
+import { Color } from "../../graphics/utils/Colors";
+
+
+const BORDER_COLOR = FILLED_COLOR;
 // which grow over time and end the game once they exceed the bounds of the board.
 class Target {
   constructor(props) {
@@ -16,8 +23,16 @@ class Target {
     this.isCleared = false;
   }
 
+  idleUpdate() {
+
+  }
+
+  activeUpdate() {
+
+  }
+
   // To be called once each time the coreState updates; either the isFilled flag goes up or it continues to grow.
-  update() {
+  advanceUpdate() {
     if (this.checkFill(this.coreState.board)) {
       this.isFilled = true;
     } else if (!this.isGameOver) {
@@ -67,6 +82,18 @@ class Target {
       }
     }
     this.isCleared = true;
+  }
+
+
+  render(canvas, xCellSize, yCellSize) {
+    outlineRect(
+      canvas,
+      this.x0 * xCellSize,
+      this.y0 * yCellSize,
+      (this.x1 - this.x0) * xCellSize,
+      (this.y1 - this.y0) * yCellSize,
+      BORDER_COLOR.getHex(),
+    );
   }
 }
 export default Target;

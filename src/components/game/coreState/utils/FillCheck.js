@@ -87,7 +87,7 @@ export const checkFilledLines = ({
 // covered cells to replace with a call to emptyValue
 export const checkFilledTargets = ({ targets, board, emptyValue }) => {
   var gameOver = false;
-  targets.forEach((target) => target.update());
+  targets.forEach((target) => target.advanceUpdate());
   targets.forEach((target) => {
     if (target.isFilled) {
       target.clear(board, emptyValue);

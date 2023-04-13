@@ -40,7 +40,11 @@ const GameGraphics = (props) => {
     renderPalette(canvas, 
       props.gameState.coreState.pieceStage);
     
-    updateBoard(board, props.gameState.coreState.currPiece);
+    updateBoard(board, {
+      piece: props.gameState.coreState.currPiece,
+      targets: props.gameState.coreState.targets,
+      targetStage: props.gameState.coreState.targetStage,   
+    });
     updateStage(props.gameState.coreState.pieceStage);
     //updatePalette(props.gameState.coreState.pieceStage);
     updateScoresheet(undefined);
