@@ -1,4 +1,6 @@
+import { STAGE_WIDTH } from "../Constants";
 import { Angle, Dxn } from "../coreState/utils/Direction";
+import { BOARD_X0, BOARD_Y0, STAGE_HEIGHT } from "../graphics/Layout";
 import { GameAction, ActionType } from "./GameAction";
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 
@@ -55,8 +57,8 @@ class GameController {
 
   // Update the mouse position
   handleMouseMove(event) {
-    this.cursorX = event.clientX;
-    this.cursorY = event.clientY;
+    this.cursorX = event.clientX - BOARD_X0;
+    this.cursorY = event.clientY - BOARD_Y0;
   }
 
   // Toggle the moveTo flag to continuously produce MOVE_TO actions.
