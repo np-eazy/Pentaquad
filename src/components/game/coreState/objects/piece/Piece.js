@@ -11,7 +11,7 @@ import BombCell from "../cell/BombCell";
 import DrillCell from "../cell/DrillCell";
 import TowerCell from "../cell/TowerCell";
 import { DEBUG } from "../../../Debug";
-import { CWR } from "../../utils/Params";
+import { COLLISION_RADIUS } from "../../utils/Params";
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
@@ -113,13 +113,13 @@ class Piece {
 
     if (this.mainCell.type != CELL_TYPE.GHOST) {
       for (
-        var y = Math.max(0, this.cy - CWR);
-        y < Math.min(this.cy + CWR + 1, ySize);
+        var y = Math.max(0, this.cy - COLLISION_RADIUS);
+        y < Math.min(this.cy + COLLISION_RADIUS + 1, ySize);
         y++
       ) {
         for (
-          var x = Math.max(0, this.cx - CWR);
-          x < Math.min(this.cx + CWR + 1, xSize);
+          var x = Math.max(0, this.cx - COLLISION_RADIUS);
+          x < Math.min(this.cx + COLLISION_RADIUS + 1, xSize);
           x++
         ) {
           if (board[y][x].type > 0) {
