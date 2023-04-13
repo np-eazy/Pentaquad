@@ -1,17 +1,17 @@
-import Cell from "../cell/Cell";
-import { randint, getPID } from "../../utils/Functions";
-import { randomDxn } from "../../utils/Direction";
-import { Color } from "../../../graphics/utils/Colors";
+import Cell from "../baseObjects/cell/Cell";
+import { randint, getPID } from "./utils/Functions";
+import { randomDxn } from "./utils/Direction";
+import { Color } from "../graphics/utils/Colors";
 
-import { PRESETS, BASE_COLORS, CELL_TYPE } from "../../../Constants";
-import EmptyCell from "../cell/EmptyCell";
-import NormalCell from "../cell/NormalCell";
-import GhostCell from "../cell/GhostCell";
-import BombCell from "../cell/BombCell";
-import DrillCell from "../cell/DrillCell";
-import TowerCell from "../cell/TowerCell";
-import { DEBUG } from "../../../Debug";
-import { COLLISION_RADIUS } from "../../utils/Params";
+import { PRESETS, BASE_COLORS, CELL_TYPE } from "../Constants";
+import EmptyCell from "../baseObjects/cell/EmptyCell";
+import NormalCell from "../baseObjects/cell/NormalCell";
+import GhostCell from "../baseObjects/cell/GhostCell";
+import BombCell from "../baseObjects/cell/BombCell";
+import DrillCell from "../baseObjects/cell/DrillCell";
+import TowerCell from "../baseObjects/cell/TowerCell";
+import { DEBUG } from "../Debug";
+import { COLLISION_RADIUS } from "./utils/Params";
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.

@@ -1,16 +1,16 @@
 import Cell from "./Cell";
-import { CELL_TYPE } from "../../../Constants";
-import { drawRect, outlineRect } from "../../../graphics/Pipeline";
+import { CELL_TYPE } from "../../Constants";
+import { drawRect, outlineRect } from "../../graphics/Pipeline";
 import {
     interpolateColor,
-} from "../../../graphics/utils/Colors";
+} from "../../graphics/utils/Colors";
 import {
     MARKER_COLOR, 
     LIGHT_AMPLITUDE,
-} from "../../../graphics/Theme";
+} from "../../graphics/Theme";
 import {
     linInt,
-} from "../../../graphics/utils/Functions";
+} from "../../graphics/utils/Functions";
 
 class NormalCell extends Cell {
     constructor() {

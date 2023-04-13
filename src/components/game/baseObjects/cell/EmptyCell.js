@@ -1,10 +1,10 @@
 import Cell from "./Cell";
-import { CELL_TYPE } from "../../../Constants";
-import { drawRect } from "../../../graphics/Pipeline";
+import { CELL_TYPE } from "../../Constants";
+import { drawRect } from "../../graphics/Pipeline";
 import {
     EMPTY_COLOR,
     MARKER_COLOR, 
-} from "../../../graphics/Theme";
+} from "../../graphics/Theme";
 
 class EmptyCell extends Cell {
     constructor() {

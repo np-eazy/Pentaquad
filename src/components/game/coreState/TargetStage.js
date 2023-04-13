@@ -1,12 +1,12 @@
-import { randint } from "../../utils/Functions";
-import Target from "./Target";
+import { randint } from "./utils/Functions";
+import Target from "../baseObjects/target/Target";
 
 import {
   TARGET_STAGE_MAX_LENGTH,
   TARGET_GRACE_PERIOD,
   TARGET_SPAWN_TIMER,
   TARGET_GROWTH_TIMER,
-} from "../../../Constants";
+} from "../Constants";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.

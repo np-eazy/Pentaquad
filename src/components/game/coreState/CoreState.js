@@ -1,7 +1,7 @@
-import Cell from "./objects/cell/Cell";
+import Cell from "../baseObjects/cell/Cell";
 import BoundarySets from "./BoundarySets";
-import PieceStage from "./objects/piece/PieceStage";
-import TargetStage from "./objects/target/TargetStage";
+import PieceStage from "./PieceStage";
+import TargetStage from "./TargetStage";
 
 import { ActionType } from "../control/GameAction";
 import { checkFilledLines, checkFilledTargets } from "./utils/FillCheck";
@@ -17,8 +17,8 @@ import {
   CELL_TYPE,
 } from "../Constants";
 import { dropzone } from "./utils/Dropzone";
-import EmptyCell from "./objects/cell/EmptyCell";
-import NormalCell from "./objects/cell/NormalCell";
+import EmptyCell from "../baseObjects/cell/EmptyCell";
+import NormalCell from "../baseObjects/cell/NormalCell";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting

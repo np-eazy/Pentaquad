@@ -1,6 +1,6 @@
-import { TEMP_LIFETIME } from "../../../Constants";
-import { Color, interpolateColor } from "../../../graphics/utils/Colors";
-import { linInt } from "../../../graphics/utils/Functions";
+import { TEMP_LIFETIME } from "../../Constants";
+import { Color, interpolateColor } from "../../graphics/utils/Colors";
+import { linInt } from "../../graphics/utils/Functions";
 import {
   
   EMPTY_COLOR,
@@ -10,7 +10,7 @@ import {
   CELL_CENTER_LIGHT,
   CELL_BASE_COLOR_BLEND,
 
-} from "../../../graphics/Theme";
+} from "../../graphics/Theme";
 
 
 class Cell {
