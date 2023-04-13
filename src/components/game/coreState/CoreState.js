@@ -263,8 +263,9 @@ const CoreState = class {
         var cell = this.board[y][x];
         if (cell.ttl != -1) {
           if (cell.ttl == 0) {
-            cell.type = 0;
-            cell.timer = 0;
+            var newCell = new EmptyCell();
+            newCell.getAttributesFrom(this.board[y][x]);
+            this.board[y][x] = newCell;
           } else {
             cell.advanceUpdate(true);
           }

@@ -1,4 +1,4 @@
-import { ADVANCE_TIME } from "./Constants";
+import { ADVANCE_TIME, CELL_TYPE } from "./Constants";
 import { dropzone } from "./coreState/utils/Dropzone";
 import { inBounds } from "./coreState/utils/Functions";
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
@@ -46,7 +46,7 @@ const GameState = class {
   // TODO (opt): make less inBounds calls?
   markDropZone() {
     var piece = this.coreState.currPiece;
-    if (piece && piece.mainCell.type != 2) {
+    if (piece && piece.mainCell.type != CELL_TYPE.GHOST) {
       dropzone(
         this.coreState.board, 
         this.coreState.currPiece, 

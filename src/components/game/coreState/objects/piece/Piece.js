@@ -114,7 +114,7 @@ class Piece {
       return true;
     }
 
-    if (this.mainCell.type != 2) {
+    if (this.mainCell.type != CELL_TYPE.GHOST) {
       for (
         var y = Math.max(0, this.cy - CWR);
         y < Math.min(this.cy + CWR + 1, ySize);

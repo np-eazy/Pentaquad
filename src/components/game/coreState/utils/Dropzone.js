@@ -1,9 +1,10 @@
+import { CELL_TYPE } from "../../Constants";
 import { inBounds } from "./Functions";
 
 // A function that finds all the cells under a piece about to be dropped, and calls
 // another function on all the cells within
 export function dropzone(board, piece, gravity, cellFunction, passThrough = false) {
-    if (piece && piece.mainCell.type != 2) {
+    if (piece && piece.mainCell.type != CELL_TYPE.GHOST) {
       var alreadyCovered = new Set();
       var [dx, dy] = gravity.getDiff();
       for (const cell of piece.cells) {
