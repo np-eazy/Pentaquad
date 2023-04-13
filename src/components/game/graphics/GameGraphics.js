@@ -1,14 +1,14 @@
 import { BOARD_SIZE, STAGE_WIDTH, WINDOW_SIZE } from "../Constants";
 
-import { renderBoard, updateBoard } from "./compounds/Board";
-import { renderStage, updateStage } from "./compounds/Stage";
+import { renderBoard, updateBoard } from "./sections/Board";
+import { renderStage, updateStage } from "./sections/Stage";
 import { drawPiece } from "./objects/piece/DrawPiece";
 import { drawTargets } from "./objects/target/DrawTargets";
 import { drawCursor } from "./objects/cursor/DrawCursor";
 import { updatePiece } from "./objects/piece/UpdatePiece";
 import { BOARD_HEIGHT, BOARD_WIDTH, SCORESHEET_X0, SCORESHEET_Y0, TOTAL_HEIGHT, TOTAL_WIDTH } from "./Layout";
-import { renderScoresheet, updateScoresheet } from "./compounds/Scoresheet";
-import { renderPalette, updatePalette } from "./compounds/Palette";
+import { renderScoresheet, updateScoresheet } from "./sections/Scoresheet";
+import { renderPalette, updatePalette } from "./sections/Palette";
 import { DEBUG, debugCell } from "../Debug";
 import { inBounds } from "../coreState/utils/Functions";
 import { useLayoutEffect } from "react";

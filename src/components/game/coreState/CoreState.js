@@ -5,7 +5,7 @@ import TargetStage from "./objects/target/TargetStage";
 
 import { ActionType } from "../control/GameAction";
 import { checkFilledLines, checkFilledTargets } from "./utils/FillCheck";
-import { randint } from "./utils/Functions";
+import { inBounds, randint } from "./utils/Functions";
 import { Angle, Direction, Dxn } from "./utils/Direction";
 import {
   SPAWN_OFFSET,
@@ -13,6 +13,7 @@ import {
   TARGET_MARGIN,
   COLLISION_TIME_LIMIT,
   MAX_ROTATION_ADJUSTMENT,
+  BOMB_RADIUS,
   CELL_TYPE,
 } from "../Constants";
 import { dropzone } from "./utils/Dropzone";
@@ -325,8 +326,8 @@ const CoreState = class {
   placeCurrentPiece() {
     if (this.currPiece != null) {
       if (this.currPiece.mainCell.type == CELL_TYPE.BOMB) {
-        for (var y = Math.max(0, this.currPiece.cy - 2); y < Math.min(this.boardSize, this.currPiece.cy + 3); y++) {
-          for (var x = Math.max(0, this.currPiece.cx - 2); x < Math.min(this.boardSize, this.currPiece.cx + 3); x++) {
+        for (var y = Math.max(0, this.currPiece.cy - BOMB_RADIUS); y < Math.min(this.boardSize, this.currPiece.cy + BOMB_RADIUS + 1); y++) {
+          for (var x = Math.max(0, this.currPiece.cx - BOMB_RADIUS); x < Math.min(this.boardSize, this.currPiece.cx + BOMB_RADIUS + 1); x++) {
             this.board[y][x] = this.emptyValue();
           }
         }
@@ -338,12 +339,12 @@ const CoreState = class {
         }, true)
       } else {
         var [x, y] = [0, 0];
-        for (const cell of this.currPiece.cells) {
+        for (const [pid, [x_, y_]] of this.currPiece.cells) {
           [x, y] = [
-            cell[1][0] + this.currPiece.cx,
-            cell[1][1] + this.currPiece.cy,
+            x_ + this.currPiece.cx,
+            y_ + this.currPiece.cy,
           ];
-          if (x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize) {
+          if (inBounds(x, y, this.boardSize)) {
             var newCell = new NormalCell();
             newCell.getAttributesFrom(this.currPiece.mainCell);
             this.board[y][x] = newCell;

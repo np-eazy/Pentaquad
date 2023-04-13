@@ -5,8 +5,8 @@ export const drawPiece = (canvas, piece, x0, y0, xCellSize, yCellSize) => {
     if (piece) {
         var mainCell = piece.mainCell;
         if (piece.cells) {
-            for (const cell of piece.cells) {
-                [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];
+            for (const [pid, [x_, y_]] of piece.cells) {
+                [x, y] = [x_ + piece.cx, y_ + piece.cy];
                 mainCell.render(
                     canvas,
                     x0 + x * xCellSize,
@@ -16,12 +16,11 @@ export const drawPiece = (canvas, piece, x0, y0, xCellSize, yCellSize) => {
                 );
             }
         } else if (piece.preset) {
-            for (const cell of piece.preset) {
-                [x, y] = [cell[0], cell[1]];
+            for (const [x_, y_] of piece.preset) {
                 mainCell.render(
                     canvas,
-                    x0 + x * xCellSize,
-                    y0 + y * yCellSize,
+                    x0 + x_ * xCellSize,
+                    y0 + y_ * yCellSize,
                     xCellSize,
                     yCellSize,
                 );

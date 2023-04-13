@@ -7,8 +7,8 @@ export function dropzone(board, piece, gravity, cellFunction, passThrough = fals
     if (piece && piece.mainCell.type != CELL_TYPE.GHOST) {
       var alreadyCovered = new Set();
       var [dx, dy] = gravity.getDiff();
-      for (const cell of piece.cells) {
-        var [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];
+      for (const [pid, [x_, y_]] of piece.cells) {
+        var [x, y] = [x_ + piece.cx, y_ + piece.cy];
         var index = gravity.isHorizontal() ? y : x;
         if (!alreadyCovered.has(index)) {
           alreadyCovered.add(index);
