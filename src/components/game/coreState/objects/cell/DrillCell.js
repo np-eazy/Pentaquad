@@ -25,8 +25,8 @@ class DrillCell extends Cell {
         super.activeUpdate();
     }
 
-    advanceUpdate() {
-        super.advanceUpdate();
+    advanceUpdate(computeColors) {
+        super.advanceUpdate(computeColors);
     }
 
     render(canvas, x0, y0, width, height) {

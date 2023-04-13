@@ -20,7 +20,8 @@ class PieceStage {
 
   createType() {
     this.counter += 1;
-    return (this.counter % 5) + 1;
+    // return (this.counter % 5) + 1;
+    return 1;
   }
 
   // To be called by CoreState when it needs another piece

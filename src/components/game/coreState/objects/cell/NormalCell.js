@@ -42,10 +42,11 @@ class NormalCell extends Cell {
               linInt,
             );
             var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
+
           
             drawRect(canvas, x, y, width, height, this.currentColor.getHex());
-            drawRect(canvas, x + d, y + d, width - 2 * d, height - 2 * d, this.midLightColor.getHex());
-            drawRect(canvas, x + 2 * d, y + 2 * d, width - 4 * d, height - 4 * d, this.centerLightColor.getHex());
+            drawRect(canvas, x + d, y + d, width - 2 * d, height - 2 * d, this.colorSuite.midLight.getHex());
+            drawRect(canvas, x + 2 * d, y + 2 * d, width - 4 * d, height - 4 * d, this.colorSuite.centerLight.getHex());
             outlineRect(canvas, x + 2, y + 2, width - 4, height - 4, borderColor.getHex());
           }
     }

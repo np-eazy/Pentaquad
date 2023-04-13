@@ -3,20 +3,24 @@ import { Color, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 import {
   EMPTY_COLOR,
-  FILLED_COLOR,
   CELL_MID_LIGHT,
   CELL_CENTER_LIGHT,
-  CELL_BASE_COLOR_BLEND,
 } from "../../../graphics/Theme";
 
 
 class Cell {
   constructor(type) {
     this.type = type;
-    this.baseColor = new Color({ red: 0, green: 0, blue: 0 });
+    this.baseColor = EMPTY_COLOR; // A non-changing base color for this Cell, which is used to derive all other colors
+    this.currentColor = EMPTY_COLOR; // A dynamically changing main color derived from interpolating the baseColor
+    this.colorSuite = {
+      midLight: EMPTY_COLOR,
+      centerLight: EMPTY_COLOR,
+    }; // A set of colors derived from the main color and can be updated very sparingly
     this.setDefaults();
   }
 
+  // Default values that a Cell is initialized with
   setDefaults() {
     this.xOffset = 0;
     this.yOffset = 0;
@@ -24,15 +28,45 @@ class Cell {
     this.meter = 0;
     this.lifetime = TEMP_LIFETIME;
     this.ttl = TEMP_LIFETIME;   
-    if (this.baseColor) {
-      this.advanceUpdate(true);
+    this.advanceUpdate(true);
+  }
+
+  // Update the cell's main color based on its TTL
+  updateCurrentColor() {
+    if (this.ttl != -1 && this.currentColor) {
+      this.currentColor = interpolateColor(
+        EMPTY_COLOR,
+        this.currentColor,
+        this.ttl / this.lifetime,
+        linInt,
+      )
+    } else {
+      this.currentColor = this.baseColor;
     }
   }
 
+  // Each time the current color changes, everything else follows suite
+  updateColorSuite() {
+    this.colorSuite.midLight = new Color({
+      red: this.currentColor.red + CELL_MID_LIGHT,
+      green: this.currentColor.green + CELL_MID_LIGHT,
+      blue: this.currentColor.blue + CELL_MID_LIGHT,
+    });
+    this.colorSuite.centerLight = new Color({
+      red: this.currentColor.red + CELL_CENTER_LIGHT,
+      green: this.currentColor.green + CELL_CENTER_LIGHT,
+      blue: this.currentColor.blue + CELL_CENTER_LIGHT,
+    });
+  }
+
+  // A quick function for getting x and y positions with adding the offset, it is used by every extension
+  // so I moved it to a separate method; cannot super() it because its intention is purely to make local
+  // vars easier.
   getPosition(x0, y0) {
     return [x0 + this.xOffset, y0 + this.yOffset];
   }
 
+  // Called at the end of each frame to update timers and to control certain variable dynamics.
   idleUpdate() {
     this.xOffset *= 0.8;
     this.yOffset *= 0.8;
@@ -43,44 +77,15 @@ class Cell {
 
   }
 
+  // Called whenever a piece is placed down and the game advances.
   advanceUpdate(computeColors = false) {
     this.ttl -= 1;
-
-    if (computeColors) {
-      if (this.baseColor) {
-        this.currentColor = interpolateColor(
-          FILLED_COLOR,
-          this.baseColor,
-          CELL_BASE_COLOR_BLEND, 
-          linInt,
-        );
-        if (this.ttl != -1) {
-          this.currentColor = interpolateColor(
-            EMPTY_COLOR,
-            this.currentColor,
-            this.ttl / this.lifetime,
-            linInt,
-          )
-        }
-        if (this.currentColor) {
-          this.midLightColor = new Color({
-            red: this.currentColor.red + CELL_MID_LIGHT,
-            green: this.currentColor.green + CELL_MID_LIGHT,
-            blue: this.currentColor.blue + CELL_MID_LIGHT,
-          })
-          this.centerLightColor = new Color({
-            red: this.currentColor.red + CELL_CENTER_LIGHT,
-            green: this.currentColor.green + CELL_CENTER_LIGHT,
-            blue: this.currentColor.blue + CELL_CENTER_LIGHT,
-          })
-        }
-      }
-    } 
+    this.updateCurrentColor();
+    this.updateColorSuite();
   }
 
   render(canvas, x0, y0, width, height) {
-    x0 += this.xOffset;
-    y0 += this.yOffset;
+
   }
 }
 

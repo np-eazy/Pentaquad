@@ -43,3 +43,5 @@ export class Color {
     return this.hex;
   }
 }
+
+export const Black = () => new Color({ red: 0, green: 0, blue: 0 });
