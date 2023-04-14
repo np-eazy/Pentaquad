@@ -1,7 +1,6 @@
 import Cell from "../baseObjects/cell/Cell";
 import { randint, getPID } from "./utils/Functions";
 import { randomDxn } from "./utils/Direction";
-import { Color } from "../graphics/utils/Colors";
 
 import { PRESETS, BASE_COLORS, CELL_TYPE } from "../Constants";
 import EmptyCell from "../baseObjects/cell/EmptyCell";
@@ -22,14 +21,14 @@ class Piece {
     this.cy = 0;
     this.dxn = undefined;
     this.pidSize = undefined;
-    
+
     var index = randint(0, PRESETS.length);
     if (DEBUG) {
       index = 0;
     }
     this.preset = PRESETS[index];
     this.baseColor = BASE_COLORS[index];
-    
+
     if (cellType == CELL_TYPE.EMPTY) {
       this.mainCell = new EmptyCell();
     } else if (cellType == CELL_TYPE.NORMAL) {
@@ -78,10 +77,10 @@ class Piece {
   // The function to fill the coreState with cells corresponding to this Piece; this will
   // be used for cases like the render script accessing the color in the parents
   createCell() {
-    var cell = new Cell(1, { 
+    var cell = new Cell(1, {
       parent: this,
       baseColor: this.baseColor,
-     });
+    });
     return cell;
   }
 

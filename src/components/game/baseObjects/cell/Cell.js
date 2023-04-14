@@ -1,4 +1,4 @@
-import { TEMP_LIFETIME } from "../../Constants";
+import { NORMAL_CELL_LIFETIME } from "../../Constants";
 
 import { Color, interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
@@ -37,8 +37,8 @@ class Cell {
     this.yOffset = 0;
     this.timer = 0;
     this.meter = 0;
-    this.lifetime = TEMP_LIFETIME;
-    this.ttl = TEMP_LIFETIME;
+    this.lifetime = NORMAL_CELL_LIFETIME;
+    this.ttl = NORMAL_CELL_LIFETIME;
 
     this.marked = false;
   }

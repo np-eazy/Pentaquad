@@ -3,9 +3,6 @@ import { Angle } from "./utils/Direction";
 
 // A container class to hold CollisionSets for quick
 // collision detection.
-
-// TODO: Utilize CollisionSets to do faster collision checks for the whole of
-// CoreState.
 class BoundarySets {
   constructor(boardSize, boundaryMargin, pidSize) {
     this.boundarySets = [];

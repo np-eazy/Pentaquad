@@ -34,6 +34,9 @@ const GameState = class {
     return this;
   }
 
+  // EmptyCells have marked fields set in order to render the drop
+  // path of a piece; this should be called to clear the marks
+  // before each frame when the piece could have moved elsewhere.
   unmarkBoard() {
     var board = this.coreState.board;
     for (var x = 0; x < this.coreState.boardSize; x++) {

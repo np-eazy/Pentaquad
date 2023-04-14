@@ -1,6 +1,5 @@
 import Piece from "./Piece";
 import { PIECE_STAGE_MAX_LENGTH } from "../Constants";
-import { randint } from "./utils/Functions";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.

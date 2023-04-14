@@ -1,9 +1,8 @@
-import { STAGE_WIDTH } from "../Constants";
 import { Angle, Dxn } from "../coreState/utils/Direction";
-import { BOARD_X0, BOARD_Y0, STAGE_HEIGHT } from "../graphics/Layout";
+import { BOARD_X0, BOARD_Y0 } from "../graphics/Layout";
 import { GameAction, ActionType } from "./GameAction";
-// A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 
+// A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 class GameController {
   constructor({ windowSize, boardSize }) {
     this.actionQueue = [];
@@ -18,34 +17,34 @@ class GameController {
   handleKeyDown(event) {
     var action = null;
     var keycode = event.keyCode;
-    if (keycode == 87) {
+    if (keycode === 87) {
       // W
       action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.UP] });
-    } else if (keycode == 65) {
+    } else if (keycode === 65) {
       // A
       action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.LEFT] });
-    } else if (keycode == 83) {
+    } else if (keycode === 83) {
       // S
       action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.DOWN] });
-    } else if (keycode == 68) {
+    } else if (keycode === 68) {
       // D
       action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.RIGHT] });
-    } else if (keycode == 81) {
+    } else if (keycode === 81) {
       // Q
       action = new GameAction(ActionType.ROTATE, { angle: 1 });
-    } else if (keycode == 69) {
+    } else if (keycode === 69) {
       // E
       action = new GameAction(ActionType.ROTATE, { angle: -1 });
-    } else if (keycode == 70) {
+    } else if (keycode === 70) {
       // F
       action = new GameAction(ActionType.FLIP, {});
-    } else if (keycode == 32) {
+    } else if (keycode === 32) {
       // SPACE
       action = new GameAction(ActionType.DROP, {});
-    } else if (keycode == 82) {
+    } else if (keycode === 82) {
       // R
       action = new GameAction(ActionType.ROTATE, { angle: 1 });
-    } else if (keycode == 67) {
+    } else if (keycode === 67) {
       // C
       action = new GameAction(ActionType.HOLD, {});
     }

@@ -1,6 +1,5 @@
-import { randint } from "./utils/Functions";
 import Target from "../baseObjects/target/Target";
-
+import { randint } from "./utils/Functions";
 import {
   TARGET_STAGE_MAX_LENGTH,
   TARGET_GRACE_PERIOD,
