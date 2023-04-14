@@ -1,6 +1,6 @@
-import { ADVANCE_TIME, CELL_TYPE } from "./Constants";
 import { dropzone } from "./coreState/utils/Dropzone";
-import { inBounds } from "./coreState/utils/Functions";
+import { ADVANCE_TIME, CELL_TYPE } from "./Constants";
+
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,
 // or leave intervals for graphic transitions.
@@ -8,7 +8,6 @@ import { inBounds } from "./coreState/utils/Functions";
 // Required props:
 // - coreState: the CoreState of the game
 // - controller: the GameController of the game
-
 const GameState = class {
   constructor(props) {
     this.coreState = props.coreState;
@@ -51,13 +50,14 @@ const GameState = class {
     var piece = this.coreState.currPiece;
     if (piece && piece.mainCell.type != CELL_TYPE.GHOST) {
       dropzone(
-        this.coreState.board, 
-        this.coreState.currPiece, 
-        this.coreState.gravity, 
+        this.coreState.board,
+        this.coreState.currPiece,
+        this.coreState.gravity,
         (x, y) => {
           this.coreState.board[y][x].marked = true;
           this.coreState.board[y][x].markerAngle = this.coreState.gravity.angle;
-        });
+        }
+      );
     }
   }
 

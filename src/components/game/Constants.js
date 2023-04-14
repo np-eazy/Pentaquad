@@ -20,6 +20,42 @@ export const MAX_ROTATION_ADJUSTMENT = 2;
 // Ticks between each block advancement
 export const ADVANCE_TIME = 30; // Wait this many ticks between each idleMove() call on coreState
 
+export const BASE_COLORS = [
+  new Color({ red: 255, green: 0, blue: 0 }),
+  new Color({ red: 0, green: 255, blue: 0 }),
+  new Color({ red: 0, green: 0, blue: 255 }),
+  new Color({ red: 255, green: 255, blue: 0 }),
+  new Color({ red: 0, green: 255, blue: 255 }),
+
+  new Color({ red: 255, green: 0, blue: 255 }),
+  new Color({ red: 0, green: 0, blue: 0 }),
+  new Color({ red: 255, green: 0, blue: 255 }),
+
+  new Color({ red: 65, green: 65, blue: 65 }),
+  new Color({ red: 125, green: 125, blue: 125 }),
+  new Color({ red: 185, green: 185, blue: 185 }),
+  new Color({ red: 255, green: 255, blue: 255 }),
+];
+
+export const CELL_TYPE = {
+  EMPTY: 0,
+  NORMAL: 1,
+  GHOST: 2,
+  BOMB: 3,
+  DRILL: 4,
+  TOWER: 5,
+};
+
+// Stage variables
+export const PIECE_STAGE_MAX_LENGTH = 4;
+export const TARGET_STAGE_MAX_LENGTH = 4;
+export const TARGET_GRACE_PERIOD = 8;
+export const TARGET_SPAWN_TIMER = 8;
+export const TARGET_GROWTH_TIMER = 8;
+
+export const NORMAL_CELL_LIFETIME = 8;
+export const BOMB_RADIUS = 2;
+
 // 5-long piece preset
 export const I_PIECE = [
   [0, -2],
@@ -124,40 +160,3 @@ export const PRESETS = [
   U_PIECE, // mirror sym
   X_PIECE, // 90 rot sym
 ];
-
-export const BASE_COLORS = [
-  new Color({ red: 255, green: 0, blue: 0}),
-  new Color({ red: 0, green: 255, blue: 0}),
-  new Color({ red: 0, green: 0, blue: 255}),
-  new Color({ red: 255, green: 255, blue: 0}),
-  new Color({ red: 0, green: 255, blue: 255}),
-
-  new Color({ red: 255, green: 0, blue: 255}),
-  new Color({ red: 0, green: 0, blue: 0}),
-  new Color({ red: 255, green: 0, blue: 255}),
-
-  new Color({ red: 65, green: 65, blue: 65}),
-  new Color({ red: 125, green: 125, blue: 125}),
-  new Color({ red: 185, green: 185, blue: 185}),
-  new Color({ red: 255, green: 255, blue: 255}),
-]
-
-export const CELL_TYPE = {
-  EMPTY: 0,
-  NORMAL: 1,
-  GHOST: 2,
-  BOMB: 3,
-  DRILL: 4,
-  TOWER: 5,
-}
-
-// Stage variables
-export const PIECE_STAGE_MAX_LENGTH = 4;
-export const TARGET_STAGE_MAX_LENGTH = 4;
-export const TARGET_GRACE_PERIOD = 8;
-export const TARGET_SPAWN_TIMER = 8;
-export const TARGET_GROWTH_TIMER = 8;
-
-export const NORMAL_CELL_LIFETIME = 8;
-
-export const BOMB_RADIUS = 2;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import GameGraphics from "./graphics/GameGraphics";
 import GameState from "./GameState";
 import CoreState from "./coreState/CoreState";
 import GameController from "../game/control/GameController";
 
-import { WINDOW_SIZE, BOARD_SIZE, REFRESH_MS, STAGE_WIDTH } from "./Constants";
+import GameGraphics from "./graphics/GameGraphics";
+import { WINDOW_SIZE, BOARD_SIZE, REFRESH_MS } from "./Constants";
 import { TOTAL_HEIGHT, TOTAL_WIDTH } from "./graphics/Layout";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
@@ -65,7 +65,7 @@ const GameCanvas = (props) => {
       onMouseDown={handleMouseDown}
     >
       <canvas id="gameGraphics" width={TOTAL_WIDTH} height={TOTAL_HEIGHT}>
-        <GameGraphics gameState={gameState}/>
+        <GameGraphics gameState={gameState} />
       </canvas>
     </div>
   );

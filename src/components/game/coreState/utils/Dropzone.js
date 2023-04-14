@@ -8,6 +8,9 @@ import { inBounds } from "./Functions";
 
 // cellFunction takes in x and y rather than the cell because sometimes dropzone is used
 // to deliberately replace Cells and the board index reference will be needed for that.
+
+// If passThrough is true, then dropzone clobbers through any filled blocks rather than stopping
+// at the first one, and goes all the way to the border.
 export function dropzone(
   board,
   piece,

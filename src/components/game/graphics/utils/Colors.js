@@ -1,3 +1,4 @@
+// Utility functions specifically for dealing with colors.
 export function componentToHex(color) {
   var c = Math.min(255, Math.max(0, Math.round(color)));
   var hex = c.toString(16);

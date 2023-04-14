@@ -1,25 +1,35 @@
-import { STAGE_WIDTH, WINDOW_SIZE } from "../../Constants";
-import { drawRect, outlineRect } from "../Pipeline";
-import { STAGE_HEIGHT, STAGE_X0, STAGE_Y0, drawBackground, STAGE_CELL_SIZE } from "../Layout";
 import { drawPiece, updatePiece } from "../objects/Piece";
+import { STAGE_WIDTH } from "../../Constants";
+import {
+  STAGE_HEIGHT,
+  STAGE_X0,
+  STAGE_Y0,
+  STAGE_CELL_SIZE,
+  drawBackground,
+} from "../Layout";
 
+const CELL_OFFSET = 2.5;
+const Y_CELL_INCREMENT = 6;
 
+// See comment in ./Board.js for more about convention with objects and sections
 export function renderStage(canvas, stage) {
   drawBackground(canvas, STAGE_X0, STAGE_Y0, STAGE_WIDTH, STAGE_HEIGHT);
   for (var i = 0; i < stage.nextPieces.length; i++) {
-    var [x_, y_] = [2.5, 2.5 + 6 * i];
+    var [x_, y_] = [CELL_OFFSET, CELL_OFFSET + Y_CELL_INCREMENT * i];
     drawPiece(
       canvas,
       stage.nextPieces[i],
       STAGE_X0 + x_ * STAGE_CELL_SIZE,
       STAGE_Y0 + y_ * STAGE_CELL_SIZE,
       STAGE_CELL_SIZE,
-      STAGE_CELL_SIZE,
+      STAGE_CELL_SIZE
     );
-
   }
   if (stage.heldPiece) {
-    var [x_, y_] = [2.25, 26.5];
+    var [x_, y_] = [
+      CELL_OFFSET,
+      CELL_OFFSET + stage.nextPieces.length * Y_CELL_INCREMENT,
+    ];
     drawPiece(
       canvas,
       stage.heldPiece,

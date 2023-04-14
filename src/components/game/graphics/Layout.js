@@ -29,13 +29,25 @@ export const SCORESHEET_HEIGHT = SCORESHEET_SIZE;
 export const TOTAL_WIDTH = COLUMN_SIZE * 2 + BOARD_SIZE;
 export const TOTAL_HEIGHT = BOARD_SIZE + SCORESHEET_SIZE;
 
-
 export const OUTER_OFFSET = 2;
 export const INNER_OFFSET = 4;
 
 export function drawBackground(canvas, x0, y0, width, height) {
-    drawRect(canvas, x0, y0, width, height, EMPTY_COLOR.getHex());
-    outlineRect(canvas, x0 + OUTER_OFFSET, y0 + OUTER_OFFSET, width - OUTER_OFFSET * 2, height - OUTER_OFFSET * 2, FILLED_COLOR.getHex());
-    outlineRect(canvas, x0 + INNER_OFFSET, y0 + INNER_OFFSET, width - INNER_OFFSET * 2, height - INNER_OFFSET * 2, MARKER_COLOR.getHex());
+  drawRect(canvas, x0, y0, width, height, EMPTY_COLOR.getHex());
+  outlineRect(
+    canvas,
+    x0 + OUTER_OFFSET,
+    y0 + OUTER_OFFSET,
+    width - OUTER_OFFSET * 2,
+    height - OUTER_OFFSET * 2,
+    FILLED_COLOR.getHex()
+  );
+  outlineRect(
+    canvas,
+    x0 + INNER_OFFSET,
+    y0 + INNER_OFFSET,
+    width - INNER_OFFSET * 2,
+    height - INNER_OFFSET * 2,
+    MARKER_COLOR.getHex()
+  );
 }
-

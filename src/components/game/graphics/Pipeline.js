@@ -1,8 +1,8 @@
 // Graphics building blocks to render the game
 
 // Every action in graphics that draws shapes will boil down to a sequence
-// of function calls from the functions below. As of now they deal with JS/HTML 
-// Canvas, which is very limited and slow, but in the future these functions will 
+// of function calls from the functions below. As of now they deal with JS/HTML
+// Canvas, which is very limited and slow, but in the future these functions will
 // serve as entry points to call Rust/WASM/WebGL functions and APIs for more
 // powerful rendering.
 

@@ -1,9 +1,7 @@
-import { STAGE_WIDTH, WINDOW_SIZE } from "../../Constants";
-import { drawRect, outlineRect } from "../Pipeline";
-import { STAGE_HEIGHT, STAGE_X0, STAGE_Y0, drawBackground, STAGE_CELL_SIZE, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT } from "../Layout";
+import { drawBackground, STAGE_CELL_SIZE, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT } from "../Layout";
 import { drawPiece, updatePiece } from "../objects/Piece";
 
-
+// See comment in ./Board.js for more about convention with objects and sections
 export function renderPalette(canvas, palette) {
   drawBackground(canvas, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT);
   for (var i = 0; i < palette.nextPieces.length; i++) {

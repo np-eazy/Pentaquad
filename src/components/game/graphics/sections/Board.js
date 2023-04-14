@@ -1,4 +1,3 @@
-import { WINDOW_SIZE } from "../../Constants";
 import {
   BOARD_HEIGHT,
   BOARD_WIDTH,
@@ -8,8 +7,11 @@ import {
 } from "../Layout";
 import { drawCursor } from "../objects/Cursor";
 import { drawPiece, updatePiece } from "../objects/Piece";
-import { drawTargets } from "../objects/Targets";
 
+// For convention, a Section is effectively a rectangle with its own reference point
+// for coordinates. It provides a way to organize render-update calls to BaseObjects
+// and Objects, of which the latter further recurses to BaseObjects. Sections like the
+// Board manage objects like Cursors and Pieces, and Pieces manage baseObject Cells.
 export const renderBoard = (
   canvas,
   board,
