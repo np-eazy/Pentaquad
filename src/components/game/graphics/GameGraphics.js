@@ -1,128 +1,74 @@
-function drawRect(canvas, x, y, xSize, ySize, color) {
-  canvas.fillStyle = color;
-  canvas.fillRect(x, y, xSize, ySize);
-}
+import { inBounds } from "../coreState/utils/Functions";
+import { BOARD_SIZE } from "../Constants";
 
-function outlineRect(canvas, x, y, xSize, ySize, color) {
-  canvas.strokeStyle = color;
-  canvas.beginPath();
-  canvas.strokeRect(x, y, xSize, ySize);
-  canvas.closePath();
-}
+import { renderBoard, updateBoard } from "./sections/Board";
+import { renderStage, updateStage } from "./sections/Stage";
+import { renderScoresheet, updateScoresheet } from "./sections/Scoresheet";
+import { renderPalette } from "./sections/Palette";
 
-// The code in GameGraphics is short-lived and due for a refactor as soon as core logic is fleshed out.
-// Disregard the spaghetti code, it's only to provide the most minimal UI for testing/debugging.
+import {
+  BOARD_HEIGHT,
+  BOARD_WIDTH,
+  SCORESHEET_X0,
+  SCORESHEET_Y0,
+  TOTAL_HEIGHT,
+  TOTAL_WIDTH,
+} from "./Layout";
+
+import { DEBUG, debugCell } from "../Debug";
+
+// The class which organizes all canvas and graphics-related code. Each
 const GameGraphics = (props) => {
-  function render(canvas, board) {
-    // Fill in cells from the coreState board
-    var [xSize, ySize] = [board[0].length, board.length];
-    var [xCellSize, yCellSize] = [
-      props.windowSize / xSize,
-      props.windowSize / ySize,
-    ];
-    for (var y = 0; y < ySize; y++) {
-      for (var x = 0; x < xSize; x++) {
-        if (board[y][x].type > 0) {
-          drawRect(
-            canvas,
-            x * xCellSize,
-            y * yCellSize,
-            xCellSize,
-            yCellSize,
-            board[y][x].props.parent.color.getHex()
-          );
-        }
-      }
-    }
+  var board = props.gameState.coreState.board;
+  var [xSize, ySize] = [board[0].length, board.length];
+  var [xCellSize, yCellSize] = [BOARD_WIDTH / xSize, BOARD_HEIGHT / ySize];
 
-    // Fill in cells from the coreState current piece.
-    var [x, y] = [0, 0];
-    var piece = props.gameState.coreState.currPiece;
-    if (piece != null) {
-      // Fill in the hitboxes to debug collision detection.
-      // Fill in the actual cell
-      for (const cell of piece.cells) {
-        [x, y] = [cell[1][0] + piece.cx, cell[1][1] + piece.cy];
-        drawRect(
-          canvas,
-          x * xCellSize,
-          y * yCellSize,
-          xCellSize,
-          yCellSize,
-          piece.color.getHex()
-        );
-      }
-    }
+  // A single loop of rendering and "updating"; these updates however are all downstream
+  // from the CoreState and only include other props like timers/colors to aid with the
+  // graphics. At this point all GameState values are set in stone.
+  function graphicLoop(canvas) {
+    renderBoard(canvas, board, xCellSize, yCellSize, {
+      piece: props.gameState.coreState.currPiece,
+      targets: props.gameState.coreState.targets,
+      targetStage: props.gameState.coreState.targetStage,
+      controller: props.gameState.controller,
+    });
+    renderStage(canvas, props.gameState.coreState.pieceStage);
+    renderScoresheet(canvas, undefined);
+    renderPalette(canvas, props.gameState.coreState.pieceStage);
 
-    // Draw outlines of Targets
-    for (var t of props.gameState.coreState.targets) {
-      outlineRect(
-        canvas,
-        t.x0 * xCellSize,
-        t.y0 * yCellSize,
-        (t.x1 - t.x0) * xCellSize,
-        (t.y1 - t.y0) * yCellSize,
-        "#000000"
+    updateBoard(board, {
+      piece: props.gameState.coreState.currPiece,
+      targets: props.gameState.coreState.targets,
+      targetStage: props.gameState.coreState.targetStage,
+    });
+    updateStage(props.gameState.coreState.pieceStage);
+    //updatePalette(props.gameState.coreState.pieceStage);
+    updateScoresheet(undefined);
+
+    // Render all the selected cell's attributes in the scoresheet if this flag is up.
+    if (DEBUG) {
+      var [x, y] = props.gameState.controller.gridCursor(
+        BOARD_HEIGHT,
+        BOARD_SIZE
       );
-    }
-    [x, y] = props.gameState.controller.gridCursor(
-      props.windowSize,
-      board.length
-    );
-    outlineRect(
-      canvas,
-      x * xCellSize,
-      y * yCellSize,
-      xCellSize,
-      yCellSize,
-      "#000000"
-    );
-
-    // Draw outlines of future pieces
-    // var stage = props.gameState.coreState.pieceStage
-    // var [xOffset, yOffset] = [0, 0] // These offsets will better be taken care of in Domain classes.
-    // for (var i = 0; i < stage.nextPieces.length; i++) {
-    //     var preset = stage.nextPieces[i].preset
-    //     var [x_, y_] = [4.5, 4.5 + 6 * i]
-    //     for (const [x, y] of preset) {
-    //         outlineRect(
-    //             canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize,
-    //             xCellSize, yCellSize, "#404040")
-    //     }
-    // }
-    // if (stage.heldPiece != null) {
-    //     var preset = stage.heldPiece.preset
-    //     var [x_, y_] = [10.5, 4.5]
-    //     for (const [x, y] of preset) {
-    //         outlineRect(
-    //             canvas, xOffset + (x + x_) * xCellSize, yOffset + (y + y_) * yCellSize,
-    //             xCellSize, yCellSize, "#404040")
-    //     }
-    // }
-
-    var stage = props.gameState.coreState.targetStage;
-    for (const target of stage.nextTargets) {
-      outlineRect(
-        canvas,
-        target.x0 * xCellSize,
-        target.y0 * yCellSize,
-        (target.x1 - target.x0) * xCellSize,
-        (target.y1 - target.y0) * yCellSize,
-        "#a0a0a0"
-      );
+      if (inBounds(x, y, board.length)) {
+        debugCell(canvas, board[y][x], SCORESHEET_X0, SCORESHEET_Y0, x, y);
+      }
     }
   }
 
-  function renderNull(canvas) {}
+  // A placeholder empty loop in case there is no GameState loaded
+  function emptyLoop(canvas) {}
 
   // Canvas and context wiring
   var canv = document.getElementById("gameGraphics");
   var ctx = canv != null ? canv.getContext("2d") : null;
   if (ctx != null && props.gameState != undefined) {
-    ctx.clearRect(0, 0, props.windowSize, props.windowSize);
+    ctx.clearRect(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT);
     props.gameState
-      ? render(ctx, props.gameState.coreState.board)
-      : renderNull(ctx);
+      ? graphicLoop(ctx, props.gameState.coreState.board)
+      : emptyLoop(ctx);
   }
 };
 

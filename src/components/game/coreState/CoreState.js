@@ -1,270 +1,111 @@
-import Cell from "./Cell";
+import EmptyCell from "../baseObjects/cell/EmptyCell";
+import NormalCell from "../baseObjects/cell/NormalCell";
 import BoundarySets from "./BoundarySets";
-import PieceStage from "./piece/PieceStage";
-import TargetStage from "./target/TargetStage";
+import PieceStage from "./PieceStage";
+import TargetStage from "./TargetStage";
 
-import { ActionType } from "../../control/GameAction";
-import { checkFilledLines, checkFilledTargets } from "./utils/FillCheck";
-import { randint } from "./utils/Functions";
+import { ActionType } from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
+import { dropzone } from "./utils/Dropzone";
+import { checkFilledLines, advanceAndCheckTargets } from "./utils/FillCheck";
+import { getSpawnPosition, inBounds } from "./utils/Functions";
+
 import {
-  SPAWN_OFFSET,
   BOUNDARY_MARGIN,
   TARGET_MARGIN,
   COLLISION_TIME_LIMIT,
-  MAX_ROTATION_ADJUSTMENT,
+  BOMB_RADIUS,
+  CELL_TYPE,
 } from "../Constants";
+import {
+  executeDrop,
+  executeFlip,
+  executeHold,
+  executeMove,
+  executeMoveTo,
+  executePlace,
+  executeRotate,
+} from "./Actions";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
 // gravity.
 const CoreState = class {
   constructor(props) {
-    // The GameState's main controller
-    this.controller = null;
-    // Create a new PieceStage
-    this.pieceStage = new PieceStage({
-      coreState: this,
-    });
-    // The GameState's current unplaced piece
-    this.currPiece = null;
-    // The GameState's roster of target blocks
+    this.controller = null; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
+    this.pieceStage = new PieceStage({ coreState: this }); // Create a new PieceStage to take care of creating/dispensing pieces
     this.targetStage = new TargetStage({
+      // Create a new TargetStage to take care of creating/dispensing targets
       coreState: this,
       minBound: TARGET_MARGIN,
       maxBound: props.boardSize - TARGET_MARGIN,
     });
-    this.targets = [];
 
-    // A timer that increments once each update updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
-    this.timer = 0;
-    // Keep track of how long this piece is in contact in its falling direction
-    this.collisionTimer = 0;
-    // Flag for placing a block
-    this.placeBlock = true;
-    // GameOver flag
-    this.isGameOver = false;
-
-    // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
-    this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2;
-    // The dimension of the square board on which this game takes place.
-    this.boardSize = props.boardSize;
-    // The default "empty" value of this grid: a type-0 Cell with no props
-    this.emptyValue = () => new Cell(0, {});
-    // The main board on which everything happens
-    this.board = [...Array(props.boardSize)].map((e) =>
-      Array(props.boardSize).fill(this.emptyValue())
+    this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
+    this.boardSize = props.boardSize; // The dimension of the square board on which this game takes place.
+    this.emptyValue = () => new EmptyCell(); // The default "empty" value of this grid: a type-0 Cell with no props
+    this.board = [...Array(props.boardSize)].map(
+      (
+        e // Create the main board for the game
+      ) => Array(props.boardSize).fill(null)
     );
+    for (var y = 0; y < this.board.length; y++) {
+      for (var x = 0; x < this.board.length; x++) {
+        this.board[y][x] = this.emptyValue();
+      }
+    }
     // Create 4 different sets to check if a boundary has been hit
     this.collisionSets = new BoundarySets(
       props.boardSize,
       BOUNDARY_MARGIN,
       this.pidSize
     );
-    // The direction in which the piece moves, and in which the board moves after a line is cleared.
-    this.gravity = new Direction(Angle.DOWN);
+
+    this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
+    this.currPiece = null; // The GameState's current unplaced piece
+    this.targets = []; // The GameState's roster of target blocks
+    this.timer = 0; // A timer that increments once each update updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
+    this.collisionTimer = 0; // Keep track of how long this piece is in contact in its falling direction
+    this.placeBlock = true; // Flag for placing a block
+    this.isGameOver = false; // GameOver flag
   }
 
-  // ===== INITIALIZATIONS =====
-  // Set this piece's controller; this is separate from the constructor to avoid
-  // async undefined shenanigans.
+  // Set this piece's controller, in the future this can end up being called
+  // while the game is going on when players hijack each other.
   setController(controller) {
     this.controller = controller;
   }
 
-  // ===== ACTIONS =====
-  // take in a GameAction and use it to change the GameState
-  executeAction(action) {
+  // (Facilitated by Controller) Take in a GameAction and use it to change the GameState
+  performNextAction(action) {
     var action = this.controller.consumeAction();
     while (action) {
       if (action.type == ActionType.MOVE) {
         if (action.props.dxn.equals(this.currPiece.dxn.opposite())) {
-          this.executeRotate(1);
+          executeRotate(this, 1);
         } else {
-          this.executeMove(action.props.dxn);
+          executeMove(this, action.props.dxn);
         }
       } else if (action.type == ActionType.ROTATE) {
-        this.executeRotate(1);
+        executeRotate(this, 1);
       } else if (action.type == ActionType.MOVE_TO) {
-        this.executeMoveTo(action.props.x, action.props.y);
+        executeMoveTo(this, action.props.x, action.props.y);
       } else if (action.type == ActionType.FLIP) {
-        this.executeFlip();
+        executeFlip(this);
       } else if (action.type == ActionType.DROP) {
-        this.executeDrop();
+        executeDrop(this);
       } else if (action.type == ActionType.PLACE) {
-        this.executePlace();
+        executePlace(this);
       } else if (action.type == ActionType.HOLD) {
-        this.executeHold();
+        executeHold(this);
       }
       action = this.controller.consumeAction();
     }
   }
-  // Move the current piece one cell in the given direction; rollback if not valid
-  executeMove(dxn) {
-    if (this.currPiece.checkCollision(dxn, this.board, this.collisionSets)) {
-      while (
-        this.currPiece.checkCollision(dxn, this.board, this.collisionSets)
-      ) {
-        this.currPiece.move(dxn.opposite());
-      }
-    }
-    this.currPiece.move(dxn);
-  }
-  // Rotate the current piece in the given direction; rollback if not valid
-  executeRotate(angle) {
-    this.currPiece.rotate(angle);
-    if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
-      var adjustment = 0;
-      while (
-        this.currPiece.checkCollision(null, this.board, this.collisionSets) &&
-        adjustment < MAX_ROTATION_ADJUSTMENT
-      ) {
-        this.currPiece.move(this.gravity.opposite());
-        adjustment += 1;
-      }
-      // Rollback if max rotation adjustment has been reached
-      if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
-        for (var i = 0; i < adjustment; i++) {
-          this.currPiece.move(this.currPiece.dxn);
-        }
-        this.currPiece.rotate(-angle);
-      }
-    }
-  }
-  // Move the current piece as far towards the given position as possible before encountering other cells
-  executeMoveTo(x, y) {
-    var moveAngle = this.gravity.isHorizontal()
-      ? this.currPiece.cy < y
-        ? Angle.DOWN
-        : Angle.UP
-      : this.currPiece.cx < x
-      ? Angle.RIGHT
-      : Angle.LEFT;
-    var iterationsLeft = this.gravity.isHorizontal()
-      ? Math.abs(this.currPiece.cy - y)
-      : Math.abs(this.currPiece.cx - x);
-    while (
-      iterationsLeft > 0 &&
-      !this.currPiece.checkCollision(
-        Dxn[moveAngle],
-        this.board,
-        this.collisionSets
-      )
-    ) {
-      this.currPiece.move(Dxn[moveAngle]);
-      iterationsLeft -= 1;
-    }
-  }
-  // Horizontally flip the current piece; rollback if not valid
-  executeFlip() {
-    this.currPiece.flip();
-    if (this.currPiece.checkCollision(null, this.board, this.collisionSets)) {
-      this.currPiece.flip();
-    }
-  }
-  // Drop the current piece as far down as possible
-  executeDrop() {
-    while (
-      !this.currPiece.checkCollision(
-        this.gravity,
-        this.board,
-        this.collisionSets
-      )
-    ) {
-      this.currPiece.move(this.gravity);
-    }
-    this.collisionTimer = COLLISION_TIME_LIMIT;
-    this.placeBlock = true;
-  }
-  // Unconditionally place the current piece where it is
-  executePlace() {
-    this.collisionTimer = COLLISION_TIME_LIMIT;
-    this.placeBlock = true;
-  }
-  // Unmount the current piece into the holding stage, and mount the holding stage in
-  executeHold() {
-    this.currPiece.unmountPiece();
-    this.pieceStage.holdPiece(this.currPiece);
-    this.currPiece = null;
-    this.placeBlock = true;
-  }
 
-  // ===== IDLE ACTIONS =====
-  // core rules of the game but is not very playable at all, nor does it have good objectives.
-  update(idleMoveIncluded) {
-    if (!this.isGameOver) {
-      if (idleMoveIncluded) {
-        if (this.placeBlock) {
-          this.advance();
-          this.updateCollisionTimer(idleMoveIncluded);
-        } else {
-          // Move the current piece, first in its direction of gravity and second according to the player.
-          if (this.currPiece && this.collisionTimer == 0) {
-            this.currPiece.move(this.gravity);
-            this.updateCollisionTimer(idleMoveIncluded);
-          }
-        }
-      } else {
-        if (!this.placeBlock) {
-          if (this.currPiece && this.controller && !this.placeBlock) {
-            this.executeAction();
-            this.updateCollisionTimer(true);
-          }
-        }
-      }
-      this.timer += 1;
-    }
-    return this; // CoreState.update() returns itself
-  }
-
-  advance() {
-    // Place the current piece, create a new one, and check for new filled lines
-    this.placeCurrentPiece();
-    this.placeBlock = false;
-    if (this.gravity && this.gravity.equals(Dxn[Angle.DOWN])) {
-      this.gravity.turnLeft(1);
-    } else {
-      this.gravity.turnRight(1);
-    }
-
-    // Check and clear any filled targets or lines
-    this.gameOver = checkFilledTargets({
-      targets: this.targets,
-      board: this.board,
-      emptyValue: this.emptyValue,
-    });
-    checkFilledLines({
-      threshold: this.boardSize,
-      dxn: this.gravity,
-      boardSize: this.boardSize,
-      board: this.board,
-      emptyValue: this.emptyValue,
-    });
-
-    // Create new game objects
-    this.createNewPiece();
-    this.createNewTarget();
-  }
-
-  getSpawnPosition(dxn) {
-    console.log(dxn);
-    var [x, y] = [0, 0];
-    var r = randint(-SPAWN_OFFSET, this.boardSize + SPAWN_OFFSET);
-    if (dxn.equals(Dxn[Angle.RIGHT])) {
-      [x, y] = [-SPAWN_OFFSET, r];
-    } else if (dxn.equals(Dxn[Angle.UP])) {
-      [x, y] = [r, SPAWN_OFFSET + this.boardSize];
-    } else if (dxn.equals(Dxn[Angle.LEFT])) {
-      [x, y] = [SPAWN_OFFSET + this.boardSize, r];
-    } else if (dxn.equals(Dxn[Angle.DOWN])) {
-      [x, y] = [r, -SPAWN_OFFSET];
-    }
-    return [x, y];
-  }
-
-  // Create a new piece based on this CoreState's gravity, at a random location.
+  // (Facilitated by PieceStage) Create a new piece based on this CoreState's gravity, at a random location.
   createNewPiece() {
-    var [x, y] = this.getSpawnPosition(this.gravity);
+    var [x, y] = getSpawnPosition(this.gravity, this.boardSize);
     // Get the unmounted piece from PieceStage; we need this loop in case async piece
     // doesn't arrive in time
     var piece;
@@ -279,30 +120,42 @@ const CoreState = class {
     });
     this.currPiece = piece;
   }
-  // Create a new 2x2 Target in a random location.
+
+  // (Facilitated by TargetStage) Create a new Target in a random location.
   createNewTarget() {
     var target = this.targetStage.consumeTarget();
     if (target) {
       this.targets.push(target);
     }
   }
-  // Change the CoreState's grid values based on where the current piece is.
-  placeCurrentPiece() {
-    if (this.currPiece != null) {
-      var [x, y] = [0, 0];
-      for (const cell of this.currPiece.cells) {
-        [x, y] = [
-          cell[1][0] + this.currPiece.cx,
-          cell[1][1] + this.currPiece.cy,
-        ];
-        if (x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize) {
-          this.board[y][x] = this.currPiece.createCell();
+
+  // An update that happens each frame; idleMoveIncluded is called once every
+  // several frames to actually move the block downwards, and that calls other
+  // updates in Cells. Corresponds to idleUpdate and activeUpdate in Cell and Target classes
+  update(idleMoveIncluded) {
+    if (!this.isGameOver) {
+      if (idleMoveIncluded) {
+        if (this.placeBlock) {
+          this.advance();
+        } else if (this.currPiece && this.collisionTimer == 0) {
+          this.active();
         }
+      } else if (!this.placeBlock && this.currPiece && this.controller) {
+        this.idle();
       }
+      this.timer += 1;
     }
+    return this; // CoreState.update() returns itself
   }
+
+  // Attempt to perform the next action if dispensed by the game controller.
+  idle() {
+    this.performNextAction();
+    this.updateCollisionTimer();
+  }
+
   // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
-  updateCollisionTimer(idleMoveIncluded) {
+  updateCollisionTimer() {
     if (
       this.currPiece != null &&
       this.currPiece.checkCollision(
@@ -311,15 +164,139 @@ const CoreState = class {
         this.collisionSets
       )
     ) {
-      if (idleMoveIncluded) {
-        this.collisionTimer += 1;
-      }
+      this.collisionTimer += 1;
       if (this.collisionTimer == COLLISION_TIME_LIMIT) {
         this.placeBlock = true;
       }
     } else {
       this.collisionTimer = 0;
     }
+  }
+
+  // Move the block down in its falling direction
+  active() {
+    this.currPiece.move(this.gravity);
+    this.updateCollisionTimer();
+  }
+
+  // Place the current piece, create a new one, and check for new filled lines.
+  // Basically all the logic that happens whenever the arrangement of board pieces
+  // changes. Corresponds to advanceUpdate in Cell and Target classes.
+  advance() {
+    this.place(this.currPiece);
+    if (this.gravity && this.gravity.equals(Dxn[Angle.DOWN])) {
+      this.gravity.turnLeft(1);
+    } else {
+      this.gravity.turnRight(1);
+    }
+    // Check and clear any filled targets or lines
+    this.gameOver = advanceAndCheckTargets({
+      targets: this.targets,
+      board: this.board,
+      emptyValue: this.emptyValue,
+    });
+    checkFilledLines({
+      threshold: this.boardSize,
+      dxn: this.gravity,
+      boardSize: this.boardSize,
+      board: this.board,
+      emptyValue: this.emptyValue,
+    });
+    this.advanceCells();
+    // Create new game objects
+    this.createNewPiece();
+    this.createNewTarget();
+    this.updateCollisionTimer();
+  }
+
+  // increment times to live for each cell before converting to empty cell
+  advanceCells() {
+    for (var y = 0; y < this.boardSize; y++) {
+      for (var x = 0; x < this.boardSize; x++) {
+        var cell = this.board[y][x];
+        if (cell.ttl != -1) {
+          if (cell.ttl == 0) {
+            var newCell = new EmptyCell();
+            newCell.getAttributesFrom(this.board[y][x]);
+            this.board[y][x] = newCell;
+          } else {
+            cell.advanceUpdate(true);
+          }
+        }
+      }
+    }
+  }
+
+  // Change the CoreState's grid values based on where the current piece is.
+  place(piece) {
+    if (piece != null) {
+      if (piece.mainCell.type == CELL_TYPE.BOMB) {
+        this.placeBomb(piece);
+      } else if (this.currPiece.mainCell.type == CELL_TYPE.DRILL) {
+        this.placeDrill(piece);
+      } else {
+        this.placeNormal(piece);
+      }
+    }
+    this.placeBlock = false;
+  }
+
+  // Place a normal piece
+  placeNormal(piece) {
+    var [x, y] = [0, 0];
+    for (const [pid, [x_, y_]] of piece.cells) {
+      [x, y] = [x_ + this.currPiece.cx, y_ + this.currPiece.cy];
+      if (inBounds(x, y, this.boardSize)) {
+        var newCell = new NormalCell();
+        newCell.getAttributesFrom(piece.mainCell);
+        this.board[y][x] = newCell;
+      }
+    }
+  }
+
+  // Place a bomb and remove a square of length 2 * BOMB_RADIUS + 1
+  placeBomb(piece) {
+    for (
+      var y = Math.max(0, piece.cy - BOMB_RADIUS);
+      y < Math.min(this.boardSize, piece.cy + BOMB_RADIUS + 1);
+      y++
+    ) {
+      for (
+        var x = Math.max(0, piece.cx - BOMB_RADIUS);
+        x < Math.min(this.boardSize, piece.cx + BOMB_RADIUS + 1);
+        x++
+      ) {
+        this.board[y][x] = this.emptyValue();
+      }
+    }
+  }
+
+  // Remove all blocks in the current piece's path.
+  placeDrill(piece) {
+    dropzone(
+      this.board,
+      piece,
+      this.gravity,
+      (x, y) => {
+        var newCell = new EmptyCell();
+        newCell.getAttributesFrom(this.board[y][x]);
+        this.board[y][x] = newCell;
+      },
+      true
+    );
+  }
+
+  placeTower(piece) {
+    dropzone(
+      this.board,
+      piece,
+      this.gravity,
+      (x, y) => {
+        this.board[y][x] = piece.createCell();
+        this.board[y][x].getAttributesFrom(piece.mainCell);
+      },
+      false
+    );
   }
 };
 

@@ -1,23 +1,50 @@
-import Cell from "../Cell";
-import { randint, getPID } from "../utils/Functions";
-import { randomDxn } from "../utils/Direction";
-import { Color } from "../../graphics/Colors";
+import Cell from "../baseObjects/cell/Cell";
+import EmptyCell from "../baseObjects/cell/EmptyCell";
+import NormalCell from "../baseObjects/cell/NormalCell";
+import GhostCell from "../baseObjects/cell/GhostCell";
+import BombCell from "../baseObjects/cell/BombCell";
+import DrillCell from "../baseObjects/cell/DrillCell";
+import TowerCell from "../baseObjects/cell/TowerCell";
 
-import { PRESETS } from "../../Constants.js";
+import { PRESETS, BASE_COLORS, CELL_TYPE } from "../Constants";
+import { randomDxn } from "./utils/Direction";
+import { randint, getPID } from "./utils/Functions";
 
-// Collision window radius to save on collision calculations
-const CWR = 3;
+import { COLLISION_RADIUS } from "./utils/Params";
+import { DEBUG } from "../Debug";
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
 class Piece {
-  constructor() {
+  constructor(cellType = CELL_TYPE.NORMAL) {
     this.mounted = false;
-    this.cx = undefined;
-    this.cy = undefined;
+    this.cx = 0;
+    this.cy = 0;
     this.dxn = undefined;
     this.pidSize = undefined;
-    this.preset = PRESETS[randint(0, PRESETS.length)];
+
+    var index = randint(0, PRESETS.length);
+    if (DEBUG) {
+      index = 0;
+    }
+    this.preset = PRESETS[index];
+    this.baseColor = BASE_COLORS[index];
+
+    if (cellType == CELL_TYPE.EMPTY) {
+      this.mainCell = new EmptyCell();
+    } else if (cellType == CELL_TYPE.NORMAL) {
+      this.mainCell = new NormalCell();
+    } else if (cellType == CELL_TYPE.GHOST) {
+      this.mainCell = new GhostCell();
+    } else if (cellType == CELL_TYPE.BOMB) {
+      this.mainCell = new BombCell();
+    } else if (cellType == CELL_TYPE.DRILL) {
+      this.mainCell = new DrillCell();
+    } else if (cellType == CELL_TYPE.TOWER) {
+      this.mainCell = new TowerCell();
+    }
+    this.mainCell.dxn = this.dxn;
+    this.mainCell.setBaseColor(this.baseColor);
   }
 
   // Before the piece is mounted to a global location, it shouldn't be used/updated.
@@ -36,21 +63,14 @@ class Piece {
     if (randint(0, 2) == 1) {
       this.flip();
     }
-
-    // Set this piece's color based on its initial direction; there will be more
-    // room to customize this.
-
-    // TODO: Define Colors in a more appropriate class and keep it in RenderProps with GameState
-    // when that time comes/
-    this.color = new Color({ red: 100, green: 100, blue: 100 });
   }
 
   // Just for formality/convention, we do this each time we move something from the game
   // back to the stage.
   unmountPiece() {
     this.mounted = false;
-    this.cx = undefined;
-    this.cy = undefined;
+    this.cx = 0;
+    this.cy = 0;
     this.dxn = undefined;
     this.pidSie = undefined;
   }
@@ -58,7 +78,8 @@ class Piece {
   // The function to fill the coreState with cells corresponding to this Piece; this will
   // be used for cases like the render script accessing the color in the parents
   createCell() {
-    var cell = new Cell(1, { parent: this });
+    var cell = new NormalCell();
+    cell.getAttributesFrom(this.mainCell);
     return cell;
   }
 
@@ -88,26 +109,28 @@ class Piece {
       return true;
     }
 
-    for (
-      var y = Math.max(0, this.cy - CWR);
-      y < Math.min(this.cy + CWR + 1, ySize);
-      y++
-    ) {
+    if (this.mainCell.type != CELL_TYPE.GHOST) {
       for (
-        var x = Math.max(0, this.cx - CWR);
-        x < Math.min(this.cx + CWR + 1, xSize);
-        x++
+        var y = Math.max(0, this.cy - COLLISION_RADIUS);
+        y < Math.min(this.cy + COLLISION_RADIUS + 1, ySize);
+        y++
       ) {
-        if (board[y][x].type > 0) {
-          // x, y generate global PIDs
-          // Subtract cx and cy from PIDs to localize
-          var globalPid = getPID(
-            x - this.cx - collisionDxn.dx,
-            y - this.cy - collisionDxn.dy,
-            this.pidSize
-          );
-          if (!collision && this.cells.has(globalPid)) {
-            return true;
+        for (
+          var x = Math.max(0, this.cx - COLLISION_RADIUS);
+          x < Math.min(this.cx + COLLISION_RADIUS + 1, xSize);
+          x++
+        ) {
+          if (board[y][x].type > 0) {
+            // x, y generate global PIDs
+            // Subtract cx and cy from PIDs to localize
+            var globalPid = getPID(
+              x - this.cx - collisionDxn.dx,
+              y - this.cy - collisionDxn.dy,
+              this.pidSize
+            );
+            if (!collision && this.cells.has(globalPid)) {
+              return true;
+            }
           }
         }
       }

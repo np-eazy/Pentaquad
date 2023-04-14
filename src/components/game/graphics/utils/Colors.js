@@ -1,3 +1,4 @@
+// Utility functions specifically for dealing with colors.
 export function componentToHex(color) {
   var c = Math.min(255, Math.max(0, Math.round(color)));
   var hex = c.toString(16);
@@ -22,6 +23,7 @@ export class Color {
     this.red = red;
     this.green = green;
     this.blue = blue;
+    this.hex = null;
   }
 
   // Descructively interpolate colors to avoid piling up Color instances
@@ -29,14 +31,22 @@ export class Color {
     this.red = interpolationFunction(this.red, colorB.red, t);
     this.green = interpolationFunction(this.green, colorB.green, t);
     this.blue = interpolationFunction(this.blue, colorB.blue, t);
+    this.hex = null;
   }
 
   getHex() {
-    return (
-      "#" +
+    if (!this.hex) {
+      this.hex = "#" +
       componentToHex(this.red) +
       componentToHex(this.green) +
-      componentToHex(this.blue)
-    );
+      componentToHex(this.blue);
+    }
+    return this.hex;
+  }
+
+  toString() {
+    return this.red.toString() + ", " + this.green.toString() + ", " + this.blue.toString();
   }
 }
+
+export const Black = () => new Color({ red: 0, green: 0, blue: 0 });
