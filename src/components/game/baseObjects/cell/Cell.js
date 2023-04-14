@@ -56,6 +56,8 @@ class Cell {
     this.meter = other.meter;
     this.lifetime = other.lifetime;
     this.ttl = other.ttl;
+
+    this.marked = other.marked;
   }
 
   // Set this Cell's base color and propagate the update to the current color and ColorSuite.

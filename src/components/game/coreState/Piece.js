@@ -78,10 +78,8 @@ class Piece {
   // The function to fill the coreState with cells corresponding to this Piece; this will
   // be used for cases like the render script accessing the color in the parents
   createCell() {
-    var cell = new Cell(1, {
-      parent: this,
-      baseColor: this.baseColor,
-    });
+    var cell = new NormalCell();
+    cell.getAttributesFrom(this.mainCell);
     return cell;
   }
 

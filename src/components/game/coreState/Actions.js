@@ -9,6 +9,9 @@ import {
   CELL_TYPE,
 } from "../Constants";
 
+// Effectively an addendum to CoreState class since it got way too large. The following
+// are all the actions that a user is capable of triggering in the CoreState.
+
 // Move the current piece one cell in the given direction; rollback if not valid
 export function executeMove(coreState, dxn) {
   if (
@@ -107,16 +110,7 @@ export function executeFlip(coreState) {
 // Drop the current piece as far down as possible
 export function executeDrop(coreState) {
   if (coreState.currPiece.mainCell.type == CELL_TYPE.TOWER) {
-    dropzone(
-      coreState.board,
-      coreState.currPiece,
-      coreState.gravity,
-      (x, y) => {
-        coreState.board[y][x] = new NormalCell();
-        coreState.board[y][x].getAttributesFrom(coreState.currPiece.mainCell);
-      },
-      false
-    );
+    coreState.placeTower(coreState.currPiece);
   } else if (coreState.currPiece.mainCell.type != CELL_TYPE.GHOST) {
     while (
       !coreState.currPiece.checkCollision(

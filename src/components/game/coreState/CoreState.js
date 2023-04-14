@@ -183,14 +183,12 @@ const CoreState = class {
   // Basically all the logic that happens whenever the arrangement of board pieces
   // changes. Corresponds to advanceUpdate in Cell and Target classes.
   advance() {
-    this.placeCurrentPiece();
-    this.placeBlock = false;
+    this.place(this.currPiece);
     if (this.gravity && this.gravity.equals(Dxn[Angle.DOWN])) {
       this.gravity.turnLeft(1);
     } else {
       this.gravity.turnRight(1);
     }
-
     // Check and clear any filled targets or lines
     this.gameOver = advanceAndCheckTargets({
       targets: this.targets,
@@ -205,7 +203,6 @@ const CoreState = class {
       emptyValue: this.emptyValue,
     });
     this.advanceCells();
-
     // Create new game objects
     this.createNewPiece();
     this.createNewTarget();
@@ -231,46 +228,75 @@ const CoreState = class {
   }
 
   // Change the CoreState's grid values based on where the current piece is.
-  placeCurrentPiece() {
-    if (this.currPiece != null) {
-      if (this.currPiece.mainCell.type == CELL_TYPE.BOMB) {
-        for (
-          var y = Math.max(0, this.currPiece.cy - BOMB_RADIUS);
-          y < Math.min(this.boardSize, this.currPiece.cy + BOMB_RADIUS + 1);
-          y++
-        ) {
-          for (
-            var x = Math.max(0, this.currPiece.cx - BOMB_RADIUS);
-            x < Math.min(this.boardSize, this.currPiece.cx + BOMB_RADIUS + 1);
-            x++
-          ) {
-            this.board[y][x] = this.emptyValue();
-          }
-        }
+  place(piece) {
+    if (piece != null) {
+      if (piece.mainCell.type == CELL_TYPE.BOMB) {
+        this.placeBomb(piece);
       } else if (this.currPiece.mainCell.type == CELL_TYPE.DRILL) {
-        dropzone(
-          this.board,
-          this.currPiece,
-          this.gravity,
-          (x, y) => {
-            var newCell = new EmptyCell();
-            newCell.getAttributesFrom(this.board[y][x]);
-            this.board[y][x] = newCell;
-          },
-          true
-        );
+        this.placeDrill(piece);
       } else {
-        var [x, y] = [0, 0];
-        for (const [pid, [x_, y_]] of this.currPiece.cells) {
-          [x, y] = [x_ + this.currPiece.cx, y_ + this.currPiece.cy];
-          if (inBounds(x, y, this.boardSize)) {
-            var newCell = new NormalCell();
-            newCell.getAttributesFrom(this.currPiece.mainCell);
-            this.board[y][x] = newCell;
-          }
-        }
+        this.placeNormal(piece);
       }
     }
+    this.placeBlock = false;
+  }
+
+  // Place a normal piece
+  placeNormal(piece) {
+    var [x, y] = [0, 0];
+    for (const [pid, [x_, y_]] of piece.cells) {
+      [x, y] = [x_ + this.currPiece.cx, y_ + this.currPiece.cy];
+      if (inBounds(x, y, this.boardSize)) {
+        var newCell = new NormalCell();
+        newCell.getAttributesFrom(piece.mainCell);
+        this.board[y][x] = newCell;
+      }
+    }
+  }
+
+  // Place a bomb and remove a square of length 2 * BOMB_RADIUS + 1
+  placeBomb(piece) {
+    for (
+      var y = Math.max(0, piece.cy - BOMB_RADIUS);
+      y < Math.min(this.boardSize, piece.cy + BOMB_RADIUS + 1);
+      y++
+    ) {
+      for (
+        var x = Math.max(0, piece.cx - BOMB_RADIUS);
+        x < Math.min(this.boardSize, piece.cx + BOMB_RADIUS + 1);
+        x++
+      ) {
+        this.board[y][x] = this.emptyValue();
+      }
+    }
+  }
+
+  // Remove all blocks in the current piece's path.
+  placeDrill(piece) {
+    dropzone(
+      this.board,
+      piece,
+      this.gravity,
+      (x, y) => {
+        var newCell = new EmptyCell();
+        newCell.getAttributesFrom(this.board[y][x]);
+        this.board[y][x] = newCell;
+      },
+      true
+    );
+  }
+
+  placeTower(piece) {
+    dropzone(
+      this.board,
+      piece,
+      this.gravity,
+      (x, y) => {
+        this.board[y][x] = piece.createCell();
+        this.board[y][x].getAttributesFrom(piece.mainCell);
+      },
+      false
+    );
   }
 };
 
