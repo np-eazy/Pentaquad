@@ -12,6 +12,10 @@ import { drawPiece, updatePiece } from "../objects/Piece";
 // for coordinates. It provides a way to organize render-update calls to BaseObjects
 // and Objects, of which the latter further recurses to BaseObjects. Sections like the
 // Board manage objects like Cursors and Pieces, and Pieces manage baseObject Cells.
+
+// The Board here is the "meat" of all the rendering, and anything that is rendered on top
+// like the game's current piece, target, staged targets, and cursors are all rendered
+// and updated as a result of renderBoard.
 export const renderBoard = (
   canvas,
   board,

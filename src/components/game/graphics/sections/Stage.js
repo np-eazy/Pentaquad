@@ -11,6 +11,8 @@ import {
 const CELL_OFFSET = 2.5;
 const Y_CELL_INCREMENT = 6;
 
+// The stage shows all the incoming pieces that the user is about to receive,
+// rendered on the left of the board.
 // See comment in ./Board.js for more about convention with objects and sections
 export function renderStage(canvas, stage) {
   drawBackground(canvas, STAGE_X0, STAGE_Y0, STAGE_WIDTH, STAGE_HEIGHT);

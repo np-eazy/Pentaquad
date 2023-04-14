@@ -1,6 +1,10 @@
 import { drawRect, outlineRect } from "./Pipeline";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "./Theme";
 
+// Layout.js is concerned with the "global" level of rendering, and managing
+// local x and y positions for different sections. Also helper functions for
+// background boxes. 
+
 export const COLUMN_SIZE = 200;
 export const BOARD_SIZE = 800;
 export const SCORESHEET_SIZE = 400;
