@@ -1,12 +1,18 @@
+import GhostCell from "../../baseObjects/cell/GhostCell";
+import BombCell from "../../baseObjects/cell/BombCell";
+import DrillCell from "../../baseObjects/cell/DrillCell";
+import TowerCell from "../../baseObjects/cell/TowerCell";
+
 import { inBounds } from "../../coreState/utils/Functions";
-import { outlineRect } from "../../graphics/Pipeline";
-import { FILLED_COLOR, MARKER_COLOR } from "../../graphics/Theme";
+import { drawRect, outlineRect } from "../../graphics/Pipeline";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../graphics/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt, sinusoid } from "../../graphics/utils/Functions";
 import {
   BOARD_X0,
   BOARD_Y0,
 } from "../../graphics/Layout";
+import { CELL_TYPE } from "../../Constants";
 
 const BORDER_COLOR = FILLED_COLOR;
 const WARNING_BORDER_SIZE = 4;
@@ -31,6 +37,13 @@ const UNMOUNT_WAVE = {
   frequency: 0.05,
   amplitude: 0.1,
 }
+const POWERUP_OFFSET = 4;
+const POWERUP_WAVE = {
+  level: 0.5,
+  frequency: 0.05,
+  amplitude: 0.4,
+}
+const CLOCK_FREQ = 0.01;
 
 
 // A single block whose corner bounds must be filled with Cells to achieve game objectives.
@@ -47,6 +60,8 @@ class Target {
     // making it harder to fill up. This can change
     this.ticksToGrowth = props.ticksToGrowth;
     this.ticksLeft = this.ticksToGrowth;
+    this.mainCell = new GhostCell();
+    this.mainCell.setBaseColor(EMPTY_COLOR);
     this.isMounted = false;
     this.isGameOver = false;
     this.isFilled = false;
@@ -62,6 +77,9 @@ class Target {
   // Update attributes each frame to get animated renders; right now not implemented.
   idleUpdate() {
     this.timer += 1;
+    if (this.mainCell) {
+      this.mainCell.idleUpdate();
+    }
   }
 
   // Not really a relevant method for targets which don't have any meaningful graphics for when a piece falls down a step,
@@ -85,7 +103,6 @@ class Target {
   // Check that every spot covered by this TargetBlock is "filled" with a Cell of type > 0, signifying that
   // it is not empty
   checkFill(board) {
-    console.log(this.x0, this.y0, this.x1, this.y1);
     for (var x = this.x0; x < this.x1; x++) {
       for (var y = this.y0; y < this.y1; y++) {
         if (!board[y][x] || board[y][x].type < 1) {
@@ -93,7 +110,6 @@ class Target {
         }
       }
     }
-    console.log("filled");
     return true;
   }
 
@@ -157,6 +173,11 @@ class Target {
           ).getHex()
         );
       }
+
+    if (this.mainCell) {
+      this.renderPowerup(canvas, xCellSize, yCellSize);
+    }
+
     } else {
       outlineRect(
         canvas,
@@ -170,6 +191,66 @@ class Target {
           sinusoid(UNMOUNT_WAVE, this.timer),
           linInt,
         ).getHex()
+      );
+    }
+  }
+
+  renderPowerup(canvas, xCellSize, yCellSize) {
+    if (this.mainCell.type == CELL_TYPE.GHOST) {
+      var borderColor = interpolateColor(
+        EMPTY_COLOR,
+        FILLED_COLOR,
+        sinusoid(POWERUP_WAVE, this.timer),
+        linInt,
+      );
+      outlineRect(
+        canvas,
+        BOARD_X0 + this.x0 * xCellSize + POWERUP_OFFSET,
+        BOARD_Y0 + this.y0 * yCellSize + POWERUP_OFFSET,
+        (this.x1 - this.x0) * xCellSize - 2 * POWERUP_OFFSET,
+        (this.y1 - this.y0) * yCellSize - 2 * POWERUP_OFFSET,
+        borderColor.getHex(),
+      )
+    } else if (this.mainCell.type == CELL_TYPE.BOMB) {
+      var d = sinusoid(POWERUP_WAVE, this.timer);
+      outlineRect(
+        canvas,
+        BOARD_X0 + this.x0 * xCellSize + d * POWERUP_OFFSET,
+        BOARD_Y0 + this.y0 * yCellSize + d * POWERUP_OFFSET,
+        (this.x1 - this.x0) * xCellSize - 2 * d * POWERUP_OFFSET,
+        (this.y1 - this.y0) * yCellSize - 2 * d * POWERUP_OFFSET,
+        FILLED_COLOR.getHex(),
+      );
+      d *= 2;
+      outlineRect(
+        canvas,
+        BOARD_X0 + this.x0 * xCellSize + d * POWERUP_OFFSET,
+        BOARD_Y0 + this.y0 * yCellSize + d * POWERUP_OFFSET,
+        (this.x1 - this.x0) * xCellSize - 2 * d * POWERUP_OFFSET,
+        (this.y1 - this.y0) * yCellSize - 2 * d * POWERUP_OFFSET,
+        FILLED_COLOR.getHex(),
+      );
+    } else if (this.mainCell.type == CELL_TYPE.DRILL) {
+      var width = (this.x1 - this.x0) * xCellSize;
+      var innerLength = (((this.timer * CLOCK_FREQ) % 1) * width) / 2;
+      outlineRect(
+        canvas,
+        BOARD_X0 + this.x0 * xCellSize + innerLength,
+        BOARD_Y0 + this.y0 * yCellSize + innerLength,
+        (this.x1 - this.x0) * xCellSize - 2 * innerLength,
+        (this.y1 - this.y0) * yCellSize - 2 * innerLength,
+        FILLED_COLOR.getHex()
+      );
+    } else if (this.mainCell.type == CELL_TYPE.TOWER) {
+      var width = (this.x1 - this.x0) * xCellSize;
+      var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * width) / 2;
+      outlineRect(
+        canvas,
+        BOARD_X0 + this.x0 * xCellSize + innerLength,
+        BOARD_Y0 + this.y0 * yCellSize + innerLength,
+        (this.x1 - this.x0) * xCellSize - 2 * innerLength,
+        (this.y1 - this.y0) * yCellSize - 2 * innerLength,
+        FILLED_COLOR.getHex()
       );
     }
   }

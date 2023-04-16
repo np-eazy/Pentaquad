@@ -1,6 +1,6 @@
 import { FILLED_COLOR } from "./graphics/Theme";
 
-export const DEBUG = true;
+export const DEBUG = false;
 export const MESSAGE_SIZE = 24;
 export const MESSAGE_OFFSET = 10;
 export const CHARS_PER_LINE = 60;
