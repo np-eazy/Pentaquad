@@ -8,7 +8,7 @@ class PieceStage {
     this.coreState = props.coreState;
     this.maxLength = props.maxLength ? props.maxLength : PIECE_STAGE_MAX_LENGTH;
     this.nextPieces = [];
-    this.heldPiece = null;
+    this.palette = new Array(PIECE_STAGE_MAX_LENGTH).fill(null);
     this.locked = false;
     this.counter = 0;
 
@@ -37,11 +37,11 @@ class PieceStage {
   }
 
   // To be called by CoreState when a piece is held
-  holdPiece(piece) {
-    if (this.heldPiece != null) {
-      this.nextPieces.unshift(this.heldPiece);
+  holdPiece(piece, slot) {
+    if (this.palette[slot] != null) {
+      this.nextPieces.unshift(this.palette[slot]);
     }
-    this.heldPiece = piece;
+    this.palette[slot] = piece;
   }
 }
 export default PieceStage;

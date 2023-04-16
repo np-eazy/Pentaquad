@@ -44,9 +44,21 @@ class GameController {
     } else if (keycode === 82) {
       // R
       action = new GameAction(ActionType.ROTATE, { angle: 1 });
-    } else if (keycode === 67) {
-      // C
-      action = new GameAction(ActionType.HOLD, {});
+    } else if (keycode === 49) {
+      // 1
+      action = new GameAction(ActionType.HOLD, { item: 0 });
+    } else if (keycode === 50) {
+      // 2
+      action = new GameAction(ActionType.HOLD, { item: 1 });
+    } else if (keycode === 51) {
+      // 3
+      action = new GameAction(ActionType.HOLD, { item: 2 });
+    } else if (keycode === 52) {
+      // 4
+      action = new GameAction(ActionType.HOLD, { item: 3 });
+    } else if (keycode === 53) {
+      // 5
+      action = new GameAction(ActionType.HOLD, { item: 4 });
     }
     if (action != null) {
       this.actionQueue.push(action);

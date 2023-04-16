@@ -4,7 +4,7 @@ import { BOARD_SIZE } from "../Constants";
 import { renderBoard, updateBoard } from "./sections/Board";
 import { renderStage, updateStage } from "./sections/Stage";
 import { renderScoresheet, updateScoresheet } from "./sections/Scoresheet";
-import { renderPalette } from "./sections/Palette";
+import { renderPalette, updatePalette } from "./sections/Palette";
 
 import {
   BOARD_HEIGHT,
@@ -43,7 +43,7 @@ const GameGraphics = (props) => {
       targetStage: props.gameState.coreState.targetStage,
     });
     updateStage(props.gameState.coreState.pieceStage);
-    //updatePalette(props.gameState.coreState.pieceStage);
+    updatePalette(props.gameState.coreState.pieceStage);
     updateScoresheet(undefined);
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.

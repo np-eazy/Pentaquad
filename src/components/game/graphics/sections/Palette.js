@@ -9,36 +9,23 @@ import { drawPiece, updatePiece } from "../objects/Piece";
 // one to iterate through Palette pieces instead of PieceStage pieces.
 export function renderPalette(canvas, palette) {
   drawBackground(canvas, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT);
-  for (var i = 0; i < palette.nextPieces.length; i++) {
+  for (var i = 0; i < palette.heldPieces.length; i++) {
     var [x_, y_] = [2.5, 2.5 + 6 * i];
-    drawPiece(
-      canvas,
-      palette.nextPieces[i],
-      PALETTE_X0 + x_ * STAGE_CELL_SIZE,
-      PALETTE_Y0 + y_ * STAGE_CELL_SIZE,
-      STAGE_CELL_SIZE,
-      STAGE_CELL_SIZE,
-    );
-
-  }
-  if (palette.heldPiece) {
-    var [x_, y_] = [2.25, 26.5];
-    drawPiece(
-      canvas,
-      palette.heldPiece,
-      PALETTE_X0 + x_ * STAGE_CELL_SIZE,
-      PALETTE_Y0 + y_ * STAGE_CELL_SIZE,
-      STAGE_CELL_SIZE,
-      STAGE_CELL_SIZE
-    );
+    if (palette.heldPieces[i] != null) {
+      drawPiece(
+        canvas,
+        palette.heldPieces[i],
+        PALETTE_X0 + x_ * STAGE_CELL_SIZE,
+        PALETTE_Y0 + y_ * STAGE_CELL_SIZE,
+        STAGE_CELL_SIZE,
+        STAGE_CELL_SIZE,
+      );
+    }
   }
 }
 
 export function updatePalette(palette) {
-  for (const piece of palette.nextPieces) {
-    updatePiece(palette);
-  }
-  if (palette.heldPiece) {
-    updatePiece(palette.heldPiece);
+  for (const piece of palette.heldPieces) {
+    updatePiece(piece);
   }
 }

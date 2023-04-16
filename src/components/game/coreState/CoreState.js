@@ -97,7 +97,7 @@ const CoreState = class {
       } else if (action.type == ActionType.PLACE) {
         executePlace(this);
       } else if (action.type == ActionType.HOLD) {
-        executeHold(this);
+        executeHold(this, action.props.item);
       }
       action = this.controller.consumeAction();
     }

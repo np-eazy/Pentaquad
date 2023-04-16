@@ -131,9 +131,9 @@ export function executePlace(coreState) {
   coreState.placeBlock = true;
 }
 // Unmount the current piece into the holding stage, and mount the holding stage in
-export function executeHold(coreState) {
+export function executeHold(coreState, item) {
   coreState.currPiece.unmountPiece();
-  coreState.pieceStage.holdPiece(coreState.currPiece);
+  coreState.pieceStage.holdPiece(coreState.currPiece, item);
   coreState.currPiece = null;
   coreState.placeBlock = true;
 }
