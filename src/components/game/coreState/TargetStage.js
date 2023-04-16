@@ -17,7 +17,6 @@ class TargetStage {
     this.maxLength = props.maxLength
       ? props.maxLength
       : TARGET_STAGE_MAX_LENGTH;
-    this.nextTargets = [];
     this.gracePeriod = props.gracePeriod
       ? props.gracePeriod
       : TARGET_GRACE_PERIOD;
@@ -25,23 +24,24 @@ class TargetStage {
       ? props.ticksToSpawn
       : TARGET_SPAWN_TIMER;
     this.ticksLeft = this.gracePeriod;
+
+    this.nextTargets = [];
+
   }
 
   createNewTarget() {
-    if (this.coreState) {
-      var [x, y] = [
-        randint(this.minBound, this.maxBound),
-        randint(this.minBound, this.maxBound),
-      ];
-      return new Target({
-        coreState: this.coreState,
-        x0: x - 1,
-        y0: y - 1,
-        x1: x + 1,
-        y1: y + 1,
-        ticksToGrowth: TARGET_GROWTH_TIMER,
-      });
-    }
+    var [x, y] = [
+      randint(this.minBound, this.maxBound - 2),
+      randint(this.minBound, this.maxBound - 2),
+    ];
+    return new Target({
+      coreState: this.coreState,
+      x0: x - 1,
+      y0: y - 1,
+      x1: x + 2,
+      y1: y + 2,
+      ticksToGrowth: TARGET_GROWTH_TIMER,
+    });
   }
 
   // To be called by CoreState when it needs another target
@@ -52,6 +52,9 @@ class TargetStage {
         this.nextTargets.push(this.createNewTarget());
       }
       this.ticksLeft = this.ticksToSpawn;
+      if (target) {
+        target.mount();
+      }
       return target;
     } else {
       this.ticksLeft -= 1;

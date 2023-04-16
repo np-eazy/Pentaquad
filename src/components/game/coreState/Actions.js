@@ -1,7 +1,4 @@
-import NormalCell from "../baseObjects/cell/NormalCell";
-
 import { Angle, Dxn } from "./utils/Direction";
-import { dropzone } from "./utils/Dropzone";
 
 import {
   COLLISION_TIME_LIMIT,

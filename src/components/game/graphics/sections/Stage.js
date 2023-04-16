@@ -27,20 +27,6 @@ export function renderStage(canvas, stage) {
       STAGE_CELL_SIZE
     );
   }
-  if (stage.heldPiece) {
-    var [x_, y_] = [
-      CELL_OFFSET,
-      CELL_OFFSET + stage.nextPieces.length * Y_CELL_INCREMENT,
-    ];
-    drawPiece(
-      canvas,
-      stage.heldPiece,
-      STAGE_X0 + x_ * STAGE_CELL_SIZE,
-      STAGE_Y0 + y_ * STAGE_CELL_SIZE,
-      STAGE_CELL_SIZE,
-      STAGE_CELL_SIZE
-    );
-  }
 }
 
 export function updateStage(stage) {

@@ -7,14 +7,14 @@ import { drawPiece, updatePiece } from "../objects/Piece";
 
 // TODO: implement the Palette class similar to PieceStage and then rewrite this
 // one to iterate through Palette pieces instead of PieceStage pieces.
-export function renderPalette(canvas, palette) {
+export function renderPalette(canvas, pieceStage) {
   drawBackground(canvas, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT);
-  for (var i = 0; i < palette.heldPieces.length; i++) {
+  for (var i = 0; i < pieceStage.palette.length; i++) {
     var [x_, y_] = [2.5, 2.5 + 6 * i];
-    if (palette.heldPieces[i] != null) {
+    if (pieceStage.palette[i] != null) {
       drawPiece(
         canvas,
-        palette.heldPieces[i],
+        pieceStage.palette[i],
         PALETTE_X0 + x_ * STAGE_CELL_SIZE,
         PALETTE_Y0 + y_ * STAGE_CELL_SIZE,
         STAGE_CELL_SIZE,
@@ -24,8 +24,8 @@ export function renderPalette(canvas, palette) {
   }
 }
 
-export function updatePalette(palette) {
-  for (const piece of palette.heldPieces) {
+export function updatePalette(pieceStage) {
+  for (const piece of pieceStage.palette) {
     updatePiece(piece);
   }
 }
