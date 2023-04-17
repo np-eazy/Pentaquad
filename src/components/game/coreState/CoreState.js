@@ -26,6 +26,7 @@ import {
   executePlace,
   executeRotate,
 } from "./Actions";
+import Scorekeeper from "./Scorekeeper";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -40,6 +41,7 @@ const CoreState = class {
       minBound: TARGET_MARGIN,
       maxBound: props.boardSize - TARGET_MARGIN,
     });
+    this.scorekeeper = new Scorekeeper({});
 
     this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
     this.boardSize = props.boardSize; // The dimension of the square board on which this game takes place.
@@ -190,11 +192,12 @@ const CoreState = class {
       this.gravity.turnRight(1);
     }
     // Check and clear any filled targets or lines
-    this.gameOver = advanceAndCheckTargets({
+    advanceAndCheckTargets({
       targets: this.targets,
       board: this.board,
-      emptyValue: this.emptyValue,
       coreState: this,
+      emptyValue: this.emptyValue,
+      scorekeeper: this.scorekeeper,
     });
     checkFilledLines({
       threshold: this.boardSize,
@@ -202,6 +205,7 @@ const CoreState = class {
       boardSize: this.boardSize,
       board: this.board,
       emptyValue: this.emptyValue,
+      scorekeeper: this.scorekeeper,
     });
     this.advanceCells();
     // Create new game objects

@@ -2,14 +2,17 @@ import { CELL_TYPE } from "../../Constants";
 import { Angle, Dxn } from "./Direction";
 
 // Check for filled lines within a certain threshold and clear them Tetris-style, based
-// on the current direction of gravity.
+// on the current direction of gravity. Fillcheck also uses two of three Scorekeeper methods
+// from the CoreState.
 export const checkFilledLines = ({
   threshold,
   dxn,
   boardSize,
   board,
   emptyValue,
+  scorekeeper,
 }) => {
+  var linesCleared = 0;
   if (dxn.isHorizontal()) {
     for (var x = 0; x < boardSize; x++) {
       var count = 0;
@@ -20,6 +23,7 @@ export const checkFilledLines = ({
       }
       // Horizontally shift everything on the left or the right of the cleared line
       if (count >= threshold) {
+        linesCleared += 1;
         if (dxn.equals(Dxn[Angle.RIGHT])) {
           for (var i = x - 1; i >= 0; i--) {
             for (var y_ = 0; y_ < boardSize; y_++) {
@@ -61,6 +65,7 @@ export const checkFilledLines = ({
       }
       // Vertically shift everything on the top or bottom of the cleared line
       if (count >= threshold) {
+        linesCleared += 1;
         if (dxn.equals(Dxn[Angle.DOWN])) {
           for (var i = y - 1; i >= 0; i--) {
             for (var x_ = 0; x_ < boardSize; x_++) {
@@ -88,16 +93,19 @@ export const checkFilledLines = ({
       }
     }
   }
+  scorekeeper.scoreFilledLines(linesCleared);
 };
 
 // Check all filled targets, remove them from targetBlocks, and erase all
 // covered cells to replace with a call to emptyValue
-export const advanceAndCheckTargets = ({ targets, board, emptyValue, coreState }) => {
+export const advanceAndCheckTargets = ({ targets, board, emptyValue, coreState, scorekeeper }) => {
   var gameOver = false;
   targets.forEach((target) => target.advanceUpdate());
   // Clear the targets in a 2nd pass so that the player can hit combos on targets in the same move.
+  var clearedTargets = 0;
   targets.forEach((target) => {
     if (target.isFilled) {
+      clearedTargets += 1;
       target.clear(board, emptyValue);
       var i = 0;
       while (i < coreState.pieceStage.nextPieces.length &&
@@ -105,7 +113,6 @@ export const advanceAndCheckTargets = ({ targets, board, emptyValue, coreState }
         i += 1;
       }
       if (i < coreState.pieceStage.nextPieces.length) {
-        console.log(coreState.pieceStage.nextPieces);
         coreState.pieceStage.nextPieces[i].mainCell = target.mainCell;
       }
     } else if (target.isGameOver) {
@@ -120,5 +127,6 @@ export const advanceAndCheckTargets = ({ targets, board, emptyValue, coreState }
       i += 1;
     }
   }
+  scorekeeper.scoreTargets(clearedTargets);
   return gameOver;
 };

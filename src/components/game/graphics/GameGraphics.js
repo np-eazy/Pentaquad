@@ -36,7 +36,7 @@ const GameGraphics = (props) => {
       controller: gameState.controller,
     });
     renderStage(canvas, coreState.pieceStage);
-    renderScoresheet(canvas, undefined);
+    renderScoresheet(canvas, coreState.scorekeeper);
     renderPalette(canvas, coreState.pieceStage);
 
     updateBoard(board, {
