@@ -3,6 +3,11 @@ import { Color } from "./utils/Colors";
 // Theme colors for the Game, and also other values used to generate
 // color suites from a BaseColor. Anything else that is graphics/theme-related
 // and used by many different classes/cases should be defined here.
+export const GRID_COLOR = new Color({ // EmptyCell color
+    red: 20,
+    green: 20,
+    blue: 24,
+  });
 export const EMPTY_COLOR = new Color({ // EmptyCell color
     red: 25,
     green: 25,

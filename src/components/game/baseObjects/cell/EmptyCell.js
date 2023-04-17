@@ -1,10 +1,19 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../Constants";
 
-import { drawRect } from "../../graphics/Pipeline";
-import { EMPTY_COLOR, MARKER_COLOR } from "../../graphics/Theme";
+import { drawRect, outlineRect } from "../../graphics/Pipeline";
+import { EMPTY_COLOR, FILLED_COLOR, GRID_COLOR, MARKER_COLOR } from "../../graphics/Theme";
+import { interpolateColor } from "../../graphics/utils/Colors";
+import { BOARD_HEIGHT } from "../../graphics/Layout";
+import { linInt, sinusoid } from "../../graphics/utils/Functions";
 
 const METER_DECAY_RATE = 0.9;
+
+const GRID_WAVE = {
+  level: 0.5,
+  amplitude: 0.5,
+  frequency: 0.02,
+}
 
 // The default empty value of a Cell on the 2D board. It has the special
 // property of lighting up a different color if marked, which is taken care of
@@ -46,6 +55,7 @@ class EmptyCell extends Cell {
       height - 2 * d,
       MARKER_COLOR.getHex()
     );
+    outlineRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
   }
 }
 
