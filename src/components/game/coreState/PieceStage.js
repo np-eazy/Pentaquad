@@ -33,7 +33,6 @@ class PieceStage {
         this.nextPieces.push(new Piece(this.createType()));
       }
     }
-
     return piece;
   }
 
@@ -43,6 +42,12 @@ class PieceStage {
       this.nextPieces.unshift(this.palette[slot]);
     }
     this.palette[slot] = piece;
+  }
+
+  lock(piece) {
+    for (var i = 0; i < PIECE_STAGE_MAX_LENGTH; i++) {
+      this.nextPieces.unshift(piece.copyUnmounted());
+    }
   }
 }
 export default PieceStage;

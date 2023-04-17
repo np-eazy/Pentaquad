@@ -21,6 +21,7 @@ import {
   executeDrop,
   executeFlip,
   executeHold,
+  executeLock,
   executeMove,
   executeMoveTo,
   executePlace,
@@ -100,6 +101,8 @@ const CoreState = class {
         executePlace(this);
       } else if (action.type == ActionType.HOLD) {
         executeHold(this, action.props.item);
+      } else if (action.type == ActionType.LOCK) {
+        executeLock(this);
       }
       action = this.controller.consumeAction();
     }

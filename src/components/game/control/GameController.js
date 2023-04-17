@@ -59,6 +59,9 @@ class GameController {
     } else if (keycode === 53) {
       // 5
       action = new GameAction(ActionType.HOLD, { item: 4 });
+    } else if (keycode === 67) {
+      // C
+      action = new GameAction(ActionType.LOCK, {});
     }
     if (action != null) {
       this.actionQueue.push(action);

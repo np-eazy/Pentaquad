@@ -47,6 +47,15 @@ class Piece {
     this.mainCell.setBaseColor(this.baseColor);
   }
 
+  copyUnmounted() {
+    var copy = new Piece(this.mainCell.type);
+    copy.preset = this.preset;
+    copy.baseColor = this.baseColor;
+    copy.dxn = this.dxn;
+    copy.mainCell.setBaseColor(this.baseColor);
+    return copy;
+  }
+
   // Before the piece is mounted to a global location, it shouldn't be used/updated.
   mountPiece({ center_x, center_y, direction, pidSize }) {
     this.mounted = true;

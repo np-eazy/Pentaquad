@@ -134,3 +134,7 @@ export function executeHold(coreState, item) {
   coreState.currPiece = null;
   coreState.placeBlock = true;
 }
+// Lock the current piece for the next 5 moves
+export function executeLock(coreState) {
+  coreState.pieceStage.lock(coreState.currPiece);
+}
