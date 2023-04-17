@@ -1,5 +1,6 @@
 import Piece from "./Piece";
 import { PIECE_STAGE_MAX_LENGTH } from "../Constants";
+import { randint } from "./utils/Functions";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
@@ -19,7 +20,7 @@ class PieceStage {
 
   createType() {
     this.counter += 1;
-    return (this.counter % 5) + 1;
+    return randint(0, 10) == 0 ? (this.counter % 5) + 1 : 1;
   }
 
   // To be called by CoreState when it needs another piece

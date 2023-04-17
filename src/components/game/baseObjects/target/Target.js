@@ -3,7 +3,7 @@ import BombCell from "../../baseObjects/cell/BombCell";
 import DrillCell from "../../baseObjects/cell/DrillCell";
 import TowerCell from "../../baseObjects/cell/TowerCell";
 
-import { inBounds } from "../../coreState/utils/Functions";
+import { inBounds, randint } from "../../coreState/utils/Functions";
 import { drawRect, outlineRect } from "../../graphics/Pipeline";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../graphics/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
@@ -60,14 +60,28 @@ class Target {
     // making it harder to fill up. This can change
     this.ticksToGrowth = props.ticksToGrowth;
     this.ticksLeft = this.ticksToGrowth;
-    this.mainCell = new GhostCell();
+    this.mainCell = this.generateCell();
     this.mainCell.setBaseColor(EMPTY_COLOR);
     this.isMounted = false;
     this.isGameOver = false;
     this.isFilled = false;
     this.isCleared = false;
+    this.isGrowing = props.isGrowing ? true : false;
 
     this.timer = 0;
+  }
+
+  generateCell() {
+    var type = randint(2, 6);
+    if (type == CELL_TYPE.GHOST) {
+      return new GhostCell();
+    } else if (type == CELL_TYPE.BOMB) {
+      return new BombCell();
+    } else if (type == CELL_TYPE.DRILL) {
+      return new DrillCell();
+    } else if (type == CELL_TYPE.TOWER) {
+      return new TowerCell();
+    }
   }
 
   mount() {
@@ -95,7 +109,11 @@ class Target {
       this.ticksLeft -= 1;
       if (this.ticksLeft == 0) {
         this.ticksLeft = this.ticksToGrowth;
-        this.grow();
+        if (this.isGrowing) {
+          this.grow();
+        } else {
+          this.isCleared = true;
+        }
       }
     }
   }

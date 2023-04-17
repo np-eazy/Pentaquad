@@ -1,3 +1,4 @@
+import { CELL_TYPE } from "../../Constants";
 import { Angle, Dxn } from "./Direction";
 
 // Check for filled lines within a certain threshold and clear them Tetris-style, based
@@ -91,13 +92,22 @@ export const checkFilledLines = ({
 
 // Check all filled targets, remove them from targetBlocks, and erase all
 // covered cells to replace with a call to emptyValue
-export const advanceAndCheckTargets = ({ targets, board, emptyValue }) => {
+export const advanceAndCheckTargets = ({ targets, board, emptyValue, coreState }) => {
   var gameOver = false;
   targets.forEach((target) => target.advanceUpdate());
   // Clear the targets in a 2nd pass so that the player can hit combos on targets in the same move.
   targets.forEach((target) => {
     if (target.isFilled) {
       target.clear(board, emptyValue);
+      var i = 0;
+      while (i < coreState.pieceStage.nextPieces.length &&
+        coreState.pieceStage.nextPieces[i].mainCell.type != CELL_TYPE.NORMAL) {
+        i += 1;
+      }
+      if (i < coreState.pieceStage.nextPieces.length) {
+        console.log(coreState.pieceStage.nextPieces);
+        coreState.pieceStage.nextPieces[i].mainCell = target.mainCell;
+      }
     } else if (target.isGameOver) {
       gameOver = true;
     }

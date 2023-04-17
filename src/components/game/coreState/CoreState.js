@@ -194,6 +194,7 @@ const CoreState = class {
       targets: this.targets,
       board: this.board,
       emptyValue: this.emptyValue,
+      coreState: this,
     });
     checkFilledLines({
       threshold: this.boardSize,

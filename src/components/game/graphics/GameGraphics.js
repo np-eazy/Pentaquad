@@ -27,28 +27,30 @@ const GameGraphics = (props) => {
   // from the CoreState and only include other props like timers/colors to aid with the
   // graphics. At this point all GameState values are set in stone.
   function graphicLoop(canvas) {
+    var gameState = props.gameState;
+    var coreState = props.gameState.coreState;
     renderBoard(canvas, board, xCellSize, yCellSize, {
-      piece: props.gameState.coreState.currPiece,
-      targets: props.gameState.coreState.targets,
-      targetStage: props.gameState.coreState.targetStage,
-      controller: props.gameState.controller,
+      piece: coreState.currPiece,
+      targets: coreState.targets,
+      targetStage: coreState.targetStage,
+      controller: gameState.controller,
     });
-    renderStage(canvas, props.gameState.coreState.pieceStage);
+    renderStage(canvas, coreState.pieceStage);
     renderScoresheet(canvas, undefined);
-    renderPalette(canvas, props.gameState.coreState.pieceStage);
+    renderPalette(canvas, coreState.pieceStage);
 
     updateBoard(board, {
-      piece: props.gameState.coreState.currPiece,
-      targets: props.gameState.coreState.targets,
-      targetStage: props.gameState.coreState.targetStage,
+      piece: coreState.currPiece,
+      targets: coreState.targets,
+      targetStage: coreState.targetStage,
     });
-    updateStage(props.gameState.coreState.pieceStage);
-    updatePalette(props.gameState.coreState.pieceStage);
+    updateStage(coreState.pieceStage);
+    updatePalette(coreState.pieceStage);
     updateScoresheet(undefined);
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.
     if (DEBUG) {
-      var [x, y] = props.gameState.controller.gridCursor(
+      var [x, y] = gameState.controller.gridCursor(
         BOARD_HEIGHT,
         BOARD_SIZE
       );
