@@ -16,6 +16,7 @@ import {
   COLLISION_TIME_LIMIT,
   BOMB_RADIUS,
   CELL_TYPE,
+  ADVANCE_TIME,
 } from "../Constants";
 import {
   executeDrop,
@@ -28,6 +29,7 @@ import {
   executeRotate,
 } from "./Actions";
 import Scorekeeper from "./Scorekeeper";
+import { FILLED_COLOR, MARKER_COLOR } from "../graphics/Theme";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -64,6 +66,7 @@ const CoreState = class {
       this.pidSize
     );
 
+    this.ticksToMove = ADVANCE_TIME;
     this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
     this.currPiece = null; // The GameState's current unplaced piece
     this.targets = []; // The GameState's roster of target blocks
@@ -137,9 +140,9 @@ const CoreState = class {
   // An update that happens each frame; idleMoveIncluded is called once every
   // several frames to actually move the block downwards, and that calls other
   // updates in Cells. Corresponds to idleUpdate and activeUpdate in Cell and Target classes
-  update(idleMoveIncluded) {
+  update() {
     if (!this.isGameOver) {
-      if (idleMoveIncluded) {
+      if (this.timer % this.ticksToMove == 0) {
         if (this.placeBlock) {
           this.advance();
         } else if (this.currPiece && this.collisionTimer == 0) {
@@ -257,6 +260,7 @@ const CoreState = class {
       if (inBounds(x, y, this.boardSize)) {
         var newCell = new NormalCell();
         newCell.getAttributesFrom(piece.mainCell);
+        newCell.lightColor.add(piece.mainCell.baseColor);
         this.board[y][x] = newCell;
       }
     }
@@ -275,6 +279,8 @@ const CoreState = class {
         x++
       ) {
         this.board[y][x] = this.emptyValue();
+        this.board[y][x].lightColor.add(FILLED_COLOR);
+
       }
     }
   }
@@ -288,6 +294,7 @@ const CoreState = class {
       (x, y) => {
         var newCell = new EmptyCell();
         newCell.getAttributesFrom(this.board[y][x]);
+        newCell.meter = 1;
         this.board[y][x] = newCell;
       },
       true
@@ -302,6 +309,7 @@ const CoreState = class {
       (x, y) => {
         this.board[y][x] = piece.createCell();
         this.board[y][x].getAttributesFrom(piece.mainCell);
+        this.board[y][x].lightColor.add(piece.mainCell.baseColor);
       },
       false
     );

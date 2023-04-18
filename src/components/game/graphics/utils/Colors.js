@@ -26,6 +26,12 @@ export class Color {
     this.hex = null;
   }
 
+  add(colorB) {
+    this.red += colorB.red;
+    this.green += colorB.green;
+    this.blue += colorB.blue;
+  }
+
   // Descructively interpolate colors to avoid piling up Color instances
   interpolateTo(colorB, t, interpolationFunction) {
     this.red = interpolationFunction(this.red, colorB.red, t);

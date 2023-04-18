@@ -120,6 +120,7 @@ export function executeDrop(coreState) {
     }
   }
   coreState.collisionTimer = COLLISION_TIME_LIMIT;
+  coreState.timer = -1;
   coreState.placeBlock = true;
 }
 // Unconditionally place the current piece where it is

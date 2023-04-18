@@ -22,7 +22,7 @@ const GameState = class {
   update() {
     if (this.isRunning && this.delayTimer <= 0) {
       // Update core logic
-      this.coreState.update(this.ticks % this.ticksToMove == 0);
+      this.coreState.update();
       this.ticks += 1;
       // Compute graphic props after core update
       this.unmarkBoard();

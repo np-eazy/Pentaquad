@@ -12,6 +12,12 @@ import {
 
 // Decay rate of X and Y offsets after row breaks.
 const OFFSET_DECAY_RATE = 0.9;
+const LIGHT_DECAY_RATE = 0.02;
+const BLACK = new Color({
+  red: 0,
+  green: 0, 
+  blue: 0,
+});
 
 // A Cell is the base unit of this game, which is played on a 2D array of them. The different structures and pieces
 // formed by Cells intercellularly is handled by CoreState, whereas the Cell class itself focuses on intracellular
@@ -23,6 +29,11 @@ class Cell {
     this.setDefaults();
 
     this.baseColor = EMPTY_COLOR; // A non-changing base color for this Cell, which is used to derive all other colors
+    this.lightColor = new Color({
+      red: 0,
+      green: 0, 
+      blue: 0,
+    });
     this.currentColor = EMPTY_COLOR; // A dynamically changing main color derived from interpolating the baseColor
     this.colorSuite = {
       // A set of colors derived from the main color and can be updated very sparingly
@@ -47,8 +58,9 @@ class Cell {
   // transition graphics when a Cell changes its type.
   getAttributesFrom(other) {
     this.baseColor = other.baseColor;
-    this.currentColor = other.currentColor;
-    this.colorSuite = other.colorSuite;
+    // this.lightColor = other.lightColor;
+    // this.currentColor = other.currentColor;
+    // this.colorSuite = other.colorSuite;
 
     this.xOffset = other.xOffset;
     this.yOffset = other.yOffset;
@@ -82,6 +94,7 @@ class Cell {
         this.ttl / this.lifetime,
         linInt
       );
+      this.currentColor.add(this.lightColor);
     } else {
       this.currentColor = this.baseColor;
     }
@@ -112,6 +125,11 @@ class Cell {
   idleUpdate() {
     this.xOffset *= OFFSET_DECAY_RATE;
     this.yOffset *= OFFSET_DECAY_RATE;
+    this.lightColor.interpolateTo(BLACK, LIGHT_DECAY_RATE, linInt);
+    if (this.lightColor.red > 0.1) {
+      this.updateCurrentColor();
+      this.updateColorSuite();
+    }
     this.timer += 1;
   }
 
