@@ -9,9 +9,16 @@ import {
   CELL_CENTER_LIGHT,
   CELL_BASE_COLOR_BLEND,
 } from "../../graphics/Theme";
+import { LIGHT_UPDATE_THRESHOLD } from "../../coreState/utils/Params";
 
 // Decay rate of X and Y offsets after row breaks.
 const OFFSET_DECAY_RATE = 0.9;
+const LIGHT_DECAY_RATE = 0.02;
+const BLACK = new Color({
+  red: 0,
+  green: 0,
+  blue: 0,
+});
 
 // A Cell is the base unit of this game, which is played on a 2D array of them. The different structures and pieces
 // formed by Cells intercellularly is handled by CoreState, whereas the Cell class itself focuses on intracellular
@@ -23,6 +30,11 @@ class Cell {
     this.setDefaults();
 
     this.baseColor = EMPTY_COLOR; // A non-changing base color for this Cell, which is used to derive all other colors
+    this.lightColor = new Color({
+      red: 0,
+      green: 0,
+      blue: 0,
+    });
     this.currentColor = EMPTY_COLOR; // A dynamically changing main color derived from interpolating the baseColor
     this.colorSuite = {
       // A set of colors derived from the main color and can be updated very sparingly
@@ -47,9 +59,6 @@ class Cell {
   // transition graphics when a Cell changes its type.
   getAttributesFrom(other) {
     this.baseColor = other.baseColor;
-    this.currentColor = other.currentColor;
-    this.colorSuite = other.colorSuite;
-
     this.xOffset = other.xOffset;
     this.yOffset = other.yOffset;
     this.timer = other.timer;
@@ -82,6 +91,7 @@ class Cell {
         this.ttl / this.lifetime,
         linInt
       );
+      this.currentColor.add(this.lightColor);
     } else {
       this.currentColor = this.baseColor;
     }
@@ -101,6 +111,12 @@ class Cell {
     });
   }
 
+  // Add this cell's baseColor to its lightColor to brighten it, idleUpdate will take
+  // care of dimming it back down.
+  lightUp(color) {
+    this.lightColor.add(color);
+  }
+
   // A quick function for getting x and y positions with adding the offset, it is used by every extension
   // so I moved it to a separate method; cannot super() it because its intention is purely to make local
   // vars easier.
@@ -112,6 +128,11 @@ class Cell {
   idleUpdate() {
     this.xOffset *= OFFSET_DECAY_RATE;
     this.yOffset *= OFFSET_DECAY_RATE;
+    this.lightColor.interpolateTo(BLACK, LIGHT_DECAY_RATE, linInt);
+    if (this.lightColor.red > LIGHT_UPDATE_THRESHOLD) {
+      this.updateCurrentColor();
+      this.updateColorSuite();
+    }
     this.timer += 1;
   }
 

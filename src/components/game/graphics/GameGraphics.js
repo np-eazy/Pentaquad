@@ -4,7 +4,7 @@ import { BOARD_SIZE } from "../Constants";
 import { renderBoard, updateBoard } from "./sections/Board";
 import { renderStage, updateStage } from "./sections/Stage";
 import { renderScoresheet, updateScoresheet } from "./sections/Scoresheet";
-import { renderPalette } from "./sections/Palette";
+import { renderPalette, updatePalette } from "./sections/Palette";
 
 import {
   BOARD_HEIGHT,
@@ -27,31 +27,30 @@ const GameGraphics = (props) => {
   // from the CoreState and only include other props like timers/colors to aid with the
   // graphics. At this point all GameState values are set in stone.
   function graphicLoop(canvas) {
+    var gameState = props.gameState;
+    var coreState = props.gameState.coreState;
     renderBoard(canvas, board, xCellSize, yCellSize, {
-      piece: props.gameState.coreState.currPiece,
-      targets: props.gameState.coreState.targets,
-      targetStage: props.gameState.coreState.targetStage,
-      controller: props.gameState.controller,
+      piece: coreState.currPiece,
+      targets: coreState.targets,
+      targetStage: coreState.targetStage,
+      controller: gameState.controller,
     });
-    renderStage(canvas, props.gameState.coreState.pieceStage);
-    renderScoresheet(canvas, undefined);
-    renderPalette(canvas, props.gameState.coreState.pieceStage);
+    renderStage(canvas, coreState.pieceStage);
+    renderScoresheet(canvas, coreState.scorekeeper);
+    renderPalette(canvas, coreState.pieceStage);
 
     updateBoard(board, {
-      piece: props.gameState.coreState.currPiece,
-      targets: props.gameState.coreState.targets,
-      targetStage: props.gameState.coreState.targetStage,
+      piece: coreState.currPiece,
+      targets: coreState.targets,
+      targetStage: coreState.targetStage,
     });
-    updateStage(props.gameState.coreState.pieceStage);
-    //updatePalette(props.gameState.coreState.pieceStage);
+    updateStage(coreState.pieceStage);
+    updatePalette(coreState.pieceStage);
     updateScoresheet(undefined);
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.
     if (DEBUG) {
-      var [x, y] = props.gameState.controller.gridCursor(
-        BOARD_HEIGHT,
-        BOARD_SIZE
-      );
+      var [x, y] = gameState.controller.gridCursor(BOARD_HEIGHT, BOARD_SIZE);
       if (inBounds(x, y, board.length)) {
         debugCell(canvas, board[y][x], SCORESHEET_X0, SCORESHEET_Y0, x, y);
       }

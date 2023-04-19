@@ -47,11 +47,14 @@ export const CELL_TYPE = {
 };
 
 // Stage variables
-export const PIECE_STAGE_MAX_LENGTH = 4;
-export const TARGET_STAGE_MAX_LENGTH = 4;
-export const TARGET_GRACE_PERIOD = 8;
-export const TARGET_SPAWN_TIMER = 8;
-export const TARGET_GROWTH_TIMER = 8;
+export const PIECE_STAGE_MAX_LENGTH = 5;
+export const PIECE_STAGE_POWERUP_RARITY = 10;
+
+export const TARGET_STAGE_MAX_LENGTH = 2;
+export const TARGET_GRACE_PERIOD = 0;
+export const TARGET_SPAWN_RADIUS = 1;
+export const TARGET_SPAWN_TIMER = 4;
+export const TARGET_GROWTH_TIMER = 6;
 
 export const NORMAL_CELL_LIFETIME = 8;
 export const BOMB_RADIUS = 2;

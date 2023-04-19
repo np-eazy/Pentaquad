@@ -1,6 +1,6 @@
 import { FILLED_COLOR } from "./graphics/Theme";
 
-export const DEBUG = true;
+export const DEBUG = false;
 export const MESSAGE_SIZE = 24;
 export const MESSAGE_OFFSET = 10;
 export const CHARS_PER_LINE = 60;
@@ -21,7 +21,6 @@ export function debugCell(canvas, cell, x0, y0, boardX, boardY) {
   //   canvas.fillText(display.slice(i * CHARS_PER_LINE, (i + 1) * CHARS_PER_LINE), x0 + MESSAGE_OFFSET, y0 + MESSAGE_SIZE * (i + 1))
   // }
   // canvas.fillText(display.slice(i * CHARS_PER_LINE), x0 + MESSAGE_OFFSET, y0 + MESSAGE_SIZE * (i + 1))
-
 
   canvas.fillText(
     boardX.toString() + ", " + boardY.toString(),

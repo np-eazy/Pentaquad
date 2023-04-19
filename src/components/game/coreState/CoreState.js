@@ -16,16 +16,19 @@ import {
   COLLISION_TIME_LIMIT,
   BOMB_RADIUS,
   CELL_TYPE,
+  ADVANCE_TIME,
 } from "../Constants";
 import {
   executeDrop,
   executeFlip,
   executeHold,
+  executeLock,
   executeMove,
   executeMoveTo,
   executePlace,
   executeRotate,
 } from "./Actions";
+import Scorekeeper from "./Scorekeeper";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -40,6 +43,7 @@ const CoreState = class {
       minBound: TARGET_MARGIN,
       maxBound: props.boardSize - TARGET_MARGIN,
     });
+    this.scorekeeper = new Scorekeeper({});
 
     this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
     this.boardSize = props.boardSize; // The dimension of the square board on which this game takes place.
@@ -61,13 +65,13 @@ const CoreState = class {
       this.pidSize
     );
 
+    this.ticksToMove = ADVANCE_TIME;
     this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
     this.currPiece = null; // The GameState's current unplaced piece
     this.targets = []; // The GameState's roster of target blocks
     this.timer = 0; // A timer that increments once each update updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
     this.collisionTimer = 0; // Keep track of how long this piece is in contact in its falling direction
     this.placeBlock = true; // Flag for placing a block
-    this.isGameOver = false; // GameOver flag
   }
 
   // Set this piece's controller, in the future this can end up being called
@@ -97,7 +101,9 @@ const CoreState = class {
       } else if (action.type == ActionType.PLACE) {
         executePlace(this);
       } else if (action.type == ActionType.HOLD) {
-        executeHold(this);
+        executeHold(this, action.props.item);
+      } else if (action.type == ActionType.LOCK) {
+        executeLock(this);
       }
       action = this.controller.consumeAction();
     }
@@ -132,19 +138,17 @@ const CoreState = class {
   // An update that happens each frame; idleMoveIncluded is called once every
   // several frames to actually move the block downwards, and that calls other
   // updates in Cells. Corresponds to idleUpdate and activeUpdate in Cell and Target classes
-  update(idleMoveIncluded) {
-    if (!this.isGameOver) {
-      if (idleMoveIncluded) {
-        if (this.placeBlock) {
-          this.advance();
-        } else if (this.currPiece && this.collisionTimer == 0) {
-          this.active();
-        }
-      } else if (!this.placeBlock && this.currPiece && this.controller) {
-        this.idle();
+  update() {
+    if (this.timer % this.ticksToMove == 0) {
+      if (this.placeBlock) {
+        this.advance();
+      } else if (this.currPiece && this.collisionTimer == 0) {
+        this.active();
       }
-      this.timer += 1;
+    } else if (!this.placeBlock && this.currPiece && this.controller) {
+      this.idle();
     }
+    this.timer += 1;
     return this; // CoreState.update() returns itself
   }
 
@@ -184,24 +188,12 @@ const CoreState = class {
   // changes. Corresponds to advanceUpdate in Cell and Target classes.
   advance() {
     this.place(this.currPiece);
-    if (this.gravity && this.gravity.equals(Dxn[Angle.DOWN])) {
-      this.gravity.turnLeft(1);
-    } else {
-      this.gravity.turnRight(1);
-    }
+    this.gravity.turn(
+      this.gravity && this.gravity.equals(Dxn[Angle.DOWN]) ? 1 : -1
+    );
     // Check and clear any filled targets or lines
-    this.gameOver = advanceAndCheckTargets({
-      targets: this.targets,
-      board: this.board,
-      emptyValue: this.emptyValue,
-    });
-    checkFilledLines({
-      threshold: this.boardSize,
-      dxn: this.gravity,
-      boardSize: this.boardSize,
-      board: this.board,
-      emptyValue: this.emptyValue,
-    });
+    advanceAndCheckTargets(this);
+    checkFilledLines(this);
     this.advanceCells();
     // Create new game objects
     this.createNewPiece();
@@ -232,7 +224,7 @@ const CoreState = class {
     if (piece != null) {
       if (piece.mainCell.type == CELL_TYPE.BOMB) {
         this.placeBomb(piece);
-      } else if (this.currPiece.mainCell.type == CELL_TYPE.DRILL) {
+      } else if (piece.mainCell.type == CELL_TYPE.DRILL) {
         this.placeDrill(piece);
       } else {
         this.placeNormal(piece);
@@ -249,6 +241,7 @@ const CoreState = class {
       if (inBounds(x, y, this.boardSize)) {
         var newCell = new NormalCell();
         newCell.getAttributesFrom(piece.mainCell);
+        newCell.lightUp(piece.mainCell.baseColor);
         this.board[y][x] = newCell;
       }
     }
@@ -280,6 +273,7 @@ const CoreState = class {
       (x, y) => {
         var newCell = new EmptyCell();
         newCell.getAttributesFrom(this.board[y][x]);
+        newCell.meter = 1;
         this.board[y][x] = newCell;
       },
       true
@@ -294,6 +288,7 @@ const CoreState = class {
       (x, y) => {
         this.board[y][x] = piece.createCell();
         this.board[y][x].getAttributesFrom(piece.mainCell);
+        this.board[y][x].lightColor.add(piece.mainCell.baseColor);
       },
       false
     );

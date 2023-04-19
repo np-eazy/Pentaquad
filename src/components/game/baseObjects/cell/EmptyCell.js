@@ -1,8 +1,11 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../Constants";
 
-import { drawRect } from "../../graphics/Pipeline";
-import { EMPTY_COLOR, MARKER_COLOR } from "../../graphics/Theme";
+import { drawRect, outlineRect } from "../../graphics/Pipeline";
+import {
+  EMPTY_COLOR,
+  MARKER_COLOR,
+} from "../../graphics/Theme";
 
 const METER_DECAY_RATE = 0.9;
 
@@ -12,6 +15,7 @@ const METER_DECAY_RATE = 0.9;
 class EmptyCell extends Cell {
   constructor() {
     super(CELL_TYPE.EMPTY);
+    this.meter = 0;
   }
 
   // The meter either goes towards 0 or 1 based on whether or not the piece is marked.
@@ -35,17 +39,17 @@ class EmptyCell extends Cell {
   // "Mix" the background and foreground rectangle based on the meter level
   render(canvas, x0, y0, width, height) {
     var [x, y] = super.getPosition(x0, y0);
-
-    drawRect(canvas, x, y, width, height, EMPTY_COLOR.getHex());
-    var d = (this.meter * width) / 2;
+    drawRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
+    var d = ((1 - this.meter) * width) / 2;
     drawRect(
       canvas,
       x + d,
       y + d,
       width - 2 * d,
       height - 2 * d,
-      MARKER_COLOR.getHex()
+      EMPTY_COLOR.getHex()
     );
+    outlineRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
   }
 }
 

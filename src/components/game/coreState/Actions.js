@@ -1,7 +1,4 @@
-import NormalCell from "../baseObjects/cell/NormalCell";
-
 import { Angle, Dxn } from "./utils/Direction";
-import { dropzone } from "./utils/Dropzone";
 
 import {
   COLLISION_TIME_LIMIT,
@@ -123,6 +120,7 @@ export function executeDrop(coreState) {
     }
   }
   coreState.collisionTimer = COLLISION_TIME_LIMIT;
+  coreState.timer = -1;
   coreState.placeBlock = true;
 }
 // Unconditionally place the current piece where it is
@@ -131,9 +129,13 @@ export function executePlace(coreState) {
   coreState.placeBlock = true;
 }
 // Unmount the current piece into the holding stage, and mount the holding stage in
-export function executeHold(coreState) {
+export function executeHold(coreState, slotNumber) {
   coreState.currPiece.unmountPiece();
-  coreState.pieceStage.holdPiece(coreState.currPiece);
+  coreState.pieceStage.holdPiece(coreState.currPiece, slotNumber);
   coreState.currPiece = null;
   coreState.placeBlock = true;
+}
+// Lock the current piece for the next 5 moves
+export function executeLock(coreState) {
+  coreState.pieceStage.lock(coreState.currPiece);
 }

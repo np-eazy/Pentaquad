@@ -3,3 +3,4 @@
 
 // Collision window radius to save on collision calculations
 export const COLLISION_RADIUS = 3;
+export const LIGHT_UPDATE_THRESHOLD = 0.1;

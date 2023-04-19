@@ -1,5 +1,6 @@
 import Piece from "./Piece";
 import { PIECE_STAGE_MAX_LENGTH } from "../Constants";
+import { generateCellType } from "./RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
@@ -8,18 +9,12 @@ class PieceStage {
     this.coreState = props.coreState;
     this.maxLength = props.maxLength ? props.maxLength : PIECE_STAGE_MAX_LENGTH;
     this.nextPieces = [];
-    this.heldPiece = null;
+    this.palette = new Array(PIECE_STAGE_MAX_LENGTH).fill(null);
     this.locked = false;
-    this.counter = 0;
 
     for (var i = 0; i < this.maxLength; i++) {
-      this.nextPieces.push(new Piece(this.createType()));
+      this.nextPieces.push(new Piece(generateCellType()));
     }
-  }
-
-  createType() {
-    this.counter += 1;
-    return (this.counter % 5) + 1;
   }
 
   // To be called by CoreState when it needs another piece
@@ -29,19 +24,24 @@ class PieceStage {
       this.nextPieces.unshift(piece);
     } else {
       if (this.nextPieces.length < this.maxLength) {
-        this.nextPieces.push(new Piece(this.createType()));
+        this.nextPieces.push(new Piece(generateCellType()));
       }
     }
-
     return piece;
   }
 
   // To be called by CoreState when a piece is held
-  holdPiece(piece) {
-    if (this.heldPiece != null) {
-      this.nextPieces.unshift(this.heldPiece);
+  holdPiece(piece, slotNumber) {
+    if (this.palette[slotNumber] != null) {
+      this.nextPieces.unshift(this.palette[slotNumber]);
     }
-    this.heldPiece = piece;
+    this.palette[slotNumber] = piece;
+  }
+
+  lock(piece) {
+    for (var i = 0; i < PIECE_STAGE_MAX_LENGTH; i++) {
+      this.nextPieces.unshift(piece.copyUnmounted());
+    }
   }
 }
 export default PieceStage;

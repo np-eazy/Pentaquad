@@ -4,17 +4,14 @@ import { CELL_TYPE } from "../../Constants";
 import { outlineRect } from "../../graphics/Pipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
-import {
-    LIGHT_AMPLITUDE,
-    MARKER_COLOR,
-  } from "../../graphics/Theme";
+import { LIGHT_AMPLITUDE, MARKER_COLOR } from "../../graphics/Theme";
 
 const METER_FREQ = 0.03;
-const METER_AMP = 0.5; 
+const METER_AMP = 0.5;
 const METER_LEVEL = 1;
 
 // A cell that converts an area of other cells into EmptyCells
-// when placed or dropped. 
+// when placed or dropped.
 class BombCell extends Cell {
   constructor() {
     super(CELL_TYPE.BOMB);
@@ -33,7 +30,7 @@ class BombCell extends Cell {
     super.advanceUpdate(computeColors);
   }
 
-// Draw non-solid cell with an oscillating border
+  // Draw non-solid cell with an oscillating border
   render(canvas, x0, y0, width, height) {
     var [x, y] = super.getPosition(x0, y0);
 
