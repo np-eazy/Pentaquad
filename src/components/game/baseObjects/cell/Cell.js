@@ -9,6 +9,7 @@ import {
   CELL_CENTER_LIGHT,
   CELL_BASE_COLOR_BLEND,
 } from "../../graphics/Theme";
+import { LIGHT_UPDATE_THRESHOLD } from "../../coreState/utils/Params";
 
 // Decay rate of X and Y offsets after row breaks.
 const OFFSET_DECAY_RATE = 0.9;
@@ -58,10 +59,6 @@ class Cell {
   // transition graphics when a Cell changes its type.
   getAttributesFrom(other) {
     this.baseColor = other.baseColor;
-    // this.lightColor = other.lightColor;
-    // this.currentColor = other.currentColor;
-    // this.colorSuite = other.colorSuite;
-
     this.xOffset = other.xOffset;
     this.yOffset = other.yOffset;
     this.timer = other.timer;
@@ -132,7 +129,7 @@ class Cell {
     this.xOffset *= OFFSET_DECAY_RATE;
     this.yOffset *= OFFSET_DECAY_RATE;
     this.lightColor.interpolateTo(BLACK, LIGHT_DECAY_RATE, linInt);
-    if (this.lightColor.red > 0.1) {
+    if (this.lightColor.red > LIGHT_UPDATE_THRESHOLD) {
       this.updateCurrentColor();
       this.updateColorSuite();
     }

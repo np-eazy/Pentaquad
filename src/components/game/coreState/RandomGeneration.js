@@ -15,8 +15,8 @@ export function generateCellType() {
 // Generate a target within a random location specified by minBound and maxBound
 export function generateRandomTarget(coreState, minBound, maxBound, radius) {
   var [x, y] = [
-    randint(minBound, maxBound - 2),
-    randint(minBound, maxBound - 2),
+    randint(minBound, maxBound - radius * 2),
+    randint(minBound, maxBound - radius * 2),
   ];
   return new Target({
     coreState: coreState,
