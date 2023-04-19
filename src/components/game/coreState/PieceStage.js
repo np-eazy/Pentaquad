@@ -1,6 +1,6 @@
 import Piece from "./Piece";
 import { PIECE_STAGE_MAX_LENGTH } from "../Constants";
-import { randint } from "./utils/Functions";
+import { generateCellType } from "./RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
@@ -11,16 +11,10 @@ class PieceStage {
     this.nextPieces = [];
     this.palette = new Array(PIECE_STAGE_MAX_LENGTH).fill(null);
     this.locked = false;
-    this.counter = 0;
 
     for (var i = 0; i < this.maxLength; i++) {
-      this.nextPieces.push(new Piece(this.createType()));
+      this.nextPieces.push(new Piece(generateCellType()));
     }
-  }
-
-  createType() {
-    this.counter += 1;
-    return randint(0, 10) == 0 ? (this.counter % 5) + 1 : 1;
   }
 
   // To be called by CoreState when it needs another piece
@@ -30,18 +24,18 @@ class PieceStage {
       this.nextPieces.unshift(piece);
     } else {
       if (this.nextPieces.length < this.maxLength) {
-        this.nextPieces.push(new Piece(this.createType()));
+        this.nextPieces.push(new Piece(generateCellType()));
       }
     }
     return piece;
   }
 
   // To be called by CoreState when a piece is held
-  holdPiece(piece, slot) {
-    if (this.palette[slot] != null) {
-      this.nextPieces.unshift(this.palette[slot]);
+  holdPiece(piece, slotNumber) {
+    if (this.palette[slotNumber] != null) {
+      this.nextPieces.unshift(this.palette[slotNumber]);
     }
-    this.palette[slot] = piece;
+    this.palette[slotNumber] = piece;
   }
 
   lock(piece) {

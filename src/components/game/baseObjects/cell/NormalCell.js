@@ -4,7 +4,11 @@ import { CELL_TYPE } from "../../Constants";
 import { drawRect, outlineRect } from "../../graphics/Pipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
-import { MARKER_COLOR, LIGHT_AMPLITUDE, BORDER_OFFSET } from "../../graphics/Theme";
+import {
+  MARKER_COLOR,
+  LIGHT_AMPLITUDE,
+  BORDER_OFFSET,
+} from "../../graphics/Theme";
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;
@@ -31,7 +35,7 @@ class NormalCell extends Cell {
     super.advanceUpdate();
   }
 
-  // Draw 3 concentric solid squares and 1 in the back. 
+  // Draw 3 concentric solid squares and 1 in the back.
   render(canvas, x0, y0, width, height) {
     super.render();
     var [x, y] = super.getPosition(x0, y0);

@@ -1,4 +1,3 @@
-import Cell from "../baseObjects/cell/Cell";
 import EmptyCell from "../baseObjects/cell/EmptyCell";
 import NormalCell from "../baseObjects/cell/NormalCell";
 import GhostCell from "../baseObjects/cell/GhostCell";

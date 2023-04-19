@@ -38,16 +38,14 @@ export const renderBoard = (
     }
   }
   drawPiece(canvas, piece, BOARD_X0, BOARD_Y0, xCellSize, yCellSize);
-  targets.forEach(target => target.render(canvas, xCellSize, yCellSize));
-  targetStage.nextTargets.forEach(target => target.render(canvas, xCellSize, yCellSize));
+  targets.forEach((target) => target.render(canvas, xCellSize, yCellSize));
+  targetStage.nextTargets.forEach((target) =>
+    target.render(canvas, xCellSize, yCellSize)
+  );
   drawCursor(canvas, board, controller, BOARD_HEIGHT, xCellSize, yCellSize);
 };
 
-export const updateBoard = (board, {
-  piece,
-  targets,
-  targetStage,
-}) => {
+export const updateBoard = (board, { piece, targets, targetStage }) => {
   // Update grid cells
   var [xSize, ySize] = [board[0].length, board.length];
   for (var y = 0; y < ySize; y++) {
@@ -56,6 +54,6 @@ export const updateBoard = (board, {
     }
   }
   updatePiece(piece);
-  targets.forEach(target => target.idleUpdate());
-  targetStage.nextTargets.forEach(target => target.idleUpdate());
+  targets.forEach((target) => target.idleUpdate());
+  targetStage.nextTargets.forEach((target) => target.idleUpdate());
 };

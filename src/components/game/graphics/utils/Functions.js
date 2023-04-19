@@ -7,6 +7,6 @@ export const linInt = (a, b, t) => {
   return a + (b - a) * t;
 };
 
-export const sinusoid = ({level, frequency, amplitude}, t) => {
+export const sinusoid = ({ level, frequency, amplitude }, t) => {
   return level + amplitude * Math.sin(frequency * t);
-}
+};

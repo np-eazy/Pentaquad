@@ -22,7 +22,6 @@ export function debugCell(canvas, cell, x0, y0, boardX, boardY) {
   // }
   // canvas.fillText(display.slice(i * CHARS_PER_LINE), x0 + MESSAGE_OFFSET, y0 + MESSAGE_SIZE * (i + 1))
 
-
   canvas.fillText(
     boardX.toString() + ", " + boardY.toString(),
     x0 + MESSAGE_OFFSET,

@@ -1,11 +1,10 @@
-import Target from "../baseObjects/target/Target";
-import { randint } from "./utils/Functions";
 import {
   TARGET_STAGE_MAX_LENGTH,
   TARGET_GRACE_PERIOD,
   TARGET_SPAWN_TIMER,
-  TARGET_GROWTH_TIMER,
+  TARGET_SPAWN_RADIUS,
 } from "../Constants";
+import { generateRandomTarget } from "./RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
@@ -26,22 +25,6 @@ class TargetStage {
     this.ticksLeft = this.gracePeriod;
 
     this.nextTargets = [];
-
-  }
-
-  createNewTarget() {
-    var [x, y] = [
-      randint(this.minBound, this.maxBound - 2),
-      randint(this.minBound, this.maxBound - 2),
-    ];
-    return new Target({
-      coreState: this.coreState,
-      x0: x - 1,
-      y0: y - 1,
-      x1: x + 2,
-      y1: y + 2,
-      ticksToGrowth: TARGET_GROWTH_TIMER,
-    });
   }
 
   // To be called by CoreState when it needs another target
@@ -49,7 +32,14 @@ class TargetStage {
     if (this.ticksLeft == 0) {
       var target = this.nextTargets.shift();
       if (this.nextTargets.length < this.maxLength) {
-        this.nextTargets.push(this.createNewTarget());
+        this.nextTargets.push(
+          generateRandomTarget(
+            this.coreState,
+            this.minBound,
+            this.maxBound,
+            TARGET_SPAWN_RADIUS
+          )
+        );
       }
       this.ticksLeft = this.ticksToSpawn;
       if (target) {

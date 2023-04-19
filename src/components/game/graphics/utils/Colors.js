@@ -42,16 +42,23 @@ export class Color {
 
   getHex() {
     if (!this.hex) {
-      this.hex = "#" +
-      componentToHex(this.red) +
-      componentToHex(this.green) +
-      componentToHex(this.blue);
+      this.hex =
+        "#" +
+        componentToHex(this.red) +
+        componentToHex(this.green) +
+        componentToHex(this.blue);
     }
     return this.hex;
   }
 
   toString() {
-    return this.red.toString() + ", " + this.green.toString() + ", " + this.blue.toString();
+    return (
+      this.red.toString() +
+      ", " +
+      this.green.toString() +
+      ", " +
+      this.blue.toString()
+    );
   }
 }
 

@@ -15,7 +15,7 @@ const OFFSET_DECAY_RATE = 0.9;
 const LIGHT_DECAY_RATE = 0.02;
 const BLACK = new Color({
   red: 0,
-  green: 0, 
+  green: 0,
   blue: 0,
 });
 
@@ -31,7 +31,7 @@ class Cell {
     this.baseColor = EMPTY_COLOR; // A non-changing base color for this Cell, which is used to derive all other colors
     this.lightColor = new Color({
       red: 0,
-      green: 0, 
+      green: 0,
       blue: 0,
     });
     this.currentColor = EMPTY_COLOR; // A dynamically changing main color derived from interpolating the baseColor
@@ -112,6 +112,12 @@ class Cell {
       green: this.currentColor.green + CELL_CENTER_LIGHT,
       blue: this.currentColor.blue + CELL_CENTER_LIGHT,
     });
+  }
+
+  // Add this cell's baseColor to its lightColor to brighten it, idleUpdate will take
+  // care of dimming it back down.
+  lightUp(color) {
+    this.lightColor.add(color);
   }
 
   // A quick function for getting x and y positions with adding the offset, it is used by every extension

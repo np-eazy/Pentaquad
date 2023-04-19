@@ -2,7 +2,11 @@ import Cell from "./Cell";
 import { CELL_TYPE } from "../../Constants";
 import { drawRect, outlineRect } from "../../graphics/Pipeline";
 
-import { EMPTY_COLOR, LIGHT_AMPLITUDE, BORDER_OFFSET } from "../../graphics/Theme";
+import {
+  EMPTY_COLOR,
+  LIGHT_AMPLITUDE,
+  BORDER_OFFSET,
+} from "../../graphics/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 

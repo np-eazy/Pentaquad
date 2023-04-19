@@ -8,11 +8,9 @@ import { drawRect, outlineRect } from "../../graphics/Pipeline";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../graphics/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt, sinusoid } from "../../graphics/utils/Functions";
-import {
-  BOARD_X0,
-  BOARD_Y0,
-} from "../../graphics/Layout";
+import { BOARD_X0, BOARD_Y0 } from "../../graphics/Layout";
 import { CELL_TYPE } from "../../Constants";
+import { generatePowerupCellType } from "../../coreState/RandomGeneration";
 
 const BORDER_COLOR = FILLED_COLOR;
 const WARNING_BORDER_SIZE = 4;
@@ -36,15 +34,14 @@ const UNMOUNT_WAVE = {
   level: 0.2,
   frequency: 0.05,
   amplitude: 0.1,
-}
+};
 const POWERUP_OFFSET = 4;
 const POWERUP_WAVE = {
   level: 0.5,
   frequency: 0.05,
   amplitude: 0.4,
-}
+};
 const CLOCK_FREQ = 0.01;
-
 
 // A single block whose corner bounds must be filled with Cells to achieve game objectives.
 class Target {
@@ -63,7 +60,6 @@ class Target {
     this.mainCell = this.generateCell();
     this.mainCell.setBaseColor(EMPTY_COLOR);
     this.isMounted = false;
-    this.isGameOver = false;
     this.isFilled = false;
     this.isCleared = false;
     this.isGrowing = props.isGrowing ? true : false;
@@ -72,7 +68,7 @@ class Target {
   }
 
   generateCell() {
-    var type = randint(2, 6);
+    var type = generatePowerupCellType();
     if (type == CELL_TYPE.GHOST) {
       return new GhostCell();
     } else if (type == CELL_TYPE.BOMB) {
@@ -105,7 +101,7 @@ class Target {
   advanceUpdate() {
     if (this.checkFill(this.coreState.board)) {
       this.isFilled = true;
-    } else if (!this.isGameOver) {
+    } else {
       this.ticksLeft -= 1;
       if (this.ticksLeft == 0) {
         this.ticksLeft = this.ticksToGrowth;
@@ -143,7 +139,7 @@ class Target {
     this.isCleared = true;
   }
 
-  // Extend the corners out by one cell. If any corner leaves the bounds of the game's board, GameOver flag goes up.
+  // Extend the corners out by one cell.
   grow() {
     if (inBounds(this.x0 - 1, this.y0 - 1, this.boardSize)) {
       this.x0 -= 1;
@@ -173,29 +169,12 @@ class Target {
         (this.y1 - this.y0 + 2) * yCellSize,
         MARKER_COLOR.getHex()
       );
-      
       if (this.ticksLeft <= 3) {
-        outlineRect(
-          canvas,
-          BOARD_X0 + (this.x0) * xCellSize - WARNING_BORDER_SIZE,
-          BOARD_Y0 + (this.y0) * yCellSize - WARNING_BORDER_SIZE,
-          (this.x1 - this.x0) * xCellSize + 2 * WARNING_BORDER_SIZE,
-          (this.y1 - this.y0) * yCellSize + 2 * WARNING_BORDER_SIZE,
-          interpolateColor(
-            MARKER_COLOR,
-            FILLED_COLOR,
-            sinusoid(this.ticksLeft == 3 ? WARNING_WAVE_3 :
-              this.ticksLeft == 2 ? WARNING_WAVE_2 :
-              WARNING_WAVE_1, this.timer),
-            linInt,
-          ).getHex()
-        );
+        this.renderWarning(canvas, xCellSize, yCellSize);
       }
-
-    if (this.mainCell) {
-      this.renderPowerup(canvas, xCellSize, yCellSize);
-    }
-
+      if (this.mainCell) {
+        this.renderPowerup(canvas, xCellSize, yCellSize);
+      }
     } else {
       outlineRect(
         canvas,
@@ -207,19 +186,45 @@ class Target {
           MARKER_COLOR,
           FILLED_COLOR,
           sinusoid(UNMOUNT_WAVE, this.timer),
-          linInt,
+          linInt
         ).getHex()
       );
     }
   }
 
+  // Render a flashing inset border if TTL is less than or equal to 3
+  renderWarning(canvas, xCellSize, yCellSize) {
+    outlineRect(
+      canvas,
+      BOARD_X0 + this.x0 * xCellSize - WARNING_BORDER_SIZE,
+      BOARD_Y0 + this.y0 * yCellSize - WARNING_BORDER_SIZE,
+      (this.x1 - this.x0) * xCellSize + 2 * WARNING_BORDER_SIZE,
+      (this.y1 - this.y0) * yCellSize + 2 * WARNING_BORDER_SIZE,
+      interpolateColor(
+        MARKER_COLOR,
+        FILLED_COLOR,
+        sinusoid(
+          this.ticksLeft == 3
+            ? WARNING_WAVE_3
+            : this.ticksLeft == 2
+            ? WARNING_WAVE_2
+            : WARNING_WAVE_1,
+          this.timer
+        ),
+        linInt
+      ).getHex()
+    );
+  }
+
+  // If the Target is holding onto a Cell with a special ability, the Target
+  // is rendered with an animation matching the type of cell it is holding.
   renderPowerup(canvas, xCellSize, yCellSize) {
     if (this.mainCell.type == CELL_TYPE.GHOST) {
       var borderColor = interpolateColor(
         EMPTY_COLOR,
         FILLED_COLOR,
         sinusoid(POWERUP_WAVE, this.timer),
-        linInt,
+        linInt
       );
       outlineRect(
         canvas,
@@ -227,8 +232,8 @@ class Target {
         BOARD_Y0 + this.y0 * yCellSize + POWERUP_OFFSET,
         (this.x1 - this.x0) * xCellSize - 2 * POWERUP_OFFSET,
         (this.y1 - this.y0) * yCellSize - 2 * POWERUP_OFFSET,
-        borderColor.getHex(),
-      )
+        borderColor.getHex()
+      );
     } else if (this.mainCell.type == CELL_TYPE.BOMB) {
       var d = sinusoid(POWERUP_WAVE, this.timer);
       outlineRect(
@@ -237,7 +242,7 @@ class Target {
         BOARD_Y0 + this.y0 * yCellSize + d * POWERUP_OFFSET,
         (this.x1 - this.x0) * xCellSize - 2 * d * POWERUP_OFFSET,
         (this.y1 - this.y0) * yCellSize - 2 * d * POWERUP_OFFSET,
-        FILLED_COLOR.getHex(),
+        FILLED_COLOR.getHex()
       );
       d *= 2;
       outlineRect(
@@ -246,7 +251,7 @@ class Target {
         BOARD_Y0 + this.y0 * yCellSize + d * POWERUP_OFFSET,
         (this.x1 - this.x0) * xCellSize - 2 * d * POWERUP_OFFSET,
         (this.y1 - this.y0) * yCellSize - 2 * d * POWERUP_OFFSET,
-        FILLED_COLOR.getHex(),
+        FILLED_COLOR.getHex()
       );
     } else if (this.mainCell.type == CELL_TYPE.DRILL) {
       var width = (this.x1 - this.x0) * xCellSize;

@@ -4,7 +4,11 @@ import { CELL_TYPE } from "../../Constants";
 import { drawRect, outlineRect } from "../../graphics/Pipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
-import { BORDER_OFFSET, EMPTY_COLOR, LIGHT_AMPLITUDE } from "../../graphics/Theme";
+import {
+  BORDER_OFFSET,
+  EMPTY_COLOR,
+  LIGHT_AMPLITUDE,
+} from "../../graphics/Theme";
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;
@@ -53,7 +57,7 @@ class GhostCell extends Cell {
       width - 2 * d,
       height - 2 * d,
       interpolateColor(
-        this.colorSuite.centerLight,
+        this.colorSuite.midLight,
         EMPTY_COLOR,
         g,
         linInt
