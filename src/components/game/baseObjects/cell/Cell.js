@@ -136,10 +136,10 @@ class Cell {
     this.timer += 1;
   }
 
-  activeUpdate() {}
+  fallingUpdate() {}
 
-  // Called whenever a piece is placed down and the game advances.
-  advanceUpdate(computeColors = false) {
+  // Called whenever a piece is placed down and the game places a piece.
+  placementUpdate(computeColors = false) {
     this.ttl -= 1;
     this.updateCurrentColor();
     this.updateColorSuite();

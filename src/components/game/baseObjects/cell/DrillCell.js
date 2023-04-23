@@ -19,12 +19,12 @@ class DrillCell extends Cell {
     super.idleUpdate();
   }
 
-  activeUpdate() {
-    super.activeUpdate();
+  fallingUpdate() {
+    super.fallingUpdate();
   }
 
-  advanceUpdate(computeColors) {
-    super.advanceUpdate(computeColors);
+  placementUpdate(computeColors) {
+    super.placementUpdate(computeColors);
   }
 
   // Draw non-solid cell with a continually shrinking border

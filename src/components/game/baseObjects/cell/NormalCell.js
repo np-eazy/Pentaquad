@@ -27,12 +27,12 @@ class NormalCell extends Cell {
     this.meter = METER_LEVEL - METER_AMP * Math.sin(this.timer * METER_FREQ);
   }
 
-  activeUpdate() {
-    super.activeUpdate();
+  fallingUpdate() {
+    super.fallingUpdate();
   }
 
-  advanceUpdate() {
-    super.advanceUpdate();
+  placementUpdate() {
+    super.placementUpdate();
   }
 
   // Draw 3 concentric solid squares and 1 in the back.

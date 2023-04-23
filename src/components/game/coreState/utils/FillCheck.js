@@ -98,14 +98,14 @@ export const checkFilledLines = (coreState) => {
 
 // Check all filled targets, remove them from targetBlocks, and erase all
 // covered cells to replace with a call to emptyValue
-export const advanceAndCheckTargets = (coreState) => {
+export const handleTargets = (coreState) => {
   var targets = coreState.targets;
   var board = coreState.board;
   var emptyValue = coreState.emptyValue;
   var scorekeeper = coreState.scorekeeper;
   var queue = coreState.pieceStage.queue;
 
-  targets.forEach((target) => target.advanceUpdate());
+  targets.forEach((target) => target.placementUpdate());
   // Clear the targets in a 2nd pass so that the player can hit combos on targets in the same move.
   var clearedTargets = 0;
   targets.forEach((target) => {

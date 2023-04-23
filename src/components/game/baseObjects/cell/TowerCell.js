@@ -25,12 +25,12 @@ class TowerCell extends Cell {
     super.idleUpdate();
   }
 
-  activeUpdate() {
-    super.activeUpdate();
+  fallingUpdate() {
+    super.fallingUpdate();
   }
 
-  advanceUpdate(computeColors) {
-    super.advanceUpdate(computeColors);
+  placementUpdate(computeColors) {
+    super.placementUpdate(computeColors);
   }
 
   render(canvas, x0, y0, width, height) {

@@ -94,11 +94,11 @@ class Target {
 
   // Not really a relevant method for targets which don't have any meaningful graphics for when a piece falls down a step,
   // but keeping it here for sake of convention matching with Cell.
-  activeUpdate() {}
+  fallingUpdate() {}
 
   // To be called once each time the coreState updates; either the isFilled flag goes up or it continues to grow.
   // Currently, a Target only grows but others can be implemented to disappear or give the user power-ups upon being cleared.
-  advanceUpdate() {
+  placementUpdate() {
     if (this.checkFill(this.coreState.board)) {
       this.isFilled = true;
     } else {

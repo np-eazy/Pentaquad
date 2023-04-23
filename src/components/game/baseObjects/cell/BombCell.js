@@ -22,12 +22,12 @@ class BombCell extends Cell {
     this.meter = METER_LEVEL - METER_AMP * Math.sin(this.timer * METER_FREQ);
   }
 
-  activeUpdate() {
-    super.activeUpdate();
+  fallingUpdate() {
+    super.fallingUpdate();
   }
 
-  advanceUpdate(computeColors) {
-    super.advanceUpdate(computeColors);
+  placementUpdate(computeColors) {
+    super.placementUpdate(computeColors);
   }
 
   // Draw non-solid cell with an oscillating border

@@ -17,8 +17,8 @@ export const TARGET_MARGIN = 4;
 export const COLLISION_TIME_LIMIT = 100;
 // The maximum number of movements to adjust a rotation
 export const MAX_ROTATION_ADJUSTMENT = 2;
-// Ticks between each block advancement
-export const ADVANCE_TIME = 30; // Wait this many ticks between each idleMove() call on coreState
+// Ticks between each block fall
+export const TICKS_TO_FALL = 30; // Wait this many ticks between each idleMove() call on coreState
 
 export const BASE_COLORS = [
   new Color({ red: 255, green: 0, blue: 0 }),

@@ -7,7 +7,7 @@ import TargetStage from "./TargetStage";
 import { ActionType } from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
 import { dropzone } from "./utils/Dropzone";
-import { checkFilledLines, advanceAndCheckTargets } from "./utils/FillCheck";
+import { checkFilledLines, handleTargets } from "./utils/FillCheck";
 import { getSpawnPosition, inBounds } from "./utils/Functions";
 
 import {
@@ -16,7 +16,7 @@ import {
   COLLISION_TIME_LIMIT,
   BOMB_RADIUS,
   CELL_TYPE,
-  ADVANCE_TIME,
+  TICKS_TO_FALL,
 } from "../Constants";
 import {
   executeDrop,
@@ -65,7 +65,7 @@ const CoreState = class {
       this.pidSize
     );
 
-    this.ticksToMove = ADVANCE_TIME;
+    this.ticksToMove = TICKS_TO_FALL;
     this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
     this.currPiece = null; // The GameState's current unplaced piece
     this.targets = []; // The GameState's roster of target blocks
@@ -137,23 +137,23 @@ const CoreState = class {
 
   // An update that happens each frame; idleMoveIncluded is called once every
   // several frames to actually move the block downwards, and that calls other
-  // updates in Cells. Corresponds to idleUpdate and activeUpdate in Cell and Target classes
+  // updates in Cells. Corresponds to idleUpdate and fallingUpdate in Cell and Target classes
   update() {
     if (this.timer % this.ticksToMove == 0) {
       if (this.placeBlock) {
-        this.advance();
+        this.placementUpdate();
       } else if (this.currPiece && this.collisionTimer == 0) {
-        this.active();
+        this.fallingUpdate();
       }
     } else if (!this.placeBlock && this.currPiece && this.controller) {
-      this.idle();
+      this.idleUpdate();
     }
     this.timer += 1;
     return this; // CoreState.update() returns itself
   }
 
   // Attempt to perform the next action if dispensed by the game controller.
-  idle() {
+  idleUpdate() {
     this.performNextAction();
     this.updateCollisionTimer();
   }
@@ -178,23 +178,23 @@ const CoreState = class {
   }
 
   // Move the block down in its falling direction
-  active() {
+  fallingUpdate() {
     this.currPiece.move(this.gravity);
     this.updateCollisionTimer();
   }
 
   // Place the current piece, create a new one, and check for new filled lines.
   // Basically all the logic that happens whenever the arrangement of board pieces
-  // changes. Corresponds to advanceUpdate in Cell and Target classes.
-  advance() {
+  // changes. Corresponds to placementUpdate in Cell and Target classes.
+  placementUpdate() {
     this.place(this.currPiece);
     this.gravity.turn(
       this.gravity && this.gravity.equals(Dxn[Angle.DOWN]) ? 1 : -1
     );
     // Check and clear any filled targets or lines
-    advanceAndCheckTargets(this);
+    handleTargets(this);
     checkFilledLines(this);
-    this.advanceCells();
+    this.cellPlacementUpdate();
     // Create new game objects
     this.createNewPiece();
     this.createNewTarget();
@@ -202,7 +202,7 @@ const CoreState = class {
   }
 
   // increment times to live for each cell before converting to empty cell
-  advanceCells() {
+  cellPlacementUpdate() {
     for (var y = 0; y < this.boardSize; y++) {
       for (var x = 0; x < this.boardSize; x++) {
         var cell = this.board[y][x];
@@ -212,7 +212,7 @@ const CoreState = class {
             newCell.getAttributesFrom(this.board[y][x]);
             this.board[y][x] = newCell;
           } else {
-            cell.advanceUpdate(true);
+            cell.placementUpdate(true);
           }
         }
       }
