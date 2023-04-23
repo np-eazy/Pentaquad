@@ -2,7 +2,7 @@ import { inBounds } from "../coreState/utils/Functions";
 import { BOARD_SIZE } from "../Constants";
 
 import { renderBoard, updateBoard } from "./sections/Board";
-import { renderStage, updateStage } from "./sections/Stage";
+import { renderQueue, updateQueue } from "./sections/Queue";
 import { renderScoresheet, updateScoresheet } from "./sections/Scoresheet";
 import { renderPalette, updatePalette } from "./sections/Palette";
 
@@ -35,7 +35,7 @@ const GameGraphics = (props) => {
       targetStage: coreState.targetStage,
       controller: gameState.controller,
     });
-    renderStage(canvas, coreState.pieceStage);
+    renderQueue(canvas, coreState.pieceStage);
     renderScoresheet(canvas, coreState.scorekeeper);
     renderPalette(canvas, coreState.pieceStage);
 
@@ -44,7 +44,7 @@ const GameGraphics = (props) => {
       targets: coreState.targets,
       targetStage: coreState.targetStage,
     });
-    updateStage(coreState.pieceStage);
+    updateQueue(coreState.pieceStage);
     updatePalette(coreState.pieceStage);
     updateScoresheet(undefined);
 

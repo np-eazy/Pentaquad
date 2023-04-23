@@ -103,7 +103,7 @@ export const advanceAndCheckTargets = (coreState) => {
   var board = coreState.board;
   var emptyValue = coreState.emptyValue;
   var scorekeeper = coreState.scorekeeper;
-  var nextPieces = coreState.pieceStage.nextPieces;
+  var queue = coreState.pieceStage.queue;
 
   targets.forEach((target) => target.advanceUpdate());
   // Clear the targets in a 2nd pass so that the player can hit combos on targets in the same move.
@@ -115,13 +115,13 @@ export const advanceAndCheckTargets = (coreState) => {
       if (target.mainCell) {
         var i = 0;
         while (
-          i < nextPieces.length &&
-          nextPieces[i].mainCell.type != CELL_TYPE.NORMAL
+          i < queue.length &&
+          queue[i].mainCell.type != CELL_TYPE.NORMAL
         ) {
           i += 1;
         }
-        if (i < nextPieces.length) {
-          nextPieces[i].mainCell = target.mainCell;
+        if (i < queue.length) {
+          queue[i].mainCell = target.mainCell;
         }
       }
     } else if (target.isCleared) {

@@ -1,6 +1,6 @@
 import {
   drawBackground,
-  STAGE_CELL_SIZE,
+  QUEUE_CELL_SIZE,
   PALETTE_X0,
   PALETTE_Y0,
   PALETTE_WIDTH,
@@ -23,10 +23,10 @@ export function renderPalette(canvas, pieceStage) {
       drawPiece(
         canvas,
         pieceStage.palette[i],
-        PALETTE_X0 + x_ * STAGE_CELL_SIZE,
-        PALETTE_Y0 + y_ * STAGE_CELL_SIZE,
-        STAGE_CELL_SIZE,
-        STAGE_CELL_SIZE
+        PALETTE_X0 + x_ * QUEUE_CELL_SIZE,
+        PALETTE_Y0 + y_ * QUEUE_CELL_SIZE,
+        QUEUE_CELL_SIZE,
+        QUEUE_CELL_SIZE
       );
     }
   }

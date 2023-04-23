@@ -1,5 +1,5 @@
 import Piece from "./Piece";
-import { PIECE_STAGE_MAX_LENGTH } from "../Constants";
+import { QUEUE_MAX_LENGTH } from "../Constants";
 import { generateCellType } from "./RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
@@ -7,24 +7,24 @@ import { generateCellType } from "./RandomGeneration";
 class PieceStage {
   constructor(props) {
     this.coreState = props.coreState;
-    this.maxLength = props.maxLength ? props.maxLength : PIECE_STAGE_MAX_LENGTH;
-    this.nextPieces = [];
-    this.palette = new Array(PIECE_STAGE_MAX_LENGTH).fill(null);
+    this.maxLength = props.maxLength ? props.maxLength : QUEUE_MAX_LENGTH;
+    this.queue = [];
+    this.palette = new Array(QUEUE_MAX_LENGTH).fill(null);
     this.locked = false;
 
     for (var i = 0; i < this.maxLength; i++) {
-      this.nextPieces.push(new Piece(generateCellType()));
+      this.queue.push(new Piece(generateCellType()));
     }
   }
 
   // To be called by CoreState when it needs another piece
   consumePiece() {
-    var piece = this.nextPieces.shift();
+    var piece = this.queue.shift();
     if (this.locked) {
-      this.nextPieces.unshift(piece);
+      this.queue.unshift(piece);
     } else {
-      if (this.nextPieces.length < this.maxLength) {
-        this.nextPieces.push(new Piece(generateCellType()));
+      if (this.queue.length < this.maxLength) {
+        this.queue.push(new Piece(generateCellType()));
       }
     }
     return piece;
@@ -33,14 +33,14 @@ class PieceStage {
   // To be called by CoreState when a piece is held
   holdPiece(piece, slotNumber) {
     if (this.palette[slotNumber] != null) {
-      this.nextPieces.unshift(this.palette[slotNumber]);
+      this.queue.unshift(this.palette[slotNumber]);
     }
     this.palette[slotNumber] = piece;
   }
 
   lock(piece) {
-    for (var i = 0; i < PIECE_STAGE_MAX_LENGTH; i++) {
-      this.nextPieces.unshift(piece.copyUnmounted());
+    for (var i = 0; i < QUEUE_MAX_LENGTH; i++) {
+      this.queue.unshift(piece.copyUnmounted());
     }
   }
 }

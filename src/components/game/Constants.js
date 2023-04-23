@@ -2,7 +2,7 @@ import { Color } from "./graphics/utils/Colors";
 
 // Real time/space parameters
 export const WINDOW_SIZE = 800;
-export const STAGE_WIDTH = 200;
+export const QUEUE_WIDTH = 200;
 export const REFRESH_MS = 10;
 
 // Board parameters
@@ -47,8 +47,8 @@ export const CELL_TYPE = {
 };
 
 // Stage variables
-export const PIECE_STAGE_MAX_LENGTH = 5;
-export const PIECE_STAGE_POWERUP_RARITY = 10;
+export const QUEUE_MAX_LENGTH = 5;
+export const POWERUP_RARITY = 10;
 
 export const TARGET_STAGE_MAX_LENGTH = 2;
 export const TARGET_GRACE_PERIOD = 0;
