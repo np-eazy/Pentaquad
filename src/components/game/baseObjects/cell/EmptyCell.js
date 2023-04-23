@@ -1,11 +1,8 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../Constants";
 
-import { drawRect, outlineRect } from "../../graphics/Pipeline";
-import {
-  EMPTY_COLOR,
-  MARKER_COLOR,
-} from "../../graphics/Theme";
+import { drawRect, drawRectOffset, outlineRect } from "../../graphics/Pipeline";
+import { EMPTY_COLOR, MARKER_COLOR } from "../../graphics/Theme";
 
 const METER_DECAY_RATE = 0.9;
 
@@ -41,14 +38,7 @@ class EmptyCell extends Cell {
     var [x, y] = super.getPosition(x0, y0);
     drawRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
     var d = ((1 - this.meter) * width) / 2;
-    drawRect(
-      canvas,
-      x + d,
-      y + d,
-      width - 2 * d,
-      height - 2 * d,
-      EMPTY_COLOR.getHex()
-    );
+    drawRectOffset(canvas, x, y, width, height, EMPTY_COLOR.getHex(), d);
     outlineRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
   }
 }

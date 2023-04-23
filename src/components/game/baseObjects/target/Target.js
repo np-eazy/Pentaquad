@@ -4,7 +4,11 @@ import DrillCell from "../../baseObjects/cell/DrillCell";
 import TowerCell from "../../baseObjects/cell/TowerCell";
 
 import { inBounds, randint } from "../../coreState/utils/Functions";
-import { drawRect, outlineRect } from "../../graphics/Pipeline";
+import {
+  drawRect,
+  outlineRect,
+  outlineRectOffset,
+} from "../../graphics/Pipeline";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../graphics/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt, sinusoid } from "../../graphics/utils/Functions";
@@ -219,6 +223,10 @@ class Target {
   // If the Target is holding onto a Cell with a special ability, the Target
   // is rendered with an animation matching the type of cell it is holding.
   renderPowerup(canvas, xCellSize, yCellSize) {
+    var [x, y] = [
+      BOARD_X0 + this.x0 * xCellSize,
+      BOARD_Y0 + this.y0 * yCellSize,
+    ];
     if (this.mainCell.type == CELL_TYPE.GHOST) {
       var borderColor = interpolateColor(
         EMPTY_COLOR,
@@ -226,54 +234,58 @@ class Target {
         sinusoid(POWERUP_WAVE, this.timer),
         linInt
       );
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + POWERUP_OFFSET,
-        BOARD_Y0 + this.y0 * yCellSize + POWERUP_OFFSET,
-        (this.x1 - this.x0) * xCellSize - 2 * POWERUP_OFFSET,
-        (this.y1 - this.y0) * yCellSize - 2 * POWERUP_OFFSET,
-        borderColor.getHex()
+        x,
+        y,
+        xCellSize,
+        yCellSize,
+        borderColor.getHex(),
+        POWERUP_OFFSET
       );
     } else if (this.mainCell.type == CELL_TYPE.BOMB) {
       var d = sinusoid(POWERUP_WAVE, this.timer);
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + d * POWERUP_OFFSET,
-        BOARD_Y0 + this.y0 * yCellSize + d * POWERUP_OFFSET,
-        (this.x1 - this.x0) * xCellSize - 2 * d * POWERUP_OFFSET,
-        (this.y1 - this.y0) * yCellSize - 2 * d * POWERUP_OFFSET,
-        FILLED_COLOR.getHex()
+        x,
+        y,
+        xCellSize,
+        yCellSize,
+        borderColor.getHex(),
+        d * POWERUP_OFFSET
       );
-      d *= 2;
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + d * POWERUP_OFFSET,
-        BOARD_Y0 + this.y0 * yCellSize + d * POWERUP_OFFSET,
-        (this.x1 - this.x0) * xCellSize - 2 * d * POWERUP_OFFSET,
-        (this.y1 - this.y0) * yCellSize - 2 * d * POWERUP_OFFSET,
-        FILLED_COLOR.getHex()
+        x,
+        y,
+        xCellSize,
+        yCellSize,
+        borderColor.getHex(),
+        2 * d * POWERUP_OFFSET
       );
     } else if (this.mainCell.type == CELL_TYPE.DRILL) {
       var width = (this.x1 - this.x0) * xCellSize;
       var innerLength = (((this.timer * CLOCK_FREQ) % 1) * width) / 2;
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + innerLength,
-        BOARD_Y0 + this.y0 * yCellSize + innerLength,
-        (this.x1 - this.x0) * xCellSize - 2 * innerLength,
-        (this.y1 - this.y0) * yCellSize - 2 * innerLength,
-        FILLED_COLOR.getHex()
+        x,
+        y,
+        xCellSize,
+        yCellSize,
+        FILLED_COLOR.getHex(),
+        innerLength
       );
     } else if (this.mainCell.type == CELL_TYPE.TOWER) {
       var width = (this.x1 - this.x0) * xCellSize;
       var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * width) / 2;
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + innerLength,
-        BOARD_Y0 + this.y0 * yCellSize + innerLength,
-        (this.x1 - this.x0) * xCellSize - 2 * innerLength,
-        (this.y1 - this.y0) * yCellSize - 2 * innerLength,
-        FILLED_COLOR.getHex()
+        x,
+        y,
+        xCellSize,
+        yCellSize,
+        FILLED_COLOR.getHex(),
+        innerLength
       );
     }
   }

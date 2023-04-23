@@ -1,7 +1,7 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../Constants";
 
-import { drawRect, outlineRect } from "../../graphics/Pipeline";
+import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../graphics/Pipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 import {
@@ -50,40 +50,21 @@ class GhostCell extends Cell {
       height,
       interpolateColor(this.currentColor, EMPTY_COLOR, g, linInt).getHex()
     );
-    drawRect(
-      canvas,
-      x + d,
-      y + d,
-      width - 2 * d,
-      height - 2 * d,
-      interpolateColor(
-        this.colorSuite.midLight,
-        EMPTY_COLOR,
-        g,
-        linInt
-      ).getHex()
-    );
-    drawRect(
-      canvas,
-      x + 2 * d,
-      y + 2 * d,
-      width - 4 * d,
-      height - 4 * d,
-      interpolateColor(
-        this.colorSuite.centerLight,
-        EMPTY_COLOR,
-        g,
-        linInt
-      ).getHex()
-    );
-    outlineRect(
-      canvas,
-      x + BORDER_OFFSET,
-      y + BORDER_OFFSET,
-      width - BORDER_OFFSET * 2,
-      height - BORDER_OFFSET * 2,
-      EMPTY_COLOR.getHex()
-    );
+    drawRectOffset(canvas, x, y, width, height, interpolateColor(
+      this.colorSuite.midLight,
+      EMPTY_COLOR,
+      g,
+      linInt
+    ).getHex(), d);
+
+    drawRectOffset(canvas, x, y, width, height, interpolateColor(
+      this.colorSuite.centerLight,
+      EMPTY_COLOR,
+      g,
+      linInt
+    ).getHex(), 2 * d);
+
+    outlineRectOffset(canvas, x, y, width, height, EMPTY_COLOR.getHex(), BORDER_OFFSET);
   }
 }
 

@@ -1,7 +1,7 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../Constants";
 
-import { outlineRect } from "../../graphics/Pipeline";
+import { outlineRect, outlineRectOffset } from "../../graphics/Pipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 import { LIGHT_AMPLITUDE, MARKER_COLOR } from "../../graphics/Theme";
@@ -43,29 +43,32 @@ class BombCell extends Cell {
     var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
     outlineRect(canvas, x, y, width, height, borderColor.getHex());
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + d,
-      y + d,
-      width - 2 * d,
-      height - 2 * d,
-      this.colorSuite.midLight.getHex()
+      x,
+      y,
+      width,
+      height,
+      this.colorSuite.midLight.getHex(),
+      d
     );
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + 2 * d,
-      y + 2 * d,
-      width - 4 * d,
-      height - 4 * d,
-      this.colorSuite.centerLight.getHex()
+      x,
+      y,
+      width,
+      height,
+      this.colorSuite.centerLight.getHex(),
+      2 * d
     );
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + 2,
-      y + 2,
-      width - 4,
-      height - 4,
-      borderColor.getHex()
+      x,
+      y,
+      width,
+      height,
+      borderColor.getHex(),
+      2
     );
   }
 }

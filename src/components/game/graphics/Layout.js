@@ -1,4 +1,4 @@
-import { drawRect, outlineRect } from "./Pipeline";
+import { drawRect, outlineRect, outlineRectOffset } from "./Pipeline";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "./Theme";
 
 // Layout.js is concerned with the "global" level of rendering, and managing
@@ -38,20 +38,6 @@ export const INNER_OFFSET = 4;
 
 export function drawBackground(canvas, x0, y0, width, height) {
   drawRect(canvas, x0, y0, width, height, EMPTY_COLOR.getHex());
-  outlineRect(
-    canvas,
-    x0 + OUTER_OFFSET,
-    y0 + OUTER_OFFSET,
-    width - OUTER_OFFSET * 2,
-    height - OUTER_OFFSET * 2,
-    FILLED_COLOR.getHex()
-  );
-  outlineRect(
-    canvas,
-    x0 + INNER_OFFSET,
-    y0 + INNER_OFFSET,
-    width - INNER_OFFSET * 2,
-    height - INNER_OFFSET * 2,
-    MARKER_COLOR.getHex()
-  );
+  outlineRectOffset(canvas, x0, y0, width, height, FILLED_COLOR.getHex(), OUTER_OFFSET);
+  outlineRectOffset(canvas, x0, y0, width, height, MARKER_COLOR.getHex(), INNER_OFFSET);
 }

@@ -1,7 +1,7 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../Constants";
 
-import { outlineRect } from "../../graphics/Pipeline";
+import { outlineRectOffset } from "../../graphics/Pipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 import { BORDER_OFFSET, EMPTY_COLOR, MARKER_COLOR } from "../../graphics/Theme";
@@ -36,13 +36,14 @@ class DrillCell extends Cell {
       1 - this.meter,
       linInt
     );
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + BORDER_OFFSET,
-      y + BORDER_OFFSET,
-      width - BORDER_OFFSET * 2,
-      height - BORDER_OFFSET * 2,
-      borderColor.getHex()
+      x,
+      y,
+      width,
+      height,
+      borderColor.getHex(),
+      BORDER_OFFSET
     );
 
     var clock = (this.timer * CLOCK_FREQ) % 1;
@@ -53,13 +54,14 @@ class DrillCell extends Cell {
       clock,
       linInt
     );
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + innerLength,
-      y + innerLength,
-      width - innerLength * 2,
-      height - innerLength * 2,
-      innerColor.getHex()
+      x,
+      y,
+      width,
+      height,
+      innerColor.getHex(),
+      innerLength
     );
   }
 }

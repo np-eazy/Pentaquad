@@ -1,7 +1,7 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../Constants";
 
-import { drawRect, outlineRect } from "../../graphics/Pipeline";
+import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../graphics/Pipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 import {
@@ -50,30 +50,9 @@ class NormalCell extends Cell {
       var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
       drawRect(canvas, x, y, width, height, this.currentColor.getHex());
-      drawRect(
-        canvas,
-        x + d,
-        y + d,
-        width - 2 * d,
-        height - 2 * d,
-        this.colorSuite.midLight.getHex()
-      );
-      drawRect(
-        canvas,
-        x + 2 * d,
-        y + 2 * d,
-        width - 4 * d,
-        height - 4 * d,
-        this.colorSuite.centerLight.getHex()
-      );
-      outlineRect(
-        canvas,
-        x + BORDER_OFFSET,
-        y + BORDER_OFFSET,
-        width - BORDER_OFFSET * 2,
-        height - BORDER_OFFSET * 2,
-        borderColor.getHex()
-      );
+      drawRectOffset(canvas, x, y, width, height, this.colorSuite.midLight.getHex(), d);
+      drawRectOffset(canvas, x, y, width, height, this.colorSuite.centerLight.getHex(), 2 * d);
+      outlineRectOffset(canvas, x, y, width, height, borderColor.getHex(), BORDER_OFFSET);
     }
   }
 }

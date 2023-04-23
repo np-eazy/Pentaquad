@@ -17,3 +17,16 @@ export function outlineRect(canvas, x, y, xSize, ySize, color) {
   canvas.strokeRect(x, y, xSize, ySize);
   canvas.closePath();
 }
+
+export function drawRectOffset(canvas, x, y, xSize, ySize, color, offset) {
+  canvas.fillStyle = color;
+  canvas.fillRect(x + offset, y + offset, xSize - 2 * offset, ySize - 2 * offset);
+}
+
+
+export function outlineRectOffset(canvas, x, y, xSize, ySize, color, offset) {
+  canvas.strokeStyle = color;
+  canvas.beginPath();
+  canvas.strokeRect(x + offset, y + offset, xSize - 2 * offset, ySize - 2 * offset);
+  canvas.closePath();
+}
