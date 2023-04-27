@@ -13,7 +13,9 @@ const GameState = class {
     this.coreState = props.coreState;
     this.controller = props.controller;
     this.coreState.controller = this.controller;
-    this.ticksToMove = props.ticksToMove ? props.ticksToMove : FALLING_COUNTDOWN;
+    this.ticksToMove = props.ticksToMove
+      ? props.ticksToMove
+      : FALLING_COUNTDOWN;
     this.ticks = 0;
     this.isRunning = true;
     this.delayTimer = 0;

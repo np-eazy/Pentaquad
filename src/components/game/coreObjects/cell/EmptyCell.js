@@ -1,7 +1,11 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../rules/Constants";
 
-import { drawRect, drawRectOffset, outlineRect } from "../../graphics/CanvasPipeline";
+import {
+  drawRect,
+  drawRectOffset,
+  outlineRect,
+} from "../../graphics/CanvasPipeline";
 import { EMPTY_COLOR, MARKER_COLOR } from "../../theme/Theme";
 
 const METER_DECAY_RATE = 0.9;

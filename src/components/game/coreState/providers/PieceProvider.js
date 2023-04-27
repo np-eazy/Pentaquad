@@ -1,6 +1,6 @@
 import Piece from "../../coreObjects/Piece";
 import { QUEUE_MAX_LENGTH } from "../../rules/Constants";
-import { generateCellType } from "../RandomGeneration";
+import { generateCellType } from "../../rules/RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.

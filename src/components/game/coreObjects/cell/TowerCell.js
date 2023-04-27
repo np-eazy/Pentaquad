@@ -1,12 +1,13 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../rules/Constants";
-import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../graphics/CanvasPipeline";
-
 import {
-  EMPTY_COLOR,
-  LIGHT_AMPLITUDE,
-  BORDER_OFFSET,
-} from "../../theme/Theme";
+  drawRect,
+  drawRectOffset,
+  outlineRect,
+  outlineRectOffset,
+} from "../../graphics/CanvasPipeline";
+
+import { EMPTY_COLOR, LIGHT_AMPLITUDE, BORDER_OFFSET } from "../../theme/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 
@@ -48,23 +49,54 @@ class TowerCell extends Cell {
         height,
         interpolateColor(this.currentColor, EMPTY_COLOR, g, linInt).getHex()
       );
-      drawRectOffset(canvas, x, y, width, height,         interpolateColor(
-        this.colorSuite.shade2H,
-        EMPTY_COLOR,
-        g,
-        linInt
-      ).getHex(), d);
-      drawRectOffset(canvas, x, y, width, height,         interpolateColor(
-        this.colorSuite.shade4H,
-        EMPTY_COLOR,
-        g,
-        linInt
-      ).getHex(), 2 * d);
-      outlineRectOffset(canvas, x, y, width, height, EMPTY_COLOR.getHex(), BORDER_OFFSET);
-
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        interpolateColor(
+          this.colorSuite.shade2H,
+          EMPTY_COLOR,
+          g,
+          linInt
+        ).getHex(),
+        d
+      );
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        interpolateColor(
+          this.colorSuite.shade4H,
+          EMPTY_COLOR,
+          g,
+          linInt
+        ).getHex(),
+        2 * d
+      );
+      outlineRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        EMPTY_COLOR.getHex(),
+        BORDER_OFFSET
+      );
 
       var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * width) / 2;
-      outlineRectOffset(canvas, x, y, width, height, this.colorSuite.shade4H.getHex(), innerLength);
+      outlineRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        this.colorSuite.shade4H.getHex(),
+        innerLength
+      );
     }
   }
 }

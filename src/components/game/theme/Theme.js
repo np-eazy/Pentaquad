@@ -45,7 +45,6 @@ export const BASE_COLORS = [
   new Color({ red: 255, green: 255, blue: 255 }),
 ];
 
-
 // The amount by which to blend the BaseColor with FILLED_COLOR to
 // make the CurrentColor; this allows for more flexibility with BaseColors
 // as they are all interpolated towards a common color.

@@ -4,7 +4,7 @@ import {
   TARGET_SPAWN_TIMER,
   TARGET_SPAWN_RADIUS,
 } from "../../rules/Constants";
-import { generateRandomTarget } from "../RandomGeneration";
+import { generateRandomTarget } from "../../rules/RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.

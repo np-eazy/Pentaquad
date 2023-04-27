@@ -50,7 +50,10 @@ const GameGraphics = (props) => {
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.
     if (DEBUG) {
-      var [x, y] = gameState.controller.getCursorCoords(BOARD_HEIGHT, BOARD_SIZE);
+      var [x, y] = gameState.controller.getCursorCoords(
+        BOARD_HEIGHT,
+        BOARD_SIZE
+      );
       if (inBounds(x, y, board.length)) {
         debugCell(canvas, board[y][x], SCORESHEET_X0, SCORESHEET_Y0, x, y);
       }

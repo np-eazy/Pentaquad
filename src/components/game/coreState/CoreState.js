@@ -2,7 +2,8 @@ import BoundarySets from "./utils/BoundarySets";
 import PieceProvider from "./providers/PieceProvider";
 import TargetProvider from "./providers/TargetProvider";
 
-import { ActionType,   
+import {
+  ActionType,
   executeDrop,
   executeFlip,
   executeHold,
@@ -10,20 +11,16 @@ import { ActionType,
   executeMove,
   executeMoveTo,
   executePlace,
-  executeRotate, } from "../control/GameAction";
+  executeRotate,
+} from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
 import { handleClearedLines } from "./utils/ClearedLines";
 import { handleClearedTargets } from "./utils/ClearedTargets";
 import { getSpawnPosition } from "./utils/Functions";
 
-import {
-  cellPlacementUpdate,
-  place,
-} from "./Placement";
+import { cellPlacementUpdate, place } from "./Placement";
 
-import {
-  BOUNDARY_EXTENSION_SIZE
-} from "./utils/Params";
+import { BOUNDARY_EXTENSION_SIZE } from "./utils/Params";
 import {
   TARGET_SPAWN_MARGIN,
   PLACEMENT_COUNTDOWN,
@@ -31,7 +28,6 @@ import {
 } from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
-
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -155,7 +151,7 @@ const CoreState = class {
     return this; // CoreState.update() returns itself
   }
 
-  // Attempt to perform the next action if dispensed by the game controller, and update the 
+  // Attempt to perform the next action if dispensed by the game controller, and update the
   // collision timer.
   idleUpdate() {
     this.performNextAction();
@@ -173,7 +169,7 @@ const CoreState = class {
       }
     } else {
       this.collisionTimer = 0;
-    }    
+    }
   }
 
   // Move the block down in its falling direction

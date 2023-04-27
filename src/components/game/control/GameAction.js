@@ -1,13 +1,10 @@
 import { Angle, Dxn } from "../coreState/utils/Direction";
-import {
-  placeTower
-} from "../coreState/Placement";
+import { placeTower } from "../coreState/Placement";
 import {
   PLACEMENT_COUNTDOWN,
   ROTATION_ADJUSTMENT_SIZE,
   CELL_TYPE,
 } from "../rules/Constants";
-
 
 // Different types of GameAction, with each different type telling us how the action props should be handled.
 export const ActionType = {
@@ -28,7 +25,6 @@ export class GameAction {
     this.props = props;
   }
 }
-
 
 // Effectively an addendum to CoreState class since it got way too large. The following
 // are all the actions that a user is capable of triggering in the CoreState.

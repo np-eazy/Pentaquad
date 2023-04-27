@@ -1,6 +1,6 @@
 import {
   drawBackground,
-   QUEUE_CELL_DIMENSIONS,
+  QUEUE_CELL_DIMENSIONS,
   PALETTE_X0,
   PALETTE_Y0,
   PALETTE_WIDTH,

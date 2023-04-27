@@ -3,11 +3,7 @@ import NormalCell from "../coreObjects/cell/NormalCell";
 import { callOnDropzone } from "./utils/Dropzone";
 import { inBounds } from "./utils/Functions";
 
-import {
-  BOMB_RADIUS,
-  CELL_TYPE,
-} from "../rules/Constants";
-
+import { BOMB_RADIUS, CELL_TYPE } from "../rules/Constants";
 
 // increment times to live for each cell before converting to empty cell
 export function cellPlacementUpdate(coreState) {
@@ -67,7 +63,7 @@ export function placeBomb(coreState, piece) {
       x < Math.min(coreState.boardSize, piece.cx + BOMB_RADIUS + 1);
       x++
     ) {
-        coreState.board[y][x] = coreState.emptyCellProvider.newCell();
+      coreState.board[y][x] = coreState.emptyCellProvider.newCell();
     }
   }
 }
@@ -94,7 +90,7 @@ export function placeTower(coreState, piece) {
     piece,
     coreState.gravity,
     (x, y) => {
-        coreState.board[y][x] = piece.createCell();
+      coreState.board[y][x] = piece.createCell();
       coreState.board[y][x].getAttributesFrom(piece.mainCell);
       coreState.board[y][x].lightColor.add(piece.mainCell.baseColor);
     },

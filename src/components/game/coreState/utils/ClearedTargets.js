@@ -18,8 +18,7 @@ export const handleClearedTargets = (coreState) => {
       target.clear(board, coreState.emptyCellProvider);
       if (target.mainCell) {
         var i = 0;
-        while (i < queue.length &&
-          queue[i].mainCell.type != CELL_TYPE.NORMAL) {
+        while (i < queue.length && queue[i].mainCell.type != CELL_TYPE.NORMAL) {
           i += 1;
         }
         if (i < queue.length) {

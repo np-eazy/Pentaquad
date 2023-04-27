@@ -1,14 +1,15 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../rules/Constants";
 
-import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../graphics/CanvasPipeline";
+import {
+  drawRect,
+  drawRectOffset,
+  outlineRect,
+  outlineRectOffset,
+} from "../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
-import {
-  BORDER_OFFSET,
-  EMPTY_COLOR,
-  LIGHT_AMPLITUDE,
-} from "../../theme/Theme";
+import { BORDER_OFFSET, EMPTY_COLOR, LIGHT_AMPLITUDE } from "../../theme/Theme";
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;
@@ -50,21 +51,45 @@ class GhostCell extends Cell {
       height,
       interpolateColor(this.currentColor, EMPTY_COLOR, g, linInt).getHex()
     );
-    drawRectOffset(canvas, x, y, width, height, interpolateColor(
-      this.colorSuite.shade2H,
-      EMPTY_COLOR,
-      g,
-      linInt
-    ).getHex(), d);
+    drawRectOffset(
+      canvas,
+      x,
+      y,
+      width,
+      height,
+      interpolateColor(
+        this.colorSuite.shade2H,
+        EMPTY_COLOR,
+        g,
+        linInt
+      ).getHex(),
+      d
+    );
 
-    drawRectOffset(canvas, x, y, width, height, interpolateColor(
-      this.colorSuite.shade4H,
-      EMPTY_COLOR,
-      g,
-      linInt
-    ).getHex(), 2 * d);
+    drawRectOffset(
+      canvas,
+      x,
+      y,
+      width,
+      height,
+      interpolateColor(
+        this.colorSuite.shade4H,
+        EMPTY_COLOR,
+        g,
+        linInt
+      ).getHex(),
+      2 * d
+    );
 
-    outlineRectOffset(canvas, x, y, width, height, EMPTY_COLOR.getHex(), BORDER_OFFSET);
+    outlineRectOffset(
+      canvas,
+      x,
+      y,
+      width,
+      height,
+      EMPTY_COLOR.getHex(),
+      BORDER_OFFSET
+    );
   }
 }
 

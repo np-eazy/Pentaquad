@@ -92,5 +92,3 @@ export const handleClearedLines = (coreState) => {
   }
   scorekeeper.scoreFilledLines(linesCleared);
 };
-
-

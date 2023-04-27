@@ -2,14 +2,13 @@ import EmptyCell from "../../coreObjects/cell/EmptyCell";
 
 // A class tasked with providing new empty cells
 export class EmptyCellProvider {
-    constructor() {
-    }
+  constructor() {}
 
-    generateCell() {
-        return new EmptyCell();
-    }
+  generateCell() {
+    return new EmptyCell();
+  }
 
-    newCell() {
-        return this.generateCell();
-    }
+  newCell() {
+    return this.generateCell();
+  }
 }

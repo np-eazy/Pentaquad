@@ -38,6 +38,22 @@ export const INNER_OFFSET = 4;
 
 export function drawBackground(canvas, x0, y0, width, height) {
   drawRect(canvas, x0, y0, width, height, EMPTY_COLOR.getHex());
-  outlineRectOffset(canvas, x0, y0, width, height, FILLED_COLOR.getHex(), OUTER_OFFSET);
-  outlineRectOffset(canvas, x0, y0, width, height, MARKER_COLOR.getHex(), INNER_OFFSET);
+  outlineRectOffset(
+    canvas,
+    x0,
+    y0,
+    width,
+    height,
+    FILLED_COLOR.getHex(),
+    OUTER_OFFSET
+  );
+  outlineRectOffset(
+    canvas,
+    x0,
+    y0,
+    width,
+    height,
+    MARKER_COLOR.getHex(),
+    INNER_OFFSET
+  );
 }

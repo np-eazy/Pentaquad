@@ -94,7 +94,10 @@ class GameController {
       return action;
     } else {
       if (this.toggleMoveTo) {
-        var [x_, y_] = this.getCursorCoords(this.windowDimensions, this.boardSize);
+        var [x_, y_] = this.getCursorCoords(
+          this.windowDimensions,
+          this.boardSize
+        );
         this.actionQueue.push(
           new GameAction(ActionType.MOVE_TO, { x: x_, y: y_ })
         );

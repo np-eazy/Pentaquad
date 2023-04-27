@@ -20,13 +20,22 @@ export function outlineRect(canvas, x, y, width, height, color) {
 
 export function drawRectOffset(canvas, x, y, width, height, color, offset) {
   canvas.fillStyle = color;
-  canvas.fillRect(x + offset, y + offset, width - 2 * offset, height - 2 * offset);
+  canvas.fillRect(
+    x + offset,
+    y + offset,
+    width - 2 * offset,
+    height - 2 * offset
+  );
 }
-
 
 export function outlineRectOffset(canvas, x, y, width, height, color, offset) {
   canvas.strokeStyle = color;
   canvas.beginPath();
-  canvas.strokeRect(x + offset, y + offset, width - 2 * offset, height - 2 * offset);
+  canvas.strokeRect(
+    x + offset,
+    y + offset,
+    width - 2 * offset,
+    height - 2 * offset
+  );
   canvas.closePath();
 }

@@ -24,14 +24,9 @@ export const TARGET_SPAWN_TIMER = 4;
 export const TARGET_GROWTH_TIMER = 6;
 export const TARGET_SPAWN_MARGIN = 4;
 
-
 export const NORMAL_CELL_LIFETIME = 8;
 export const BOMB_RADIUS = 2;
 export const ROTATION_ADJUSTMENT_SIZE = 2;
-
-
-
-
 
 export const CELL_TYPE = {
   EMPTY: 0,
@@ -41,10 +36,6 @@ export const CELL_TYPE = {
   DRILL: 4,
   TOWER: 5,
 };
-
-
-
-
 
 // 5-long piece preset
 export const I_PIECE = [

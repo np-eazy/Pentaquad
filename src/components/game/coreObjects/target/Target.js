@@ -14,7 +14,7 @@ import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt, sinusoid } from "../../graphics/utils/Functions";
 import { BOARD_X0, BOARD_Y0 } from "../../graphics/Layout";
 import { CELL_TYPE } from "../../rules/Constants";
-import { generatePowerupCellType } from "../../coreState/RandomGeneration";
+import { generatePowerupCellType } from "../../rules/RandomGeneration";
 
 const BORDER_COLOR = FILLED_COLOR;
 const WARNING_BORDER_SIZE = 4;
@@ -230,7 +230,7 @@ class Target {
     var [targetWidth, targetHeight] = [
       cellWidth * (this.x1 - this.x0),
       cellHeight * (this.y1 - this.y0),
-    ]
+    ];
 
     var borderColor = interpolateColor(
       EMPTY_COLOR,
@@ -280,7 +280,8 @@ class Target {
         innerLength
       );
     } else if (this.mainCell.type == CELL_TYPE.TOWER) {
-      var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * targetWidth) / 2;
+      var innerLength =
+        ((1 - ((this.timer * CLOCK_FREQ) % 1)) * targetWidth) / 2;
       outlineRectOffset(
         canvas,
         x,

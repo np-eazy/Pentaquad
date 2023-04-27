@@ -61,15 +61,7 @@ class BombCell extends Cell {
       this.colorSuite.shade4H.getHex(),
       2 * d
     );
-    outlineRectOffset(
-      canvas,
-      x,
-      y,
-      width,
-      height,
-      borderColor.getHex(),
-      2
-    );
+    outlineRectOffset(canvas, x, y, width, height, borderColor.getHex(), 2);
   }
 }
 
