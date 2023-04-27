@@ -227,19 +227,24 @@ class Target {
       BOARD_X0 + this.x0 * xCellSize,
       BOARD_Y0 + this.y0 * yCellSize,
     ];
+    var [xSize, ySize] = [
+      xCellSize * (this.x1 - this.x0),
+      yCellSize * (this.y1 - this.y0),
+    ]
+
+    var borderColor = interpolateColor(
+      EMPTY_COLOR,
+      FILLED_COLOR,
+      sinusoid(POWERUP_WAVE, this.timer),
+      linInt
+    );
     if (this.mainCell.type == CELL_TYPE.GHOST) {
-      var borderColor = interpolateColor(
-        EMPTY_COLOR,
-        FILLED_COLOR,
-        sinusoid(POWERUP_WAVE, this.timer),
-        linInt
-      );
       outlineRectOffset(
         canvas,
         x,
         y,
-        xCellSize,
-        yCellSize,
+        xSize,
+        ySize,
         borderColor.getHex(),
         POWERUP_OFFSET
       );
@@ -249,8 +254,8 @@ class Target {
         canvas,
         x,
         y,
-        xCellSize,
-        yCellSize,
+        xSize,
+        ySize,
         borderColor.getHex(),
         d * POWERUP_OFFSET
       );
@@ -258,32 +263,30 @@ class Target {
         canvas,
         x,
         y,
-        xCellSize,
-        yCellSize,
+        xSize,
+        ySize,
         borderColor.getHex(),
         2 * d * POWERUP_OFFSET
       );
     } else if (this.mainCell.type == CELL_TYPE.DRILL) {
-      var width = (this.x1 - this.x0) * xCellSize;
-      var innerLength = (((this.timer * CLOCK_FREQ) % 1) * width) / 2;
+      var innerLength = (((this.timer * CLOCK_FREQ) % 1) * xSize) / 2;
       outlineRectOffset(
         canvas,
         x,
         y,
-        xCellSize,
-        yCellSize,
+        xSize,
+        ySize,
         FILLED_COLOR.getHex(),
         innerLength
       );
     } else if (this.mainCell.type == CELL_TYPE.TOWER) {
-      var width = (this.x1 - this.x0) * xCellSize;
-      var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * width) / 2;
+      var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * xSize) / 2;
       outlineRectOffset(
         canvas,
         x,
         y,
-        xCellSize,
-        yCellSize,
+        xSize,
+        ySize,
         FILLED_COLOR.getHex(),
         innerLength
       );

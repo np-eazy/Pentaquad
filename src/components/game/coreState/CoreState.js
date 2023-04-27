@@ -1,6 +1,6 @@
 import EmptyCell from "../baseObjects/cell/EmptyCell";
 import NormalCell from "../baseObjects/cell/NormalCell";
-import BoundarySets from "./BoundarySets";
+import BoundarySets from "./utils/BoundarySets";
 import PieceStage from "./PieceStage";
 import TargetStage from "./TargetStage";
 
