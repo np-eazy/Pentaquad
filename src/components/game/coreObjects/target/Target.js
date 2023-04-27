@@ -3,9 +3,8 @@ import BombCell from "../cell/BombCell";
 import DrillCell from "../cell/DrillCell";
 import TowerCell from "../cell/TowerCell";
 
-import { inBounds, randint } from "../../coreState/utils/Functions";
+import { inBounds } from "../../coreState/utils/Functions";
 import {
-  drawRect,
   outlineRect,
   outlineRectOffset,
 } from "../../graphics/CanvasPipeline";
