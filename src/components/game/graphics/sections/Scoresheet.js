@@ -30,16 +30,24 @@ export const renderScoresheet = (canvas, scorekeeper) => {
   canvas.fillStyle = FILLED_COLOR.getHex();
 
   canvas.fillText(
-    "Score: " + scorekeeper.score,
+    "Level: " + scorekeeper.level,
     SCORESHEET_X0 + SCORE_FONT_XOFFSET,
     SCORESHEET_Y0 + SCORE_FONT_SIZE + SCORE_FONT_YSPACE
   );
 
   canvas.fillText(
-    "Strikes: " + scorekeeper.strikes,
+    "Score: " + scorekeeper.score,
     SCORESHEET_X0 + SCORE_FONT_XOFFSET,
     SCORESHEET_Y0 + SCORE_FONT_SIZE * 2 + SCORE_FONT_YSPACE
   );
+
+  canvas.fillText(
+    "Strikes: " + scorekeeper.strikes,
+    SCORESHEET_X0 + SCORE_FONT_XOFFSET,
+    SCORESHEET_Y0 + SCORE_FONT_SIZE * 3 + SCORE_FONT_YSPACE
+  );
+
+  
 };
 
 export const updateScoresheet = (scoresheet) => {};

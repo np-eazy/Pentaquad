@@ -1,3 +1,5 @@
+import { LEVEL_SCORE_THRESHOLDS, MAX_LEVELS } from "../rules/Levels";
+
 const MAX_STRIKES = 3;
 
 const BASE_LINE_SCORE = 100;
@@ -11,7 +13,15 @@ const Scorekeeper = class {
     this.lineCombo = 1;
     this.targetCombo = 1;
     this.strikes = 0;
+    this.level = 1;
     this.gameOver = false;
+  }
+
+  // Check for level update thresholds
+  levelUpdate() {
+    if (this.level < MAX_LEVELS && this.score > LEVEL_SCORE_THRESHOLDS[this.level - 1]) {
+      this.level += 1;
+    }
   }
 
   // Add a score for the last cell placed, based on how far it was dropped.
@@ -33,6 +43,7 @@ const Scorekeeper = class {
     } else {
       this.targetCombo += targetsCleared;
     }
+    this.levelUpdate();
   }
 
   // Add a score for all filled lines in this advancement, which increases quadratically
@@ -50,6 +61,7 @@ const Scorekeeper = class {
     } else {
       this.lineCombo += linesCleared;
     }
+    this.levelUpdate();
   }
 
   // Keep log of strikes that would cause the game to be lost.

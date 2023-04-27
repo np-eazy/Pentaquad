@@ -180,7 +180,6 @@ const CoreState = class {
   // Move the block down in its falling direction
   active() {
     this.currPiece.move(this.gravity);
-    this.updateCollisionTimer();
   }
 
   // Place the current piece, create a new one, and check for new filled lines.
@@ -198,7 +197,6 @@ const CoreState = class {
     // Create new game objects
     this.createNewPiece();
     this.createNewTarget();
-    this.updateCollisionTimer();
   }
 
   // increment times to live for each cell before converting to empty cell
