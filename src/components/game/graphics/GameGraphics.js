@@ -8,8 +8,8 @@ import { renderPalette, updatePalette } from "./sections/Palette";
 import {
   BOARD_HEIGHT,
   BOARD_WIDTH,
-  SCORESHEET_X0,
-  SCORESHEET_Y0,
+  BOARD_X0,
+  BOARD_Y0,
   TOTAL_HEIGHT,
   TOTAL_WIDTH,
 } from "./Layout";
@@ -52,7 +52,7 @@ const GameGraphics = (props) => {
         BOARD_SIZE
       );
       if (inBounds(x, y, board.length)) {
-        debugCell(canvas, board[y][x], SCORESHEET_X0, SCORESHEET_Y0, x, y);
+        debugCell(canvas, board[y][x], BOARD_X0, BOARD_Y0, x, y);
       }
     }
   }

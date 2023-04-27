@@ -41,6 +41,14 @@ const GameCanvas = (props) => {
   const handleMouseDown = (event) => {
     gameController.handleMouseDown(event);
   };
+
+  const togglePauseGame = (e) => {
+    gameState.togglePause();
+  };
+  const startNewGame = (e) => {
+    gameState.startOver();
+  }
+
   // Disable spacebar scrolling down
   window.onkeydown = function (e) {
     return e.keyCode !== 32 && e.key !== " ";
@@ -68,7 +76,7 @@ const GameCanvas = (props) => {
       <canvas id="gameGraphics" width={TOTAL_WIDTH} height={TOTAL_HEIGHT}>
         <GameGraphics gameState={gameState} />
       </canvas>
-      <Scoresheet gameState={gameState}/>
+      <Scoresheet gameState={gameState} togglePauseGame={togglePauseGame} startNewGame={startNewGame}/>
     </div>
   );
 };

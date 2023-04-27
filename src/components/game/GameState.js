@@ -1,6 +1,6 @@
+import CoreState from "./coreState/CoreState";
 import { callOnDropzone } from "./coreState/utils/Dropzone";
-import { FALLING_COUNTDOWN, CELL_TYPE } from "./rules/Constants";
-import { FALLING_COUNTDOWN_LVL } from "./rules/Levels";
+import { FALLING_COUNTDOWN, CELL_TYPE, BOARD_SIZE } from "./rules/Constants";
 
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,
@@ -14,16 +14,27 @@ const GameState = class {
     this.coreState = props.coreState;
     this.controller = props.controller;
     this.coreState.controller = this.controller;
-    this.ticksToMove = props.ticksToMove
-      ? props.ticksToMove
-      : FALLING_COUNTDOWN;
+    this.ticks = 0;
+    this.isRunning = true;
+    this.delayTimer = 0;
+  }
+
+  togglePause() {
+    this.isRunning = !this.isRunning;
+  }
+
+  startOver() {
+    this.coreState = new CoreState({
+      boardSize: BOARD_SIZE,
+    });
+    this.coreState.controller = this.controller;
     this.ticks = 0;
     this.isRunning = true;
     this.delayTimer = 0;
   }
 
   update() {
-    if (this.isRunning && this.delayTimer <= 0) {
+    if (this.isRunning && this.delayTimer <= 0 && !this.coreState.scorekeeper.gameOver) {
       // Update core logic
       this.coreState.update();
       this.ticks += 1;

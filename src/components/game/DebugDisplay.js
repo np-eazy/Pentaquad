@@ -1,6 +1,6 @@
 import { FILLED_COLOR } from "./theme/Theme";
 
-export const DEBUG = false;
+export const DEBUG = true;
 export const MESSAGE_FONTSIZE = 24;
 export const MESSAGE_OFFSET = 10;
 export const CHARS_PER_LINE = 60;
@@ -72,4 +72,8 @@ export function debugCell(canvas, cell, x0, y0, boardX, boardY) {
     x0 + MESSAGE_OFFSET,
     y0 + MESSAGE_FONTSIZE * 10
   );
+}
+
+export const DebugDisplay = (props) => {
+  
 }
