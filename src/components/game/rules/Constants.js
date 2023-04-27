@@ -1,6 +1,4 @@
-import { Color } from "../graphics/utils/Colors";
 import { BOARD_WIDTH } from "../graphics/Layout";
-import { QUEUE_WIDTH } from "../graphics/Layout";
 
 // Real time/space parameters
 export const WINDOW_DIMENSIONS = BOARD_WIDTH;

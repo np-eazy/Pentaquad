@@ -2,8 +2,8 @@ import {
   TARGET_PROVIDER_MAX_LENGTH,
   TARGET_GRACE_PERIOD,
   TARGET_SPAWN_TIMER,
-  TARGET_SPAWN_RADIUS,
 } from "../../rules/Constants";
+import { TARGET_SPAWN_RADIUS_LVL } from "../../rules/Levels";
 import { generateRandomTarget } from "../../rules/RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
@@ -37,7 +37,7 @@ class TargetProvider {
             this.coreState,
             this.minBound,
             this.maxBound,
-            TARGET_SPAWN_RADIUS
+            TARGET_SPAWN_RADIUS_LVL[this.coreState.scorekeeper.level]
           )
         );
       }

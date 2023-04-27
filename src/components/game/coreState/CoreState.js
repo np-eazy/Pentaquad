@@ -28,6 +28,7 @@ import {
 } from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
+import { NORMAL_CELL_LIFETIME_LVL, FALLING_COUNTDOWN_LVL } from "../rules/Levels";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -64,7 +65,6 @@ const CoreState = class {
       this.pidSize
     );
 
-    this.ticksToMove = FALLING_COUNTDOWN;
     this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
     this.currPiece = null; // The GameState's current unplaced piece
     this.targets = []; // The GameState's roster of target blocks
@@ -115,13 +115,14 @@ const CoreState = class {
     // doesn't arrive in time
     var piece;
     while (!piece) {
-      piece = this.pieceProvider.consumePiece();
+      piece = this.pieceProvider.consumePiece(this.scorekeeper.level);
     }
     piece.activatePiece({
       center_x: x,
       center_y: y,
       direction: this.gravity,
       pidSize: this.pidSize,
+      ttl: NORMAL_CELL_LIFETIME_LVL[this.scorekeeper.level],
     });
     this.currPiece = piece;
   }
@@ -138,7 +139,7 @@ const CoreState = class {
   // several frames to actually move the block downwards, and that calls other
   // updates in Cells. Corresponds to idleUpdate and fallingUpdate in Cell and Target classes
   update() {
-    if (this.timer % this.ticksToMove == 0) {
+    if (this.timer % FALLING_COUNTDOWN_LVL[this.scorekeeper.level] == 0) {
       if (this.readyToPlace) {
         this.placementUpdate();
       } else if (this.currPiece && this.collisionTimer == 0) {
@@ -175,7 +176,6 @@ const CoreState = class {
   // Move the block down in its falling direction
   fallingUpdate() {
     this.currPiece.move(this.gravity);
-    this.updateCollisionTimer();
   }
 
   // Place the current piece, create a new one, and check for new filled lines.
@@ -193,7 +193,6 @@ const CoreState = class {
     // Create new game objects
     this.createNewPiece();
     this.createNewTarget();
-    this.updateCollisionTimer();
   }
 };
 
