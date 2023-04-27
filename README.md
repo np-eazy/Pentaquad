@@ -1,28 +1,40 @@
 Pentaquad is a web game of a more complex Tetris variant, which features different gravity modes and objectives for clearing
 specific targets rather than filled lines in the original game.
 
-Start game: like any other React App(); npm run start and open localhost:3000
+## To download/start the game:
+- Clone this Github repository to your local drive
+- `$ cd` into the Pentaquad folder and run `$ npm start`
+- A new Chrome window should pop up with the game running. 
 
-Controls
+## Game Rules (Alpha)
+- The game drops pieces in alternating downwards and rightwards direction.
+- Placed blocks will expire after a certain time.
+- Filled lines are cleared as they are in Tetris.
+- As the game progresses, targets will spawn in random areas around the board. 
+- When a target is filled, it destroys an area slightly larger than itself, and may grant a power-up to the next normal piece in the queue.
+- They must be filled before they expire, otherwise the player gets a strike.
+- When the player gets three strikes, the game ends.
+
+### Special Piece Types
+- Ghost: marked by solid blocks with slowly flashing colors. A ghost piece can pas through previously placed pieces
+- Bomb: marked by hollow blocks with an oscillating double border. A bomb pieces destroys a 5x5 area around it when placed.
+- Drill: marked by hollow blocks with a border continually shrinking inwards. A drill piece destroys every placed block in its path when dropped.
+- Tower: marked by solid blocks with quickly flashing colors and a border continually growing outwards. A tower piece when dropped fills the entire area under it.
+
+### Controls
+- Space: drop the current piece towards its boundary
 - Click: Toggle whether or not the piece follows the cursor position
+- F: flip the piece 
+- R: rotate the piece
+- C: "lock" the current piece for another 5 moves.
+- Numkeys 1-5: Hold the current piece in the corresponding slot on the inventory
+
+- If piece following cursor is not on:
 - W: move piece up
 - A: move piece left
 - S: move piece down
 - D: move piece right
 - For WASD controls, if going in the opposite direction of the falling direction, the piece rotates right instead.
-
-- Space: drop the current piece towards its boundary
-- Q: rotate piece left 
-- E: rotate piece right
-- F: flip the piece 
-- R: place the piece in mid-air
-- C: hold the current piece, if a piece is already held then swap that one in. A block must be placed before this can happen again
-
-Game Rules 
-- Basically Tetris, but pieces are 5 blocks large and alternate by falling down or to the right. This makes for more complex thinking/structures than the original game, with room for more interesting objectives.
-- A row or column can be fully cleared if it is fully filled, but it will only clear if it is perpendicular to the current gravity.
-- Overtime, target blocks spawn starting from a 2x2 size. Target blocks need to be filled quickly, otherwise they will grow larger.
-- Once a target block covers the whole board, the game is over. As of now, GameOver is not implemented since the current version is mostly a demo of mechanisms and potential gameplay.
 
 
 # Getting Started with Create React App
