@@ -43,7 +43,7 @@ class TargetProvider {
       }
       this.ticksLeft = this.ticksToSpawn;
       if (target) {
-        target.mount();
+        target.activate();
       }
       return target;
     } else {

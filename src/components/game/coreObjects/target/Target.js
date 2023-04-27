@@ -84,8 +84,8 @@ class Target {
     }
   }
 
-  mount() {
-    this.mounted = true;
+  activate() {
+    this.activated = true;
   }
 
   // Update attributes each frame to get animated renders; right now not implemented.
@@ -132,11 +132,11 @@ class Target {
   }
 
   // Clear the cells this TargetBlock covers and set its cleared flag to True
-  clear(board, fillCell) {
+  clear(board, emptyCellProvider) {
     for (var x = this.x0 - 1; x < this.x1 + 1; x++) {
       for (var y = this.y0 - 1; y < this.y1 + 1; y++) {
         if (inBounds(x, y, this.boardSize)) {
-          board[y][x] = fillCell();
+          board[y][x] = emptyCellProvider.newCell();
         }
       }
     }
@@ -156,7 +156,7 @@ class Target {
   }
 
   render(canvas, cellWidth, cellHeight) {
-    if (this.mounted) {
+    if (this.activated) {
       outlineRect(
         canvas,
         BOARD_X0 + this.x0 * cellWidth,

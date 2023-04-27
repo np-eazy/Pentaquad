@@ -10,7 +10,7 @@ export const drawCursor = (
   cellWidth,
   cellHeight
 ) => {
-  var [x, y] = controller.gridCursor(windowSize, board.length);
+  var [x, y] = controller.getCursorCoords(windowSize, board.length);
   outlineRect(
     canvas,
     BOARD_X0 + x * cellWidth,

@@ -34,7 +34,7 @@ export const handleClearedLines = (coreState) => {
           for (var y_ = 0; y_ < boardSize; y_++) {
             // There will be one row left at the "top" which will have to be filled with new empty values
             // after everything else is shifted down.
-            board[y_][0] = this.emptyCellProvider.newCell();
+            board[y_][0] = coreState.emptyCellProvider.newCell();
             board[y_][0].xOffset = -1;
           }
           // The above block is effectively implemented once for each direction in the else-if blocks below.
@@ -46,7 +46,7 @@ export const handleClearedLines = (coreState) => {
             }
           }
           for (var y_ = 0; y_ < boardSize; y_++) {
-            board[y_][boardSize - 1] = this.emptyCellProvider.newCell();
+            board[y_][boardSize - 1] = coreState.emptyCellProvider.newCell();
             board[y_][boardSize - 1].xOffset = 1;
           }
         }
@@ -71,7 +71,7 @@ export const handleClearedLines = (coreState) => {
             }
           }
           for (var x_ = 0; x_ < boardSize; x_++) {
-            board[0][x_] = this.emptyCellProvider.newCell();
+            board[0][x_] = coreState.emptyCellProvider.newCell();
             board[0][x_].yOffset = -1;
           }
         } else {
@@ -82,7 +82,7 @@ export const handleClearedLines = (coreState) => {
             }
           }
           for (var x_ = 0; x_ < boardSize; x_++) {
-            board[boardSize - 1][x_] = this.emptyCellProvider.newCell();
+            board[boardSize - 1][x_] = coreState.emptyCellProvider.newCell();
             board[boardSize - 1][x_].yOffset = 1;
           }
         }

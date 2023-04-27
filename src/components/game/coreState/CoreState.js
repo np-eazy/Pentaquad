@@ -121,7 +121,7 @@ const CoreState = class {
     while (!piece) {
       piece = this.pieceProvider.consumePiece();
     }
-    piece.mountPiece({
+    piece.activatePiece({
       center_x: x,
       center_y: y,
       direction: this.gravity,

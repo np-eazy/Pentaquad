@@ -40,7 +40,7 @@ class PieceProvider {
 
   lock(piece) {
     for (var i = 0; i < QUEUE_MAX_LENGTH; i++) {
-      this.queue.unshift(piece.copyUnmounted());
+      this.queue.unshift(piece.copyDeactivated());
     }
   }
 }

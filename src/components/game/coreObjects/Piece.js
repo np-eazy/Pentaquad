@@ -17,7 +17,7 @@ import { DEBUG } from "../DebugDisplay";
 // based on which direction is moving.
 class Piece {
   constructor(cellType = CELL_TYPE.NORMAL) {
-    this.mounted = false;
+    this.activated = false;
     this.cx = 0;
     this.cy = 0;
     this.dxn = undefined;
@@ -47,7 +47,7 @@ class Piece {
     this.mainCell.setBaseColor(this.baseColor);
   }
 
-  copyUnmounted() {
+  copyDeactivated() {
     var copy = new Piece(this.mainCell.type);
     copy.preset = this.preset;
     copy.baseColor = this.baseColor;
@@ -56,9 +56,9 @@ class Piece {
     return copy;
   }
 
-  // Before the piece is mounted to a global location, it shouldn't be used/updated.
-  mountPiece({ center_x, center_y, direction, pidSize }) {
-    this.mounted = true;
+  // Before the piece is activated to a global location, it shouldn't be used/updated.
+  activatePiece({ center_x, center_y, direction, pidSize }) {
+    this.activated = true;
     this.cx = center_x;
     this.cy = center_y;
     this.dxn = direction;
@@ -76,8 +76,8 @@ class Piece {
 
   // Just for formality/convention, we do this each time we move something from the game
   // back to the provider.
-  unmountPiece() {
-    this.mounted = false;
+  deactivatePiece() {
+    this.activated = false;
     this.cx = 0;
     this.cy = 0;
     this.dxn = undefined;

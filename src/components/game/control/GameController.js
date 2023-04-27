@@ -81,7 +81,7 @@ class GameController {
   }
 
   // Map the global location of the mouse with the in-game grid index of the cursor.
-  gridCursor(windowDimensions, boardSize) {
+  getCursorCoords(windowDimensions, boardSize) {
     var x = Math.floor((this.cursorX / windowDimensions) * boardSize);
     var y = Math.floor((this.cursorY / windowDimensions) * boardSize);
     return [x, y];
@@ -94,7 +94,7 @@ class GameController {
       return action;
     } else {
       if (this.toggleMoveTo) {
-        var [x_, y_] = this.gridCursor(this.windowDimensions, this.boardSize);
+        var [x_, y_] = this.getCursorCoords(this.windowDimensions, this.boardSize);
         this.actionQueue.push(
           new GameAction(ActionType.MOVE_TO, { x: x_, y: y_ })
         );

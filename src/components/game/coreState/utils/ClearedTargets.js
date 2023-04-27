@@ -15,7 +15,7 @@ export const handleClearedTargets = (coreState) => {
   targets.forEach((target) => {
     if (target.isFilled) {
       clearedTargets += 1;
-      target.clear(board, this.emptyCellProvider.newCell);
+      target.clear(board, coreState.emptyCellProvider);
       if (target.mainCell) {
         var i = 0;
         while (i < queue.length &&

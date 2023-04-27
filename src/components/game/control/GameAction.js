@@ -150,9 +150,9 @@ export function executePlace(coreState) {
   coreState.collisionTimer = PLACEMENT_COUNTDOWN;
   coreState.placeBlock = true;
 }
-// Unmount the current piece into the holding slot on PieceProvider
+// Deactivate the current piece into the holding slot on PieceProvider
 export function executeHold(coreState, slotNumber) {
-  coreState.currPiece.unmountPiece();
+  coreState.currPiece.deactivatePiece();
   coreState.pieceProvider.holdPiece(coreState.currPiece, slotNumber);
   coreState.currPiece = null;
   coreState.placeBlock = true;
