@@ -73,7 +73,3 @@ export function debugCell(canvas, cell, x0, y0, boardX, boardY) {
     y0 + MESSAGE_FONTSIZE * 10
   );
 }
-
-export const DebugDisplay = (props) => {
-  
-}
