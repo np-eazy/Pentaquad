@@ -1,5 +1,7 @@
 import { Angle, Dxn } from "../coreState/utils/Direction";
-
+import {
+  placeTower
+} from "../coreState/Placement";
 import {
   PLACEMENT_COUNTDOWN,
   ROTATION_ADJUSTMENT_SIZE,
@@ -129,7 +131,7 @@ export function executeFlip(coreState) {
 // Drop the current piece as far down as possible
 export function executeDrop(coreState) {
   if (coreState.currPiece.mainCell.type == CELL_TYPE.TOWER) {
-    coreState.placeTower(coreState.currPiece);
+    placeTower(coreState, coreState.currPiece);
   } else if (coreState.currPiece.mainCell.type != CELL_TYPE.GHOST) {
     while (
       !coreState.currPiece.checkCollision(
@@ -143,19 +145,19 @@ export function executeDrop(coreState) {
   }
   coreState.collisionTimer = PLACEMENT_COUNTDOWN;
   coreState.timer = -1;
-  coreState.placeBlock = true;
+  coreState.readyToPlace = true;
 }
 // Unconditionally place the current piece where it is
 export function executePlace(coreState) {
   coreState.collisionTimer = PLACEMENT_COUNTDOWN;
-  coreState.placeBlock = true;
+  coreState.readyToPlace = true;
 }
 // Deactivate the current piece into the holding slot on PieceProvider
 export function executeHold(coreState, slotNumber) {
   coreState.currPiece.deactivatePiece();
   coreState.pieceProvider.holdPiece(coreState.currPiece, slotNumber);
   coreState.currPiece = null;
-  coreState.placeBlock = true;
+  coreState.readyToPlace = true;
 }
 // Lock the current piece for the next 5 moves
 export function executeLock(coreState) {

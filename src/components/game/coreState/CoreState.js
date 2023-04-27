@@ -20,6 +20,11 @@ import { handleClearedTargets } from "./utils/ClearedTargets";
 import { getSpawnPosition, inBounds } from "./utils/Functions";
 
 import {
+  cellPlacementUpdate,
+  place,
+} from "./Placement";
+
+import {
   BOUNDARY_EXTENSION_SIZE
 } from "./utils/Params";
 import {
@@ -74,7 +79,7 @@ const CoreState = class {
     this.targets = []; // The GameState's roster of target blocks
     this.timer = 0; // A timer that increments once each update updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
     this.collisionTimer = 0; // Keep track of how long this piece is in contact in its falling direction
-    this.placeBlock = true; // Flag for placing a block
+    this.readyToPlace = true; // Flag for placing a block
   }
 
   // Set this piece's controller, in the future this can end up being called
@@ -143,12 +148,12 @@ const CoreState = class {
   // updates in Cells. Corresponds to idleUpdate and fallingUpdate in Cell and Target classes
   update() {
     if (this.timer % this.ticksToMove == 0) {
-      if (this.placeBlock) {
+      if (this.readyToPlace) {
         this.placementUpdate();
       } else if (this.currPiece && this.collisionTimer == 0) {
         this.fallingUpdate();
       }
-    } else if (!this.placeBlock && this.currPiece && this.controller) {
+    } else if (!this.readyToPlace && this.currPiece && this.controller) {
       this.idleUpdate();
     }
     this.timer += 1;
@@ -173,7 +178,7 @@ const CoreState = class {
     ) {
       this.collisionTimer += 1;
       if (this.collisionTimer == PLACEMENT_COUNTDOWN) {
-        this.placeBlock = true;
+        this.readyToPlace = true;
       }
     } else {
       this.collisionTimer = 0;
@@ -190,111 +195,18 @@ const CoreState = class {
   // Basically all the logic that happens whenever the arrangement of board pieces
   // changes. Corresponds to placementUpdate in Cell and Target classes.
   placementUpdate() {
-    this.place(this.currPiece);
+    place(this, this.currPiece);
     this.gravity.turn(
       this.gravity && this.gravity.equals(Dxn[Angle.DOWN]) ? 1 : -1
     );
     // Check and clear any filled targets or lines
     handleClearedTargets(this);
     handleClearedLines(this);
-    this.cellPlacementUpdate();
+    cellPlacementUpdate(this);
     // Create new game objects
     this.createNewPiece();
     this.createNewTarget();
     this.updateCollisionTimer();
-  }
-
-  // increment times to live for each cell before converting to empty cell
-  cellPlacementUpdate() {
-    for (var y = 0; y < this.boardSize; y++) {
-      for (var x = 0; x < this.boardSize; x++) {
-        var cell = this.board[y][x];
-        if (cell.ttl != -1) {
-          if (cell.ttl == 0) {
-            var newCell = this.emptyCellProvider.newCell();
-            newCell.getAttributesFrom(this.board[y][x]);
-            this.board[y][x] = newCell;
-          } else {
-            cell.placementUpdate(true);
-          }
-        }
-      }
-    }
-  }
-
-  // Change the CoreState's grid values based on where the current piece is.
-  place(piece) {
-    if (piece != null) {
-      if (piece.mainCell.type == CELL_TYPE.BOMB) {
-        this.placeBomb(piece);
-      } else if (piece.mainCell.type == CELL_TYPE.DRILL) {
-        this.placeDrill(piece);
-      } else {
-        this.placeNormal(piece);
-      }
-    }
-    this.placeBlock = false;
-  }
-
-  // Place a normal piece
-  placeNormal(piece) {
-    var [x, y] = [0, 0];
-    for (const [pid, [x_, y_]] of piece.cells) {
-      [x, y] = [x_ + this.currPiece.cx, y_ + this.currPiece.cy];
-      if (inBounds(x, y, this.boardSize)) {
-        var newCell = new NormalCell();
-        newCell.getAttributesFrom(piece.mainCell);
-        newCell.lightUp(piece.mainCell.baseColor);
-        this.board[y][x] = newCell;
-      }
-    }
-  }
-
-  // Place a bomb and remove a square of length 2 * BOMB_RADIUS + 1
-  placeBomb(piece) {
-    for (
-      var y = Math.max(0, piece.cy - BOMB_RADIUS);
-      y < Math.min(this.boardSize, piece.cy + BOMB_RADIUS + 1);
-      y++
-    ) {
-      for (
-        var x = Math.max(0, piece.cx - BOMB_RADIUS);
-        x < Math.min(this.boardSize, piece.cx + BOMB_RADIUS + 1);
-        x++
-      ) {
-        this.board[y][x] = this.emptyCellProvider.newCell();
-      }
-    }
-  }
-
-  // Remove all blocks in the current piece's path.
-  placeDrill(piece) {
-    callOnDropzone(
-      this.board,
-      piece,
-      this.gravity,
-      (x, y) => {
-        var newCell = new EmptyCell();
-        newCell.getAttributesFrom(this.board[y][x]);
-        newCell.meter = 1;
-        this.board[y][x] = newCell;
-      },
-      true
-    );
-  }
-
-  placeTower(piece) {
-    callOnDropzone(
-      this.board,
-      piece,
-      this.gravity,
-      (x, y) => {
-        this.board[y][x] = piece.createCell();
-        this.board[y][x].getAttributesFrom(piece.mainCell);
-        this.board[y][x].lightColor.add(piece.mainCell.baseColor);
-      },
-      false
-    );
   }
 };
 
