@@ -1,5 +1,3 @@
-import EmptyCell from "../coreObjects/cell/EmptyCell";
-import NormalCell from "../coreObjects/cell/NormalCell";
 import BoundarySets from "./utils/BoundarySets";
 import PieceProvider from "./providers/PieceProvider";
 import TargetProvider from "./providers/TargetProvider";
@@ -14,10 +12,9 @@ import { ActionType,
   executePlace,
   executeRotate, } from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
-import { callOnDropzone } from "./utils/Dropzone";
 import { handleClearedLines } from "./utils/ClearedLines";
 import { handleClearedTargets } from "./utils/ClearedTargets";
-import { getSpawnPosition, inBounds } from "./utils/Functions";
+import { getSpawnPosition } from "./utils/Functions";
 
 import {
   cellPlacementUpdate,
@@ -30,8 +27,6 @@ import {
 import {
   TARGET_SPAWN_MARGIN,
   PLACEMENT_COUNTDOWN,
-  BOMB_RADIUS,
-  CELL_TYPE,
   FALLING_COUNTDOWN,
 } from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
@@ -160,14 +155,10 @@ const CoreState = class {
     return this; // CoreState.update() returns itself
   }
 
-  // Attempt to perform the next action if dispensed by the game controller.
+  // Attempt to perform the next action if dispensed by the game controller, and update the 
+  // collision timer.
   idleUpdate() {
     this.performNextAction();
-    this.updateCollisionTimer();
-  }
-
-  // If in contact with ground, increment the timer until it hits a threshold; otherwise, reset it
-  updateCollisionTimer() {
     if (
       this.currPiece != null &&
       this.currPiece.checkCollision(
@@ -182,7 +173,7 @@ const CoreState = class {
       }
     } else {
       this.collisionTimer = 0;
-    }
+    }    
   }
 
   // Move the block down in its falling direction
