@@ -3,7 +3,6 @@ import { BOARD_SIZE } from "../rules/Constants";
 
 import { renderBoard, updateBoard } from "./sections/Board";
 import { renderQueue, updateQueue } from "./sections/Queue";
-import { renderScoresheet, updateScoresheet } from "./sections/Scoresheet";
 import { renderPalette, updatePalette } from "./sections/Palette";
 
 import {
@@ -36,7 +35,6 @@ const GameGraphics = (props) => {
       controller: gameState.controller,
     });
     renderQueue(canvas, coreState.pieceProvider);
-    renderScoresheet(canvas, coreState.scorekeeper);
     renderPalette(canvas, coreState.pieceProvider);
 
     updateBoard(board, {
@@ -46,7 +44,6 @@ const GameGraphics = (props) => {
     });
     updateQueue(coreState.pieceProvider);
     updatePalette(coreState.pieceProvider);
-    updateScoresheet(undefined);
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.
     if (DEBUG) {
