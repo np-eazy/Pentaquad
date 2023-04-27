@@ -1,6 +1,6 @@
 import { FILLED_COLOR } from "./theme/Theme";
 
-export const DEBUG = false;
+export const DEBUG = true;
 export const MESSAGE_FONTSIZE = 24;
 export const MESSAGE_OFFSET = 10;
 export const CHARS_PER_LINE = 60;

@@ -67,7 +67,7 @@ const Scorekeeper = class {
   // Keep log of strikes that would cause the game to be lost.
   strike() {
     this.strikes += 1;
-    if (this.strikes > MAX_STRIKES) {
+    if (this.strikes >= MAX_STRIKES) {
       this.gameOver = true;
     }
   }

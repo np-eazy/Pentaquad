@@ -7,6 +7,7 @@ import GameController from "../game/control/GameController";
 import GameGraphics from "./graphics/GameGraphics";
 import { WINDOW_DIMENSIONS, BOARD_SIZE, REFRESH_MS } from "./rules/Constants";
 import { TOTAL_HEIGHT, TOTAL_WIDTH } from "./graphics/Layout";
+import Scoresheet from "./graphics/sections/scoresheet/Scoresheet";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.
@@ -40,6 +41,14 @@ const GameCanvas = (props) => {
   const handleMouseDown = (event) => {
     gameController.handleMouseDown(event);
   };
+
+  const togglePauseGame = (e) => {
+    gameState.togglePause();
+  };
+  const startNewGame = (e) => {
+    gameState.startOver();
+  }
+
   // Disable spacebar scrolling down
   window.onkeydown = function (e) {
     return e.keyCode !== 32 && e.key !== " ";
@@ -67,6 +76,7 @@ const GameCanvas = (props) => {
       <canvas id="gameGraphics" width={TOTAL_WIDTH} height={TOTAL_HEIGHT}>
         <GameGraphics gameState={gameState} />
       </canvas>
+      <Scoresheet gameState={gameState} togglePauseGame={togglePauseGame} startNewGame={startNewGame}/>
     </div>
   );
 };
