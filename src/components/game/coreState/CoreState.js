@@ -1,8 +1,8 @@
-import EmptyCell from "../baseObjects/cell/EmptyCell";
-import NormalCell from "../baseObjects/cell/NormalCell";
+import EmptyCell from "../coreObjects/cell/EmptyCell";
+import NormalCell from "../coreObjects/cell/NormalCell";
 import BoundarySets from "./utils/BoundarySets";
-import PieceStage from "./PieceStage";
-import TargetStage from "./TargetStage";
+import PieceProvider from "./providers/PieceProvider";
+import TargetProvider from "./providers/TargetProvider";
 
 import { ActionType } from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
@@ -32,6 +32,7 @@ import {
   executeRotate,
 } from "./Actions";
 import Scorekeeper from "./Scorekeeper";
+import { EmptyCellProvider } from "./providers/EmptyCellProvider";
 
 
 // The most essential level of state in the game. Each update() call either
@@ -40,18 +41,18 @@ import Scorekeeper from "./Scorekeeper";
 const CoreState = class {
   constructor(props) {
     this.controller = null; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
-    this.pieceStage = new PieceStage({ coreState: this }); // Create a new PieceStage to take care of creating/dispensing pieces
-    this.targetStage = new TargetStage({
-      // Create a new TargetStage to take care of creating/dispensing targets
+    this.pieceProvider = new PieceProvider({ coreState: this }); // Create a new PieceProvider to take care of creating/dispensing pieces
+    this.targetProvider = new TargetProvider({
+      // Create a new TargetProvider to take care of creating/dispensing targets
       coreState: this,
       minBound: TARGET_SPAWN_MARGIN,
       maxBound: props.boardSize - TARGET_SPAWN_MARGIN,
     });
+    this.emptyCellProvider = new EmptyCellProvider();
     this.scorekeeper = new Scorekeeper({});
 
     this.pidSize = (props.boardSize + BOUNDARY_EXTENSION_SIZE * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
     this.boardSize = props.boardSize; // The dimension of the square board on which this game takes place.
-    this.emptyValue = () => new EmptyCell(); // The default "empty" value of this grid: a type-0 Cell with no props
     this.board = [...Array(props.boardSize)].map(
       (
         e // Create the main board for the game
@@ -59,7 +60,7 @@ const CoreState = class {
     );
     for (var y = 0; y < this.board.length; y++) {
       for (var x = 0; x < this.board.length; x++) {
-        this.board[y][x] = this.emptyValue();
+        this.board[y][x] = this.emptyCellProvider.newCell();
       }
     }
     // Create 4 different sets to check if a boundary has been hit
@@ -113,14 +114,14 @@ const CoreState = class {
     }
   }
 
-  // (Facilitated by PieceStage) Create a new piece based on this CoreState's gravity, at a random location.
+  // (Facilitated by PieceProvider) Create a new piece based on this CoreState's gravity, at a random location.
   createNewPiece() {
     var [x, y] = getSpawnPosition(this.gravity, this.boardSize);
-    // Get the unmounted piece from PieceStage; we need this loop in case async piece
+    // Get the unmounted piece from PieceProvider; we need this loop in case async piece
     // doesn't arrive in time
     var piece;
     while (!piece) {
-      piece = this.pieceStage.consumePiece();
+      piece = this.pieceProvider.consumePiece();
     }
     piece.mountPiece({
       center_x: x,
@@ -131,9 +132,9 @@ const CoreState = class {
     this.currPiece = piece;
   }
 
-  // (Facilitated by TargetStage) Create a new Target in a random location.
+  // (Facilitated by TargetProvider) Create a new Target in a random location.
   createNewTarget() {
-    var target = this.targetStage.consumeTarget();
+    var target = this.targetProvider.consumeTarget();
     if (target) {
       this.targets.push(target);
     }
@@ -212,7 +213,7 @@ const CoreState = class {
         var cell = this.board[y][x];
         if (cell.ttl != -1) {
           if (cell.ttl == 0) {
-            var newCell = new EmptyCell();
+            var newCell = this.emptyCellProvider.newCell();
             newCell.getAttributesFrom(this.board[y][x]);
             this.board[y][x] = newCell;
           } else {
@@ -263,7 +264,7 @@ const CoreState = class {
         x < Math.min(this.boardSize, piece.cx + BOMB_RADIUS + 1);
         x++
       ) {
-        this.board[y][x] = this.emptyValue();
+        this.board[y][x] = this.emptyCellProvider.newCell();
       }
     }
   }

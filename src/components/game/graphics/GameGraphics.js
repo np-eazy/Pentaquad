@@ -32,20 +32,20 @@ const GameGraphics = (props) => {
     renderBoard(canvas, board, xCellSize, yCellSize, {
       piece: coreState.currPiece,
       targets: coreState.targets,
-      targetStage: coreState.targetStage,
+      targetProvider: coreState.targetProvider,
       controller: gameState.controller,
     });
-    renderQueue(canvas, coreState.pieceStage);
+    renderQueue(canvas, coreState.pieceProvider);
     renderScoresheet(canvas, coreState.scorekeeper);
-    renderPalette(canvas, coreState.pieceStage);
+    renderPalette(canvas, coreState.pieceProvider);
 
     updateBoard(board, {
       piece: coreState.currPiece,
       targets: coreState.targets,
-      targetStage: coreState.targetStage,
+      targetProvider: coreState.targetProvider,
     });
-    updateQueue(coreState.pieceStage);
-    updatePalette(coreState.pieceStage);
+    updateQueue(coreState.pieceProvider);
+    updatePalette(coreState.pieceProvider);
     updateScoresheet(undefined);
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.

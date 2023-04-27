@@ -1,10 +1,10 @@
-import Piece from "./Piece";
-import { QUEUE_MAX_LENGTH } from "../Constants";
-import { generateCellType } from "./RandomGeneration";
+import Piece from "../Piece";
+import { QUEUE_MAX_LENGTH } from "../../Constants";
+import { generateCellType } from "../RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
-class PieceStage {
+class PieceProvider {
   constructor(props) {
     this.coreState = props.coreState;
     this.maxLength = props.maxLength ? props.maxLength : QUEUE_MAX_LENGTH;
@@ -44,4 +44,4 @@ class PieceStage {
     }
   }
 }
-export default PieceStage;
+export default PieceProvider;

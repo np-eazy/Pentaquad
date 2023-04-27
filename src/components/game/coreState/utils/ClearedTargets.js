@@ -1,14 +1,13 @@
 import { CELL_TYPE } from "../../Constants";
 
 // Check all filled targets, remove them from targetBlocks, and erase all
-// covered cells to replace with a call to emptyValue
+// covered cells to replace with a call to newCell
 
 export const handleClearedTargets = (coreState) => {
   var targets = coreState.targets;
   var board = coreState.board;
-  var emptyValue = coreState.emptyValue;
   var scorekeeper = coreState.scorekeeper;
-  var queue = coreState.pieceStage.queue;
+  var queue = coreState.pieceProvider.queue;
 
   targets.forEach((target) => target.placementUpdate());
   // Clear the targets in a 2nd pass so that the player can hit combos on targets in the same move.
@@ -16,7 +15,7 @@ export const handleClearedTargets = (coreState) => {
   targets.forEach((target) => {
     if (target.isFilled) {
       clearedTargets += 1;
-      target.clear(board, emptyValue);
+      target.clear(board, this.emptyCellProvider.newCell);
       if (target.mainCell) {
         var i = 0;
         while (i < queue.length &&

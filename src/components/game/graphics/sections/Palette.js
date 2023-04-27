@@ -15,14 +15,14 @@ import { drawPiece, updatePiece } from "../objects/Piece";
 const CELL_OFFSET = 2.5;
 const Y_CELL_INCREMENT = 6;
 
-export function renderPalette(canvas, pieceStage) {
+export function renderPalette(canvas, pieceProvider) {
   drawBackground(canvas, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT);
-  for (var i = 0; i < pieceStage.palette.length; i++) {
+  for (var i = 0; i < pieceProvider.palette.length; i++) {
     var [x_, y_] = [CELL_OFFSET, CELL_OFFSET + Y_CELL_INCREMENT * i];
-    if (pieceStage.palette[i] != null) {
+    if (pieceProvider.palette[i] != null) {
       drawPiece(
         canvas,
-        pieceStage.palette[i],
+        pieceProvider.palette[i],
         PALETTE_X0 + x_ * QUEUE_CELL_SIZE,
         PALETTE_Y0 + y_ * QUEUE_CELL_SIZE,
         QUEUE_CELL_SIZE,
@@ -32,8 +32,8 @@ export function renderPalette(canvas, pieceStage) {
   }
 }
 
-export function updatePalette(pieceStage) {
-  for (const piece of pieceStage.palette) {
+export function updatePalette(pieceProvider) {
+  for (const piece of pieceProvider.palette) {
     updatePiece(piece);
   }
 }

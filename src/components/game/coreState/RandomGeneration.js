@@ -1,4 +1,4 @@
-import Target from "../baseObjects/target/Target";
+import Target from "../coreObjects/target/Target";
 import { randint } from "./utils/Functions";
 import { TARGET_GROWTH_TIMER } from "../Constants";
 

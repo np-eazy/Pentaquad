@@ -16,7 +16,7 @@ export const POWERUP_RARITY = 10;
 export const PIECE_SPAWN_MARGIN = 2;
 
 // Target spawning
-export const TARGET_STAGE_MAX_LENGTH = 2;
+export const TARGET_PROVIDER_MAX_LENGTH = 2;
 export const TARGET_GRACE_PERIOD = 0;
 export const TARGET_SPAWN_RADIUS = 1;
 export const TARGET_SPAWN_TIMER = 4;

@@ -1,9 +1,9 @@
-import EmptyCell from "../baseObjects/cell/EmptyCell";
-import NormalCell from "../baseObjects/cell/NormalCell";
-import GhostCell from "../baseObjects/cell/GhostCell";
-import BombCell from "../baseObjects/cell/BombCell";
-import DrillCell from "../baseObjects/cell/DrillCell";
-import TowerCell from "../baseObjects/cell/TowerCell";
+import EmptyCell from "../coreObjects/cell/EmptyCell";
+import NormalCell from "../coreObjects/cell/NormalCell";
+import GhostCell from "../coreObjects/cell/GhostCell";
+import BombCell from "../coreObjects/cell/BombCell";
+import DrillCell from "../coreObjects/cell/DrillCell";
+import TowerCell from "../coreObjects/cell/TowerCell";
 
 import { PRESETS, BASE_COLORS, CELL_TYPE } from "../Constants";
 import { randomDxn } from "./utils/Direction";
@@ -74,7 +74,7 @@ class Piece {
   }
 
   // Just for formality/convention, we do this each time we move something from the game
-  // back to the stage.
+  // back to the provider.
   unmountPiece() {
     this.mounted = false;
     this.cx = 0;

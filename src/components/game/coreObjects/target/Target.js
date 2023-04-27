@@ -1,7 +1,7 @@
-import GhostCell from "../../baseObjects/cell/GhostCell";
-import BombCell from "../../baseObjects/cell/BombCell";
-import DrillCell from "../../baseObjects/cell/DrillCell";
-import TowerCell from "../../baseObjects/cell/TowerCell";
+import GhostCell from "../cell/GhostCell";
+import BombCell from "../cell/BombCell";
+import DrillCell from "../cell/DrillCell";
+import TowerCell from "../cell/TowerCell";
 
 import { inBounds, randint } from "../../coreState/utils/Functions";
 import {

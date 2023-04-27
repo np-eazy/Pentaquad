@@ -128,14 +128,14 @@ export function executePlace(coreState) {
   coreState.collisionTimer = PLACEMENT_COUNTDOWN;
   coreState.placeBlock = true;
 }
-// Unmount the current piece into the holding stage, and mount the holding stage in
+// Unmount the current piece into the holding slot on PieceProvider
 export function executeHold(coreState, slotNumber) {
   coreState.currPiece.unmountPiece();
-  coreState.pieceStage.holdPiece(coreState.currPiece, slotNumber);
+  coreState.pieceProvider.holdPiece(coreState.currPiece, slotNumber);
   coreState.currPiece = null;
   coreState.placeBlock = true;
 }
 // Lock the current piece for the next 5 moves
 export function executeLock(coreState) {
-  coreState.pieceStage.lock(coreState.currPiece);
+  coreState.pieceProvider.lock(coreState.currPiece);
 }
