@@ -7,18 +7,28 @@ export const REFRESH_MS = 10;
 
 // Board parameters
 export const BOARD_SIZE = 16;
-// The distance from the boundary that each piece
-export const SPAWN_OFFSET = 2;
-// Extend edge boundaries a bit further to ensure pieces finish falling.
-export const BOUNDARY_MARGIN = 4;
-// Distance from the borders tp spawn in targets
-export const TARGET_MARGIN = 4;
-// The number of ticks contact must take place in order to place a piece.
-export const COLLISION_TIME_LIMIT = 100;
-// The maximum number of movements to adjust a rotation
-export const MAX_ROTATION_ADJUSTMENT = 2;
-// Ticks between each block fall
-export const TICKS_TO_FALL = 30; // Wait this many ticks between each idleMove() call on coreState
+export const PLACEMENT_COUNTDOWN = 100; // The number of ticks contact must take place in order to place a piece.
+export const FALLING_COUNTDOWN = 30; // Wait this many ticks between each fallingUpdate() call on coreState
+
+// Piece spawning
+export const QUEUE_MAX_LENGTH = 5;
+export const POWERUP_RARITY = 10;
+export const PIECE_SPAWN_MARGIN = 2;
+
+// Target spawning
+export const TARGET_STAGE_MAX_LENGTH = 2;
+export const TARGET_GRACE_PERIOD = 0;
+export const TARGET_SPAWN_RADIUS = 1;
+export const TARGET_SPAWN_TIMER = 4;
+export const TARGET_GROWTH_TIMER = 6;
+export const TARGET_SPAWN_MARGIN = 4;
+
+
+export const NORMAL_CELL_LIFETIME = 8;
+export const BOMB_RADIUS = 2;
+export const ROTATION_ADJUSTMENT_SIZE = 2;
+
+
 
 export const BASE_COLORS = [
   new Color({ red: 255, green: 0, blue: 0 }),
@@ -46,18 +56,9 @@ export const CELL_TYPE = {
   TOWER: 5,
 };
 
-// Stage variables
-export const QUEUE_MAX_LENGTH = 5;
-export const POWERUP_RARITY = 10;
 
-export const TARGET_STAGE_MAX_LENGTH = 2;
-export const TARGET_GRACE_PERIOD = 0;
-export const TARGET_SPAWN_RADIUS = 1;
-export const TARGET_SPAWN_TIMER = 4;
-export const TARGET_GROWTH_TIMER = 6;
 
-export const NORMAL_CELL_LIFETIME = 8;
-export const BOMB_RADIUS = 2;
+
 
 // 5-long piece preset
 export const I_PIECE = [

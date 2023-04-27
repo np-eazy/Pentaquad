@@ -11,12 +11,14 @@ import { checkFilledLines, handleTargets } from "./utils/FillCheck";
 import { getSpawnPosition, inBounds } from "./utils/Functions";
 
 import {
-  BOUNDARY_MARGIN,
-  TARGET_MARGIN,
-  COLLISION_TIME_LIMIT,
+  BOUNDARY_EXTENSION_SIZE
+} from "./utils/Params";
+import {
+  TARGET_SPAWN_MARGIN,
+  PLACEMENT_COUNTDOWN,
   BOMB_RADIUS,
   CELL_TYPE,
-  TICKS_TO_FALL,
+  FALLING_COUNTDOWN,
 } from "../Constants";
 import {
   executeDrop,
@@ -30,6 +32,7 @@ import {
 } from "./Actions";
 import Scorekeeper from "./Scorekeeper";
 
+
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
 // gravity.
@@ -40,12 +43,12 @@ const CoreState = class {
     this.targetStage = new TargetStage({
       // Create a new TargetStage to take care of creating/dispensing targets
       coreState: this,
-      minBound: TARGET_MARGIN,
-      maxBound: props.boardSize - TARGET_MARGIN,
+      minBound: TARGET_SPAWN_MARGIN,
+      maxBound: props.boardSize - TARGET_SPAWN_MARGIN,
     });
     this.scorekeeper = new Scorekeeper({});
 
-    this.pidSize = (props.boardSize + BOUNDARY_MARGIN * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
+    this.pidSize = (props.boardSize + BOUNDARY_EXTENSION_SIZE * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
     this.boardSize = props.boardSize; // The dimension of the square board on which this game takes place.
     this.emptyValue = () => new EmptyCell(); // The default "empty" value of this grid: a type-0 Cell with no props
     this.board = [...Array(props.boardSize)].map(
@@ -61,11 +64,11 @@ const CoreState = class {
     // Create 4 different sets to check if a boundary has been hit
     this.collisionSets = new BoundarySets(
       props.boardSize,
-      BOUNDARY_MARGIN,
+      BOUNDARY_EXTENSION_SIZE,
       this.pidSize
     );
 
-    this.ticksToMove = TICKS_TO_FALL;
+    this.ticksToMove = FALLING_COUNTDOWN;
     this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
     this.currPiece = null; // The GameState's current unplaced piece
     this.targets = []; // The GameState's roster of target blocks
@@ -169,7 +172,7 @@ const CoreState = class {
       )
     ) {
       this.collisionTimer += 1;
-      if (this.collisionTimer == COLLISION_TIME_LIMIT) {
+      if (this.collisionTimer == PLACEMENT_COUNTDOWN) {
         this.placeBlock = true;
       }
     } else {

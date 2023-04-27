@@ -1,5 +1,5 @@
 import { dropzone } from "./coreState/utils/Dropzone";
-import { TICKS_TO_FALL, CELL_TYPE } from "./Constants";
+import { FALLING_COUNTDOWN, CELL_TYPE } from "./Constants";
 
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,
@@ -13,7 +13,7 @@ const GameState = class {
     this.coreState = props.coreState;
     this.controller = props.controller;
     this.coreState.controller = this.controller;
-    this.ticksToMove = props.ticksToMove ? props.ticksToMove : TICKS_TO_FALL;
+    this.ticksToMove = props.ticksToMove ? props.ticksToMove : FALLING_COUNTDOWN;
     this.ticks = 0;
     this.isRunning = true;
     this.delayTimer = 0;

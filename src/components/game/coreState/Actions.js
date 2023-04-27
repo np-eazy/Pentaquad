@@ -1,8 +1,8 @@
 import { Angle, Dxn } from "./utils/Direction";
 
 import {
-  COLLISION_TIME_LIMIT,
-  MAX_ROTATION_ADJUSTMENT,
+  PLACEMENT_COUNTDOWN,
+  ROTATION_ADJUSTMENT_SIZE,
   CELL_TYPE,
 } from "../Constants";
 
@@ -47,7 +47,7 @@ export function executeRotate(coreState, angle) {
         coreState.board,
         coreState.collisionSets
       ) &&
-      adjustment < MAX_ROTATION_ADJUSTMENT
+      adjustment < ROTATION_ADJUSTMENT_SIZE
     ) {
       coreState.currPiece.move(coreState.gravity.opposite());
       adjustment += 1;
@@ -119,13 +119,13 @@ export function executeDrop(coreState) {
       coreState.currPiece.move(coreState.gravity);
     }
   }
-  coreState.collisionTimer = COLLISION_TIME_LIMIT;
+  coreState.collisionTimer = PLACEMENT_COUNTDOWN;
   coreState.timer = -1;
   coreState.placeBlock = true;
 }
 // Unconditionally place the current piece where it is
 export function executePlace(coreState) {
-  coreState.collisionTimer = COLLISION_TIME_LIMIT;
+  coreState.collisionTimer = PLACEMENT_COUNTDOWN;
   coreState.placeBlock = true;
 }
 // Unmount the current piece into the holding stage, and mount the holding stage in

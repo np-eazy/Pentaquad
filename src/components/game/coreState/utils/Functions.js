@@ -1,7 +1,7 @@
 // Utility functions specifically for dealing with discrete ints and indices on the board for CoreState.
 // Not to be confused with utility functions in graphics
 
-import { SPAWN_OFFSET } from "../../Constants";
+import { PIECE_SPAWN_MARGIN } from "../../Constants";
 import { Angle, Dxn } from "./Direction";
 
 // Generate a random integer from a up to but not including b
@@ -25,15 +25,15 @@ export function inBounds(x, y, boardSize) {
 // on the edges but also allows them to spawn further off screen.
 export function getSpawnPosition(dxn, boardSize) {
   var [x, y] = [0, 0];
-  var r = randint(SPAWN_OFFSET, boardSize - SPAWN_OFFSET);
+  var r = randint(PIECE_SPAWN_MARGIN, boardSize - PIECE_SPAWN_MARGIN);
   if (dxn.equals(Dxn[Angle.RIGHT])) {
-    [x, y] = [-SPAWN_OFFSET, r];
+    [x, y] = [-PIECE_SPAWN_MARGIN, r];
   } else if (dxn.equals(Dxn[Angle.UP])) {
-    [x, y] = [r, SPAWN_OFFSET + this.boardSize];
+    [x, y] = [r, PIECE_SPAWN_MARGIN + this.boardSize];
   } else if (dxn.equals(Dxn[Angle.LEFT])) {
-    [x, y] = [SPAWN_OFFSET + this.boardSize, r];
+    [x, y] = [PIECE_SPAWN_MARGIN + this.boardSize, r];
   } else if (dxn.equals(Dxn[Angle.DOWN])) {
-    [x, y] = [r, -SPAWN_OFFSET];
+    [x, y] = [r, -PIECE_SPAWN_MARGIN];
   }
   return [x, y];
 }
