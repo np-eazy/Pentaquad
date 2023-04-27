@@ -4,7 +4,15 @@ import BoundarySets from "./utils/BoundarySets";
 import PieceProvider from "./providers/PieceProvider";
 import TargetProvider from "./providers/TargetProvider";
 
-import { ActionType } from "../control/GameAction";
+import { ActionType,   
+  executeDrop,
+  executeFlip,
+  executeHold,
+  executeLock,
+  executeMove,
+  executeMoveTo,
+  executePlace,
+  executeRotate, } from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
 import { callOnDropzone } from "./utils/Dropzone";
 import { handleClearedLines } from "./utils/ClearedLines";
@@ -21,16 +29,6 @@ import {
   CELL_TYPE,
   FALLING_COUNTDOWN,
 } from "../Constants";
-import {
-  executeDrop,
-  executeFlip,
-  executeHold,
-  executeLock,
-  executeMove,
-  executeMoveTo,
-  executePlace,
-  executeRotate,
-} from "./Actions";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
 

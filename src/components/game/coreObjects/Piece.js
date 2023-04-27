@@ -1,15 +1,15 @@
-import EmptyCell from "../coreObjects/cell/EmptyCell";
-import NormalCell from "../coreObjects/cell/NormalCell";
-import GhostCell from "../coreObjects/cell/GhostCell";
-import BombCell from "../coreObjects/cell/BombCell";
-import DrillCell from "../coreObjects/cell/DrillCell";
-import TowerCell from "../coreObjects/cell/TowerCell";
+import EmptyCell from "./cell/EmptyCell";
+import NormalCell from "./cell/NormalCell";
+import GhostCell from "./cell/GhostCell";
+import BombCell from "./cell/BombCell";
+import DrillCell from "./cell/DrillCell";
+import TowerCell from "./cell/TowerCell";
 
 import { PRESETS, BASE_COLORS, CELL_TYPE } from "../Constants";
-import { randomDxn } from "./utils/Direction";
-import { randint, getPID } from "./utils/Functions";
+import { randomDxn } from "../coreState/utils/Direction";
+import { randint, getPID } from "../coreState/utils/Functions";
 
-import { COLLISION_RADIUS } from "./utils/Params";
+import { COLLISION_RADIUS } from "../coreState/utils/Params";
 import { DEBUG } from "../Debug";
 
 // A single piece in the game, which can move in different directions and detect collisions

@@ -1,4 +1,4 @@
-import Piece from "../Piece";
+import Piece from "../../coreObjects/Piece";
 import { QUEUE_MAX_LENGTH } from "../../Constants";
 import { generateCellType } from "../RandomGeneration";
 
