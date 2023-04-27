@@ -51,14 +51,14 @@ class GhostCell extends Cell {
       interpolateColor(this.currentColor, EMPTY_COLOR, g, linInt).getHex()
     );
     drawRectOffset(canvas, x, y, width, height, interpolateColor(
-      this.colorSuite.midLight,
+      this.colorSuite.shade2H,
       EMPTY_COLOR,
       g,
       linInt
     ).getHex(), d);
 
     drawRectOffset(canvas, x, y, width, height, interpolateColor(
-      this.colorSuite.centerLight,
+      this.colorSuite.shade4H,
       EMPTY_COLOR,
       g,
       linInt

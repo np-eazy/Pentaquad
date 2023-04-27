@@ -11,7 +11,7 @@ import { inBounds } from "./Functions";
 
 // If passThrough is true, then dropzone clobbers through any filled blocks rather than stopping
 // at the first one, and goes all the way to the border.
-export function dropzone(
+export function callOnDropzone(
   board,
   piece,
   gravity,

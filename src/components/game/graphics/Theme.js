@@ -33,8 +33,7 @@ export const FILLED_COLOR = new Color({
 // as they are all interpolated towards a common color.
 export const CELL_BASE_COLOR_BLEND = 0.2;
 
-// Add this value to all channels of the CurrentColor to generate MidLight and
-// CenterLight
+// Add this value to all channels of the CurrentColor to generate 2h and 4h
 export const CELL_MID_LIGHT = 30;
 export const CELL_CENTER_LIGHT = 45;
 

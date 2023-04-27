@@ -6,8 +6,9 @@ import TargetStage from "./TargetStage";
 
 import { ActionType } from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
-import { dropzone } from "./utils/Dropzone";
-import { checkFilledLines, handleTargets } from "./utils/FillCheck";
+import { callOnDropzone } from "./utils/Dropzone";
+import { handleClearedLines } from "./utils/ClearedLines";
+import { handleClearedTargets } from "./utils/ClearedTargets";
 import { getSpawnPosition, inBounds } from "./utils/Functions";
 
 import {
@@ -195,8 +196,8 @@ const CoreState = class {
       this.gravity && this.gravity.equals(Dxn[Angle.DOWN]) ? 1 : -1
     );
     // Check and clear any filled targets or lines
-    handleTargets(this);
-    checkFilledLines(this);
+    handleClearedTargets(this);
+    handleClearedLines(this);
     this.cellPlacementUpdate();
     // Create new game objects
     this.createNewPiece();
@@ -269,7 +270,7 @@ const CoreState = class {
 
   // Remove all blocks in the current piece's path.
   placeDrill(piece) {
-    dropzone(
+    callOnDropzone(
       this.board,
       piece,
       this.gravity,
@@ -284,7 +285,7 @@ const CoreState = class {
   }
 
   placeTower(piece) {
-    dropzone(
+    callOnDropzone(
       this.board,
       piece,
       this.gravity,

@@ -1,4 +1,4 @@
-import { dropzone } from "./coreState/utils/Dropzone";
+import { callOnDropzone } from "./coreState/utils/Dropzone";
 import { FALLING_COUNTDOWN, CELL_TYPE } from "./Constants";
 
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
@@ -49,7 +49,7 @@ const GameState = class {
   markDropZone() {
     var piece = this.coreState.currPiece;
     if (piece && piece.mainCell.type != CELL_TYPE.GHOST) {
-      dropzone(
+      callOnDropzone(
         this.coreState.board,
         this.coreState.currPiece,
         this.coreState.gravity,

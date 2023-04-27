@@ -49,7 +49,7 @@ class DrillCell extends Cell {
     var clock = (this.timer * CLOCK_FREQ) % 1;
     var innerLength = (clock * width) / 2;
     var innerColor = interpolateColor(
-      this.colorSuite.midLight,
+      this.colorSuite.shade2H,
       EMPTY_COLOR,
       clock,
       linInt

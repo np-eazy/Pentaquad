@@ -49,13 +49,13 @@ class TowerCell extends Cell {
         interpolateColor(this.currentColor, EMPTY_COLOR, g, linInt).getHex()
       );
       drawRectOffset(canvas, x, y, width, height,         interpolateColor(
-        this.colorSuite.midLight,
+        this.colorSuite.shade2H,
         EMPTY_COLOR,
         g,
         linInt
       ).getHex(), d);
       drawRectOffset(canvas, x, y, width, height,         interpolateColor(
-        this.colorSuite.centerLight,
+        this.colorSuite.shade4H,
         EMPTY_COLOR,
         g,
         linInt
@@ -64,7 +64,7 @@ class TowerCell extends Cell {
 
 
       var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * width) / 2;
-      outlineRectOffset(canvas, x, y, width, height, this.colorSuite.centerLight.getHex(), innerLength);
+      outlineRectOffset(canvas, x, y, width, height, this.colorSuite.shade4H.getHex(), innerLength);
     }
   }
 }

@@ -1,10 +1,8 @@
-import { CELL_TYPE } from "../../Constants";
 import { Angle, Dxn } from "./Direction";
 
 // Check for filled lines within a certain threshold and clear them Tetris-style, based
-// on the current direction of gravity. Fillcheck also uses two of three Scorekeeper methods
-// from the CoreState.
-export const checkFilledLines = (coreState) => {
+// on the current direction of gravity.
+export const handleClearedLines = (coreState) => {
   var threshold = coreState.threshold;
   var board = coreState.board;
   var boardSize = coreState.boardSize;
@@ -96,45 +94,4 @@ export const checkFilledLines = (coreState) => {
   scorekeeper.scoreFilledLines(linesCleared);
 };
 
-// Check all filled targets, remove them from targetBlocks, and erase all
-// covered cells to replace with a call to emptyValue
-export const handleTargets = (coreState) => {
-  var targets = coreState.targets;
-  var board = coreState.board;
-  var emptyValue = coreState.emptyValue;
-  var scorekeeper = coreState.scorekeeper;
-  var queue = coreState.pieceStage.queue;
 
-  targets.forEach((target) => target.placementUpdate());
-  // Clear the targets in a 2nd pass so that the player can hit combos on targets in the same move.
-  var clearedTargets = 0;
-  targets.forEach((target) => {
-    if (target.isFilled) {
-      clearedTargets += 1;
-      target.clear(board, emptyValue);
-      if (target.mainCell) {
-        var i = 0;
-        while (
-          i < queue.length &&
-          queue[i].mainCell.type != CELL_TYPE.NORMAL
-        ) {
-          i += 1;
-        }
-        if (i < queue.length) {
-          queue[i].mainCell = target.mainCell;
-        }
-      }
-    } else if (target.isCleared) {
-      scorekeeper.strike();
-    }
-  });
-  var i = 0;
-  while (i < targets.length) {
-    if (targets[i].isCleared) {
-      targets.splice(i, 1);
-    } else {
-      i += 1;
-    }
-  }
-  scorekeeper.scoreTargets(clearedTargets);
-};

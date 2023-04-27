@@ -38,8 +38,8 @@ class Cell {
     this.currentColor = EMPTY_COLOR; // A dynamically changing main color derived from interpolating the baseColor
     this.colorSuite = {
       // A set of colors derived from the main color and can be updated very sparingly
-      midLight: EMPTY_COLOR,
-      centerLight: EMPTY_COLOR,
+      shade2H: EMPTY_COLOR,
+      shade4H: EMPTY_COLOR,
     };
   }
 
@@ -99,12 +99,12 @@ class Cell {
 
   // Each time the current color changes, everything else follows
   updateColorSuite() {
-    this.colorSuite.midLight = new Color({
+    this.colorSuite.shade2H = new Color({
       red: this.currentColor.red + CELL_MID_LIGHT,
       green: this.currentColor.green + CELL_MID_LIGHT,
       blue: this.currentColor.blue + CELL_MID_LIGHT,
     });
-    this.colorSuite.centerLight = new Color({
+    this.colorSuite.shade4H = new Color({
       red: this.currentColor.red + CELL_CENTER_LIGHT,
       green: this.currentColor.green + CELL_CENTER_LIGHT,
       blue: this.currentColor.blue + CELL_CENTER_LIGHT,

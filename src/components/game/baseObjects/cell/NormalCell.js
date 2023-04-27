@@ -50,8 +50,8 @@ class NormalCell extends Cell {
       var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
       drawRect(canvas, x, y, width, height, this.currentColor.getHex());
-      drawRectOffset(canvas, x, y, width, height, this.colorSuite.midLight.getHex(), d);
-      drawRectOffset(canvas, x, y, width, height, this.colorSuite.centerLight.getHex(), 2 * d);
+      drawRectOffset(canvas, x, y, width, height, this.colorSuite.shade2H.getHex(), d);
+      drawRectOffset(canvas, x, y, width, height, this.colorSuite.shade4H.getHex(), 2 * d);
       outlineRectOffset(canvas, x, y, width, height, borderColor.getHex(), BORDER_OFFSET);
     }
   }
