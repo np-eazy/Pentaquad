@@ -1,13 +1,13 @@
-import { FILLED_COLOR } from "./graphics/Theme";
+import { FILLED_COLOR } from "./theme/Theme";
 
 export const DEBUG = false;
-export const MESSAGE_SIZE = 24;
+export const MESSAGE_FONTSIZE = 24;
 export const MESSAGE_OFFSET = 10;
 export const CHARS_PER_LINE = 60;
 
 // TODO: Add more args to debugCell like x and y position or left/right align to render more of these
 export function debugCell(canvas, cell, x0, y0, boardX, boardY) {
-  canvas.font = (MESSAGE_SIZE - 4).toString() + "px Arial";
+  canvas.font = (MESSAGE_FONTSIZE - 4).toString() + "px Arial";
   canvas.fillStyle = FILLED_COLOR.getHex();
 
   var display = JSON.stringify(cell);
@@ -25,51 +25,51 @@ export function debugCell(canvas, cell, x0, y0, boardX, boardY) {
   canvas.fillText(
     boardX.toString() + ", " + boardY.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE
+    y0 + MESSAGE_FONTSIZE
   );
   canvas.fillText(
     "type: " + cell.type.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 2
+    y0 + MESSAGE_FONTSIZE * 2
   );
   canvas.fillText(
     "baseColor: " + cell.baseColor.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 3
+    y0 + MESSAGE_FONTSIZE * 3
   );
   canvas.fillText(
     "currentColor: " + cell.baseColor.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 4
+    y0 + MESSAGE_FONTSIZE * 4
   );
   canvas.fillText(
     "x offset: " + cell.xOffset.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 5
+    y0 + MESSAGE_FONTSIZE * 5
   );
   canvas.fillText(
     "y offset: " + cell.yOffset.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 6
+    y0 + MESSAGE_FONTSIZE * 6
   );
   canvas.fillText(
     "timer: " + cell.timer.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 7
+    y0 + MESSAGE_FONTSIZE * 7
   );
   canvas.fillText(
     "meter: " + cell.meter.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 8
+    y0 + MESSAGE_FONTSIZE * 8
   );
   canvas.fillText(
     "lifetime: " + cell.lifetime.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 9
+    y0 + MESSAGE_FONTSIZE * 9
   );
   canvas.fillText(
     "ttl: " + cell.ttl.toString(),
     x0 + MESSAGE_OFFSET,
-    y0 + MESSAGE_SIZE * 10
+    y0 + MESSAGE_FONTSIZE * 10
   );
 }

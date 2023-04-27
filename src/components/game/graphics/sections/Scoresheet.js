@@ -5,7 +5,7 @@ import {
   SCORESHEET_Y0,
   drawBackground,
 } from "../Layout";
-import { FILLED_COLOR } from "../Theme";
+import { FILLED_COLOR } from "../../theme/Theme";
 
 // The scoresheet will be used to render scores, messages, and other CLI-style information
 // for the player. Its coordinates are also used to place debug messages, handled by GameGraphics.

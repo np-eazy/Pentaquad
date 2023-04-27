@@ -1,8 +1,8 @@
 import { inBounds } from "../coreState/utils/Functions";
-import { BOARD_SIZE } from "../Constants";
+import { BOARD_SIZE } from "../rules/Constants";
 
 import { renderBoard, updateBoard } from "./sections/Board";
-import { renderStage, updateStage } from "./sections/Stage";
+import { renderQueue, updateQueue } from "./sections/Queue";
 import { renderScoresheet, updateScoresheet } from "./sections/Scoresheet";
 import { renderPalette, updatePalette } from "./sections/Palette";
 
@@ -15,13 +15,13 @@ import {
   TOTAL_WIDTH,
 } from "./Layout";
 
-import { DEBUG, debugCell } from "../Debug";
+import { DEBUG, debugCell } from "../DebugDisplay";
 
 // The class which organizes all canvas and graphics-related code. Each
 const GameGraphics = (props) => {
   var board = props.gameState.coreState.board;
   var [xSize, ySize] = [board[0].length, board.length];
-  var [xCellSize, yCellSize] = [BOARD_WIDTH / xSize, BOARD_HEIGHT / ySize];
+  var [cellWidth, cellHeight] = [BOARD_WIDTH / xSize, BOARD_HEIGHT / ySize];
 
   // A single loop of rendering and "updating"; these updates however are all downstream
   // from the CoreState and only include other props like timers/colors to aid with the
@@ -29,28 +29,31 @@ const GameGraphics = (props) => {
   function graphicLoop(canvas) {
     var gameState = props.gameState;
     var coreState = props.gameState.coreState;
-    renderBoard(canvas, board, xCellSize, yCellSize, {
+    renderBoard(canvas, board, cellWidth, cellHeight, {
       piece: coreState.currPiece,
       targets: coreState.targets,
-      targetStage: coreState.targetStage,
+      targetProvider: coreState.targetProvider,
       controller: gameState.controller,
     });
-    renderStage(canvas, coreState.pieceStage);
+    renderQueue(canvas, coreState.pieceProvider);
     renderScoresheet(canvas, coreState.scorekeeper);
-    renderPalette(canvas, coreState.pieceStage);
+    renderPalette(canvas, coreState.pieceProvider);
 
     updateBoard(board, {
       piece: coreState.currPiece,
       targets: coreState.targets,
-      targetStage: coreState.targetStage,
+      targetProvider: coreState.targetProvider,
     });
-    updateStage(coreState.pieceStage);
-    updatePalette(coreState.pieceStage);
+    updateQueue(coreState.pieceProvider);
+    updatePalette(coreState.pieceProvider);
     updateScoresheet(undefined);
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.
     if (DEBUG) {
-      var [x, y] = gameState.controller.gridCursor(BOARD_HEIGHT, BOARD_SIZE);
+      var [x, y] = gameState.controller.getCursorCoords(
+        BOARD_HEIGHT,
+        BOARD_SIZE
+      );
       if (inBounds(x, y, board.length)) {
         debugCell(canvas, board[y][x], SCORESHEET_X0, SCORESHEET_Y0, x, y);
       }

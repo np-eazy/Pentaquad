@@ -1,10 +1,10 @@
 import Cell from "./Cell";
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 
-import { outlineRect } from "../../graphics/Pipeline";
+import { outlineRectOffset } from "../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
-import { BORDER_OFFSET, EMPTY_COLOR, MARKER_COLOR } from "../../graphics/Theme";
+import { BORDER_OFFSET, EMPTY_COLOR, MARKER_COLOR } from "../../theme/Theme";
 
 const CLOCK_FREQ = 0.01;
 
@@ -19,12 +19,12 @@ class DrillCell extends Cell {
     super.idleUpdate();
   }
 
-  activeUpdate() {
-    super.activeUpdate();
+  fallingUpdate() {
+    super.fallingUpdate();
   }
 
-  advanceUpdate(computeColors) {
-    super.advanceUpdate(computeColors);
+  placementUpdate(computeColors) {
+    super.placementUpdate(computeColors);
   }
 
   // Draw non-solid cell with a continually shrinking border
@@ -36,30 +36,32 @@ class DrillCell extends Cell {
       1 - this.meter,
       linInt
     );
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + BORDER_OFFSET,
-      y + BORDER_OFFSET,
-      width - BORDER_OFFSET * 2,
-      height - BORDER_OFFSET * 2,
-      borderColor.getHex()
+      x,
+      y,
+      width,
+      height,
+      borderColor.getHex(),
+      BORDER_OFFSET
     );
 
     var clock = (this.timer * CLOCK_FREQ) % 1;
     var innerLength = (clock * width) / 2;
     var innerColor = interpolateColor(
-      this.colorSuite.midLight,
+      this.colorSuite.shade2H,
       EMPTY_COLOR,
       clock,
       linInt
     );
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + innerLength,
-      y + innerLength,
-      width - innerLength * 2,
-      height - innerLength * 2,
-      innerColor.getHex()
+      x,
+      y,
+      width,
+      height,
+      innerColor.getHex(),
+      innerLength
     );
   }
 }

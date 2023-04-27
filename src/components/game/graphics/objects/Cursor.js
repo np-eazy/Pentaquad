@@ -1,22 +1,22 @@
-import { outlineRect } from "../Pipeline";
+import { outlineRect } from "../CanvasPipeline";
 import { BOARD_X0, BOARD_Y0 } from "../Layout";
-import { FILLED_COLOR } from "../Theme";
+import { FILLED_COLOR } from "../../theme/Theme";
 
 export const drawCursor = (
   canvas,
   board,
   controller,
   windowSize,
-  xCellSize,
-  yCellSize
+  cellWidth,
+  cellHeight
 ) => {
-  var [x, y] = controller.gridCursor(windowSize, board.length);
+  var [x, y] = controller.getCursorCoords(windowSize, board.length);
   outlineRect(
     canvas,
-    BOARD_X0 + x * xCellSize,
-    BOARD_Y0 + y * yCellSize,
-    xCellSize,
-    yCellSize,
+    BOARD_X0 + x * cellWidth,
+    BOARD_Y0 + y * cellHeight,
+    cellWidth,
+    cellHeight,
     FILLED_COLOR.getHex()
   );
 };

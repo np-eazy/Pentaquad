@@ -1,10 +1,10 @@
 import Cell from "./Cell";
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 
-import { outlineRect } from "../../graphics/Pipeline";
+import { outlineRect, outlineRectOffset } from "../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
-import { LIGHT_AMPLITUDE, MARKER_COLOR } from "../../graphics/Theme";
+import { LIGHT_AMPLITUDE, MARKER_COLOR } from "../../theme/Theme";
 
 const METER_FREQ = 0.03;
 const METER_AMP = 0.5;
@@ -22,12 +22,12 @@ class BombCell extends Cell {
     this.meter = METER_LEVEL - METER_AMP * Math.sin(this.timer * METER_FREQ);
   }
 
-  activeUpdate() {
-    super.activeUpdate();
+  fallingUpdate() {
+    super.fallingUpdate();
   }
 
-  advanceUpdate(computeColors) {
-    super.advanceUpdate(computeColors);
+  placementUpdate(computeColors) {
+    super.placementUpdate(computeColors);
   }
 
   // Draw non-solid cell with an oscillating border
@@ -43,30 +43,25 @@ class BombCell extends Cell {
     var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
     outlineRect(canvas, x, y, width, height, borderColor.getHex());
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + d,
-      y + d,
-      width - 2 * d,
-      height - 2 * d,
-      this.colorSuite.midLight.getHex()
+      x,
+      y,
+      width,
+      height,
+      this.colorSuite.shade2H.getHex(),
+      d
     );
-    outlineRect(
+    outlineRectOffset(
       canvas,
-      x + 2 * d,
-      y + 2 * d,
-      width - 4 * d,
-      height - 4 * d,
-      this.colorSuite.centerLight.getHex()
+      x,
+      y,
+      width,
+      height,
+      this.colorSuite.shade4H.getHex(),
+      2 * d
     );
-    outlineRect(
-      canvas,
-      x + 2,
-      y + 2,
-      width - 4,
-      height - 4,
-      borderColor.getHex()
-    );
+    outlineRectOffset(canvas, x, y, width, height, borderColor.getHex(), 2);
   }
 }
 

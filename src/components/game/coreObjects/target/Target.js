@@ -1,16 +1,20 @@
-import GhostCell from "../../baseObjects/cell/GhostCell";
-import BombCell from "../../baseObjects/cell/BombCell";
-import DrillCell from "../../baseObjects/cell/DrillCell";
-import TowerCell from "../../baseObjects/cell/TowerCell";
+import GhostCell from "../cell/GhostCell";
+import BombCell from "../cell/BombCell";
+import DrillCell from "../cell/DrillCell";
+import TowerCell from "../cell/TowerCell";
 
 import { inBounds, randint } from "../../coreState/utils/Functions";
-import { drawRect, outlineRect } from "../../graphics/Pipeline";
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../graphics/Theme";
+import {
+  drawRect,
+  outlineRect,
+  outlineRectOffset,
+} from "../../graphics/CanvasPipeline";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../theme/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt, sinusoid } from "../../graphics/utils/Functions";
 import { BOARD_X0, BOARD_Y0 } from "../../graphics/Layout";
-import { CELL_TYPE } from "../../Constants";
-import { generatePowerupCellType } from "../../coreState/RandomGeneration";
+import { CELL_TYPE } from "../../rules/Constants";
+import { generatePowerupCellType } from "../../rules/RandomGeneration";
 
 const BORDER_COLOR = FILLED_COLOR;
 const WARNING_BORDER_SIZE = 4;
@@ -80,8 +84,8 @@ class Target {
     }
   }
 
-  mount() {
-    this.mounted = true;
+  activate() {
+    this.activated = true;
   }
 
   // Update attributes each frame to get animated renders; right now not implemented.
@@ -94,11 +98,11 @@ class Target {
 
   // Not really a relevant method for targets which don't have any meaningful graphics for when a piece falls down a step,
   // but keeping it here for sake of convention matching with Cell.
-  activeUpdate() {}
+  fallingUpdate() {}
 
   // To be called once each time the coreState updates; either the isFilled flag goes up or it continues to grow.
   // Currently, a Target only grows but others can be implemented to disappear or give the user power-ups upon being cleared.
-  advanceUpdate() {
+  placementUpdate() {
     if (this.checkFill(this.coreState.board)) {
       this.isFilled = true;
     } else {
@@ -128,11 +132,11 @@ class Target {
   }
 
   // Clear the cells this TargetBlock covers and set its cleared flag to True
-  clear(board, fillCell) {
+  clear(board, emptyCellProvider) {
     for (var x = this.x0 - 1; x < this.x1 + 1; x++) {
       for (var y = this.y0 - 1; y < this.y1 + 1; y++) {
         if (inBounds(x, y, this.boardSize)) {
-          board[y][x] = fillCell();
+          board[y][x] = emptyCellProvider.newCell();
         }
       }
     }
@@ -151,37 +155,37 @@ class Target {
     }
   }
 
-  render(canvas, xCellSize, yCellSize) {
-    if (this.mounted) {
+  render(canvas, cellWidth, cellHeight) {
+    if (this.activated) {
       outlineRect(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize,
-        BOARD_Y0 + this.y0 * yCellSize,
-        (this.x1 - this.x0) * xCellSize,
-        (this.y1 - this.y0) * yCellSize,
+        BOARD_X0 + this.x0 * cellWidth,
+        BOARD_Y0 + this.y0 * cellHeight,
+        (this.x1 - this.x0) * cellWidth,
+        (this.y1 - this.y0) * cellHeight,
         BORDER_COLOR.getHex()
       );
       outlineRect(
         canvas,
-        BOARD_X0 + (this.x0 - 1) * xCellSize,
-        BOARD_Y0 + (this.y0 - 1) * yCellSize,
-        (this.x1 - this.x0 + 2) * xCellSize,
-        (this.y1 - this.y0 + 2) * yCellSize,
+        BOARD_X0 + (this.x0 - 1) * cellWidth,
+        BOARD_Y0 + (this.y0 - 1) * cellHeight,
+        (this.x1 - this.x0 + 2) * cellWidth,
+        (this.y1 - this.y0 + 2) * cellHeight,
         MARKER_COLOR.getHex()
       );
       if (this.ticksLeft <= 3) {
-        this.renderWarning(canvas, xCellSize, yCellSize);
+        this.renderWarning(canvas, cellWidth, cellHeight);
       }
       if (this.mainCell) {
-        this.renderPowerup(canvas, xCellSize, yCellSize);
+        this.renderPowerup(canvas, cellWidth, cellHeight);
       }
     } else {
       outlineRect(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize,
-        BOARD_Y0 + this.y0 * yCellSize,
-        (this.x1 - this.x0) * xCellSize,
-        (this.y1 - this.y0) * yCellSize,
+        BOARD_X0 + this.x0 * cellWidth,
+        BOARD_Y0 + this.y0 * cellHeight,
+        (this.x1 - this.x0) * cellWidth,
+        (this.y1 - this.y0) * cellHeight,
         interpolateColor(
           MARKER_COLOR,
           FILLED_COLOR,
@@ -193,13 +197,13 @@ class Target {
   }
 
   // Render a flashing inset border if TTL is less than or equal to 3
-  renderWarning(canvas, xCellSize, yCellSize) {
+  renderWarning(canvas, cellWidth, cellHeight) {
     outlineRect(
       canvas,
-      BOARD_X0 + this.x0 * xCellSize - WARNING_BORDER_SIZE,
-      BOARD_Y0 + this.y0 * yCellSize - WARNING_BORDER_SIZE,
-      (this.x1 - this.x0) * xCellSize + 2 * WARNING_BORDER_SIZE,
-      (this.y1 - this.y0) * yCellSize + 2 * WARNING_BORDER_SIZE,
+      BOARD_X0 + this.x0 * cellWidth - WARNING_BORDER_SIZE,
+      BOARD_Y0 + this.y0 * cellHeight - WARNING_BORDER_SIZE,
+      (this.x1 - this.x0) * cellWidth + 2 * WARNING_BORDER_SIZE,
+      (this.y1 - this.y0) * cellHeight + 2 * WARNING_BORDER_SIZE,
       interpolateColor(
         MARKER_COLOR,
         FILLED_COLOR,
@@ -218,62 +222,74 @@ class Target {
 
   // If the Target is holding onto a Cell with a special ability, the Target
   // is rendered with an animation matching the type of cell it is holding.
-  renderPowerup(canvas, xCellSize, yCellSize) {
+  renderPowerup(canvas, cellWidth, cellHeight) {
+    var [x, y] = [
+      BOARD_X0 + this.x0 * cellWidth,
+      BOARD_Y0 + this.y0 * cellHeight,
+    ];
+    var [targetWidth, targetHeight] = [
+      cellWidth * (this.x1 - this.x0),
+      cellHeight * (this.y1 - this.y0),
+    ];
+
+    var borderColor = interpolateColor(
+      EMPTY_COLOR,
+      FILLED_COLOR,
+      sinusoid(POWERUP_WAVE, this.timer),
+      linInt
+    );
     if (this.mainCell.type == CELL_TYPE.GHOST) {
-      var borderColor = interpolateColor(
-        EMPTY_COLOR,
-        FILLED_COLOR,
-        sinusoid(POWERUP_WAVE, this.timer),
-        linInt
-      );
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + POWERUP_OFFSET,
-        BOARD_Y0 + this.y0 * yCellSize + POWERUP_OFFSET,
-        (this.x1 - this.x0) * xCellSize - 2 * POWERUP_OFFSET,
-        (this.y1 - this.y0) * yCellSize - 2 * POWERUP_OFFSET,
-        borderColor.getHex()
+        x,
+        y,
+        targetWidth,
+        targetHeight,
+        borderColor.getHex(),
+        POWERUP_OFFSET
       );
     } else if (this.mainCell.type == CELL_TYPE.BOMB) {
       var d = sinusoid(POWERUP_WAVE, this.timer);
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + d * POWERUP_OFFSET,
-        BOARD_Y0 + this.y0 * yCellSize + d * POWERUP_OFFSET,
-        (this.x1 - this.x0) * xCellSize - 2 * d * POWERUP_OFFSET,
-        (this.y1 - this.y0) * yCellSize - 2 * d * POWERUP_OFFSET,
-        FILLED_COLOR.getHex()
+        x,
+        y,
+        targetWidth,
+        targetHeight,
+        borderColor.getHex(),
+        d * POWERUP_OFFSET
       );
-      d *= 2;
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + d * POWERUP_OFFSET,
-        BOARD_Y0 + this.y0 * yCellSize + d * POWERUP_OFFSET,
-        (this.x1 - this.x0) * xCellSize - 2 * d * POWERUP_OFFSET,
-        (this.y1 - this.y0) * yCellSize - 2 * d * POWERUP_OFFSET,
-        FILLED_COLOR.getHex()
+        x,
+        y,
+        targetWidth,
+        targetHeight,
+        borderColor.getHex(),
+        2 * d * POWERUP_OFFSET
       );
     } else if (this.mainCell.type == CELL_TYPE.DRILL) {
-      var width = (this.x1 - this.x0) * xCellSize;
-      var innerLength = (((this.timer * CLOCK_FREQ) % 1) * width) / 2;
-      outlineRect(
+      var innerLength = (((this.timer * CLOCK_FREQ) % 1) * targetWidth) / 2;
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + innerLength,
-        BOARD_Y0 + this.y0 * yCellSize + innerLength,
-        (this.x1 - this.x0) * xCellSize - 2 * innerLength,
-        (this.y1 - this.y0) * yCellSize - 2 * innerLength,
-        FILLED_COLOR.getHex()
+        x,
+        y,
+        targetWidth,
+        targetHeight,
+        FILLED_COLOR.getHex(),
+        innerLength
       );
     } else if (this.mainCell.type == CELL_TYPE.TOWER) {
-      var width = (this.x1 - this.x0) * xCellSize;
-      var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * width) / 2;
-      outlineRect(
+      var innerLength =
+        ((1 - ((this.timer * CLOCK_FREQ) % 1)) * targetWidth) / 2;
+      outlineRectOffset(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize + innerLength,
-        BOARD_Y0 + this.y0 * yCellSize + innerLength,
-        (this.x1 - this.x0) * xCellSize - 2 * innerLength,
-        (this.y1 - this.y0) * yCellSize - 2 * innerLength,
-        FILLED_COLOR.getHex()
+        x,
+        y,
+        targetWidth,
+        targetHeight,
+        FILLED_COLOR.getHex(),
+        innerLength
       );
     }
   }

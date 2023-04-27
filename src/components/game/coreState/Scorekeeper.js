@@ -17,8 +17,8 @@ const Scorekeeper = class {
   // Add a score for the last cell placed, based on how far it was dropped.
   scoreDrop() {}
 
-  // Add a score for all targets cleared in this advancement, based on a combo.
-  // This must receive a list each advancement, if the list of cleared targets is
+  // Add a score for all targets cleared in this placement, based on a combo.
+  // This must receive a list each placement, if the list of cleared targets is
   // empty then reset the combo.
   scoreTargets(targetsCleared) {
     this.score +=
@@ -35,7 +35,7 @@ const Scorekeeper = class {
     }
   }
 
-  // Add a score for all filled lines in this advancement, which increases quadratically
+  // Add a score for all filled lines in this placement, which increases quadratically
   // with more simultaneous lines cleared. If no lines were cleared, the combo resets.
   scoreFilledLines(linesCleared) {
     this.score +=

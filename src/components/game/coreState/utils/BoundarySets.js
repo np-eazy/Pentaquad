@@ -1,5 +1,5 @@
-import { getPID } from "./utils/Functions";
-import { Angle } from "./utils/Direction";
+import { getPID } from "./Functions";
+import { Angle } from "./Direction";
 
 // A container class to hold CollisionSets for quick
 // collision detection.

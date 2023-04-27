@@ -1,22 +1,23 @@
-import EmptyCell from "../baseObjects/cell/EmptyCell";
-import NormalCell from "../baseObjects/cell/NormalCell";
-import GhostCell from "../baseObjects/cell/GhostCell";
-import BombCell from "../baseObjects/cell/BombCell";
-import DrillCell from "../baseObjects/cell/DrillCell";
-import TowerCell from "../baseObjects/cell/TowerCell";
+import EmptyCell from "./cell/EmptyCell";
+import NormalCell from "./cell/NormalCell";
+import GhostCell from "./cell/GhostCell";
+import BombCell from "./cell/BombCell";
+import DrillCell from "./cell/DrillCell";
+import TowerCell from "./cell/TowerCell";
 
-import { PRESETS, BASE_COLORS, CELL_TYPE } from "../Constants";
-import { randomDxn } from "./utils/Direction";
-import { randint, getPID } from "./utils/Functions";
+import { PRESETS, CELL_TYPE } from "../rules/Constants";
+import { BASE_COLORS } from "../theme/Theme";
+import { randomDxn } from "../coreState/utils/Direction";
+import { randint, getPID } from "../coreState/utils/Functions";
 
-import { COLLISION_RADIUS } from "./utils/Params";
-import { DEBUG } from "../Debug";
+import { COLLISION_RADIUS } from "../coreState/utils/Params";
+import { DEBUG } from "../DebugDisplay";
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
 class Piece {
   constructor(cellType = CELL_TYPE.NORMAL) {
-    this.mounted = false;
+    this.activated = false;
     this.cx = 0;
     this.cy = 0;
     this.dxn = undefined;
@@ -46,7 +47,7 @@ class Piece {
     this.mainCell.setBaseColor(this.baseColor);
   }
 
-  copyUnmounted() {
+  copyDeactivated() {
     var copy = new Piece(this.mainCell.type);
     copy.preset = this.preset;
     copy.baseColor = this.baseColor;
@@ -55,9 +56,9 @@ class Piece {
     return copy;
   }
 
-  // Before the piece is mounted to a global location, it shouldn't be used/updated.
-  mountPiece({ center_x, center_y, direction, pidSize }) {
-    this.mounted = true;
+  // Before the piece is activated to a global location, it shouldn't be used/updated.
+  activatePiece({ center_x, center_y, direction, pidSize }) {
+    this.activated = true;
     this.cx = center_x;
     this.cy = center_y;
     this.dxn = direction;
@@ -74,9 +75,9 @@ class Piece {
   }
 
   // Just for formality/convention, we do this each time we move something from the game
-  // back to the stage.
-  unmountPiece() {
-    this.mounted = false;
+  // back to the provider.
+  deactivatePiece() {
+    this.activated = false;
     this.cx = 0;
     this.cy = 0;
     this.dxn = undefined;

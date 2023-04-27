@@ -1,14 +1,19 @@
 import Cell from "./Cell";
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 
-import { drawRect, outlineRect } from "../../graphics/Pipeline";
+import {
+  drawRect,
+  drawRectOffset,
+  outlineRect,
+  outlineRectOffset,
+} from "../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 import {
   MARKER_COLOR,
   LIGHT_AMPLITUDE,
   BORDER_OFFSET,
-} from "../../graphics/Theme";
+} from "../../theme/Theme";
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;
@@ -27,12 +32,12 @@ class NormalCell extends Cell {
     this.meter = METER_LEVEL - METER_AMP * Math.sin(this.timer * METER_FREQ);
   }
 
-  activeUpdate() {
-    super.activeUpdate();
+  fallingUpdate() {
+    super.fallingUpdate();
   }
 
-  advanceUpdate() {
-    super.advanceUpdate();
+  placementUpdate() {
+    super.placementUpdate();
   }
 
   // Draw 3 concentric solid squares and 1 in the back.
@@ -50,29 +55,32 @@ class NormalCell extends Cell {
       var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
       drawRect(canvas, x, y, width, height, this.currentColor.getHex());
-      drawRect(
+      drawRectOffset(
         canvas,
-        x + d,
-        y + d,
-        width - 2 * d,
-        height - 2 * d,
-        this.colorSuite.midLight.getHex()
+        x,
+        y,
+        width,
+        height,
+        this.colorSuite.shade2H.getHex(),
+        d
       );
-      drawRect(
+      drawRectOffset(
         canvas,
-        x + 2 * d,
-        y + 2 * d,
-        width - 4 * d,
-        height - 4 * d,
-        this.colorSuite.centerLight.getHex()
+        x,
+        y,
+        width,
+        height,
+        this.colorSuite.shade4H.getHex(),
+        2 * d
       );
-      outlineRect(
+      outlineRectOffset(
         canvas,
-        x + BORDER_OFFSET,
-        y + BORDER_OFFSET,
-        width - BORDER_OFFSET * 2,
-        height - BORDER_OFFSET * 2,
-        borderColor.getHex()
+        x,
+        y,
+        width,
+        height,
+        borderColor.getHex(),
+        BORDER_OFFSET
       );
     }
   }

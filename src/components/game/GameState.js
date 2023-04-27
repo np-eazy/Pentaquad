@@ -1,5 +1,5 @@
-import { dropzone } from "./coreState/utils/Dropzone";
-import { ADVANCE_TIME, CELL_TYPE } from "./Constants";
+import { callOnDropzone } from "./coreState/utils/Dropzone";
+import { FALLING_COUNTDOWN, CELL_TYPE } from "./rules/Constants";
 
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,
@@ -13,7 +13,9 @@ const GameState = class {
     this.coreState = props.coreState;
     this.controller = props.controller;
     this.coreState.controller = this.controller;
-    this.ticksToMove = props.ticksToMove ? props.ticksToMove : ADVANCE_TIME;
+    this.ticksToMove = props.ticksToMove
+      ? props.ticksToMove
+      : FALLING_COUNTDOWN;
     this.ticks = 0;
     this.isRunning = true;
     this.delayTimer = 0;
@@ -49,7 +51,7 @@ const GameState = class {
   markDropZone() {
     var piece = this.coreState.currPiece;
     if (piece && piece.mainCell.type != CELL_TYPE.GHOST) {
-      dropzone(
+      callOnDropzone(
         this.coreState.board,
         this.coreState.currPiece,
         this.coreState.gravity,

@@ -1,6 +1,6 @@
-import Target from "../baseObjects/target/Target";
-import { randint } from "./utils/Functions";
-import { TARGET_GROWTH_TIMER } from "../Constants";
+import Target from "../coreObjects/target/Target";
+import { randint } from "../coreState/utils/Functions";
+import { TARGET_GROWTH_TIMER } from "./Constants";
 
 // Generate a CellType with a powerup
 export function generatePowerupCellType() {

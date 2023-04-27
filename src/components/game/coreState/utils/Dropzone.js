@@ -1,4 +1,4 @@
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 import { inBounds } from "./Functions";
 
 // A function that finds all the cells under a piece about to be dropped, and calls
@@ -11,7 +11,7 @@ import { inBounds } from "./Functions";
 
 // If passThrough is true, then dropzone clobbers through any filled blocks rather than stopping
 // at the first one, and goes all the way to the border.
-export function dropzone(
+export function callOnDropzone(
   board,
   piece,
   gravity,
