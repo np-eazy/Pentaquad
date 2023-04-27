@@ -14,14 +14,14 @@ import { drawPiece, updatePiece } from "../objects/Piece";
 // Board manage objects like Cursors and Pieces, and Pieces manage baseObject Cells.
 
 // The Board here is the "meat" of all the rendering, and anything that is rendered on top
-// like the game's current piece, target, staged targets, and cursors are all rendered
+// like the game's current piece, target, queued targets, and cursors are all rendered
 // and updated as a result of renderBoard.
 export const renderBoard = (
   canvas,
   board,
-  xCellSize,
-  yCellSize,
-  { piece, targets, targetStage, controller }
+  cellWidth,
+  cellHeight,
+  { piece, targets, targetProvider, controller }
 ) => {
   // Draw grid cells
   drawBackground(canvas, BOARD_X0, BOARD_Y0, BOARD_WIDTH, BOARD_HEIGHT);
@@ -30,22 +30,22 @@ export const renderBoard = (
     for (var x = 0; x < xSize; x++) {
       board[y][x].render(
         canvas,
-        x * xCellSize + BOARD_X0,
-        y * yCellSize + BOARD_Y0,
-        xCellSize,
-        yCellSize
+        x * cellWidth + BOARD_X0,
+        y * cellHeight + BOARD_Y0,
+        cellWidth,
+        cellHeight
       );
     }
   }
-  drawPiece(canvas, piece, BOARD_X0, BOARD_Y0, xCellSize, yCellSize);
-  targets.forEach((target) => target.render(canvas, xCellSize, yCellSize));
-  targetStage.nextTargets.forEach((target) =>
-    target.render(canvas, xCellSize, yCellSize)
+  drawPiece(canvas, piece, BOARD_X0, BOARD_Y0, cellWidth, cellHeight);
+  targets.forEach((target) => target.render(canvas, cellWidth, cellHeight));
+  targetProvider.nextTargets.forEach((target) =>
+    target.render(canvas, cellWidth, cellHeight)
   );
-  drawCursor(canvas, board, controller, BOARD_HEIGHT, xCellSize, yCellSize);
+  drawCursor(canvas, board, controller, BOARD_HEIGHT, cellWidth, cellHeight);
 };
 
-export const updateBoard = (board, { piece, targets, targetStage }) => {
+export const updateBoard = (board, { piece, targets, targetProvider }) => {
   // Update grid cells
   var [xSize, ySize] = [board[0].length, board.length];
   for (var y = 0; y < ySize; y++) {
@@ -55,5 +55,5 @@ export const updateBoard = (board, { piece, targets, targetStage }) => {
   }
   updatePiece(piece);
   targets.forEach((target) => target.idleUpdate());
-  targetStage.nextTargets.forEach((target) => target.idleUpdate());
+  targetProvider.nextTargets.forEach((target) => target.idleUpdate());
 };

@@ -5,7 +5,7 @@ import CoreState from "./coreState/CoreState";
 import GameController from "../game/control/GameController";
 
 import GameGraphics from "./graphics/GameGraphics";
-import { WINDOW_SIZE, BOARD_SIZE, REFRESH_MS } from "./Constants";
+import { WINDOW_DIMENSIONS, BOARD_SIZE, REFRESH_MS } from "./rules/Constants";
 import { TOTAL_HEIGHT, TOTAL_WIDTH } from "./graphics/Layout";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
@@ -17,7 +17,7 @@ const GameCanvas = (props) => {
   const [gameController, setGameController] = useState(
     new GameController({
       boardSize: BOARD_SIZE,
-      windowSize: WINDOW_SIZE,
+      windowDimensions: WINDOW_DIMENSIONS,
     })
   );
   // TODO: Create a GameState that wraps around CoreState to control when active game logic takes place

@@ -1,21 +1,21 @@
 import {
-  TARGET_STAGE_MAX_LENGTH,
+  TARGET_PROVIDER_MAX_LENGTH,
   TARGET_GRACE_PERIOD,
   TARGET_SPAWN_TIMER,
   TARGET_SPAWN_RADIUS,
-} from "../Constants";
-import { generateRandomTarget } from "./RandomGeneration";
+} from "../../rules/Constants";
+import { generateRandomTarget } from "../../rules/RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
 // able to see the next pieces, and also to hold/swap pieces.
-class TargetStage {
+class TargetProvider {
   constructor(props) {
     this.coreState = props.coreState;
     this.minBound = props.minBound;
     this.maxBound = props.maxBound;
     this.maxLength = props.maxLength
       ? props.maxLength
-      : TARGET_STAGE_MAX_LENGTH;
+      : TARGET_PROVIDER_MAX_LENGTH;
     this.gracePeriod = props.gracePeriod
       ? props.gracePeriod
       : TARGET_GRACE_PERIOD;
@@ -43,7 +43,7 @@ class TargetStage {
       }
       this.ticksLeft = this.ticksToSpawn;
       if (target) {
-        target.mount();
+        target.activate();
       }
       return target;
     } else {
@@ -52,4 +52,4 @@ class TargetStage {
     }
   }
 }
-export default TargetStage;
+export default TargetProvider;
