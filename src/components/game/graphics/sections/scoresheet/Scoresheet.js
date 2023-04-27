@@ -1,19 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { SCORESHEET_HEIGHT, SCORESHEET_WIDTH } from "../../Layout";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../../theme/Theme";
 
+const PADDING_DIMENSIONS = 20;
+const FONT_SIZE = 24;
 
 const scoresheetStyle = {
-  minWidth: SCORESHEET_WIDTH,
-  minHeight: SCORESHEET_HEIGHT,
+  width: (SCORESHEET_WIDTH - PADDING_DIMENSIONS).toString() + "px",
+  height: (SCORESHEET_HEIGHT - PADDING_DIMENSIONS).toString() + "px",
+  padding: PADDING_DIMENSIONS.toString() + "px",
+  backgroundColor: EMPTY_COLOR.getHex(),
+}
+
+const labelStyle = {
+  height: "60px",
+  maxWidth: "200px",
+  margin: PADDING_DIMENSIONS.toString() + "px",
+  padding: PADDING_DIMENSIONS.toString() + "px",
+  fontSize: FONT_SIZE.toString() + "px",
+  backgroundColor: MARKER_COLOR.getHex(),
+  color: FILLED_COLOR.getHex(),
 }
 
 const Scoresheet = (props) => {
   if (props.gameState) {
     const scorekeeper = props.gameState.coreState.scorekeeper;
     return (<div style={scoresheetStyle}>
-      <div>{"Level: " + scorekeeper.level}</div>
-      <div>{"Score: " + scorekeeper.score}</div>
-      <div>{"Strikes: " + scorekeeper.strikes}</div>
+      <div style={labelStyle}>{"Level: " + scorekeeper.level}</div>
+      <div style={labelStyle}>{"Score: " + scorekeeper.score}</div>
+      <div style={labelStyle}>{"Strikes: " + scorekeeper.strikes}</div>
     </div>)
   }
 }
