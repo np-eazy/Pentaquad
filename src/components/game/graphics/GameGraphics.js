@@ -1,5 +1,5 @@
 import { inBounds } from "../coreState/utils/Functions";
-import { BOARD_SIZE } from "../Constants";
+import { BOARD_SIZE } from "../rules/Constants";
 
 import { renderBoard, updateBoard } from "./sections/Board";
 import { renderQueue, updateQueue } from "./sections/Queue";
@@ -15,13 +15,13 @@ import {
   TOTAL_WIDTH,
 } from "./Layout";
 
-import { DEBUG, debugCell } from "../Debug";
+import { DEBUG, debugCell } from "../DebugDisplay";
 
 // The class which organizes all canvas and graphics-related code. Each
 const GameGraphics = (props) => {
   var board = props.gameState.coreState.board;
   var [xSize, ySize] = [board[0].length, board.length];
-  var [xCellSize, yCellSize] = [BOARD_WIDTH / xSize, BOARD_HEIGHT / ySize];
+  var [cellWidth, cellHeight] = [BOARD_WIDTH / xSize, BOARD_HEIGHT / ySize];
 
   // A single loop of rendering and "updating"; these updates however are all downstream
   // from the CoreState and only include other props like timers/colors to aid with the
@@ -29,7 +29,7 @@ const GameGraphics = (props) => {
   function graphicLoop(canvas) {
     var gameState = props.gameState;
     var coreState = props.gameState.coreState;
-    renderBoard(canvas, board, xCellSize, yCellSize, {
+    renderBoard(canvas, board, cellWidth, cellHeight, {
       piece: coreState.currPiece,
       targets: coreState.targets,
       targetProvider: coreState.targetProvider,

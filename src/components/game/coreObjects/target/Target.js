@@ -8,12 +8,12 @@ import {
   drawRect,
   outlineRect,
   outlineRectOffset,
-} from "../../graphics/Pipeline";
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../graphics/Theme";
+} from "../../graphics/CanvasPipeline";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../theme/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt, sinusoid } from "../../graphics/utils/Functions";
 import { BOARD_X0, BOARD_Y0 } from "../../graphics/Layout";
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 import { generatePowerupCellType } from "../../coreState/RandomGeneration";
 
 const BORDER_COLOR = FILLED_COLOR;
@@ -155,37 +155,37 @@ class Target {
     }
   }
 
-  render(canvas, xCellSize, yCellSize) {
+  render(canvas, cellWidth, cellHeight) {
     if (this.mounted) {
       outlineRect(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize,
-        BOARD_Y0 + this.y0 * yCellSize,
-        (this.x1 - this.x0) * xCellSize,
-        (this.y1 - this.y0) * yCellSize,
+        BOARD_X0 + this.x0 * cellWidth,
+        BOARD_Y0 + this.y0 * cellHeight,
+        (this.x1 - this.x0) * cellWidth,
+        (this.y1 - this.y0) * cellHeight,
         BORDER_COLOR.getHex()
       );
       outlineRect(
         canvas,
-        BOARD_X0 + (this.x0 - 1) * xCellSize,
-        BOARD_Y0 + (this.y0 - 1) * yCellSize,
-        (this.x1 - this.x0 + 2) * xCellSize,
-        (this.y1 - this.y0 + 2) * yCellSize,
+        BOARD_X0 + (this.x0 - 1) * cellWidth,
+        BOARD_Y0 + (this.y0 - 1) * cellHeight,
+        (this.x1 - this.x0 + 2) * cellWidth,
+        (this.y1 - this.y0 + 2) * cellHeight,
         MARKER_COLOR.getHex()
       );
       if (this.ticksLeft <= 3) {
-        this.renderWarning(canvas, xCellSize, yCellSize);
+        this.renderWarning(canvas, cellWidth, cellHeight);
       }
       if (this.mainCell) {
-        this.renderPowerup(canvas, xCellSize, yCellSize);
+        this.renderPowerup(canvas, cellWidth, cellHeight);
       }
     } else {
       outlineRect(
         canvas,
-        BOARD_X0 + this.x0 * xCellSize,
-        BOARD_Y0 + this.y0 * yCellSize,
-        (this.x1 - this.x0) * xCellSize,
-        (this.y1 - this.y0) * yCellSize,
+        BOARD_X0 + this.x0 * cellWidth,
+        BOARD_Y0 + this.y0 * cellHeight,
+        (this.x1 - this.x0) * cellWidth,
+        (this.y1 - this.y0) * cellHeight,
         interpolateColor(
           MARKER_COLOR,
           FILLED_COLOR,
@@ -197,13 +197,13 @@ class Target {
   }
 
   // Render a flashing inset border if TTL is less than or equal to 3
-  renderWarning(canvas, xCellSize, yCellSize) {
+  renderWarning(canvas, cellWidth, cellHeight) {
     outlineRect(
       canvas,
-      BOARD_X0 + this.x0 * xCellSize - WARNING_BORDER_SIZE,
-      BOARD_Y0 + this.y0 * yCellSize - WARNING_BORDER_SIZE,
-      (this.x1 - this.x0) * xCellSize + 2 * WARNING_BORDER_SIZE,
-      (this.y1 - this.y0) * yCellSize + 2 * WARNING_BORDER_SIZE,
+      BOARD_X0 + this.x0 * cellWidth - WARNING_BORDER_SIZE,
+      BOARD_Y0 + this.y0 * cellHeight - WARNING_BORDER_SIZE,
+      (this.x1 - this.x0) * cellWidth + 2 * WARNING_BORDER_SIZE,
+      (this.y1 - this.y0) * cellHeight + 2 * WARNING_BORDER_SIZE,
       interpolateColor(
         MARKER_COLOR,
         FILLED_COLOR,
@@ -222,14 +222,14 @@ class Target {
 
   // If the Target is holding onto a Cell with a special ability, the Target
   // is rendered with an animation matching the type of cell it is holding.
-  renderPowerup(canvas, xCellSize, yCellSize) {
+  renderPowerup(canvas, cellWidth, cellHeight) {
     var [x, y] = [
-      BOARD_X0 + this.x0 * xCellSize,
-      BOARD_Y0 + this.y0 * yCellSize,
+      BOARD_X0 + this.x0 * cellWidth,
+      BOARD_Y0 + this.y0 * cellHeight,
     ];
-    var [xSize, ySize] = [
-      xCellSize * (this.x1 - this.x0),
-      yCellSize * (this.y1 - this.y0),
+    var [targetWidth, targetHeight] = [
+      cellWidth * (this.x1 - this.x0),
+      cellHeight * (this.y1 - this.y0),
     ]
 
     var borderColor = interpolateColor(
@@ -243,8 +243,8 @@ class Target {
         canvas,
         x,
         y,
-        xSize,
-        ySize,
+        targetWidth,
+        targetHeight,
         borderColor.getHex(),
         POWERUP_OFFSET
       );
@@ -254,8 +254,8 @@ class Target {
         canvas,
         x,
         y,
-        xSize,
-        ySize,
+        targetWidth,
+        targetHeight,
         borderColor.getHex(),
         d * POWERUP_OFFSET
       );
@@ -263,30 +263,30 @@ class Target {
         canvas,
         x,
         y,
-        xSize,
-        ySize,
+        targetWidth,
+        targetHeight,
         borderColor.getHex(),
         2 * d * POWERUP_OFFSET
       );
     } else if (this.mainCell.type == CELL_TYPE.DRILL) {
-      var innerLength = (((this.timer * CLOCK_FREQ) % 1) * xSize) / 2;
+      var innerLength = (((this.timer * CLOCK_FREQ) % 1) * targetWidth) / 2;
       outlineRectOffset(
         canvas,
         x,
         y,
-        xSize,
-        ySize,
+        targetWidth,
+        targetHeight,
         FILLED_COLOR.getHex(),
         innerLength
       );
     } else if (this.mainCell.type == CELL_TYPE.TOWER) {
-      var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * xSize) / 2;
+      var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * targetWidth) / 2;
       outlineRectOffset(
         canvas,
         x,
         y,
-        xSize,
-        ySize,
+        targetWidth,
+        targetHeight,
         FILLED_COLOR.getHex(),
         innerLength
       );

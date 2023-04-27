@@ -1,10 +1,10 @@
 import Cell from "./Cell";
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 
-import { outlineRectOffset } from "../../graphics/Pipeline";
+import { outlineRectOffset } from "../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
-import { BORDER_OFFSET, EMPTY_COLOR, MARKER_COLOR } from "../../graphics/Theme";
+import { BORDER_OFFSET, EMPTY_COLOR, MARKER_COLOR } from "../../theme/Theme";
 
 const CLOCK_FREQ = 0.01;
 

@@ -28,7 +28,7 @@ import {
   BOMB_RADIUS,
   CELL_TYPE,
   FALLING_COUNTDOWN,
-} from "../Constants";
+} from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
 

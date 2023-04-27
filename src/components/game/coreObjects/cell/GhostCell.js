@@ -1,14 +1,14 @@
 import Cell from "./Cell";
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 
-import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../graphics/Pipeline";
+import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 import {
   BORDER_OFFSET,
   EMPTY_COLOR,
   LIGHT_AMPLITUDE,
-} from "../../graphics/Theme";
+} from "../../theme/Theme";
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;

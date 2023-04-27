@@ -1,5 +1,5 @@
 import Piece from "../../coreObjects/Piece";
-import { QUEUE_MAX_LENGTH } from "../../Constants";
+import { QUEUE_MAX_LENGTH } from "../../rules/Constants";
 import { generateCellType } from "../RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be

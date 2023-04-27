@@ -1,4 +1,4 @@
-import { Color } from "./utils/Colors";
+import { Color } from "../graphics/utils/Colors";
 
 // Theme colors for the Game, and also other values used to generate
 // color suites from a BaseColor. Anything else that is graphics/theme-related
@@ -27,6 +27,24 @@ export const FILLED_COLOR = new Color({
   green: 125,
   blue: 145,
 });
+
+export const BASE_COLORS = [
+  new Color({ red: 255, green: 0, blue: 0 }),
+  new Color({ red: 0, green: 255, blue: 0 }),
+  new Color({ red: 0, green: 0, blue: 255 }),
+  new Color({ red: 255, green: 255, blue: 0 }),
+  new Color({ red: 0, green: 255, blue: 255 }),
+
+  new Color({ red: 255, green: 0, blue: 255 }),
+  new Color({ red: 0, green: 0, blue: 0 }),
+  new Color({ red: 255, green: 0, blue: 255 }),
+
+  new Color({ red: 65, green: 65, blue: 65 }),
+  new Color({ red: 125, green: 125, blue: 125 }),
+  new Color({ red: 185, green: 185, blue: 185 }),
+  new Color({ red: 255, green: 255, blue: 255 }),
+];
+
 
 // The amount by which to blend the BaseColor with FILLED_COLOR to
 // make the CurrentColor; this allows for more flexibility with BaseColors

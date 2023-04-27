@@ -3,7 +3,7 @@ import {
   TARGET_GRACE_PERIOD,
   TARGET_SPAWN_TIMER,
   TARGET_SPAWN_RADIUS,
-} from "../../Constants";
+} from "../../rules/Constants";
 import { generateRandomTarget } from "../RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be

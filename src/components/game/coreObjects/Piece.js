@@ -5,12 +5,13 @@ import BombCell from "./cell/BombCell";
 import DrillCell from "./cell/DrillCell";
 import TowerCell from "./cell/TowerCell";
 
-import { PRESETS, BASE_COLORS, CELL_TYPE } from "../Constants";
+import { PRESETS, CELL_TYPE } from "../rules/Constants";
+import { BASE_COLORS } from "../theme/Theme";
 import { randomDxn } from "../coreState/utils/Direction";
 import { randint, getPID } from "../coreState/utils/Functions";
 
 import { COLLISION_RADIUS } from "../coreState/utils/Params";
-import { DEBUG } from "../Debug";
+import { DEBUG } from "../DebugDisplay";
 
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.

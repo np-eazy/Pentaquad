@@ -4,12 +4,12 @@ import { GameAction, ActionType } from "./GameAction";
 
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 class GameController {
-  constructor({ windowSize, boardSize }) {
+  constructor({ windowDimensions, boardSize }) {
     this.actionQueue = [];
     this.cursorX = 0;
     this.cursorY = 0;
     this.toggleMoveTo = false;
-    this.windowSize = windowSize;
+    this.windowDimensions = windowDimensions;
     this.boardSize = boardSize;
   }
   // We should have two types of controls: holdable keys which follow the rule above, and single-press keys which already work as
@@ -81,9 +81,9 @@ class GameController {
   }
 
   // Map the global location of the mouse with the in-game grid index of the cursor.
-  gridCursor(windowSize, boardSize) {
-    var x = Math.floor((this.cursorX / windowSize) * boardSize);
-    var y = Math.floor((this.cursorY / windowSize) * boardSize);
+  gridCursor(windowDimensions, boardSize) {
+    var x = Math.floor((this.cursorX / windowDimensions) * boardSize);
+    var y = Math.floor((this.cursorY / windowDimensions) * boardSize);
     return [x, y];
   }
 
@@ -94,7 +94,7 @@ class GameController {
       return action;
     } else {
       if (this.toggleMoveTo) {
-        var [x_, y_] = this.gridCursor(this.windowSize, this.boardSize);
+        var [x_, y_] = this.gridCursor(this.windowDimensions, this.boardSize);
         this.actionQueue.push(
           new GameAction(ActionType.MOVE_TO, { x: x_, y: y_ })
         );

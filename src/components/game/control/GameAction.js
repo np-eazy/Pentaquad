@@ -4,7 +4,7 @@ import {
   PLACEMENT_COUNTDOWN,
   ROTATION_ADJUSTMENT_SIZE,
   CELL_TYPE,
-} from "../Constants";
+} from "../rules/Constants";
 
 
 // Different types of GameAction, with each different type telling us how the action props should be handled.

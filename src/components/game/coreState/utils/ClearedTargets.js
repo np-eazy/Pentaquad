@@ -1,4 +1,4 @@
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 
 // Check all filled targets, remove them from targetBlocks, and erase all
 // covered cells to replace with a call to newCell

@@ -1,4 +1,4 @@
-import { NORMAL_CELL_LIFETIME } from "../../Constants";
+import { NORMAL_CELL_LIFETIME } from "../../rules/Constants";
 
 import { Color, interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
@@ -8,7 +8,7 @@ import {
   CELL_MID_LIGHT,
   CELL_CENTER_LIGHT,
   CELL_BASE_COLOR_BLEND,
-} from "../../graphics/Theme";
+} from "../../theme/Theme";
 import { LIGHT_UPDATE_THRESHOLD } from "../../coreState/utils/Params";
 
 // Decay rate of X and Y offsets after row breaks.

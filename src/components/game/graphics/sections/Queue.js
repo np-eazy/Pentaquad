@@ -1,10 +1,10 @@
 import { drawPiece, updatePiece } from "../objects/Piece";
-import { QUEUE_WIDTH } from "../../Constants";
 import {
+  QUEUE_WIDTH,
   QUEUE_HEIGHT,
   QUEUE_X0,
   QUEUE_Y0,
-  QUEUE_CELL_SIZE as QUEUE_CELL_SIZE,
+  QUEUE_CELL_DIMENSIONS,
   drawBackground,
 } from "../Layout";
 
@@ -21,10 +21,10 @@ export function renderQueue(canvas, pieceProvider) {
     drawPiece(
       canvas,
       pieceProvider.queue[i],
-      QUEUE_X0 + x_ * QUEUE_CELL_SIZE,
-      QUEUE_Y0 + y_ * QUEUE_CELL_SIZE,
-      QUEUE_CELL_SIZE,
-      QUEUE_CELL_SIZE
+      QUEUE_X0 + x_ * QUEUE_CELL_DIMENSIONS,
+      QUEUE_Y0 + y_ * QUEUE_CELL_DIMENSIONS,
+      QUEUE_CELL_DIMENSIONS,
+      QUEUE_CELL_DIMENSIONS
     );
   }
 }

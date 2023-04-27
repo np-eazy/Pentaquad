@@ -1,12 +1,12 @@
 import Cell from "./Cell";
-import { CELL_TYPE } from "../../Constants";
-import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../graphics/Pipeline";
+import { CELL_TYPE } from "../../rules/Constants";
+import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../graphics/CanvasPipeline";
 
 import {
   EMPTY_COLOR,
   LIGHT_AMPLITUDE,
   BORDER_OFFSET,
-} from "../../graphics/Theme";
+} from "../../theme/Theme";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 

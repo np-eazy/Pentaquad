@@ -19,8 +19,8 @@ import { drawPiece, updatePiece } from "../objects/Piece";
 export const renderBoard = (
   canvas,
   board,
-  xCellSize,
-  yCellSize,
+  cellWidth,
+  cellHeight,
   { piece, targets, targetProvider, controller }
 ) => {
   // Draw grid cells
@@ -30,19 +30,19 @@ export const renderBoard = (
     for (var x = 0; x < xSize; x++) {
       board[y][x].render(
         canvas,
-        x * xCellSize + BOARD_X0,
-        y * yCellSize + BOARD_Y0,
-        xCellSize,
-        yCellSize
+        x * cellWidth + BOARD_X0,
+        y * cellHeight + BOARD_Y0,
+        cellWidth,
+        cellHeight
       );
     }
   }
-  drawPiece(canvas, piece, BOARD_X0, BOARD_Y0, xCellSize, yCellSize);
-  targets.forEach((target) => target.render(canvas, xCellSize, yCellSize));
+  drawPiece(canvas, piece, BOARD_X0, BOARD_Y0, cellWidth, cellHeight);
+  targets.forEach((target) => target.render(canvas, cellWidth, cellHeight));
   targetProvider.nextTargets.forEach((target) =>
-    target.render(canvas, xCellSize, yCellSize)
+    target.render(canvas, cellWidth, cellHeight)
   );
-  drawCursor(canvas, board, controller, BOARD_HEIGHT, xCellSize, yCellSize);
+  drawCursor(canvas, board, controller, BOARD_HEIGHT, cellWidth, cellHeight);
 };
 
 export const updateBoard = (board, { piece, targets, targetProvider }) => {

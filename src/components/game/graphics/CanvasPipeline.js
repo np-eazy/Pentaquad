@@ -6,27 +6,27 @@
 // serve as entry points to call Rust/WASM/WebGL functions and APIs for more
 // powerful rendering.
 
-export function drawRect(canvas, x, y, xSize, ySize, color) {
+export function drawRect(canvas, x, y, width, height, color) {
   canvas.fillStyle = color;
-  canvas.fillRect(x, y, xSize, ySize);
+  canvas.fillRect(x, y, width, height);
 }
 
-export function outlineRect(canvas, x, y, xSize, ySize, color) {
+export function outlineRect(canvas, x, y, width, height, color) {
   canvas.strokeStyle = color;
   canvas.beginPath();
-  canvas.strokeRect(x, y, xSize, ySize);
+  canvas.strokeRect(x, y, width, height);
   canvas.closePath();
 }
 
-export function drawRectOffset(canvas, x, y, xSize, ySize, color, offset) {
+export function drawRectOffset(canvas, x, y, width, height, color, offset) {
   canvas.fillStyle = color;
-  canvas.fillRect(x + offset, y + offset, xSize - 2 * offset, ySize - 2 * offset);
+  canvas.fillRect(x + offset, y + offset, width - 2 * offset, height - 2 * offset);
 }
 
 
-export function outlineRectOffset(canvas, x, y, xSize, ySize, color, offset) {
+export function outlineRectOffset(canvas, x, y, width, height, color, offset) {
   canvas.strokeStyle = color;
   canvas.beginPath();
-  canvas.strokeRect(x + offset, y + offset, xSize - 2 * offset, ySize - 2 * offset);
+  canvas.strokeRect(x + offset, y + offset, width - 2 * offset, height - 2 * offset);
   canvas.closePath();
 }

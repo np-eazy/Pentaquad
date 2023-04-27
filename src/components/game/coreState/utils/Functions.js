@@ -1,7 +1,7 @@
 // Utility functions specifically for dealing with discrete ints and indices on the board for CoreState.
 // Not to be confused with utility functions in graphics
 
-import { PIECE_SPAWN_MARGIN } from "../../Constants";
+import { PIECE_SPAWN_MARGIN } from "../../rules/Constants";
 import { Angle, Dxn } from "./Direction";
 
 // Generate a random integer from a up to but not including b

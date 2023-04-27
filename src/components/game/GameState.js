@@ -1,5 +1,5 @@
 import { callOnDropzone } from "./coreState/utils/Dropzone";
-import { FALLING_COUNTDOWN, CELL_TYPE } from "./Constants";
+import { FALLING_COUNTDOWN, CELL_TYPE } from "./rules/Constants";
 
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,

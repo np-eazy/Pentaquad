@@ -1,4 +1,4 @@
-import { CELL_TYPE } from "../../Constants";
+import { CELL_TYPE } from "../../rules/Constants";
 import { inBounds } from "./Functions";
 
 // A function that finds all the cells under a piece about to be dropped, and calls
