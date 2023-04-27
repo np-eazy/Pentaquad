@@ -55,6 +55,11 @@ class Cell {
     this.marked = false;
   }
 
+  setTTL(ttl) {
+    this.lifetime = ttl;
+    this.ttl = ttl;
+  }
+
   // Copy props from another Cell, regardless of what type/subclass of cell it is. This is useful for
   // transition graphics when a Cell changes its type.
   getAttributesFrom(other) {

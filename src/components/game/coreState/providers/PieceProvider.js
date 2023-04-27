@@ -18,7 +18,7 @@ class PieceProvider {
   }
 
   // To be called by CoreState when it needs another piece
-  consumePiece() {
+  consumePiece(level = 1) {
     var piece = this.queue.shift();
     if (this.locked) {
       this.queue.unshift(piece);

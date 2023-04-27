@@ -1,10 +1,15 @@
 export const MAX_LEVELS = 10;
+// export const LEVEL_SCORE_THRESHOLDS = [
+//   200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 35000, 50000,
+// ];
+
+
 export const LEVEL_SCORE_THRESHOLDS = [
-  200, 500, 1000, 2000, 5000, 10000, 15000, 20000, 35000, 50000,
+  200, 400, 600, 800, 1000, 1200, 15000, 20000, 35000, 50000,
 ];
 
 // Board parameters
-export const FALLING_COUNTDOWN_LVL = [30, 28, 26, 24, 20, 40, 36, 32, 28, 24]; // Wait this many ticks between each fallingUpdate() call on coreState
+export const FALLING_COUNTDOWN_LVL = [30, 26, 22, 18, 15, 40, 36, 32, 28, 24]; // Wait this many ticks between each fallingUpdate() call on coreState
 
 // Piece spawning
 export const POWERUP_RARITY_LVL = [5, 5, 6, 6, 7, 7, 8, 8, 9, 9];

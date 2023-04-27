@@ -57,12 +57,13 @@ class Piece {
   }
 
   // Before the piece is activated to a global location, it shouldn't be used/updated.
-  activatePiece({ center_x, center_y, direction, pidSize }) {
+  activatePiece({ center_x, center_y, direction, pidSize, ttl }) {
     this.activated = true;
     this.cx = center_x;
     this.cy = center_y;
     this.dxn = direction;
     this.pidSize = pidSize;
+    this.mainCell.setTTL(ttl);
 
     this.cells = new Map();
     for (var [x, y] of this.preset) {
