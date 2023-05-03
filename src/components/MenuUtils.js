@@ -28,6 +28,7 @@ export const basicButtonStyle = {
 
     borderStyle: "solid",
     borderWidth: "1px",
+    borderRadius: "5px",
     borderColor: FILLED_COLOR.getHex(),
 
     maxWidth: "150px",
