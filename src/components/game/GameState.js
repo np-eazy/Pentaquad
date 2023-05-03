@@ -6,6 +6,12 @@ import { FALLING_COUNTDOWN, CELL_TYPE, BOARD_SIZE } from "./rules/Constants";
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,
 // or leave intervals for graphic transitions.
 
+export const Mode = {
+  MAIN_MENU: 0,
+  TUTORIAL: 1,
+  SETTINGS: 2,
+  SINGLE_PLAYER: 3,
+}
 // Required props:
 // - coreState: the CoreState of the game
 // - controller: the GameController of the game
@@ -15,8 +21,23 @@ const GameState = class {
     this.controller = props.controller;
     this.coreState.controller = this.controller;
     this.ticks = 0;
-    this.isRunning = true;
+    this.isRunning = false;
     this.delayTimer = 0;
+    this.setMode(Mode.MAIN_MENU);
+  }
+
+  setMode(mode) {
+    this.mode = mode;
+    if (mode == Mode.MAIN_MENU) {
+
+    } else if (mode == Mode.TUTORIAL) {
+
+    } else if (mode == Mode.SETTINGS) {
+
+    } else if (mode == Mode.SINGLE_PLAYER) {
+      this.startOver();
+      this.isRunning = true;
+    }
   }
 
   togglePause() {

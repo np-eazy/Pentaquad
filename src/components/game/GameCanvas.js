@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import GameState from "./GameState";
+import GameState, { Mode } from "./GameState";
 import CoreState from "./coreState/CoreState";
 import GameController from "../game/control/GameController";
 
@@ -8,6 +8,9 @@ import GameGraphics from "./graphics/GameGraphics";
 import { WINDOW_DIMENSIONS, BOARD_SIZE, REFRESH_MS } from "./rules/Constants";
 import { TOTAL_HEIGHT, TOTAL_WIDTH } from "./graphics/Layout";
 import Scoresheet from "./graphics/sections/scoresheet/Scoresheet";
+import { MainMenu } from "../mainMenu/MainMenu";
+import { Tutorial } from "../tutorial/Tutorial";
+import { Settings } from "../settings/Settings";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.
@@ -76,6 +79,17 @@ const GameCanvas = (props) => {
       <canvas id="gameGraphics" width={TOTAL_WIDTH} height={TOTAL_HEIGHT}>
         <GameGraphics gameState={gameState} />
       </canvas>
+      <>
+        {gameState.mode == Mode.MAIN_MENU ? 
+        <MainMenu gameState={gameState} />
+        : ""}
+        {gameState.mode == Mode.TUTORIAL ? 
+        <Tutorial gameState={gameState} />
+        : ""}
+        {gameState.mode == Mode.SETTINGS ? 
+        <Settings gameState={gameState} />
+        : ""}
+      </>
       <Scoresheet gameState={gameState} togglePauseGame={togglePauseGame} startNewGame={startNewGame}/>
     </div>
   );

@@ -15,6 +15,7 @@ import {
 } from "./Layout";
 
 import { DEBUG, debugCell } from "../DebugDisplay";
+import { Mode } from "../GameState";
 
 // The class which organizes all canvas and graphics-related code. Each
 const GameGraphics = (props) => {
@@ -25,25 +26,28 @@ const GameGraphics = (props) => {
   // A single loop of rendering and "updating"; these updates however are all downstream
   // from the CoreState and only include other props like timers/colors to aid with the
   // graphics. At this point all GameState values are set in stone.
-  function graphicLoop(canvas) {
-    var gameState = props.gameState;
-    var coreState = props.gameState.coreState;
-    renderBoard(canvas, board, cellWidth, cellHeight, {
-      piece: coreState.currPiece,
-      targets: coreState.targets,
-      targetProvider: coreState.targetProvider,
-      controller: gameState.controller,
-    });
-    renderQueue(canvas, coreState.pieceProvider);
-    renderPalette(canvas, coreState.pieceProvider);
+  function graphicLoop(canvas, mode) {
+    if (mode == Mode.SINGLE_PLAYER) {
+      var gameState = props.gameState;
+      var coreState = props.gameState.coreState;
+      renderBoard(canvas, board, cellWidth, cellHeight, {
+        piece: coreState.currPiece,
+        targets: coreState.targets,
+        targetProvider: coreState.targetProvider,
+        controller: gameState.controller,
+      });
+      renderQueue(canvas, coreState.pieceProvider);
+      renderPalette(canvas, coreState.pieceProvider);
+  
+      updateBoard(board, {
+        piece: coreState.currPiece,
+        targets: coreState.targets,
+        targetProvider: coreState.targetProvider,
+      });
+      updateQueue(coreState.pieceProvider);
+      updatePalette(coreState.pieceProvider);
+    }
 
-    updateBoard(board, {
-      piece: coreState.currPiece,
-      targets: coreState.targets,
-      targetProvider: coreState.targetProvider,
-    });
-    updateQueue(coreState.pieceProvider);
-    updatePalette(coreState.pieceProvider);
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.
     if (DEBUG) {
@@ -66,7 +70,7 @@ const GameGraphics = (props) => {
   if (ctx != null && props.gameState != undefined) {
     ctx.clearRect(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT);
     props.gameState
-      ? graphicLoop(ctx, props.gameState.coreState.board)
+      ? graphicLoop(ctx, props.gameState.mode)
       : emptyLoop(ctx);
   }
 };
