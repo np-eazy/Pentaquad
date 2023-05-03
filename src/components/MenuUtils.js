@@ -14,14 +14,17 @@ export const overlayWrapperStyle = {
 
 export const titleStyle = {
     textAlign: "center",
-    margin: "50px",
+    marginTop: "50px",
+    marginBottom: "150px",
     color: "#ffffff",
     fontSize: "48px",
 }
 
 export const basicButtonStyle = {
     padding: "10px",
-    margin: "10px",
+    margin: "auto",
+    marginTop: "20px",
+    width: "50%",
 
     borderStyle: "solid",
     borderWidth: "1px",
