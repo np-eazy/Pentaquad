@@ -5,9 +5,9 @@ import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../theme/Theme";
 // local x and y positions for different sections. Also helper functions for
 // background boxes.
 
-export const COLUMN_WIDTH = 200;
-export const BOARD_DIMENSIONS = 800;
-export const ROW_SIZE = 400;
+export const COLUMN_WIDTH = 150;
+export const BOARD_DIMENSIONS = 600;
+export const ROW_SIZE = 300;
 
 export const QUEUE_X0 = 0;
 export const QUEUE_Y0 = 0;

@@ -11,6 +11,7 @@ class PieceProvider {
     this.queue = [];
     this.palette = new Array(QUEUE_MAX_LENGTH).fill(null);
     this.locked = false;
+    this.yOffset = 0;
 
     for (var i = 0; i < this.maxLength; i++) {
       this.queue.push(new Piece(generateCellType()));
@@ -27,6 +28,7 @@ class PieceProvider {
         this.queue.push(new Piece(generateCellType()));
       }
     }
+    this.yOffset += 120;
     return piece;
   }
 
