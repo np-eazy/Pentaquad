@@ -1,6 +1,7 @@
 import React from "react";
 import { Mode } from "../game/GameState";
-import { basicButtonStyle, overlayWrapperStyle } from "../MenuUtils";
+import { basicButtonStyle, overlayWrapperStyle, titleStyle } from "../MenuUtils";
+import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 
 const wrapperStyle = {
     ...overlayWrapperStyle,
@@ -10,6 +11,7 @@ const wrapperStyle = {
 
 export const Settings = (props) => {
     return (<div style={wrapperStyle}>
-        <div style={basicButtonStyle} onClick={(e) => props.gameState.setMode(Mode.MAIN_MENU)}>{"Main menu"}</div>
+        <div style={titleStyle}>{"Settings coming soon!"}</div>
+        <ReturnToMenu clickHandler={(e) => props.gameState.setMode(Mode.MAIN_MENU)} />
     </div>);
 }

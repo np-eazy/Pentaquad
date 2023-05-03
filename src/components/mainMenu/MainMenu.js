@@ -17,6 +17,7 @@ const menuButtonStyle = {
     margin: "10px",
 }
 
+
 export const MainMenu = (props) => {
     return (<div style={wrapperStyle}>
         <div style={titleStyle}>{"Pentaquad"}</div>
