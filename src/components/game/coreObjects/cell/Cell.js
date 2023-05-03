@@ -12,7 +12,7 @@ import {
 import { LIGHT_UPDATE_THRESHOLD } from "../../coreState/utils/Params";
 
 // Decay rate of X and Y offsets after row breaks.
-const OFFSET_DECAY_RATE = 0.9;
+const OFFSET_DECAY_RATE = 0.85;
 const LIGHT_DECAY_RATE = 0.02;
 const BLACK = new Color({
   red: 0,
@@ -125,8 +125,8 @@ class Cell {
   // A quick function for getting x and y positions with adding the offset, it is used by every extension
   // so I moved it to a separate method; cannot super() it because its intention is purely to make local
   // vars easier.
-  getPosition(x0, y0) {
-    return [x0 + this.xOffset, y0 + this.yOffset];
+  getPosition(x0, y0, cellSize) {
+    return [x0 + this.xOffset * cellSize, y0 + this.yOffset * cellSize];
   }
 
   // Called at the end of each frame to update timers and to control certain variable dynamics.

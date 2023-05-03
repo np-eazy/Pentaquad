@@ -35,7 +35,7 @@ class TowerCell extends Cell {
   }
 
   render(canvas, x0, y0, width, height) {
-    var [x, y] = super.getPosition(x0, y0);
+    var [x, y] = super.getPosition(x0, y0, width);
 
     if (this.currentColor) {
       var d = this.meter * LIGHT_AMPLITUDE * 0.5 + LIGHT_AMPLITUDE;

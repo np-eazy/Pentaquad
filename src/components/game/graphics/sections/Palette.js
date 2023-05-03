@@ -1,3 +1,5 @@
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../theme/Theme";
+import { drawRectOffset, outlineRectOffset } from "../CanvasPipeline";
 import {
   drawBackground,
   QUEUE_CELL_DIMENSIONS,
@@ -12,13 +14,39 @@ import { drawPiece, updatePiece } from "../objects/Piece";
 // can see which key to press to get a certain held piece, rendered on the right of the board.
 // See comment in ./Board.js for more about convention with objects and sections
 
-const CELL_OFFSET = 2.5;
+const CELL_OFFSET = 3;
 const Y_CELL_INCREMENT = 6;
 
 export function renderPalette(canvas, pieceProvider) {
   drawBackground(canvas, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT);
   for (var i = 0; i < pieceProvider.palette.length; i++) {
     var [x_, y_] = [CELL_OFFSET, CELL_OFFSET + Y_CELL_INCREMENT * i];
+    var [x0, y0] = [PALETTE_X0, PALETTE_Y0 + Y_CELL_INCREMENT * QUEUE_CELL_DIMENSIONS * i]
+    drawRectOffset(canvas,         
+      x0,
+      y0,
+      PALETTE_WIDTH,
+      (Y_CELL_INCREMENT + 1) * QUEUE_CELL_DIMENSIONS,
+      MARKER_COLOR.getHex(),
+      12,
+    );
+    outlineRectOffset(canvas,         
+      x0,
+      y0,
+      PALETTE_WIDTH,
+      (Y_CELL_INCREMENT + 1) * QUEUE_CELL_DIMENSIONS,
+      EMPTY_COLOR.getHex(),
+      16,
+    );
+    canvas.font = "16px Arial";
+    canvas.fillStyle = FILLED_COLOR.getHex();
+    canvas.fillText((i + 1).toString(),
+      x0 + 25,
+      y0 + 35,
+    );
+
+    
+
     if (pieceProvider.palette[i] != null) {
       drawPiece(
         canvas,

@@ -29,7 +29,7 @@ class DrillCell extends Cell {
 
   // Draw non-solid cell with a continually shrinking border
   render(canvas, x0, y0, width, height) {
-    var [x, y] = super.getPosition(x0, y0);
+    var [x, y] = super.getPosition(x0, y0, width);
     var borderColor = interpolateColor(
       MARKER_COLOR,
       this.currentColor,

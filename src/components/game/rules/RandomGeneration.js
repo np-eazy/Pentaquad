@@ -7,6 +7,11 @@ export function generatePowerupCellType(level = 1) {
   return randint(2, Math.min(3 + level, 6));
 }
 
+// Generate a CellType with a powerup
+export function generateSuperCellType(level = 1) {
+  return randint(4, 6);
+}
+
 // Generate a cell with a chance of being a powerup
 export function generateCellType(level = 1) {
   return randint(0, POWERUP_RARITY_LVL[level]) == 0 ? generatePowerupCellType(level) : 1;

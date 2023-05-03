@@ -40,7 +40,7 @@ class GhostCell extends Cell {
 
   // Draw a normal cell whose base color is flashing
   render(canvas, x0, y0, width, height) {
-    var [x, y] = super.getPosition(x0, y0);
+    var [x, y] = super.getPosition(x0, y0, width);
     var d = (this.meter * LIGHT_AMPLITUDE) / 2 + LIGHT_AMPLITUDE;
     var g = GHOST_LEVEL + GHOST_AMP * Math.sin(this.timer * GHOST_FREQ);
     drawRect(
