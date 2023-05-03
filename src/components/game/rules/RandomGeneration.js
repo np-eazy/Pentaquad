@@ -4,7 +4,7 @@ import { POWERUP_RARITY_LVL, TARGET_GROWTH_TIMER_LVL } from "./Levels";
 
 // Generate a CellType with a powerup
 export function generatePowerupCellType(level = 1) {
-  return randint(2, Math.min(2 + level, 6));
+  return randint(2, Math.min(5 + level, 6));
 }
 
 // Generate a CellType with a powerup
@@ -14,7 +14,8 @@ export function generateSuperCellType(level = 1) {
 
 // Generate a cell with a chance of being a powerup
 export function generateCellType(level = 1) {
-  return randint(0, POWERUP_RARITY_LVL[level]) == 0 ? generatePowerupCellType() : 1;
+  // return randint(0, POWERUP_RARITY_LVL[level]) == 0 ? generatePowerupCellType() : 1;
+  return 5;
 }
 
 // Generate a target within a random location specified by minBound and maxBound

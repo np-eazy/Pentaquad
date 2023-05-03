@@ -58,6 +58,7 @@ const CoreState = class {
         this.board[y][x] = this.emptyCellProvider.newCell();
       }
     }
+    this.threshold = props.boardSize;
     // Create 4 different sets to check if a boundary has been hit
     this.collisionSets = new BoundarySets(
       props.boardSize,

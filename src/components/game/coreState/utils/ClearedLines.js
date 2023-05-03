@@ -86,7 +86,6 @@ export const handleClearedLines = (coreState) => {
             board[boardSize - 1][x_].yOffset = 1;
           }
         }
-        break;
       }
     }
   }

@@ -43,7 +43,7 @@ class NormalCell extends Cell {
   // Draw 3 concentric solid squares and 1 in the back.
   render(canvas, x0, y0, width, height) {
     super.render();
-    var [x, y] = super.getPosition(x0, y0);
+    var [x, y] = super.getPosition(x0, y0, width);
 
     if (this.currentColor) {
       var borderColor = interpolateColor(

@@ -39,7 +39,7 @@ class EmptyCell extends Cell {
 
   // "Mix" the background and foreground rectangle based on the meter level
   render(canvas, x0, y0, width, height) {
-    var [x, y] = super.getPosition(x0, y0);
+    var [x, y] = super.getPosition(x0, y0, width);
     drawRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
     var d = ((1 - this.meter) * width) / 2;
     drawRectOffset(canvas, x, y, width, height, EMPTY_COLOR.getHex(), d);
