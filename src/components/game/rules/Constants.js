@@ -11,7 +11,7 @@ export const FALLING_COUNTDOWN = 30; // Wait this many ticks between each fallin
 
 // Piece spawning
 export const QUEUE_MAX_LENGTH = 5;
-export const POWERUP_RARITY = 10;
+export const POWERUP_RARITY = 1;
 export const PIECE_SPAWN_MARGIN = 2;
 
 // Target spawning

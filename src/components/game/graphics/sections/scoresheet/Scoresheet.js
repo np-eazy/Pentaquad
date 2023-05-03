@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { SCORESHEET_HEIGHT, SCORESHEET_WIDTH } from "../../Layout";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../../theme/Theme";
 
-const PADDING_DIMENSIONS = 20;
-const FONT_SIZE = 24;
+const PADDING_DIMENSIONS = 10;
+const FONT_SIZE = 16;
 
 const scoresheetStyle = {
   width: (SCORESHEET_WIDTH - PADDING_DIMENSIONS).toString() + "px",
@@ -20,34 +20,31 @@ const labelContainerStyle = {
 }
 
 const labelStyle = {
-  height: "40px",
+  height: "20px",
   minWidth: "200px",
   margin: PADDING_DIMENSIONS.toString() + "px",
   padding: PADDING_DIMENSIONS.toString() + "px",
   fontSize: FONT_SIZE.toString() + "px",
   fontFamily: "Verdana, Arial, sans-serif",
   backgroundColor: MARKER_COLOR.getHex(),
-  color: FILLED_COLOR.getHex(),
+  color: "#ffffff",
 }
 
 const buttonStyle = {
-  height: "40px",
+  height: "20px",
   minWidth: "200px",
   margin: PADDING_DIMENSIONS.toString() + "px",
   padding: PADDING_DIMENSIONS.toString() + "px",
-  borderWidth: "2px",
+  borderWidth: "1px",
   borderStyle: "solid",
   borderColor: FILLED_COLOR.getHex(),
 
   fontSize: FONT_SIZE.toString() + "px",
   fontFamily: "Verdana, Arial, sans-serif",
-  color: FILLED_COLOR.getHex(),
-}
+  color: "#ffffff",}
 
 
 const Scoresheet = (props) => {
-
-
   if (props.gameState) {
     const scorekeeper = props.gameState.coreState.scorekeeper;
     return (<div style={scoresheetStyle}>

@@ -12,7 +12,7 @@ export const LEVEL_SCORE_THRESHOLDS = [
 export const FALLING_COUNTDOWN_LVL = [30, 26, 22, 18, 15, 40, 36, 32, 28, 24]; // Wait this many ticks between each fallingUpdate() call on coreState
 
 // Piece spawning
-export const POWERUP_RARITY_LVL = [5, 5, 6, 6, 7, 7, 8, 8, 9, 9];
+export const POWERUP_RARITY_LVL = [7, 7, 7, 6, 6, 6, 5, 5, 5, 5];
 
 // Target spawning
 export const TARGET_SPAWN_RADIUS_LVL = [1, 1, 1, 1, 1, 2, 2, 2, 2, 2];

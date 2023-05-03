@@ -13,7 +13,7 @@ class PieceProvider {
     this.locked = false;
 
     for (var i = 0; i < this.maxLength; i++) {
-      this.queue.push(new Piece(generateCellType()));
+      this.queue.push(new Piece(generateCellType(1)));
     }
   }
 
@@ -24,7 +24,7 @@ class PieceProvider {
       this.queue.unshift(piece);
     } else {
       if (this.queue.length < this.maxLength) {
-        this.queue.push(new Piece(generateCellType()));
+        this.queue.push(new Piece(generateCellType(level)));
       }
     }
     return piece;

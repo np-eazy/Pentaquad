@@ -150,10 +150,12 @@ export function executePlace(coreState) {
 }
 // Deactivate the current piece into the holding slot on PieceProvider
 export function executeHold(coreState, slotNumber) {
-  coreState.currPiece.deactivatePiece();
-  coreState.pieceProvider.holdPiece(coreState.currPiece, slotNumber);
-  coreState.currPiece = null;
-  coreState.readyToPlace = true;
+  if (coreState.currPiece) {
+    coreState.currPiece.deactivatePiece();
+    coreState.pieceProvider.holdPiece(coreState.currPiece, slotNumber);
+    coreState.currPiece = null;
+    coreState.readyToPlace = true;
+  }
 }
 // Lock the current piece for the next 5 moves
 export function executeLock(coreState) {
