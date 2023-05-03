@@ -12,6 +12,12 @@ const wrapperStyle = {
 export const Settings = (props) => {
     return (<div style={wrapperStyle}>
         <div style={titleStyle}>{"Settings coming soon!"}</div>
-        <ReturnToMenu clickHandler={(e) => props.gameState.setMode(Mode.MAIN_MENU)} />
+        <ReturnToMenu clickHandler={(e) => {
+            if (!props.gameState.isRunning) {
+                props.gameState.setMode(Mode.MAIN_MENU)
+            } else {
+                props.gameState.setMode(Mode.SINGLE_PLAYER)
+            }
+        }} />
     </div>);
 }

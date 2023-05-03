@@ -26,16 +26,18 @@ const GameState = class {
     this.setMode(Mode.MAIN_MENU);
   }
 
-  setMode(mode) {
+  setMode(mode, props) {
     this.mode = mode;
     if (mode == Mode.MAIN_MENU) {
 
     } else if (mode == Mode.TUTORIAL) {
 
     } else if (mode == Mode.SETTINGS) {
-
+      // this.isRunning = false; Commenting this out until we have another flag that says a game is currently going on
     } else if (mode == Mode.SINGLE_PLAYER) {
-      this.startOver();
+      if (props && props.startOver) {
+        this.startOver();
+      }
       this.isRunning = true;
     }
   }

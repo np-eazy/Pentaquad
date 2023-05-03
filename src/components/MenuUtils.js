@@ -35,6 +35,7 @@ export const basicButtonStyle = {
 
     maxWidth: "150px",
     textAlign: "center",
+    zIndex: "200",
 
     backgroundColor: "#000000",
     color: "#ffffff",
@@ -52,9 +53,11 @@ export const navButtonStyle = {
 
     borderStyle: "solid",
     borderWidth: "1px",
+    borderRadius: "5px",
     borderColor: FILLED_COLOR.getHex(),
 
     textAlign: "center",
+    zIndex: "200",
 
     backgroundColor: "#000000",
     color: FILLED_COLOR.getHex(),

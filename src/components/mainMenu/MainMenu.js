@@ -1,6 +1,7 @@
 import React from "react";
 import { basicButtonStyle, overlayWrapperStyle, titleStyle } from "../MenuUtils";
 import { Mode } from "../game/GameState";
+import { GoToSettings } from "../settings/GoToSettings";
 
 const wrapperStyle = {
     ...overlayWrapperStyle,
@@ -20,9 +21,9 @@ const menuButtonStyle = {
 
 export const MainMenu = (props) => {
     return (<div style={wrapperStyle}>
+        {/* <GoToSettings clickHandler={(e) => props.gameState.setMode(Mode.SETTINGS)} /> */}
         <div style={titleStyle}>{"Pentaquad"}</div>
-        <div style={basicButtonStyle} onClick={(e) => props.gameState.setMode(Mode.SETTINGS)}>{"Settings"}</div>
         <div style={basicButtonStyle} onClick={(e) => props.gameState.setMode(Mode.TUTORIAL)}>{"Tutorial"}</div>
-        <div style={basicButtonStyle} onClick={(e) => props.gameState.setMode(Mode.SINGLE_PLAYER)}>{"Play"}</div>
+        <div style={basicButtonStyle} onClick={(e) => props.gameState.setMode(Mode.SINGLE_PLAYER, {startOver: true})}>{"Play"}</div>
     </div>);
 }

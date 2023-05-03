@@ -11,6 +11,9 @@ import Scoresheet from "./graphics/sections/scoresheet/Scoresheet";
 import { MainMenu } from "../mainMenu/MainMenu";
 import { Tutorial } from "../tutorial/Tutorial";
 import { Settings } from "../settings/Settings";
+import { GoToSettings } from "../settings/GoToSettings";
+import { overlayWrapperStyle } from "../MenuUtils";
+import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.
@@ -76,20 +79,33 @@ const GameCanvas = (props) => {
       onMouseMove={handleMouseMove}
       onMouseDown={handleMouseDown}
     >
+
       <canvas id="gameGraphics" width={TOTAL_WIDTH} height={TOTAL_HEIGHT}>
         <GameGraphics gameState={gameState} />
       </canvas>
-      <>
-        {gameState.mode == Mode.MAIN_MENU ? 
-        <MainMenu gameState={gameState} />
+      <div style={overlayWrapperStyle}>
+        {gameState.mode == Mode.MAIN_MENU ?
+          <MainMenu gameState={gameState}/>
+        : ""} 
+        {gameState.mode == Mode.TUTORIAL ?
+          <Tutorial gameState={gameState}/>
+        : ""} 
+        {gameState.mode == Mode.SETTINGS ?
+          <Settings gameState={gameState}/>
+        : ""} 
+        {gameState.mode == Mode.MAIN_MENU || gameState.mode == Mode.SINGLE_PLAYER ?
+          <GoToSettings clickHandler={(e) => gameState.setMode(Mode.SETTINGS)} /> 
         : ""}
-        {gameState.mode == Mode.TUTORIAL ? 
-        <Tutorial gameState={gameState} />
+        {gameState.mode == Mode.SETTINGS || gameState.mode == Mode.TUTORIAL ?
+          <ReturnToMenu clickHandler={(e) => {
+            if (!gameState.isRunning) {
+              gameState.setMode(Mode.MAIN_MENU)
+            } else {
+              gameState.setMode(Mode.SINGLE_PLAYER)
+            }
+          }} /> 
         : ""}
-        {gameState.mode == Mode.SETTINGS ? 
-        <Settings gameState={gameState} />
-        : ""}
-      </>
+      </div>
       <Scoresheet gameState={gameState} togglePauseGame={togglePauseGame} startNewGame={startNewGame}/>
     </div>
   );
