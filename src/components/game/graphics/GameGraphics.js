@@ -27,26 +27,24 @@ const GameGraphics = (props) => {
   // from the CoreState and only include other props like timers/colors to aid with the
   // graphics. At this point all GameState values are set in stone.
   function graphicLoop(canvas, mode) {
-    if (mode == Mode.SINGLE_PLAYER) {
-      var gameState = props.gameState;
-      var coreState = props.gameState.coreState;
-      renderBoard(canvas, board, cellWidth, cellHeight, {
-        piece: coreState.currPiece,
-        targets: coreState.targets,
-        targetProvider: coreState.targetProvider,
-        controller: gameState.controller,
-      });
-      renderQueue(canvas, coreState.pieceProvider);
-      renderPalette(canvas, coreState.pieceProvider);
-  
-      updateBoard(board, {
-        piece: coreState.currPiece,
-        targets: coreState.targets,
-        targetProvider: coreState.targetProvider,
-      });
-      updateQueue(coreState.pieceProvider);
-      updatePalette(coreState.pieceProvider);
-    }
+    var gameState = props.gameState;
+    var coreState = props.gameState.coreState;
+    renderBoard(canvas, board, cellWidth, cellHeight, {
+      piece: coreState.currPiece,
+      targets: coreState.targets,
+      targetProvider: coreState.targetProvider,
+      controller: gameState.controller,
+    });
+    renderQueue(canvas, coreState.pieceProvider);
+    renderPalette(canvas, coreState.pieceProvider);
+
+    updateBoard(board, {
+      piece: coreState.currPiece,
+      targets: coreState.targets,
+      targetProvider: coreState.targetProvider,
+    });
+    updateQueue(coreState.pieceProvider);
+    updatePalette(coreState.pieceProvider);
 
 
     // Render all the selected cell's attributes in the scoresheet if this flag is up.

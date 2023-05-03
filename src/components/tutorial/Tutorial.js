@@ -1,12 +1,11 @@
 import React from "react";
-import { TOTAL_HEIGHT, TOTAL_WIDTH } from "../game/graphics/Layout";
 import { Mode } from "../game/GameState";
+import { basicButtonStyle, overlayWrapperStyle } from "../MenuUtils";
 
-const overlayWrapperStyle = {
-    width: TOTAL_WIDTH,
-    height: TOTAL_HEIGHT,
+const wrapperStyle = {
+    ...overlayWrapperStyle,
     backgroundColor: "#000000",
-    opacity: 0.5,
+    opacity: "0.5",
 }
 
 const menuButtonStyle = {
@@ -18,7 +17,7 @@ const menuButtonStyle = {
 }
 
 export const Tutorial = (props) => {
-    return (<div style={overlayWrapperStyle}>
-        <div style={menuButtonStyle} onClick={(e) => props.gameState.setMode(Mode.MAIN_MENU)}>{"Main menu"}</div>
+    return (<div style={wrapperStyle}>
+        <div style={basicButtonStyle} onClick={(e) => props.gameState.setMode(Mode.MAIN_MENU)}>{"Main menu"}</div>
     </div>);
 }
