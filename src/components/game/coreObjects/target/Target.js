@@ -13,7 +13,7 @@ import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt, sinusoid } from "../../graphics/utils/Functions";
 import { BOARD_X0, BOARD_Y0 } from "../../graphics/Layout";
 import { CELL_TYPE } from "../../rules/Constants";
-import { generatePowerupCellType } from "../../rules/RandomGeneration";
+import { generatePowerupCellType, generateSuperCellType } from "../../rules/RandomGeneration";
 
 const BORDER_COLOR = FILLED_COLOR;
 const WARNING_BORDER_SIZE = 4;
@@ -71,7 +71,7 @@ class Target {
   }
 
   generateCell() {
-    var type = generatePowerupCellType();
+    var type = generateSuperCellType();
     if (type == CELL_TYPE.GHOST) {
       return new GhostCell();
     } else if (type == CELL_TYPE.BOMB) {
