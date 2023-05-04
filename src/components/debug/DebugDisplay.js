@@ -1,10 +1,10 @@
 import React from "react";
-import { overlayWrapperStyle } from "../MenuUtils";
-import { BOARD_DIMENSIONS, BOARD_HEIGHT } from "../game/graphics/Layout";
-import { BOARD_SIZE, PLACEMENT_COUNTDOWN, TARGET_SPAWN_RADIUS } from "../game/rules/Constants";
-import { inBounds, insideTarget } from "../game/coreState/utils/Functions";
-import { FALLING_COUNTDOWN_LVL, POWERUP_RARITY_LVL, TARGET_SPAWN_RADIUS_LVL } from "../game/rules/Levels";
-import { ROUNDING_FACTOR } from "../game/coreState/utils/Params";
+import { overlayWrapperStyle } from "../Styles";
+import { BOARD_DIMENSIONS, BOARD_HEIGHT } from "../../graphics/Layout";
+import { BOARD_SIZE, PLACEMENT_COUNTDOWN, TARGET_SPAWN_RADIUS } from "../../game/rules/Constants";
+import { inBounds, insideTarget } from "../../game/coreState/utils/Functions";
+import { FALLING_COUNTDOWN_LVL, POWERUP_RARITY_LVL, TARGET_SPAWN_RADIUS_LVL } from "../../game/rules/Levels";
+import { ROUNDING_FACTOR } from "../../game/coreState/utils/Params";
 
 const debugSectionStyle = {
     margin: "10px",

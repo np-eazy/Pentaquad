@@ -1,5 +1,5 @@
 import React from "react";
-import { navButtonStyle } from "../MenuUtils";
+import { navButtonStyle } from "../Styles";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUndo } from "@fortawesome/free-solid-svg-icons";

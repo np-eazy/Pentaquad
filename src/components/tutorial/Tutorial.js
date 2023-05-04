@@ -1,6 +1,6 @@
 import React from "react";
-import { Mode } from "../game/GameState";
-import { basicButtonStyle, overlayWrapperStyle, titleStyle } from "../MenuUtils";
+import { Mode } from "../../game/GameState";
+import { basicButtonStyle, overlayWrapperStyle, titleStyle } from "../Styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
