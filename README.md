@@ -4,9 +4,7 @@ Pentaquad is a web game of a more complex Tetris variant, which features differe
 specific targets rather than filled lines in the original game.
 
 Alpha demo: 
-https://user-images.githubusercontent.com/10951707/236352047-0956943e-65d9-4e42-a458-12133b938f10.mov
-
-
+https://user-images.githubusercontent.com/10951707/236352504-9efac17b-6c6e-493f-867b-aae775ef95e6.mp4
 
 ## To download/start the game:
 - Clone this Github repository to your local drive
