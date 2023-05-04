@@ -1,9 +1,17 @@
+
+
 Pentaquad is a web game of a more complex Tetris variant, which features different gravity modes and objectives for clearing
 specific targets rather than filled lines in the original game.
 
+Alpha demo: 
+https://user-images.githubusercontent.com/10951707/236352047-0956943e-65d9-4e42-a458-12133b938f10.mov
+
+
+
 ## To download/start the game:
 - Clone this Github repository to your local drive
-- `$ cd` into the Pentaquad folder and run `$ npm start`
+- `$ cd` into the Pentaquad folder, if this is the first time running then run `$ npm install` before anything else.
+- Run `$ npm start`.
 - A new Chrome window should pop up with the game running. 
 
 ## Game Rules (Alpha)
