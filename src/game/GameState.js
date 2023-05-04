@@ -12,6 +12,8 @@ export const Mode = {
   SETTINGS: 2,
   SINGLE_PLAYER: 3,
 }
+
+const INITIAL_Y_OFFSET = 120;
 // Required props:
 // - coreState: the CoreState of the game
 // - controller: the GameController of the game
@@ -24,6 +26,7 @@ const GameState = class {
     this.isRunning = false;
     this.delayTimer = 0;
     this.setMode(Mode.MAIN_MENU);
+    this.queueOffset = 0;
   }
 
   setMode(mode, props) {
@@ -42,13 +45,16 @@ const GameState = class {
     }
   }
 
+  onPlacement() {
+    this.yOffset += INITIAL_Y_OFFSET;
+  }
+
   togglePause() {
     this.isRunning = !this.isRunning;
   }
 
   startOver() {
     this.coreState = new CoreState({
-      boardSize: BOARD_SIZE,
     });
     this.coreState.controller = this.controller;
     this.ticks = 0;
@@ -75,8 +81,8 @@ const GameState = class {
   // before each frame when the piece could have moved elsewhere.
   unmarkBoard() {
     var board = this.coreState.board;
-    for (var x = 0; x < this.coreState.boardSize; x++) {
-      for (var y = 0; y < this.coreState.boardSize; y++) {
+    for (var x = 0; x < BOARD_SIZE; x++) {
+      for (var y = 0; y < BOARD_SIZE; y++) {
         board[y][x].marked = false;
       }
     }

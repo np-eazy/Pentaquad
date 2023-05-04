@@ -6,12 +6,15 @@ import {
   QUEUE_Y0,
   QUEUE_CELL_DIMENSIONS,
   drawBackground,
-} from "../Layout";
+} from "../theme/Layout";
 import { drawRectOffset, outlineRect, outlineRectOffset } from "../CanvasPipeline";
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../theme/Theme";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../theme/ColorScheme";
+import { QUEUE_DAMP_RATE } from "../theme/Dynamics";
 
 const CELL_OFFSET = 3;
 const Y_CELL_INCREMENT = 6;
+const BOX_OFFSET = 12;
+const BOX_BORDER_OFFSET = 16;
 
 // The provider shows all the incoming pieces that the user is about to receive,
 // rendered on the left of the board.
@@ -27,7 +30,7 @@ export function renderQueue(canvas, pieceProvider) {
       QUEUE_WIDTH,
       (Y_CELL_INCREMENT + 1) * QUEUE_CELL_DIMENSIONS,
       MARKER_COLOR.getHex(),
-      12,
+      BOX_OFFSET,
     );
     outlineRectOffset(canvas,         
       x0,
@@ -35,7 +38,7 @@ export function renderQueue(canvas, pieceProvider) {
       QUEUE_WIDTH,
       (Y_CELL_INCREMENT + 1) * QUEUE_CELL_DIMENSIONS,
       EMPTY_COLOR.getHex(),
-      16,
+      BOX_BORDER_OFFSET,
     );
 
     drawPiece(
@@ -53,5 +56,5 @@ export function updateQueue(pieceProvider) {
   for (const piece of pieceProvider.queue) {
     updatePiece(piece);
   }
-  pieceProvider.yOffset *= 0.8;
+  pieceProvider.yOffset *= QUEUE_DAMP_RATE;
 }

@@ -7,7 +7,7 @@ import {
   BOARD_WIDTH,
   TOTAL_HEIGHT,
   TOTAL_WIDTH,
-} from "./Layout";
+} from "./theme/Layout";
 
 // The class which organizes all canvas and graphics-related code. Each
 const GameGraphics = (props) => {

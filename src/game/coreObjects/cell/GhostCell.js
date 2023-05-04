@@ -9,7 +9,10 @@ import {
 } from "../../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
-import { BORDER_OFFSET, EMPTY_COLOR, LIGHT_AMPLITUDE } from "../../../graphics/theme/Theme";
+import { EMPTY_COLOR } from "../../../graphics/theme/ColorScheme";
+import { CELL_BORDER_OFFSET } from "./Cell";
+import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
+
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;
@@ -88,7 +91,7 @@ class GhostCell extends Cell {
       width,
       height,
       EMPTY_COLOR.getHex(),
-      BORDER_OFFSET
+      CELL_BORDER_OFFSET
     );
   }
 }

@@ -6,7 +6,7 @@ import {
   drawRectOffset,
   outlineRect,
 } from "../../../graphics/CanvasPipeline";
-import { EMPTY_COLOR, MARKER_COLOR } from "../../../graphics/theme/Theme";
+import { EMPTY_COLOR, MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
 
 const METER_DECAY_RATE = 0.9;
 

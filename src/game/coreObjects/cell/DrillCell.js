@@ -4,7 +4,8 @@ import { CELL_TYPE } from "../../rules/Constants";
 import { outlineRectOffset } from "../../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
-import { BORDER_OFFSET, EMPTY_COLOR, MARKER_COLOR } from "../../../graphics/theme/Theme";
+import { EMPTY_COLOR, MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
+import { CELL_BORDER_OFFSET } from "./Cell";
 
 const CLOCK_FREQ = 0.01;
 
@@ -43,7 +44,7 @@ class DrillCell extends Cell {
       width,
       height,
       borderColor.getHex(),
-      BORDER_OFFSET
+      CELL_BORDER_OFFSET
     );
 
     var clock = (this.timer * CLOCK_FREQ) % 1;

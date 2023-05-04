@@ -1,6 +1,6 @@
 import React from "react";
 import { Mode } from "../../game/GameState";
-import { basicButtonStyle, overlayWrapperStyle, titleStyle } from "../Styles";
+import { menuButtonStyle, overlayWrapperStyle, titleStyle } from "../Styles";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 
 const wrapperStyle = {

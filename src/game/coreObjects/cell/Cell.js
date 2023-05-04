@@ -8,17 +8,14 @@ import {
   CELL_MID_LIGHT,
   CELL_CENTER_LIGHT,
   CELL_BASE_COLOR_BLEND,
-} from "../../../graphics/theme/Theme";
+  BLACK,
+} from "../../../graphics/theme/ColorScheme";
 import { LIGHT_UPDATE_THRESHOLD } from "../../coreState/utils/Params";
+import { CELL_DAMP_RATE, CELL_DIM_RATE } from "../../../graphics/theme/Dynamics";
 
 // Decay rate of X and Y offsets after row breaks.
-const OFFSET_DECAY_RATE = 0.85;
-const LIGHT_DECAY_RATE = 0.02;
-const BLACK = new Color({
-  red: 0,
-  green: 0,
-  blue: 0,
-});
+export const CELL_BORDER_OFFSET = 2;
+
 
 // A Cell is the base unit of this game, which is played on a 2D array of them. The different structures and pieces
 // formed by Cells intercellularly is handled by CoreState, whereas the Cell class itself focuses on intracellular
@@ -131,9 +128,9 @@ class Cell {
 
   // Called at the end of each frame to update timers and to control certain variable dynamics.
   idleUpdate() {
-    this.xOffset *= OFFSET_DECAY_RATE;
-    this.yOffset *= OFFSET_DECAY_RATE;
-    this.lightColor.interpolateTo(BLACK, LIGHT_DECAY_RATE, linInt);
+    this.xOffset *= CELL_DAMP_RATE;
+    this.yOffset *= CELL_DAMP_RATE;
+    this.lightColor.interpolateTo(BLACK, CELL_DIM_RATE, linInt);
     if (this.lightColor.red > LIGHT_UPDATE_THRESHOLD) {
       this.updateCurrentColor();
       this.updateColorSuite();

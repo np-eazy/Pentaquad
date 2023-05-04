@@ -1,16 +1,16 @@
 import { Angle, Dxn } from "../coreState/utils/Direction";
-import { BOARD_X0, BOARD_Y0 } from "../../graphics/Layout";
+import { BOARD_X0, BOARD_Y0 } from "../../graphics/theme/Layout";
 import { GameAction, ActionType } from "./GameAction";
+import { BOARD_SIZE, WINDOW_DIMENSIONS } from "../rules/Constants";
 
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 class GameController {
-  constructor({ windowDimensions, boardSize }) {
+  constructor({}) {
     this.actionQueue = [];
     this.cursorX = 0;
     this.cursorY = 0;
     this.toggleMoveTo = false;
-    this.windowDimensions = windowDimensions;
-    this.boardSize = boardSize;
+    this.windowDimensions = WINDOW_DIMENSIONS;
   }
   // We should have two types of controls: holdable keys which follow the rule above, and single-press keys which already work as
   // intended with keyDown. Holdable keys include WASD movement, and single-press keys include SPACE and QE for placing/rotation.
@@ -81,9 +81,9 @@ class GameController {
   }
 
   // Map the global location of the mouse with the in-game grid index of the cursor.
-  getCursorCoords(windowDimensions, boardSize) {
-    var x = Math.floor((this.cursorX / windowDimensions) * boardSize);
-    var y = Math.floor((this.cursorY / windowDimensions) * boardSize);
+  getCursorCoords(windowDimensions) {
+    var x = Math.floor((this.cursorX / windowDimensions) * BOARD_SIZE);
+    var y = Math.floor((this.cursorY / windowDimensions) * BOARD_SIZE);
     return [x, y];
   }
 
@@ -96,7 +96,6 @@ class GameController {
       if (this.toggleMoveTo) {
         var [x_, y_] = this.getCursorCoords(
           this.windowDimensions,
-          this.boardSize
         );
         this.actionQueue.push(
           new GameAction(ActionType.MOVE_TO, { x: x_, y: y_ })

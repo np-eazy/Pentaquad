@@ -11,9 +11,9 @@ import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 import {
   MARKER_COLOR,
-  LIGHT_AMPLITUDE,
-  BORDER_OFFSET,
-} from "../../../graphics/theme/Theme";
+} from "../../../graphics/theme/ColorScheme";
+import { CELL_BORDER_OFFSET } from "./Cell";
+import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;
@@ -80,7 +80,7 @@ class NormalCell extends Cell {
         width,
         height,
         borderColor.getHex(),
-        BORDER_OFFSET
+        CELL_BORDER_OFFSET
       );
     }
   }

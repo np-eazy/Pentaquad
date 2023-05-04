@@ -1,28 +1,33 @@
 import React from "react";
 import { overlayWrapperStyle } from "../Styles";
-import { BOARD_DIMENSIONS, BOARD_HEIGHT } from "../../graphics/Layout";
-import { BOARD_SIZE, PLACEMENT_COUNTDOWN, TARGET_SPAWN_RADIUS } from "../../game/rules/Constants";
+import { BOARD_DIMENSIONS } from "../../graphics/theme/Layout";
+import { BOARD_SIZE, PLACEMENT_COUNTDOWN } from "../../game/rules/Constants";
 import { inBounds, insideTarget } from "../../game/coreState/utils/Functions";
-import { FALLING_COUNTDOWN_LVL, POWERUP_RARITY_LVL, TARGET_SPAWN_RADIUS_LVL } from "../../game/rules/Levels";
+import { FALLING_COUNTDOWN_LVL, LEVEL_SCORE_THRESHOLDS, POWERUP_RARITY_LVL, TARGET_SPAWN_RADIUS_LVL } from "../../game/rules/Levels";
 import { ROUNDING_FACTOR } from "../../game/coreState/utils/Params";
+import { WHITE } from "../../graphics/theme/ColorScheme";
+import { displayNum } from "../../graphics/utils/Functions";
 
 const debugSectionStyle = {
     margin: "10px",
 
-    color: "#ffffff",
-    size: "16px",
+    color: WHITE.getHex(),
+    fontSize: "16px",
 }
 
 const debugSubsectionStyle = {
     margin: "20px",
-}
 
+    textShadow: "2px 2px #000000",
+}
 
 export const DebugDisplay = (props) => {
     const gameState = props.gameState;
     const coreState = gameState.coreState;
     const currPiece = coreState.currPiece;
-
+    const scorekeeper = coreState.scorekeeper;
+    const level = scorekeeper.level;
+    
     var [x, y] = gameState.controller.getCursorCoords(
         BOARD_DIMENSIONS,
         BOARD_SIZE,
@@ -36,7 +41,6 @@ export const DebugDisplay = (props) => {
             <div>{"Growing penalty: " + target.isGrowing.toString()}</div>
             <div>{"Penalty countdown: " + target.penaltyCounter.toString() + "/" + target.placementsToPenalty.toString()}</div>
             <div>{"Powerup type: " + target.mainCell.type.toString()}</div>
-
         </div>);
     }
 
@@ -44,10 +48,11 @@ export const DebugDisplay = (props) => {
     return (<div style={overlayWrapperStyle}>
         <div style={{...debugSectionStyle, float: "left",}}>
             <div style={debugSubsectionStyle}>
-                <div>{"PID size: " + coreState.pidSize.toString()}</div>
-                <div>{"Falling Countdown: " + FALLING_COUNTDOWN_LVL[coreState.scorekeeper.level] + " frames"}</div>
-                <div>{"Powerup Rarity: 1/" + POWERUP_RARITY_LVL[coreState.scorekeeper.level]}</div>
-                <div>{"Target spawn size: " + (1 + 2 * TARGET_SPAWN_RADIUS_LVL[coreState.scorekeeper.level])}</div>
+                <div>{"Level: " + level.toString()}</div>
+                <div>{"Points to next level: " + LEVEL_SCORE_THRESHOLDS[level - 1]}</div>
+                <div>{"Falling Countdown: " + FALLING_COUNTDOWN_LVL[level] + " frames"}</div>
+                <div>{"Powerup Rarity: 1/" + POWERUP_RARITY_LVL[level]}</div>
+                <div>{"Target spawn size: " + (1 + 2 * TARGET_SPAWN_RADIUS_LVL[level])}</div>
             </div>
 
             <div style={debugSubsectionStyle}>
@@ -75,7 +80,7 @@ export const DebugDisplay = (props) => {
                     <div>{"Type: " + cell.type.toString()}</div>
                     <div>{"Offset: " + cell.xOffset.toString() + ", " + cell.yOffset.toString()}</div>
                     <div>{"Timer: " + cell.timer.toString()}</div>
-                    <div>{"Meter: " + (Math.round(cell.meter * ROUNDING_FACTOR) / ROUNDING_FACTOR).toString()}</div>
+                    <div>{"Meter: " + displayNum(cell.meter)}</div>
                     <div>{"TTL: " + cell.ttl.toString() + "/" + cell.lifetime.toString()}</div>
                     <div>{"Marked: " + cell.marked.toString()}</div>
 

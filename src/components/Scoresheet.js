@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { SCORESHEET_HEIGHT, SCORESHEET_WIDTH } from "../graphics/Layout";
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../graphics/theme/Theme";
+import { SCORESHEET_HEIGHT, SCORESHEET_WIDTH } from "../graphics/theme/Layout";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../graphics/theme/ColorScheme";
 
 const PADDING_DIMENSIONS = 10;
 const FONT_SIZE = 16;

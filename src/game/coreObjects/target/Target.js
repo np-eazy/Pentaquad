@@ -8,10 +8,10 @@ import {
   outlineRect,
   outlineRectOffset,
 } from "../../../graphics/CanvasPipeline";
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../../graphics/theme/Theme";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
 import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt, sinusoid } from "../../../graphics/utils/Functions";
-import { BOARD_X0, BOARD_Y0 } from "../../../graphics/Layout";
+import { BOARD_X0, BOARD_Y0 } from "../../../graphics/theme/Layout";
 import { CELL_TYPE } from "../../rules/Constants";
 import { generatePowerupCellType, generateSuperCellType } from "../../rules/RandomGeneration";
 
@@ -50,7 +50,6 @@ const CLOCK_FREQ = 0.01;
 class Target {
   constructor(props) {
     this.coreState = props.coreState;
-    this.boardSize = props.coreState.boardSize;
     this.x0 = props.x0;
     this.y0 = props.y0;
     this.x1 = props.x1;
@@ -134,7 +133,7 @@ class Target {
   clear(board, emptyCellProvider) {
     for (var x = this.x0 - 1; x < this.x1 + 1; x++) {
       for (var y = this.y0 - 1; y < this.y1 + 1; y++) {
-        if (inBounds(x, y, this.boardSize)) {
+        if (inBounds(x, y)) {
           board[y][x] = emptyCellProvider.newCell();
         }
       }
@@ -144,11 +143,11 @@ class Target {
 
   // Extend the corners out by one cell.
   grow() {
-    if (inBounds(this.x0 - 1, this.y0 - 1, this.boardSize)) {
+    if (inBounds(this.x0 - 1, this.y0 - 1)) {
       this.x0 -= 1;
       this.y0 -= 1;
     }
-    if (inBounds(this.x1 + 1, this.y1 + 1, this.boardSize)) {
+    if (inBounds(this.x1 + 1, this.y1 + 1)) {
       this.x1 += 1;
       this.y1 += 1;
     }

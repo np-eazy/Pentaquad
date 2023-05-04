@@ -4,7 +4,7 @@ import {
   BOARD_X0,
   BOARD_Y0,
   drawBackground,
-} from "../Layout";
+} from "../theme/Layout";
 import { drawCursor } from "../objects/Cursor";
 import { drawPiece, updatePiece } from "../objects/Piece";
 

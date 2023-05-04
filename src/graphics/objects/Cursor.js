@@ -1,6 +1,6 @@
 import { outlineRect } from "../CanvasPipeline";
-import { BOARD_X0, BOARD_Y0 } from "../Layout";
-import { FILLED_COLOR } from "../theme/Theme";
+import { BOARD_X0, BOARD_Y0 } from "../theme/Layout";
+import { FILLED_COLOR } from "../theme/ColorScheme";
 
 export const drawCursor = (
   canvas,

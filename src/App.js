@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import GameCanvas from './components/GameCanvas';
+import GameCanvas from './components/Game';
 import './App.css';
 
 function App() {

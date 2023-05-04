@@ -25,6 +25,7 @@ import {
   TARGET_SPAWN_MARGIN,
   PLACEMENT_COUNTDOWN,
   FALLING_COUNTDOWN,
+  BOARD_SIZE,
 } from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
@@ -41,27 +42,25 @@ const CoreState = class {
       // Create a new TargetProvider to take care of creating/dispensing targets
       coreState: this,
       minBound: TARGET_SPAWN_MARGIN,
-      maxBound: props.boardSize - TARGET_SPAWN_MARGIN,
+      maxBound: BOARD_SIZE - TARGET_SPAWN_MARGIN,
     });
     this.emptyCellProvider = new EmptyCellProvider();
     this.scorekeeper = new Scorekeeper({});
 
-    this.pidSize = (props.boardSize + BOUNDARY_EXTENSION_SIZE * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
-    this.boardSize = props.boardSize; // The dimension of the square board on which this game takes place.
-    this.board = [...Array(props.boardSize)].map(
+    this.pidSize = (BOARD_SIZE + BOUNDARY_EXTENSION_SIZE * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
+    this.board = [...Array(BOARD_SIZE)].map(
       (
         e // Create the main board for the game
-      ) => Array(props.boardSize).fill(null)
+      ) => Array(BOARD_SIZE).fill(null)
     );
     for (var y = 0; y < this.board.length; y++) {
       for (var x = 0; x < this.board.length; x++) {
         this.board[y][x] = this.emptyCellProvider.newCell();
       }
     }
-    this.threshold = props.boardSize;
+    this.threshold = BOARD_SIZE;
     // Create 4 different sets to check if a boundary has been hit
     this.collisionSets = new BoundarySets(
-      props.boardSize,
       BOUNDARY_EXTENSION_SIZE,
       this.pidSize
     );
@@ -111,7 +110,7 @@ const CoreState = class {
 
   // (Facilitated by PieceProvider) Create a new piece based on this CoreState's gravity, at a random location.
   createNewPiece() {
-    var [x, y] = getSpawnPosition(this.gravity, this.boardSize);
+    var [x, y] = getSpawnPosition(this.gravity);
     // Get the unmounted piece from PieceProvider; we need this loop in case async piece
     // doesn't arrive in time
     var piece;

@@ -1,4 +1,5 @@
 import { ROUNDING_FACTOR } from "../../game/coreState/utils/Params";
+import { displayNum } from "./Functions";
 
 // Utility functions specifically for dealing with colors.
 export function componentToHex(color) {
@@ -55,11 +56,11 @@ export class Color {
 
   toString() {
     return (
-      (Math.round(this.red * ROUNDING_FACTOR) / ROUNDING_FACTOR).toString() +
+      displayNum(this.red) +
       ", " +
-      (Math.round(this.green * ROUNDING_FACTOR) / ROUNDING_FACTOR).toString() +
+      displayNum(this.green) +
       ", " +
-      (Math.round(this.blue * ROUNDING_FACTOR) / ROUNDING_FACTOR).toString()
+      displayNum(this.blue)
     );
   }
 }

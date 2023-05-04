@@ -1,9 +1,9 @@
-import { BOARD_WIDTH } from "../../graphics/Layout";
+import { BOARD_WIDTH } from "../../graphics/theme/Layout";
 
 // Real time/space parameters
 export const WINDOW_DIMENSIONS = BOARD_WIDTH;
 export const REFRESH_MS = 10;
-export const DEBUG = true;
+export const DEBUG = false;
 
 // Board parameters
 export const BOARD_SIZE = 16;

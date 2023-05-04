@@ -1,4 +1,4 @@
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../theme/Theme";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../theme/ColorScheme";
 import { drawRectOffset, outlineRectOffset } from "../CanvasPipeline";
 import {
   drawBackground,
@@ -7,7 +7,7 @@ import {
   PALETTE_Y0,
   PALETTE_WIDTH,
   PALETTE_HEIGHT,
-} from "../Layout";
+} from "../theme/Layout";
 import { drawPiece, updatePiece } from "../objects/Piece";
 
 // The palette is the area where the user's held pieces are displayed, and where they
@@ -16,6 +16,9 @@ import { drawPiece, updatePiece } from "../objects/Piece";
 
 const CELL_OFFSET = 3;
 const Y_CELL_INCREMENT = 6;
+
+const [TEXT_X0, TEXT_Y0] = [25, 35];
+const TEXT_SIZE = 16;
 
 export function renderPalette(canvas, pieceProvider) {
   drawBackground(canvas, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT);
@@ -38,15 +41,14 @@ export function renderPalette(canvas, pieceProvider) {
       EMPTY_COLOR.getHex(),
       16,
     );
-    canvas.font = "16px Arial";
+    canvas.font = TEXT_SIZE.toString() + "px Arial";
     canvas.fillStyle = FILLED_COLOR.getHex();
     canvas.fillText((i + 1).toString(),
-      x0 + 25,
-      y0 + 35,
+      x0 + TEXT_X0,
+      y0 + TEXT_Y0,
     );
 
     
-
     if (pieceProvider.palette[i] != null) {
       drawPiece(
         canvas,

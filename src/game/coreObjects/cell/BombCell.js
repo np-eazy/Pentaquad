@@ -4,7 +4,8 @@ import { CELL_TYPE } from "../../rules/Constants";
 import { outlineRect, outlineRectOffset } from "../../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
-import { LIGHT_AMPLITUDE, MARKER_COLOR } from "../../../graphics/theme/Theme";
+import { MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
+import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
 
 const METER_FREQ = 0.03;
 const METER_AMP = 0.5;

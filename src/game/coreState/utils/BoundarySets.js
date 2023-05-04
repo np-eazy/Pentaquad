@@ -1,12 +1,13 @@
 import { getPID } from "./Functions";
 import { Angle } from "./Direction";
+import { BOARD_SIZE } from "../../rules/Constants";
 
 // A container class to hold CollisionSets for quick
 // collision detection.
 class BoundarySets {
-  constructor(boardSize, boundaryMargin, pidSize) {
+  constructor(boundaryMargin, pidSize) {
     this.boundarySets = [];
-    var [xSize, ySize] = [boardSize, boardSize];
+    var [xSize, ySize] = [BOARD_SIZE, BOARD_SIZE];
     var pid;
     for (var i = 0; i < 4; i++) {
       this.boundarySets.push(new Map());

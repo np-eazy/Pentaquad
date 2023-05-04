@@ -1,3 +1,4 @@
+import { QUEUE_INITIAL_OFFSET } from "../../../graphics/theme/Dynamics";
 import Piece from "../../coreObjects/Piece";
 import { QUEUE_MAX_LENGTH } from "../../rules/Constants";
 import { generateCellType } from "../../rules/RandomGeneration";
@@ -28,7 +29,7 @@ class PieceProvider {
         this.queue.push(new Piece(generateCellType(level)));
       }
     }
-    this.yOffset += 120;
+    this.yOffset += QUEUE_INITIAL_OFFSET;
     return piece;
   }
 

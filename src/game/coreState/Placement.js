@@ -3,12 +3,12 @@ import NormalCell from "../coreObjects/cell/NormalCell";
 import { callOnDropzone } from "./utils/Dropzone";
 import { inBounds } from "./utils/Functions";
 
-import { BOMB_RADIUS, CELL_TYPE } from "../rules/Constants";
+import { BOARD_SIZE, BOMB_RADIUS, CELL_TYPE } from "../rules/Constants";
 
 // increment times to live for each cell before converting to empty cell
 export function cellPlacementUpdate(coreState) {
-  for (var y = 0; y < coreState.boardSize; y++) {
-    for (var x = 0; x < coreState.boardSize; x++) {
+  for (var y = 0; y < BOARD_SIZE; y++) {
+    for (var x = 0; x < BOARD_SIZE; x++) {
       var cell = coreState.board[y][x];
       if (cell.ttl != -1) {
         if (cell.ttl == 0) {
@@ -42,7 +42,7 @@ export function placeNormal(coreState, piece) {
   var [x, y] = [0, 0];
   for (const [pid, [x_, y_]] of piece.cells) {
     [x, y] = [x_ + coreState.currPiece.cx, y_ + coreState.currPiece.cy];
-    if (inBounds(x, y, coreState.boardSize)) {
+    if (inBounds(x, y)) {
       var newCell = new NormalCell();
       newCell.getAttributesFrom(piece.mainCell);
       newCell.lightUp(piece.mainCell.baseColor);
@@ -55,12 +55,12 @@ export function placeNormal(coreState, piece) {
 export function placeBomb(coreState, piece) {
   for (
     var y = Math.max(0, piece.cy - BOMB_RADIUS);
-    y < Math.min(coreState.boardSize, piece.cy + BOMB_RADIUS + 1);
+    y < Math.min(BOARD_SIZE, piece.cy + BOMB_RADIUS + 1);
     y++
   ) {
     for (
       var x = Math.max(0, piece.cx - BOMB_RADIUS);
-      x < Math.min(coreState.boardSize, piece.cx + BOMB_RADIUS + 1);
+      x < Math.min(BOARD_SIZE, piece.cx + BOMB_RADIUS + 1);
       x++
     ) {
       coreState.board[y][x] = coreState.emptyCellProvider.newCell();

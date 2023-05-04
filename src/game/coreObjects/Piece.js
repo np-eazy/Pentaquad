@@ -6,7 +6,7 @@ import DrillCell from "./cell/DrillCell";
 import TowerCell from "./cell/TowerCell";
 
 import { PRESETS, CELL_TYPE, DEBUG } from "../rules/Constants";
-import { BASE_COLORS } from "../../graphics/theme/Theme";
+import { BASE_COLORS } from "../../graphics/theme/ColorScheme";
 import { randomDxn } from "../coreState/utils/Direction";
 import { randint, getPID } from "../coreState/utils/Functions";
 

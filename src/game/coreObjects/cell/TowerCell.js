@@ -7,14 +7,17 @@ import {
   outlineRectOffset,
 } from "../../../graphics/CanvasPipeline";
 
-import { EMPTY_COLOR, LIGHT_AMPLITUDE, BORDER_OFFSET } from "../../../graphics/theme/Theme";
+import { EMPTY_COLOR } from "../../../graphics/theme/ColorScheme";
+import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
 import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
+import { CELL_BORDER_OFFSET } from "./Cell";
 
 const GHOST_LEVEL = 0.5;
 const GHOST_AMP = 0.2;
 const GHOST_FREQ = 0.2;
 const CLOCK_FREQ = 0.01;
+
 
 // A cell which when placed fills everything in its falling path with normal cells.
 class TowerCell extends Cell {
@@ -84,7 +87,7 @@ class TowerCell extends Cell {
         width,
         height,
         EMPTY_COLOR.getHex(),
-        BORDER_OFFSET
+        CELL_BORDER_OFFSET
       );
 
       var innerLength = ((1 - ((this.timer * CLOCK_FREQ) % 1)) * width) / 2;
