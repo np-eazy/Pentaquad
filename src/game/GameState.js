@@ -55,6 +55,7 @@ const GameState = class {
 
   startOver() {
     this.coreState = new CoreState({
+      audioController: this.audioController,
     });
     this.coreState.controller = this.controller;
     this.ticks = 0;

@@ -30,6 +30,7 @@ import {
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
 import { NORMAL_CELL_LIFETIME_LVL, FALLING_COUNTDOWN_LVL } from "../rules/Levels";
+import { AudioController } from "../../audio/AudioController";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -37,6 +38,7 @@ import { NORMAL_CELL_LIFETIME_LVL, FALLING_COUNTDOWN_LVL } from "../rules/Levels
 const CoreState = class {
   constructor(props) {
     this.controller = null; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
+    this.audioController = props.audioController;
     this.pieceProvider = new PieceProvider({ coreState: this }); // Create a new PieceProvider to take care of creating/dispensing pieces
     this.targetProvider = new TargetProvider({
       // Create a new TargetProvider to take care of creating/dispensing targets
