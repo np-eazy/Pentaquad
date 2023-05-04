@@ -4,6 +4,7 @@
 // Collision window radius to save on collision calculations
 export const COLLISION_RADIUS = 3;
 export const LIGHT_UPDATE_THRESHOLD = 0.1;
+export const ROUNDING_FACTOR = 10000;
 
 // Extend edge boundaries a bit further to ensure pieces finish falling.
 export const BOUNDARY_EXTENSION_SIZE = 4;

@@ -14,6 +14,8 @@ import { Settings } from "../settings/Settings";
 import { GoToSettings } from "../settings/GoToSettings";
 import { overlayWrapperStyle } from "../MenuUtils";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
+import { DEBUG } from "./DebugDisplay";
+import { DebugDisplay } from "../debug/DebugDisplay";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.
@@ -84,6 +86,9 @@ const GameCanvas = (props) => {
         <GameGraphics gameState={gameState} />
       </canvas>
       <div style={overlayWrapperStyle}>
+        {DEBUG ?
+          <DebugDisplay gameState={gameState} />
+        : ""}
         {gameState.mode == Mode.MAIN_MENU ?
           <MainMenu gameState={gameState}/>
         : ""} 

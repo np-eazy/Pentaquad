@@ -58,11 +58,11 @@ class Target {
 
     // Similar to a lifetime-TTL loop, except each time it completes the Target's bounds grow,
     // making it harder to fill up. This can change
-    this.ticksToGrowth = props.ticksToGrowth;
-    this.ticksLeft = this.ticksToGrowth;
+    this.placementsToPenalty = props.ticksToGrowth;
+    this.penaltyCounter = this.placementsToPenalty;
     this.mainCell = this.generateCell();
     this.mainCell.setBaseColor(EMPTY_COLOR);
-    this.isMounted = false;
+    this.activated = false;
     this.isFilled = false;
     this.isCleared = false;
     this.isGrowing = props.isGrowing ? true : false;
@@ -105,9 +105,9 @@ class Target {
     if (this.checkFill(this.coreState.board)) {
       this.isFilled = true;
     } else {
-      this.ticksLeft -= 1;
-      if (this.ticksLeft == 0) {
-        this.ticksLeft = this.ticksToGrowth;
+      this.penaltyCounter -= 1;
+      if (this.penaltyCounter == 0) {
+        this.penaltyCounter = this.placementsToPenalty;
         if (this.isGrowing) {
           this.grow();
         } else {
@@ -172,7 +172,7 @@ class Target {
         (this.y1 - this.y0 + 2) * cellHeight,
         MARKER_COLOR.getHex()
       );
-      if (this.ticksLeft <= 3) {
+      if (this.penaltyCounter <= 3) {
         this.renderWarning(canvas, cellWidth, cellHeight);
       }
       if (this.mainCell) {
@@ -207,9 +207,9 @@ class Target {
         MARKER_COLOR,
         FILLED_COLOR,
         sinusoid(
-          this.ticksLeft == 3
+          this.penaltyCounter == 3
             ? WARNING_WAVE_3
-            : this.ticksLeft == 2
+            : this.penaltyCounter == 2
             ? WARNING_WAVE_2
             : WARNING_WAVE_1,
           this.timer

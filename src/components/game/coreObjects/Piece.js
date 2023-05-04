@@ -27,6 +27,7 @@ class Piece {
     if (DEBUG) {
       index = 0;
     }
+    this.shapeIndex = index;
     this.preset = PRESETS[index];
     this.baseColor = BASE_COLORS[index];
 

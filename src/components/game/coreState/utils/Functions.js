@@ -20,6 +20,10 @@ export function inBounds(x, y, boardSize) {
   return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
 }
 
+export function insideTarget(x, y, target) {
+  return target.x0 <= x && x < target.x1 && target.y0 <= y && y < target.y1;
+}
+
 // Get a sensible spawn position to put a new Piece or Target based on
 // the direction and boardSize. SPAWN_OFFSET keeps pieces from spawning
 // on the edges but also allows them to spawn further off screen.
