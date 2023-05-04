@@ -32,7 +32,7 @@ export const titleStyle = {
 };
 
 export const menuButtonStyle = {
-  maxWidth: "150px",
+  minWidth: "150px",
   padding: "10px",
 
   margin: "auto",
@@ -70,4 +70,25 @@ export const navButtonStyle = {
   textAlign: "center",
   color: FILLED_COLOR.getHex(),
   fontSize: "20px",
+};
+
+export const scoresheetStyle = {
+  minWidth: "100px",
+  minHeight: "36px",
+  padding: "10px",
+
+//   margin: "auto",
+//   width: "50%",
+//   marginTop: "20px",
+  textAlign: "center",
+  zIndex: "200",
+
+//   backgroundColor: EMPTY_COLOR.getHex(),
+//   borderStyle: "solid",
+//   borderWidth: "1px",
+//   borderRadius: "5px",
+//   borderColor: FILLED_COLOR.getHex(),
+
+  color: WHITE.getHex(),
+  fontSize: "16px",
 };

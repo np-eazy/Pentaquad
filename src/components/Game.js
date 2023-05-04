@@ -7,7 +7,7 @@ import GameController from "../game/control/GameController";
 import GameGraphics from "../graphics/GameGraphics";
 import { REFRESH_MS, DEBUG } from "../game/rules/Constants";
 import { TOTAL_HEIGHT, TOTAL_WIDTH } from "../graphics/theme/Layout";
-import Scoresheet from "./Scoresheet";
+import Scoresheet from "./scoresheet/Scoresheet";
 import { MainMenu } from "./mainMenu/MainMenu";
 import { Tutorial } from "./tutorial/Tutorial";
 import { Settings } from "./settings/Settings";
@@ -62,6 +62,7 @@ const Game = (props) => {
       </canvas>
       <div style={overlayWrapperStyle}>
         {DEBUG ? <DebugDisplay gameState={gameState}/> : ""}
+        
         {gameState.mode == Mode.MAIN_MENU ? (
           <MainMenu gameState={gameState}  audioController={audioController} />
         ) : (
@@ -76,6 +77,15 @@ const Game = (props) => {
           <Settings
             gameState={gameState}
             audioController={audioController} 
+            togglePauseGame={(e) => gameState.togglePause()}
+            startNewGame={(e) => gameState.startNewGame()}
+          />
+        ) : (
+          ""
+        )}
+        {gameState.mode == Mode.SINGLE_PLAYER ? (
+          <Scoresheet
+            gameState={gameState}
             togglePauseGame={(e) => gameState.togglePause()}
             startNewGame={(e) => gameState.startNewGame()}
           />
@@ -107,11 +117,6 @@ const Game = (props) => {
           ""
         )}
       </div>
-      <Scoresheet
-        gameState={gameState}
-        togglePauseGame={(e) => gameState.togglePause()}
-        startNewGame={(e) => gameState.startNewGame()}
-      />
     </div>
   );
 };

@@ -12,25 +12,25 @@ export const MainMenu = (props) => {
   return (
     <div style={overlayWrapperStyle}>
       <div style={overlayStyle}></div>
-      <div style={titleStyle}>{"Pentaquad"}</div>
-      <div
-        style={menuButtonStyle}
-        onClick={(e) => {
-          props.gameState.setMode(Mode.TUTORIAL);
-          props.audioController.queueSound(Sound.CLICK_BUTTON_A);
-        }}
-      >
-        {"Tutorial"}
-      </div>
-      <div
-        style={menuButtonStyle}
-        onClick={(e) => {
-            props.gameState.setMode(Mode.SINGLE_PLAYER, { startOver: true });
+        <div style={titleStyle}>{"Pentaquad"}</div>
+        <div
+          style={menuButtonStyle}
+          onClick={(e) => {
+            props.gameState.setMode(Mode.TUTORIAL);
             props.audioController.queueSound(Sound.CLICK_BUTTON_A);
-            props.audioController.queueSound(Sound.GAME_START);
+          }}
+        >
+          {"Tutorial"}
+        </div>
+        <div
+          style={menuButtonStyle}
+          onClick={(e) => {
+              props.gameState.setMode(Mode.SINGLE_PLAYER, { startOver: true });
+              props.audioController.queueSound(Sound.CLICK_BUTTON_A);
+              props.audioController.queueSound(Sound.GAME_START);
+            }
           }
-        }
-      >
+        >
         {"Play"}
       </div>
     </div>

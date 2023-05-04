@@ -1,6 +1,6 @@
 import { LEVEL_SCORE_THRESHOLDS, MAX_LEVELS } from "../rules/Levels";
 
-const MAX_STRIKES = 3;
+export const MAX_STRIKES = 3;
 
 const BASE_LINE_SCORE = 100;
 const BASE_TARGET_SCORE = 250;
