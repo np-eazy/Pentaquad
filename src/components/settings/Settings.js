@@ -1,23 +1,12 @@
 import React from "react";
 import { Mode } from "../../game/GameState";
-import { menuButtonStyle, overlayWrapperStyle, titleStyle } from "../Styles";
+import { overlayStyle, overlayWrapperStyle, titleStyle } from "../Styles";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 
-const wrapperStyle = {
-    ...overlayWrapperStyle,
-    backgroundColor: "#000000",
-    opacity: "0.5",
-}
-
 export const Settings = (props) => {
-    return (<div style={wrapperStyle}>
+    return (<div style={overlayWrapperStyle}>
+        <div style={overlayStyle}></div>
         <div style={titleStyle}>{"Settings coming soon!"}</div>
-        <ReturnToMenu clickHandler={(e) => {
-            if (!props.gameState.isRunning) {
-                props.gameState.setMode(Mode.MAIN_MENU)
-            } else {
-                props.gameState.setMode(Mode.SINGLE_PLAYER)
-            }
-        }} />
+        <ReturnToMenu clickHandler={(e) => props.gameState.setMode(props.gameState.isRunning ? Mode.SINGLE_PLAYER : Mode.MAIN_MENU)} />
     </div>);
 }

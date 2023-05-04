@@ -13,6 +13,15 @@ export const overlayWrapperStyle = {
   zIndex: 100,
 };
 
+export const overlayStyle = {
+    minWidth: TOTAL_WIDTH,
+    minHeight: TOTAL_HEIGHT,
+    position: "absolute",
+    zIndex: -1000,
+    backgroundColor: EMPTY_COLOR.getHex(),
+    opacity: 0.75,
+}
+
 export const titleStyle = {
   marginTop: "50px",
   marginBottom: "150px",
