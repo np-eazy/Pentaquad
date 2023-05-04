@@ -5,6 +5,7 @@ import {
   ROTATION_ADJUSTMENT_SIZE,
   CELL_TYPE,
 } from "../rules/Constants";
+import { Sound } from "../../audio/AudioController";
 
 // Different types of GameAction, with each different type telling us how the action props should be handled.
 export const ActionType = {
@@ -88,7 +89,7 @@ export function executeRotate(coreState, angle) {
   }
 }
 // Move the current piece as far towards the given position as possible before encountering other cells
-export function executeMoveTo(coreState, x, y) {
+export function executeMoveTo(coreState, x, y, audioController) {
   var moveAngle = coreState.gravity.isHorizontal()
     ? coreState.currPiece.cy < y
       ? Angle.DOWN
@@ -99,6 +100,7 @@ export function executeMoveTo(coreState, x, y) {
   var iterationsLeft = coreState.gravity.isHorizontal()
     ? Math.abs(coreState.currPiece.cy - y)
     : Math.abs(coreState.currPiece.cx - x);
+  var moved = false;
   while (
     iterationsLeft > 0 &&
     !coreState.currPiece.checkCollision(
@@ -109,7 +111,9 @@ export function executeMoveTo(coreState, x, y) {
   ) {
     coreState.currPiece.move(Dxn[moveAngle]);
     iterationsLeft -= 1;
+    moved = true;
   }
+  if (moved) audioController.queueSound(Sound.MOVE);
 }
 // Horizontally flip the current piece; rollback if not valid
 export function executeFlip(coreState) {

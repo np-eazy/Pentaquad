@@ -4,6 +4,7 @@ import { callOnDropzone } from "./utils/Dropzone";
 import { inBounds } from "./utils/Functions";
 
 import { BOARD_SIZE, BOMB_RADIUS, CELL_TYPE } from "../rules/Constants";
+import { Sound } from "../../audio/AudioController";
 
 // increment times to live for each cell before converting to empty cell
 export function cellPlacementUpdate(coreState) {
@@ -53,6 +54,7 @@ export function placeNormal(coreState, piece) {
 
 // Place a bomb and remove a square of length 2 * BOMB_RADIUS + 1
 export function placeBomb(coreState, piece) {
+  coreState.audioController.queueSound(Sound.PLACE_BOMB)
   for (
     var y = Math.max(0, piece.cy - BOMB_RADIUS);
     y < Math.min(BOARD_SIZE, piece.cy + BOMB_RADIUS + 1);
@@ -70,6 +72,7 @@ export function placeBomb(coreState, piece) {
 
 // Remove all blocks in the current piece's path.
 export function placeDrill(coreState, piece) {
+  coreState.audioController.queueSound(Sound.PLACE_DRILL)
   callOnDropzone(
     coreState.board,
     piece,
@@ -85,6 +88,7 @@ export function placeDrill(coreState, piece) {
 }
 
 export function placeTower(coreState, piece) {
+  coreState.audioController.queueSound(Sound.TOWER)
   callOnDropzone(
     coreState.board,
     piece,

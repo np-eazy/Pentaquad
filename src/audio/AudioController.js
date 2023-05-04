@@ -1,4 +1,5 @@
 export const Sound = {
+    NOP: -1,
     // Menu actions
     CLICK_BUTTON_A: 0,
     CLICK_BUTTON_B: 1,
@@ -14,7 +15,6 @@ export const Sound = {
 
     // Power-ups
     POWERUP_GHOST: 9,
-    PLACE_GHOST: 10,
     POWERUP_BOMB: 11,
     PLACE_BOMB: 12,
     POWERUP_DRILL: 13,
@@ -22,7 +22,6 @@ export const Sound = {
     POWERUP_TOWER: 15,
     PLACE_TOWER: 16,
     LOCK: 17,
-    UNLOCK: 18,
 
     // Scorekeeper
     CLEAR_SINGLE_LINE: 19,

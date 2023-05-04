@@ -26,8 +26,9 @@ const Game = (props) => {
   const [audioController, setAudioController] = useState(new AudioController({}));
   const [gameState, setGameState] = useState(
     new GameState({
-      coreState: new CoreState({ audioController: audioController }),
+      coreState: new CoreState({}),
       controller: gameController,
+      audioController: audioController,
     })
   );
 
