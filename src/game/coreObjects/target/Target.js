@@ -141,6 +141,17 @@ class Target {
     this.isCleared = true;
   }
 
+  // Reset emptyCell meters when this cell is deleted to signify a failure
+  failClear(board, emptyCellProvider) {
+    for (var x = this.x0; x < this.x1; x++) {
+      for (var y = this.y0; y < this.y1; y++) {
+        if (inBounds(x, y) && board[y][x].type == 0) {
+          board[y][x].meter = 0;
+        }
+      }
+    }
+  }
+
   // Extend the corners out by one cell.
   grow() {
     if (inBounds(this.x0 - 1, this.y0 - 1)) {

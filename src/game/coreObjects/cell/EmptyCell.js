@@ -6,7 +6,7 @@ import {
   drawRectOffset,
   outlineRect,
 } from "../../../graphics/CanvasPipeline";
-import { EMPTY_COLOR, MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
+import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR, MARKER_COLOR_2 } from "../../../graphics/theme/ColorScheme";
 
 const METER_DECAY_RATE = 0.9;
 
@@ -39,11 +39,24 @@ class EmptyCell extends Cell {
 
   // "Mix" the background and foreground rectangle based on the meter level
   render(canvas, x0, y0, width, height) {
-    var [x, y] = super.getPosition(x0, y0, width);
-    drawRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
-    var d = ((1 - this.meter) * width) / 2;
-    drawRectOffset(canvas, x, y, width, height, EMPTY_COLOR.getHex(), d);
-    outlineRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
+    this.meter *= 2
+    if (this.meter < 1) {
+      var [x, y] = super.getPosition(x0, y0, width);
+      drawRect(canvas, x, y, width, height, MARKER_COLOR_2.getHex());
+      var d = ((1 - (this.meter)) * width) / 2;
+
+      drawRectOffset(canvas, x, y, width, height, MARKER_COLOR.getHex(), d);
+      outlineRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
+    } else {
+      var [x, y] = super.getPosition(x0, y0, width);
+      drawRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
+      var d = ((1 - (this.meter - 1)) * width) / 2;
+
+      drawRectOffset(canvas, x, y, width, height, EMPTY_COLOR.getHex(), d);
+      outlineRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
+    }
+    this.meter /= 2
+
   }
 }
 

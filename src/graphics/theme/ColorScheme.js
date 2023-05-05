@@ -30,7 +30,13 @@ export const MARKER_COLOR = new Color({
   // EmptyCell color when marked
   red: 35,
   green: 35,
-  blue: 40,
+  blue: 42,
+});
+export const MARKER_COLOR_2 = new Color({
+  // EmptyCell color when marked
+  red: 45,
+  green: 45,
+  blue: 52,
 });
 export const FILLED_COLOR = new Color({
   // All NormalCells have a bit of this
