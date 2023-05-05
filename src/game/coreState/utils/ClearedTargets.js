@@ -28,7 +28,7 @@ export const handleClearedTargets = (coreState) => {
       }
     } else if (target.isCleared) {
       coreState.audioController.queueSound(Sound.STRIKE);
-      target.failClear(board, coreState.emptyCellProvider);
+      target.markTargetArea(board, coreState.emptyCellProvider);
       scorekeeper.strike();
       if (scorekeeper.gameOver) {
         coreState.audioController.queueSound(Sound.GAME_OVER);

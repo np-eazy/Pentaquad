@@ -1,3 +1,4 @@
+import { QUEUE_INITIAL_OFFSET, DIFFUSE_ITERATIONS, DIFFUSE_RANGE, DIFFUSE_STEP_AMOUNT } from "../graphics/theme/Dynamics";
 import { interpolateColor } from "../graphics/utils/Colors";
 import { linInt } from "../graphics/utils/Functions";
 import CoreState from "./coreState/CoreState";
@@ -16,10 +17,7 @@ export const Mode = {
   SINGLE_PLAYER: 3,
 }
 
-const DIFFUSE_STEP_AMOUNT = 0.1;
-const DIFFUSE_ITERATIONS = 50;
-const DIFFUSE_RANGE = 2;
-const INITIAL_Y_OFFSET = 120;
+
 // Required props:
 // - coreState: the CoreState of the game
 // - controller: the GameController of the game
@@ -54,7 +52,7 @@ const GameState = class {
   }
 
   onPlacement() {
-    this.yOffset += INITIAL_Y_OFFSET;
+    this.yOffset += QUEUE_INITIAL_OFFSET;
   }
 
   togglePause() {
@@ -79,7 +77,7 @@ const GameState = class {
       this.unmarkBoard();
       this.markDropZone();
       for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
-        this.diffuseColors();
+        this.randomColorSwap();
       }
     } else {
       this.delayTimer -= 1;
@@ -115,7 +113,8 @@ const GameState = class {
     }
   }
 
-  diffuseColors() {
+  // Randomly sample a pair of nearby Cells in the grid and mix their colors
+  randomColorSwap() {
     var [x0, y0] = sample();
     if (this.coreState.board[y0][x0].type == CELL_TYPE.EMPTY) {
       var [x1, y1] = sampleAround(x0, y0, DIFFUSE_RANGE);

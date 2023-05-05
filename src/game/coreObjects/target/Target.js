@@ -142,7 +142,7 @@ class Target {
   }
 
   // Reset emptyCell meters when this cell is deleted to signify a failure
-  failClear(board, emptyCellProvider) {
+  markTargetArea(board) {
     for (var x = this.x0; x < this.x1; x++) {
       for (var y = this.y0; y < this.y1; y++) {
         if (inBounds(x, y) && board[y][x].type == 0) {

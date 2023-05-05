@@ -6,15 +6,14 @@ import {
   drawRectOffset,
   outlineRect,
 } from "../../../graphics/CanvasPipeline";
+import { METER_DECAY_RATE } from "../../../graphics/theme/Dynamics";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR, MARKER_COLOR_2, WHITE } from "../../../graphics/theme/ColorScheme";
 import { Color, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 
-const METER_DECAY_RATE = 0.9;
-const BACKGROUND_COLOR_BLEND = 0.125;
-
-const MARKER_1 = 10;
-const MARKER_2 = 20;
+const EMPTY_BASE_COLOR_BLEND = 0.125;
+const EMPTY_2H_LIGHT = 10;
+const EMPTY_4H_LIGHT = 20;
 // The default empty value of a Cell on the 2D board. It has the special
 // property of lighting up a different color if marked, which is taken care of
 // during a GameState update.
@@ -45,7 +44,7 @@ class EmptyCell extends Cell {
       this.currentColor = interpolateColor(
         EMPTY_COLOR,
         this.baseColor,
-        BACKGROUND_COLOR_BLEND,
+        EMPTY_BASE_COLOR_BLEND,
         linInt
       );
       this.currentColor.add(this.lightColor);
@@ -57,14 +56,14 @@ class EmptyCell extends Cell {
   // Each time the current color changes, everything else follows
   updateColorSuite() {
     this.colorSuite.shade2H = new Color({
-      red: this.currentColor.red + MARKER_1,
-      green: this.currentColor.green + MARKER_1,
-      blue: this.currentColor.blue + MARKER_1,
+      red: this.currentColor.red + EMPTY_2H_LIGHT,
+      green: this.currentColor.green + EMPTY_2H_LIGHT,
+      blue: this.currentColor.blue + EMPTY_2H_LIGHT,
     });
     this.colorSuite.shade4H = new Color({
-      red: this.currentColor.red + MARKER_2,
-      green: this.currentColor.green + MARKER_2,
-      blue: this.currentColor.blue + MARKER_2,
+      red: this.currentColor.red + EMPTY_4H_LIGHT,
+      green: this.currentColor.green + EMPTY_4H_LIGHT,
+      blue: this.currentColor.blue + EMPTY_4H_LIGHT,
     });
   }
 
