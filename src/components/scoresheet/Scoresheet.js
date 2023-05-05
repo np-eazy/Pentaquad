@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { SCORESHEET_HEIGHT, SCORESHEET_WIDTH, BOARD_DIMENSIONS, TOTAL_WIDTH, TOTAL_HEIGHT, QUEUE_WIDTH } from "../../graphics/theme/Layout";
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../graphics/theme/ColorScheme";
+import React from "react";
+import { SCORESHEET_HEIGHT, BOARD_DIMENSIONS, QUEUE_WIDTH } from "../../graphics/theme/Layout";
 import { Level } from "./Level";
 import { Score } from "./Score";
 import { Strikes } from "./Strikes";
-import { overlayStyle, overlayWrapperStyle } from "../Styles";
+import { overlayWrapperStyle } from "../Styles";
 
 const PADDING_DIMENSIONS = 10;
-const FONT_SIZE = 16;
+const SCORESHEET_HIDE_Y = 100;
 
 const scoresheetStyle = {
   maxWidth: BOARD_DIMENSIONS.toString() + "px",
@@ -35,7 +34,6 @@ export const backgroundStyle = {
   opacity: 0.4,
 }
 
-const SCORESHEET_HIDE_Y = 100;
 
 const Scoresheet = (props) => {
   var cursorY = props.gameState.controller.cursorY;

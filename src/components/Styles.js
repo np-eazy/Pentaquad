@@ -1,5 +1,9 @@
 import { TOTAL_HEIGHT, TOTAL_WIDTH } from "../graphics/theme/Layout";
-import { EMPTY_COLOR, FILLED_COLOR, WHITE } from "../graphics/theme/ColorScheme";
+import {
+  EMPTY_COLOR,
+  FILLED_COLOR,
+  WHITE,
+} from "../graphics/theme/ColorScheme";
 
 export const overlayWrapperStyle = {
   width: TOTAL_WIDTH,
@@ -14,13 +18,13 @@ export const overlayWrapperStyle = {
 };
 
 export const overlayStyle = {
-    minWidth: TOTAL_WIDTH,
-    minHeight: TOTAL_HEIGHT,
-    position: "absolute",
-    zIndex: -1000,
-    backgroundColor: EMPTY_COLOR.getHex(),
-    opacity: 0.75,
-}
+  minWidth: TOTAL_WIDTH,
+  minHeight: TOTAL_HEIGHT,
+  position: "absolute",
+  zIndex: -1000,
+  backgroundColor: EMPTY_COLOR.getHex(),
+  opacity: 0.75,
+};
 
 export const titleStyle = {
   marginTop: "50px",
@@ -77,17 +81,8 @@ export const scoresheetStyle = {
   minHeight: "36px",
   padding: "10px",
 
-//   margin: "auto",
-//   width: "50%",
-//   marginTop: "20px",
   textAlign: "center",
   zIndex: "200",
-
-//   backgroundColor: EMPTY_COLOR.getHex(),
-//   borderStyle: "solid",
-//   borderWidth: "1px",
-//   borderRadius: "5px",
-//   borderColor: FILLED_COLOR.getHex(),
 
   color: WHITE.getHex(),
   fontSize: "16px",

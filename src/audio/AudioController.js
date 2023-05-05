@@ -2,9 +2,9 @@ export const Sound = {
   NOP: ["NOP", 1],
   // Menu actions
   CLICK_BUTTON_A: ["CLICK_BUTTON_A", 0.25],
-  CLICK_BUTTON_B: ["CLICK_BUTTON_B", 0.25],
+  CLICK_BUTTON_B: ["CLICK_BUTTON_A", 0.25],
   CLICK_BUTTON_X: ["CLICK_BUTTON_X", 0.25],
-  CLICK_BUTTON_Y: ["CLICK_BUTTON_B", 0.25],
+  CLICK_BUTTON_Y: ["CLICK_BUTTON_A", 0.25],
 
   // Game actions
   MOVE: ["MOVE", 0.04],
@@ -37,6 +37,7 @@ export const Sound = {
 
 const PATH_PREFIX = "assets/sounds/";
 const EXTENSION = ".wav";
+const MASTER_VOLUME = 0.4;
 
 export class AudioController {
   constructor({}) {
@@ -46,7 +47,7 @@ export class AudioController {
   queueSound(soundNumber) {
     if (soundNumber != Sound.NOP) {
       var audio = new Audio(PATH_PREFIX + soundNumber[0] + EXTENSION);
-      audio.volume = soundNumber[1] * 0.4;
+      audio.volume = soundNumber[1] * MASTER_VOLUME;
       this.soundQueue.push(audio);
     }
   }
