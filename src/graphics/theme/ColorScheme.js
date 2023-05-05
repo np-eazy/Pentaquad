@@ -77,7 +77,7 @@ export const BASE_COLORS = [
 // The amount by which to blend the BaseColor with FILLED_COLOR to
 // make the CurrentColor; this allows for more flexibility with BaseColors
 // as they are all interpolated towards a common color.
-export const CELL_BASE_COLOR_BLEND = 0.7;
+export const CELL_BASE_COLOR_BLEND = 0.85;
 // Add this value to all channels of the CurrentColor to generate 2h and 4h
 export const CELL_MID_LIGHT = 30;
 export const CELL_CENTER_LIGHT = 45;

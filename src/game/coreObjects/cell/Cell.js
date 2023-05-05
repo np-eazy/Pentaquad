@@ -73,12 +73,7 @@ class Cell {
 
   // Set this Cell's base color and propagate the update to the current color and ColorSuite.
   setBaseColor(color) {
-    this.baseColor = interpolateColor(
-      FILLED_COLOR,
-      color,
-      CELL_BASE_COLOR_BLEND,
-      linInt
-    );
+    this.baseColor = color;
     this.updateCurrentColor();
     this.updateColorSuite();
   }
@@ -89,8 +84,13 @@ class Cell {
     if (this.ttl != -1 && this.currentColor) {
       this.currentColor = interpolateColor(
         EMPTY_COLOR,
-        this.baseColor,
-        this.ttl / this.lifetime,
+        interpolateColor(
+          FILLED_COLOR,
+          this.baseColor,
+          CELL_BASE_COLOR_BLEND,
+          linInt
+        ),
+        (this.ttl + 1) / this.lifetime,
         linInt
       );
       this.currentColor.add(this.lightColor);
