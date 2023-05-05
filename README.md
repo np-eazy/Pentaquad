@@ -6,6 +6,7 @@ specific targets rather than filled lines in the original game.
 
 https://user-images.githubusercontent.com/10951707/236352504-9efac17b-6c6e-493f-867b-aae775ef95e6.mp4
 
+Alpha deployment --> https://pentaquad.uc.r.appspot.com
 
 ## To download/start the game:
 - Clone this Github repository to your local drive
