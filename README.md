@@ -1,5 +1,5 @@
 
-Playing the Alpha release here: https://pentaquad.uc.r.appspot.com 
+Play the Alpha release here: https://pentaquad.uc.r.appspot.com 
 
 https://user-images.githubusercontent.com/10951707/236352504-9efac17b-6c6e-493f-867b-aae775ef95e6.mp4
 
