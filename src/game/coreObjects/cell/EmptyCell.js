@@ -11,7 +11,7 @@ import { Color, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 
 const METER_DECAY_RATE = 0.9;
-const BACKGROUND_COLOR_BLEND = 0.1;
+const BACKGROUND_COLOR_BLEND = 0.125;
 
 const MARKER_1 = 10;
 const MARKER_2 = 20;
