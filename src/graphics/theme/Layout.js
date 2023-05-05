@@ -7,7 +7,7 @@ import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "./ColorScheme";
 
 export const COLUMN_WIDTH = 150;
 export const BOARD_DIMENSIONS = 600;
-export const ROW_SIZE = 200;
+export const ROW_SIZE = 100;
 
 export const QUEUE_X0 = 0;
 export const QUEUE_Y0 = 0;
@@ -26,7 +26,7 @@ export const PALETTE_WIDTH = COLUMN_WIDTH;
 export const PALETTE_HEIGHT = BOARD_DIMENSIONS;
 
 export const SCORESHEET_X0 = 0;
-export const SCORESHEET_Y0 = BOARD_DIMENSIONS;
+export const SCORESHEET_Y0 = 0;
 export const SCORESHEET_WIDTH = COLUMN_WIDTH * 2 + BOARD_DIMENSIONS;
 export const SCORESHEET_HEIGHT = ROW_SIZE;
 

@@ -21,7 +21,9 @@ const GameState = class {
   constructor(props) {
     this.coreState = props.coreState;
     this.controller = props.controller;
+    this.audioController = props.audioController;
     this.coreState.controller = this.controller;
+    this.coreState.audioController = this.audioController;
     this.ticks = 0;
     this.isRunning = false;
     this.delayTimer = 0;
@@ -54,9 +56,9 @@ const GameState = class {
   }
 
   startOver() {
-    this.coreState = new CoreState({
-    });
+    this.coreState = new CoreState({});
     this.coreState.controller = this.controller;
+    this.coreState.audioController = this.audioController;
     this.ticks = 0;
     this.isRunning = true;
     this.delayTimer = 0;

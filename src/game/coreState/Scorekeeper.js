@@ -1,6 +1,7 @@
+import { Sound } from "../../audio/AudioController";
 import { LEVEL_SCORE_THRESHOLDS, MAX_LEVELS } from "../rules/Levels";
 
-const MAX_STRIKES = 3;
+export const MAX_STRIKES = 3;
 
 const BASE_LINE_SCORE = 100;
 const BASE_TARGET_SCORE = 250;
@@ -14,6 +15,7 @@ const Scorekeeper = class {
     this.targetCombo = 1;
     this.strikes = 0;
     this.level = 1;
+    this.coreState = props.coreState;
     this.gameOver = false;
   }
 
@@ -21,6 +23,7 @@ const Scorekeeper = class {
   levelUpdate() {
     if (this.level < MAX_LEVELS && this.score > LEVEL_SCORE_THRESHOLDS[this.level - 1]) {
       this.level += 1;
+      this.coreState.audioController.queueSound(Sound.LEVEL_UP)
     }
   }
 

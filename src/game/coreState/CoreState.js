@@ -26,10 +26,12 @@ import {
   PLACEMENT_COUNTDOWN,
   FALLING_COUNTDOWN,
   BOARD_SIZE,
+  CELL_TYPE,
 } from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
 import { NORMAL_CELL_LIFETIME_LVL, FALLING_COUNTDOWN_LVL } from "../rules/Levels";
+import { AudioController, Sound } from "../../audio/AudioController";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -37,6 +39,7 @@ import { NORMAL_CELL_LIFETIME_LVL, FALLING_COUNTDOWN_LVL } from "../rules/Levels
 const CoreState = class {
   constructor(props) {
     this.controller = null; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
+    this.audioController = null;
     this.pieceProvider = new PieceProvider({ coreState: this }); // Create a new PieceProvider to take care of creating/dispensing pieces
     this.targetProvider = new TargetProvider({
       // Create a new TargetProvider to take care of creating/dispensing targets
@@ -45,7 +48,7 @@ const CoreState = class {
       maxBound: BOARD_SIZE - TARGET_SPAWN_MARGIN,
     });
     this.emptyCellProvider = new EmptyCellProvider();
-    this.scorekeeper = new Scorekeeper({});
+    this.scorekeeper = new Scorekeeper({ coreState: this });
 
     this.pidSize = (BOARD_SIZE + BOUNDARY_EXTENSION_SIZE * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
     this.board = [...Array(BOARD_SIZE)].map(
@@ -85,23 +88,31 @@ const CoreState = class {
     while (action) {
       if (action.type == ActionType.MOVE) {
         if (action.props.dxn.equals(this.currPiece.dxn.opposite())) {
+          this.audioController.queueSound(Sound.ROTATE);
           executeRotate(this, 1);
         } else {
+          this.audioController.queueSound(Sound.MOVE);
           executeMove(this, action.props.dxn);
         }
       } else if (action.type == ActionType.ROTATE) {
+        this.audioController.queueSound(Sound.ROTATE);
         executeRotate(this, 1);
       } else if (action.type == ActionType.MOVE_TO) {
-        executeMoveTo(this, action.props.x, action.props.y);
+        executeMoveTo(this, action.props.x, action.props.y, this.audioController);
       } else if (action.type == ActionType.FLIP) {
+        this.audioController.queueSound(Sound.FLIP);
         executeFlip(this);
       } else if (action.type == ActionType.DROP) {
+        this.audioController.queueSound(Sound.DROP);
         executeDrop(this);
       } else if (action.type == ActionType.PLACE) {
+        this.audioController.queueSound(Sound.PLACEMENT);
         executePlace(this);
       } else if (action.type == ActionType.HOLD) {
+        this.audioController.queueSound(Sound.HOLD);
         executeHold(this, action.props.item);
       } else if (action.type == ActionType.LOCK) {
+        this.audioController.queueSound(Sound.LOCK);
         executeLock(this);
       }
       action = this.controller.consumeAction();
@@ -117,6 +128,10 @@ const CoreState = class {
     while (!piece) {
       piece = this.pieceProvider.consumePiece(this.scorekeeper.level);
     }
+    this.audioController.queueSound(piece.mainCell.type == CELL_TYPE.GHOST ? Sound.POWERUP_GHOST : 
+      piece.mainCell.type == CELL_TYPE.BOMB ? Sound.POWERUP_BOMB : 
+      piece.mainCell.type == CELL_TYPE.DRILL ? Sound.POWERUP_DRILL : 
+      piece.mainCell.type == CELL_TYPE.TOWER ? Sound.POWERUP_TOWER : Sound.NOP) 
     piece.activatePiece({
       center_x: x,
       center_y: y,

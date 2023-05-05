@@ -1,3 +1,4 @@
+import { Sound } from "../../../audio/AudioController";
 import { CELL_TYPE } from "../../rules/Constants";
 
 // Check all filled targets, remove them from targetBlocks, and erase all
@@ -26,7 +27,11 @@ export const handleClearedTargets = (coreState) => {
         }
       }
     } else if (target.isCleared) {
+      coreState.audioController.queueSound(Sound.STRIKE);
       scorekeeper.strike();
+      if (scorekeeper.gameOver) {
+        coreState.audioController.queueSound(Sound.GAME_OVER);
+      }
     }
   });
   var i = 0;
@@ -37,5 +42,7 @@ export const handleClearedTargets = (coreState) => {
       i += 1;
     }
   }
+  coreState.audioController.queueSound(clearedTargets > 1 ? Sound.CLEAR_MULTI_TARGET :
+    clearedTargets == 1 ? Sound.CLEAR_SINGLE_TARGET : Sound.NOP);
   scorekeeper.scoreTargets(clearedTargets);
 };
