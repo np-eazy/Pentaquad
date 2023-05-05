@@ -41,3 +41,11 @@ export function getSpawnPosition(dxn) {
   }
   return [x, y];
 }
+
+export function sample(size) {
+  return [randint(0, BOARD_SIZE), randint(0, BOARD_SIZE)];
+}
+
+export function sampleAround(x, y, size) {
+  return [x + randint(-size, size + 1), y + randint(-size, size + 1)];
+}

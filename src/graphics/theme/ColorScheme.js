@@ -30,7 +30,7 @@ export const MARKER_COLOR = new Color({
   // EmptyCell color when marked
   red: 35,
   green: 35,
-  blue: 40,
+  blue: 42,
 });
 export const FILLED_COLOR = new Color({
   // All NormalCells have a bit of this
@@ -71,10 +71,10 @@ export const BASE_COLORS = [
 // The amount by which to blend the BaseColor with FILLED_COLOR to
 // make the CurrentColor; this allows for more flexibility with BaseColors
 // as they are all interpolated towards a common color.
-export const CELL_BASE_COLOR_BLEND = 0.7;
+export const CELL_BASE_COLOR_BLEND = 0.85;
 // Add this value to all channels of the CurrentColor to generate 2h and 4h
-export const CELL_MID_LIGHT = 30;
-export const CELL_CENTER_LIGHT = 45;
+export const LIGHT_2H = 30;
+export const LIGHT_4H = 45;
 // Every cell is rendered with a border that is offset from its
 // actual dimensions by this much.
 

@@ -5,8 +5,8 @@ import { linInt } from "../../../graphics/utils/Functions";
 import {
   EMPTY_COLOR,
   FILLED_COLOR,
-  CELL_MID_LIGHT,
-  CELL_CENTER_LIGHT,
+  LIGHT_2H,
+  LIGHT_4H,
   CELL_BASE_COLOR_BLEND,
   BLACK,
 } from "../../../graphics/theme/ColorScheme";
@@ -15,7 +15,6 @@ import { CELL_DAMP_RATE, CELL_DIM_RATE } from "../../../graphics/theme/Dynamics"
 
 // Decay rate of X and Y offsets after row breaks.
 export const CELL_BORDER_OFFSET = 2;
-
 
 // A Cell is the base unit of this game, which is played on a 2D array of them. The different structures and pieces
 // formed by Cells intercellularly is handled by CoreState, whereas the Cell class itself focuses on intracellular
@@ -73,12 +72,7 @@ class Cell {
 
   // Set this Cell's base color and propagate the update to the current color and ColorSuite.
   setBaseColor(color) {
-    this.baseColor = interpolateColor(
-      FILLED_COLOR,
-      color,
-      CELL_BASE_COLOR_BLEND,
-      linInt
-    );
+    this.baseColor = color;
     this.updateCurrentColor();
     this.updateColorSuite();
   }
@@ -89,8 +83,13 @@ class Cell {
     if (this.ttl != -1 && this.currentColor) {
       this.currentColor = interpolateColor(
         EMPTY_COLOR,
-        this.baseColor,
-        this.ttl / this.lifetime,
+        interpolateColor(
+          FILLED_COLOR,
+          this.baseColor,
+          CELL_BASE_COLOR_BLEND,
+          linInt
+        ),
+        (this.ttl + 1) / this.lifetime,
         linInt
       );
       this.currentColor.add(this.lightColor);
@@ -102,14 +101,14 @@ class Cell {
   // Each time the current color changes, everything else follows
   updateColorSuite() {
     this.colorSuite.shade2H = new Color({
-      red: this.currentColor.red + CELL_MID_LIGHT,
-      green: this.currentColor.green + CELL_MID_LIGHT,
-      blue: this.currentColor.blue + CELL_MID_LIGHT,
+      red: this.currentColor.red + LIGHT_2H,
+      green: this.currentColor.green + LIGHT_2H,
+      blue: this.currentColor.blue + LIGHT_2H,
     });
     this.colorSuite.shade4H = new Color({
-      red: this.currentColor.red + CELL_CENTER_LIGHT,
-      green: this.currentColor.green + CELL_CENTER_LIGHT,
-      blue: this.currentColor.blue + CELL_CENTER_LIGHT,
+      red: this.currentColor.red + LIGHT_4H,
+      green: this.currentColor.green + LIGHT_4H,
+      blue: this.currentColor.blue + LIGHT_4H,
     });
   }
 
