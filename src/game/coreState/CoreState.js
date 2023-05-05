@@ -48,7 +48,7 @@ const CoreState = class {
       maxBound: BOARD_SIZE - TARGET_SPAWN_MARGIN,
     });
     this.emptyCellProvider = new EmptyCellProvider();
-    this.scorekeeper = new Scorekeeper({});
+    this.scorekeeper = new Scorekeeper({ coreState: this });
 
     this.pidSize = (BOARD_SIZE + BOUNDARY_EXTENSION_SIZE * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
     this.board = [...Array(BOARD_SIZE)].map(

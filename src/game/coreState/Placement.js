@@ -88,7 +88,7 @@ export function placeDrill(coreState, piece) {
 }
 
 export function placeTower(coreState, piece) {
-  coreState.audioController.queueSound(Sound.TOWER)
+  coreState.audioController.queueSound(Sound.PLACE_TOWER)
   callOnDropzone(
     coreState.board,
     piece,
