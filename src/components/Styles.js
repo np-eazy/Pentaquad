@@ -2,6 +2,7 @@ import { TOTAL_HEIGHT, TOTAL_WIDTH } from "../graphics/theme/Layout";
 import {
   EMPTY_COLOR,
   FILLED_COLOR,
+  MARKER_COLOR,
   WHITE,
 } from "../graphics/theme/ColorScheme";
 
@@ -26,6 +27,17 @@ export const overlayStyle = {
   opacity: 0.75,
 };
 
+export const containerStyle = {
+  position: "relative",
+}
+
+export const verticalCenterStyle = {
+  position: "absolute",
+  top: "50%",
+  transform: "translateY(-50%)"
+}
+
+
 export const titleStyle = {
   marginTop: "50px",
   marginBottom: "150px",
@@ -49,6 +61,25 @@ export const menuButtonStyle = {
   borderWidth: "1px",
   borderRadius: "5px",
   borderColor: FILLED_COLOR.getHex(),
+
+  textAlign: "center",
+  color: WHITE.getHex(),
+};
+
+export const settingButtonStyle = {
+  maxWidth: "500px",
+  minHeight: "30px",
+  margin: "10px",
+  padding: "10px",
+
+  position: "relative",
+  margin: "auto",
+  width: "50%",
+  marginTop: "20px",
+  zIndex: "200",
+
+  backgroundColor: MARKER_COLOR.getHex(),
+  borderRadius: "5px",
 
   textAlign: "center",
   color: WHITE.getHex(),

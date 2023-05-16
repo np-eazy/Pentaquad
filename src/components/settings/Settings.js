@@ -3,26 +3,29 @@ import { Mode } from "../../game/GameState";
 import { overlayStyle, overlayWrapperStyle, titleStyle } from "../Styles";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 import { Sound } from "../../audio/AudioController";
-import { LevelToggler } from "./LevelToggler";
+import { ThreeOptionToggler } from "./ThreeOptionToggler";
 
 export const Settings = (props) => {
   var settings = props.controlPanel;
   return (
     <div style={overlayWrapperStyle}>
       <div style={overlayStyle}></div>
-      <div style={titleStyle}>{"Settings coming soon!"}</div>
-      <LevelToggler 
+      <div style={titleStyle}>{"Settings"}</div>
+      <ThreeOptionToggler 
         name={"Game Difficulty"}
+        labels={["EASY", "NORMAL", "HARD"]}
         getSetting={() => props.controlPanel.getGameDifficulty()} 
         clickHandler={() => props.controlPanel.toggleGameDifficulty()} />
 
-      <LevelToggler 
+      <ThreeOptionToggler 
         name={"Graphics"}
+        labels={["FAST", "NORMAL", "FANCY"]}
         getSetting={() => props.controlPanel.getGraphicsLevel()} 
         clickHandler={() => props.controlPanel.toggleGraphicsLevel()} />
 
-      <LevelToggler 
-        name={"Sound"}
+      <ThreeOptionToggler 
+        name={"Volume"}
+        labels={["MUTE", "QUIET", "NORMAL"]}
         getSetting={() => props.controlPanel.getSoundLevel()} 
         clickHandler={() => props.controlPanel.toggleSoundLevel()} />
 
