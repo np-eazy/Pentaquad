@@ -16,6 +16,7 @@ import { overlayWrapperStyle } from "./Styles";
 import { ReturnToMenu } from "./mainMenu/ReturnToMenu";
 import { DebugDisplay } from "./debug/DebugDisplay";
 import { AudioController } from "../audio/AudioController";
+import { ControlPanel } from "../game/control/ControlPanel";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.
@@ -24,11 +25,14 @@ const Game = (props) => {
   const [canvasTimer, setCanvasTimer] = useState(0);
   const [gameController, setGameController] = useState(new GameController({}));
   const [audioController, setAudioController] = useState(new AudioController({}));
+  const [controlPanel, setControlPanel] = useState(new ControlPanel({}));
+
   const [gameState, setGameState] = useState(
     new GameState({
       coreState: new CoreState({}),
       controller: gameController,
       audioController: audioController,
+      controlPanel: controlPanel,
     })
   );
 
@@ -77,6 +81,7 @@ const Game = (props) => {
           <Settings
             gameState={gameState}
             audioController={audioController} 
+            controlPanel={controlPanel}
             togglePauseGame={(e) => gameState.togglePause()}
             startNewGame={(e) => gameState.startNewGame()}
           />
