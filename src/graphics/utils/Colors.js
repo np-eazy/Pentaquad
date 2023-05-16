@@ -40,7 +40,12 @@ export class Color {
     this.blue += colorB.blue;
   }
 
-  
+  set(colorB) {
+    this.red = colorB.red;
+    this.green = colorB.green;
+    this.blue = colorB.blue;
+    return this;
+  }
 
   // Descructively interpolate colors to avoid piling up Color instances
   interpolateTo(colorB, t, interpolationFunction) {
