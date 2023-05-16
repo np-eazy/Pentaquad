@@ -15,18 +15,14 @@ export const labelStyle = {
 export const ThreeOptionToggler = (props) => {
     const [borderColor, setBorderColor] = new useState(copy(FILLED_COLOR));
     const [hover, setHover] = new useState(false);
-
-    const blocked = props.blocked ? props.blocked() : false;
-
-    useEffect(() => {
-    }, [])
-
     useEffect(() => {
         const interval = setInterval(() => {
             setBorderColor(borderColor.interpolateTo(hover ? FILLED_COLOR : MARKER_COLOR, 0.2, linInt))
         }, REFRESH_MS);
         return () => clearInterval(interval);
       }, [hover]);
+
+    const blocked = props.blocked ? props.blocked() : false;
 
     return (<div style={{...containerStyle, ...settingButtonStyle, borderColor: borderColor.getHex(), borderWidth: "1px", borderStyle: "solid",}} 
     onMouseEnter={(e) => setHover(true)}
