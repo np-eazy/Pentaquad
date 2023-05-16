@@ -15,7 +15,7 @@ export const ThreeOptionToggler = (props) => {
         <div style={{...verticalCenterStyle, left:"20px"}}>
             {props.name}:
         </div>
-        <div style={{...verticalCenterStyle, right:"20px", textAlign:minWidth:"150px"}}>
+        <div style={{...verticalCenterStyle, right:"20px", textAlign:"right", minWidth:"150px"}}>
             <div style={{...labelStyle, float: "left"}}>{props.labels[props.getSetting()]}</div>
             <ThreeOptionDisplay style={{float: "right"}} level={props.getSetting() + 1} maxLevel={3} />
         </div>
