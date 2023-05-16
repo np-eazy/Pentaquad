@@ -7,23 +7,37 @@ import {
 } from "../graphics/theme/ColorScheme";
 
 export const BORDER_CHANGE_RATE = 0.2;
+export const BACKGROUND_CHANGE_RATE = 0.2;
 
-export const containerStyle = {
+
+export const mainStyle = {
+  color: WHITE.getHex(),
+  fontSize: "16px",
+  textAlign: "center",
+}
+
+export const container = {
   position: "relative",
 };
 
-export const verticalCenterStyle = {
+export const verticalCenterAlignment = {
   position: "absolute",
   top: "50%",
   transform: "translateY(-50%)",
 };
 
-export const centerStyle = {
+export const centerAlignment = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translateX(-50%) translateY(-50%)",
 };
+
+export const lowerRightAlignment = {
+  position: "absolute",
+  right: "0px",
+  bottom: "0px",
+}
 
 export const overlayWrapperStyle = {
   width: TOTAL_WIDTH,
@@ -68,6 +82,8 @@ export const buttonStyle = {
   zIndex: "200",
 
   backgroundColor: MARKER_COLOR.getHex(),
+  borderStyle: "solid",
+  borderWidth: "1px",
   borderRadius: "5px",
 
   textAlign: "center",

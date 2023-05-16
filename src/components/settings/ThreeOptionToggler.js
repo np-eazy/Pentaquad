@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
-  BORDER_CHANGE_RATE,
   buttonStyle,
-  containerStyle,
-  verticalCenterStyle,
+  container,
+  verticalCenterAlignment,
 } from "../BaseStyles";
 import { ThreeOptionDisplay } from "./ThreeOptionDisplay";
 import { FILLED_COLOR, MARKER_COLOR } from "../../graphics/theme/ColorScheme";
-import { linInt } from "../../graphics/utils/Functions";
-import { copy } from "../../graphics/utils/Colors";
-import { REFRESH_MS } from "../../game/rules/Constants";
+import { MouseInteraction } from "../MouseInteraction";
 
 const labelStyle = {
   color: FILLED_COLOR.getHex(),
@@ -24,42 +21,21 @@ const valueStyle = {
 const DISABLED_OPACITY = 0.25;
 
 export const ThreeOptionToggler = (props) => {
-  const [borderColor, setBorderColor] = new useState(copy(MARKER_COLOR));
-  const [hover, setHover] = new useState(false);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBorderColor(
-        borderColor.interpolateTo(
-          hover ? FILLED_COLOR : MARKER_COLOR,
-          BORDER_CHANGE_RATE,
-          linInt
-        )
-      );
-    }, REFRESH_MS);
-    return () => clearInterval(interval);
-  }, [hover]);
-
-  const blocked = props.blocked ? true : false;
-
   return (
-    <div
-      style={{
-        ...containerStyle,
-        ...buttonStyle,
-        borderColor: borderColor.getHex(),
-        borderWidth: "1px",
-        borderStyle: "solid",
+    <MouseInteraction
+      style={{ ...container, ...buttonStyle }}
+      startingColor={MARKER_COLOR}
+      blocked={props.blocked}
+      clickHandler={(e) => {
+        props.clickHandler();
       }}
-      onMouseEnter={(e) => setHover(true)}
-      onMouseLeave={(e) => setHover(false)}
-      onMouseDown={(e) => (props.blocked ? null : props.clickHandler())}
     >
-      <div style={{ ...verticalCenterStyle, float: "left" }}>{props.name}:</div>
+      <div style={{ ...verticalCenterAlignment, float: "left" }}>{props.name}:</div>
       <div
         style={{
-          ...verticalCenterStyle,
+          ...verticalCenterAlignment,
           ...valueStyle,
-          opacity: blocked ? DISABLED_OPACITY : 1,
+          opacity: props.blocked ? DISABLED_OPACITY : 1,
         }}
       >
         <div style={{ ...labelStyle, float: "left" }}>
@@ -70,6 +46,6 @@ export const ThreeOptionToggler = (props) => {
           style={{ float: "right" }}
         />
       </div>
-    </div>
+    </MouseInteraction>
   );
 };

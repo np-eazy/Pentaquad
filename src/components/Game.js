@@ -42,7 +42,7 @@ const Game = (props) => {
 
   // Disable spacebar scrolling down
   window.onkeydown = function (e) {
-    return e.keyCode !== 32 && e.key !== " ";
+    return e.keyCode !== 32 &&  e.keyCode !== 37 && e.keyCode !== 39 && e.key !== " ";
   };
 
   // Main update loop
