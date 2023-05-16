@@ -1,5 +1,5 @@
 import React from "react";
-import { navButtonStyle } from "../Styles";
+import { navButtonStyle } from "../BaseStyles";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUndo } from "@fortawesome/free-solid-svg-icons";
@@ -13,10 +13,13 @@ const returnToMenuStyle = {
 };
 export const ReturnToMenu = (props) => {
   return (
-    <div style={returnToMenuStyle} onMouseDown={(e) => {
+    <div
+      style={returnToMenuStyle}
+      onMouseDown={(e) => {
         props.clickHandler();
         props.audioController.queueSound(Sound.CLICK_BUTTON_B);
-      }}>
+      }}
+    >
       <FontAwesomeIcon icon={faUndo} />
     </div>
   );

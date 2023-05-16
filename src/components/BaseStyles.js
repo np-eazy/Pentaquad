@@ -6,6 +6,25 @@ import {
   WHITE,
 } from "../graphics/theme/ColorScheme";
 
+export const BORDER_CHANGE_RATE = 0.2;
+
+export const containerStyle = {
+  position: "relative",
+};
+
+export const verticalCenterStyle = {
+  position: "absolute",
+  top: "50%",
+  transform: "translateY(-50%)",
+};
+
+export const centerStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translateX(-50%) translateY(-50%)",
+};
+
 export const overlayWrapperStyle = {
   width: TOTAL_WIDTH,
   height: TOTAL_HEIGHT,
@@ -27,17 +46,6 @@ export const overlayStyle = {
   opacity: 0.75,
 };
 
-export const containerStyle = {
-  position: "relative",
-}
-
-export const verticalCenterStyle = {
-  position: "absolute",
-  top: "50%",
-  transform: "translateY(-50%)"
-}
-
-
 export const titleStyle = {
   marginTop: "50px",
   marginBottom: "150px",
@@ -47,26 +55,7 @@ export const titleStyle = {
   fontSize: "48px",
 };
 
-export const menuButtonStyle = {
-  minWidth: "150px",
-  padding: "10px",
-
-  margin: "auto",
-  width: "50%",
-  marginTop: "20px",
-  zIndex: "200",
-
-  backgroundColor: EMPTY_COLOR.getHex(),
-  borderStyle: "solid",
-  borderWidth: "1px",
-  borderRadius: "5px",
-  borderColor: FILLED_COLOR.getHex(),
-
-  textAlign: "center",
-  color: WHITE.getHex(),
-};
-
-export const settingButtonStyle = {
+export const buttonStyle = {
   maxWidth: "500px",
   minHeight: "30px",
   margin: "10px",
@@ -105,16 +94,4 @@ export const navButtonStyle = {
   textAlign: "center",
   color: FILLED_COLOR.getHex(),
   fontSize: "20px",
-};
-
-export const scoresheetStyle = {
-  minWidth: "100px",
-  minHeight: "36px",
-  padding: "10px",
-
-  textAlign: "center",
-  zIndex: "200",
-
-  color: WHITE.getHex(),
-  fontSize: "16px",
 };

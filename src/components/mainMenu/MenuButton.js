@@ -2,28 +2,15 @@ import React, { useEffect, useState } from "react";
 import {
   BORDER_CHANGE_RATE,
   buttonStyle,
+  centerStyle,
   containerStyle,
-  verticalCenterStyle,
 } from "../BaseStyles";
-import { ThreeOptionDisplay } from "./ThreeOptionDisplay";
 import { FILLED_COLOR, MARKER_COLOR } from "../../graphics/theme/ColorScheme";
 import { linInt } from "../../graphics/utils/Functions";
 import { copy } from "../../graphics/utils/Colors";
 import { REFRESH_MS } from "../../game/rules/Constants";
 
-const labelStyle = {
-  color: FILLED_COLOR.getHex(),
-};
-
-const valueStyle = {
-  right: "20px",
-  textAlign: "right",
-  minWidth: "150px",
-};
-
-const DISABLED_OPACITY = 0.25;
-
-export const ThreeOptionToggler = (props) => {
+export const MenuButton = (props) => {
   const [borderColor, setBorderColor] = new useState(copy(MARKER_COLOR));
   const [hover, setHover] = new useState(false);
   useEffect(() => {
@@ -39,8 +26,6 @@ export const ThreeOptionToggler = (props) => {
     return () => clearInterval(interval);
   }, [hover]);
 
-  const blocked = props.blocked ? true : false;
-
   return (
     <div
       style={{
@@ -54,22 +39,7 @@ export const ThreeOptionToggler = (props) => {
       onMouseLeave={(e) => setHover(false)}
       onMouseDown={(e) => (props.blocked ? null : props.clickHandler())}
     >
-      <div style={{ ...verticalCenterStyle, float: "left" }}>{props.name}:</div>
-      <div
-        style={{
-          ...verticalCenterStyle,
-          ...valueStyle,
-          opacity: blocked ? DISABLED_OPACITY : 1,
-        }}
-      >
-        <div style={{ ...labelStyle, float: "left" }}>
-          {props.labels[props.getSetting]}
-        </div>
-        <ThreeOptionDisplay
-          level={props.getSetting + 1}
-          style={{ float: "right" }}
-        />
-      </div>
+      <div style={centerStyle}>{props.label}</div>
     </div>
   );
 };

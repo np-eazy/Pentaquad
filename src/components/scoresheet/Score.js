@@ -1,5 +1,5 @@
 import React from "react";
-import { scoresheetStyle } from "../Styles";
+import { scoresheetStyle } from "./Scoresheet";
 import { WHITE } from "../../graphics/theme/ColorScheme";
 import { displayNum } from "../../graphics/utils/Functions";
 

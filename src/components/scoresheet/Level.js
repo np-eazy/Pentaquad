@@ -1,5 +1,5 @@
 import React from "react";
-import { scoresheetStyle } from "../Styles";
+import { scoresheetStyle } from "./Scoresheet";
 
 export const Level = (props) => {
   return (

@@ -2,7 +2,7 @@ import { Angle, Dxn } from "../coreState/utils/Direction";
 import { BOARD_X0, BOARD_Y0 } from "../../graphics/theme/Layout";
 import { GameAction, ActionType } from "./GameAction";
 import { BOARD_SIZE, WINDOW_DIMENSIONS } from "../rules/Constants";
-import { DEFAULTS } from "./ControlPanel";
+import { DEFAULTS } from "./SettingsController";
 
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 class GameController {
@@ -20,46 +20,32 @@ class GameController {
     var keycode = event.keyCode;
     if (keycode === DEFAULTS.keybindings.MOVE_UP) {
       action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.UP] });
-
     } else if (keycode === DEFAULTS.keybindings.MOVE_LEFT) {
       action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.LEFT] });
-
     } else if (keycode === DEFAULTS.keybindings.MOVE_DOWN) {
       action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.DOWN] });
-
     } else if (keycode === DEFAULTS.keybindings.MOVE_RIGHT) {
       action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.RIGHT] });
-
     } else if (keycode === DEFAULTS.keybindings.ROTATE_LEFT) {
       action = new GameAction(ActionType.ROTATE, { angle: 1 });
-
     } else if (keycode === DEFAULTS.keybindings.ROTATE_RIGHT) {
       action = new GameAction(ActionType.ROTATE, { angle: -1 });
-
     } else if (keycode === DEFAULTS.keybindings.FLIP) {
       action = new GameAction(ActionType.FLIP, {});
-
     } else if (keycode === DEFAULTS.keybindings.DROP) {
       action = new GameAction(ActionType.DROP, {});
-
     } else if (keycode === DEFAULTS.keybindings.ROTATE) {
       action = new GameAction(ActionType.ROTATE, { angle: 1 });
-
     } else if (keycode === DEFAULTS.keybindings.HOLD_1) {
       action = new GameAction(ActionType.HOLD, { item: 0 });
-
     } else if (keycode === DEFAULTS.keybindings.HOLD_2) {
       action = new GameAction(ActionType.HOLD, { item: 1 });
-
     } else if (keycode === DEFAULTS.keybindings.HOLD_3) {
       action = new GameAction(ActionType.HOLD, { item: 2 });
-
     } else if (keycode === DEFAULTS.keybindings.HOLD_4) {
       action = new GameAction(ActionType.HOLD, { item: 3 });
-
     } else if (keycode === DEFAULTS.keybindings.HOLD_5) {
       action = new GameAction(ActionType.HOLD, { item: 4 });
-      
     } else if (keycode === DEFAULTS.keybindings.LOCK) {
       action = new GameAction(ActionType.LOCK, {});
     }
@@ -94,9 +80,7 @@ class GameController {
       return action;
     } else {
       if (this.toggleMoveTo) {
-        var [x_, y_] = this.getCursorCoords(
-          this.windowDimensions,
-        );
+        var [x_, y_] = this.getCursorCoords(this.windowDimensions);
         this.actionQueue.push(
           new GameAction(ActionType.MOVE_TO, { x: x_, y: y_ })
         );
