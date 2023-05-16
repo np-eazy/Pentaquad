@@ -14,22 +14,22 @@ export const Settings = (props) => {
       <ThreeOptionToggler 
         name={"Game Difficulty"}
         labels={["EASY", "NORMAL", "HARD"]}
-        getSetting={() => props.controlPanel.getGameDifficulty()} 
+        getSetting={props.controlPanel.gameDifficulty} 
         clickHandler={() => props.controlPanel.toggleGameDifficulty()}
         gameState={props.gameState}
-        blocked={() => props.gameState.isRunning} />
+        blocked={props.gameState.isRunning} />
 
       <ThreeOptionToggler 
         name={"Graphics"}
         labels={["FAST", "NORMAL", "FANCY"]}
-        getSetting={() => props.controlPanel.getGraphicsLevel()} 
+        getSetting={props.controlPanel.graphicsLevel} 
         clickHandler={() => props.controlPanel.toggleGraphicsLevel()}
         gameState={props.gameState} />
 
       <ThreeOptionToggler 
         name={"Volume"}
         labels={["MUTE", "QUIET", "NORMAL"]}
-        getSetting={() => props.controlPanel.getSoundLevel()} 
+        getSetting={props.controlPanel.soundLevel} 
         clickHandler={() => props.controlPanel.toggleSoundLevel()} 
         gameState={props.gameState} />
 
