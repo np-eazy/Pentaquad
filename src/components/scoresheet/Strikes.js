@@ -1,12 +1,9 @@
 import React from "react";
-import { scoresheetStyle } from "../Styles";
+import { scoresheetStyle } from "./Scoresheet";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import {
-  MARKER_COLOR,
-  WHITE,
-} from "../../graphics/theme/ColorScheme";
+import { MARKER_COLOR, WHITE } from "../../graphics/theme/ColorScheme";
 import { MAX_STRIKES } from "../../game/coreState/Scorekeeper";
 
 export const Strikes = (props) => {

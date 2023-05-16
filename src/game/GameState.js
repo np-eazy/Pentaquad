@@ -4,7 +4,7 @@ import { linInt } from "../graphics/utils/Functions";
 import CoreState from "./coreState/CoreState";
 import { callOnDropzone } from "./coreState/utils/Dropzone";
 import { inBounds, sample, sampleAround } from "./coreState/utils/Functions";
-import { FALLING_COUNTDOWN, CELL_TYPE, BOARD_SIZE } from "./rules/Constants";
+import { CELL_TYPE, BOARD_SIZE } from "./rules/Constants";
 
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,

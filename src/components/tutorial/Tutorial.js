@@ -1,6 +1,6 @@
 import React from "react";
 import { Mode } from "../../game/GameState";
-import { overlayStyle, overlayWrapperStyle, titleStyle } from "../Styles";
+import { overlayStyle, overlayWrapperStyle, titleStyle } from "../BaseStyles";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 import { Sound } from "../../audio/AudioController";
 
