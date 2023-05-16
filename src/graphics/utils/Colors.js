@@ -20,6 +20,11 @@ export function interpolateColor(colorA, colorB, t, interpolationFunction) {
   });
 }
 
+export function copy(colorB) {
+  return new Color(
+    {red: colorB.red, green: colorB.green, blue:colorB.blue}
+  )
+}
 // Utility class to work with Colors in both RGB and hexcode
 export class Color {
   constructor({ red, green, blue }) {
@@ -35,12 +40,15 @@ export class Color {
     this.blue += colorB.blue;
   }
 
+  
+
   // Descructively interpolate colors to avoid piling up Color instances
   interpolateTo(colorB, t, interpolationFunction) {
     this.red = interpolationFunction(this.red, colorB.red, t);
     this.green = interpolationFunction(this.green, colorB.green, t);
     this.blue = interpolationFunction(this.blue, colorB.blue, t);
     this.hex = null;
+    return this;
   }
 
   getHex() {
