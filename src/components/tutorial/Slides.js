@@ -46,7 +46,7 @@ const QUEUE_LOCATION = {
     textAlign: "left",
 }
 
-const OBJECTIVE_MSG = "Clearing lines both horizontally and vertically will earn points just like in Tetris, but this game revolves around filling square targets. "
+const OBJECTIVE_MSG = "Clearing lines both horizontally and vertically will earn points just like in Tetris, but this game revolves around filling square targets, shown below. "
 const OBJECTIVE_LOCATION = {
     maxWidth: BOARD_DIMENSIONS - 100,
     padding: 10,
