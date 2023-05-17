@@ -24,11 +24,11 @@ const Game = (props) => {
   // The global flow of tempo to facilitate the useEffect update loop
   const [canvasTimer, setCanvasTimer] = useState(0);
   const [gameController, setGameController] = useState(new GameController({}));
-  const [audioController, setAudioController] = useState(
-    new AudioController({})
-  );
-  const [settingsController, setSettingsController] = useState(
+    const [settingsController, setSettingsController] = useState(
     new SettingsController({})
+  );
+  const [audioController, setAudioController] = useState(
+    new AudioController({settingsController: settingsController})
   );
 
   const [gameState, setGameState] = useState(
