@@ -2,7 +2,7 @@ import { Angle, Dxn } from "../coreState/utils/Direction";
 import { BOARD_X0, BOARD_Y0 } from "../../graphics/theme/Layout";
 import { GameAction, ActionType } from "./GameAction";
 import { BOARD_SIZE, WINDOW_DIMENSIONS } from "../rules/Constants";
-import { DEFAULTS } from "./SettingsController";
+import { DEFAULTS, KeyActions } from "./SettingsController";
 
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 class GameController {
@@ -13,6 +13,7 @@ class GameController {
     this.cursorY = 0;
 
     this.toggleMoveTo = false;
+    this.settingsController = props.settingsController;
     this.windowDimensions = WINDOW_DIMENSIONS;
   }
   // We should have two types of controls: holdable keys which follow the rule above, and single-press keys which already work as
@@ -20,37 +21,41 @@ class GameController {
   handleKeyDown(event) {
     var action = null;
     var keycode = event.keyCode;
-    if (keycode === DEFAULTS.keybindings.MOVE_UP) {
-      action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.UP] });
-    } else if (keycode === DEFAULTS.keybindings.MOVE_LEFT) {
-      action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.LEFT] });
-    } else if (keycode === DEFAULTS.keybindings.MOVE_DOWN) {
-      action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.DOWN] });
-    } else if (keycode === DEFAULTS.keybindings.MOVE_RIGHT) {
-      action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.RIGHT] });
-    } else if (keycode === DEFAULTS.keybindings.ROTATE_LEFT) {
-      action = new GameAction(ActionType.ROTATE, { angle: 1 });
-    } else if (keycode === DEFAULTS.keybindings.ROTATE_RIGHT) {
-      action = new GameAction(ActionType.ROTATE, { angle: -1 });
-    } else if (keycode === DEFAULTS.keybindings.FLIP) {
-      action = new GameAction(ActionType.FLIP, {});
-    } else if (keycode === DEFAULTS.keybindings.DROP) {
-      action = new GameAction(ActionType.DROP, {});
-    } else if (keycode === DEFAULTS.keybindings.ROTATE) {
-      action = new GameAction(ActionType.ROTATE, { angle: 1 });
-    } else if (keycode === DEFAULTS.keybindings.HOLD_1) {
-      action = new GameAction(ActionType.HOLD, { item: 0 });
-    } else if (keycode === DEFAULTS.keybindings.HOLD_2) {
-      action = new GameAction(ActionType.HOLD, { item: 1 });
-    } else if (keycode === DEFAULTS.keybindings.HOLD_3) {
-      action = new GameAction(ActionType.HOLD, { item: 2 });
-    } else if (keycode === DEFAULTS.keybindings.HOLD_4) {
-      action = new GameAction(ActionType.HOLD, { item: 3 });
-    } else if (keycode === DEFAULTS.keybindings.HOLD_5) {
-      action = new GameAction(ActionType.HOLD, { item: 4 });
-    } else if (keycode === DEFAULTS.keybindings.LOCK) {
-      action = new GameAction(ActionType.LOCK, {});
+    if (this.settingsController) {
+      var keybindings = this.settingsController.keybindings;
+      if (keycode === keybindings.get(KeyActions.MOVE_UP)) {
+        action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.UP] });
+      } else if (keycode === keybindings.get(KeyActions.MOVE_LEFT)) {
+        action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.LEFT] });
+      } else if (keycode === keybindings.get(KeyActions.MOVE_DOWN)) {
+        action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.DOWN] });
+      } else if (keycode === keybindings.get(KeyActions.MOVE_RIGHT)) {
+        action = new GameAction(ActionType.MOVE, { dxn: Dxn[Angle.RIGHT] });
+      } else if (keycode === keybindings.get(KeyActions.ROTATE_LEFT)) {
+        action = new GameAction(ActionType.ROTATE, { angle: 1 });
+      } else if (keycode === keybindings.get(KeyActions.ROTATE_RIGHT)) {
+        action = new GameAction(ActionType.ROTATE, { angle: -1 });
+      } else if (keycode === keybindings.get(KeyActions.FLIP)) {
+        action = new GameAction(ActionType.FLIP, {});
+      } else if (keycode === keybindings.get(KeyActions.DROP)) {
+        action = new GameAction(ActionType.DROP, {});
+      } else if (keycode === keybindings.get(KeyActions.ROTATE)) {
+        action = new GameAction(ActionType.ROTATE, { angle: 1 });
+      } else if (keycode === keybindings.get(KeyActions.HOLD_1)) {
+        action = new GameAction(ActionType.HOLD, { item: 0 });
+      } else if (keycode === keybindings.get(KeyActions.HOLD_2)) {
+        action = new GameAction(ActionType.HOLD, { item: 1 });
+      } else if (keycode === keybindings.get(KeyActions.HOLD_3)) {
+        action = new GameAction(ActionType.HOLD, { item: 2 });
+      } else if (keycode === keybindings.get(KeyActions.HOLD_4)) {
+        action = new GameAction(ActionType.HOLD, { item: 3 });
+      } else if (keycode === keybindings.get(KeyActions.HOLD_5)) {
+        action = new GameAction(ActionType.HOLD, { item: 4 });
+      } else if (keycode === keybindings.get(KeyActions.LOCK)) {
+        action = new GameAction(ActionType.LOCK, {});
+      }
     }
+
     if (action != null) {
       this.actionQueue.push(action);
     }

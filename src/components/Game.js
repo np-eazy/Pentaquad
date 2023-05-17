@@ -23,12 +23,14 @@ import { GameOver } from "./gameOver/GameOver";
 const Game = (props) => {
   // The global flow of tempo to facilitate the useEffect update loop
   const [canvasTimer, setCanvasTimer] = useState(0);
-  const [gameController, setGameController] = useState(new GameController({}));
   const [settingsController, setSettingsController] = useState(
     new SettingsController({})
   );
   const [audioController, setAudioController] = useState(
     new AudioEventController({ settingsController: settingsController })
+  );
+  const [gameController, setGameController] = useState(
+    new GameController({ settingsController: settingsController })
   );
 
   const [gameState, setGameState] = useState(

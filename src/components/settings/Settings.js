@@ -4,6 +4,8 @@ import { overlayStyle, overlayWrapperStyle, titleStyle } from "../BaseStyles";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 import { AudioEvents } from "../../audio/AudioEventController";
 import { ThreeOptionToggler } from "./ThreeOptionToggler";
+import { Keybinding } from "./Keybinding";
+import { DEFAULTS, KeyActions } from "../../game/control/SettingsController";
 
 export const Settings = (props) => {
   return (
@@ -23,7 +25,11 @@ export const Settings = (props) => {
         name={"Graphics"}
         labels={["FAST", "NORMAL", "FANCY"]}
         getSetting={props.settingsController.graphicsLevel}
-        clickHandler={() => props.settingsController.toggleGraphicsLevel(() => props.gameState.resetBaseColors())}
+        clickHandler={() =>
+          props.settingsController.toggleGraphicsLevel(() =>
+            props.gameState.resetBaseColors()
+          )
+        }
         gameState={props.gameState}
       />
 
@@ -33,6 +39,12 @@ export const Settings = (props) => {
         getSetting={props.settingsController.soundLevel}
         clickHandler={() => props.settingsController.toggleSoundLevel()}
         gameState={props.gameState}
+      />
+
+      <Keybinding
+        settingsController={props.settingsController}
+        actionName={"Rotate"}
+        action={KeyActions.ROTATE}
       />
 
       <ReturnToMenu
