@@ -10,16 +10,17 @@ import { METER_DECAY_RATE } from "../../../graphics/theme/Dynamics";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR, MARKER_COLOR_2, WHITE } from "../../../graphics/theme/ColorScheme";
 import { Color, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
+import { Setting } from "../../control/SettingsController";
 
-const EMPTY_BASE_COLOR_BLEND = 0.125;
+const EMPTY_BASE_COLOR_BLEND = 0.15;
 const EMPTY_2H_LIGHT = 10;
 const EMPTY_4H_LIGHT = 20;
 // The default empty value of a Cell on the 2D board. It has the special
 // property of lighting up a different color if marked, which is taken care of
 // during a GameState update.
 class EmptyCell extends Cell {
-  constructor() {
-    super(CELL_TYPE.EMPTY);
+  constructor(coreState) {
+    super(CELL_TYPE.EMPTY, coreState);
     this.lightColor = WHITE;
     this.baseColor = EMPTY_COLOR;
 

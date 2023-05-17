@@ -15,7 +15,7 @@ import { COLLISION_RADIUS } from "../coreState/utils/Params";
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
 class Piece {
-  constructor(cellType = CELL_TYPE.NORMAL) {
+  constructor(cellType, coreState) {
     this.activated = false;
     this.cx = 0;
     this.cy = 0;
@@ -31,24 +31,24 @@ class Piece {
     this.baseColor = BASE_COLORS[index];
 
     if (cellType == CELL_TYPE.EMPTY) {
-      this.mainCell = new EmptyCell();
+      this.mainCell = new EmptyCell(coreState);
     } else if (cellType == CELL_TYPE.NORMAL) {
-      this.mainCell = new NormalCell();
+      this.mainCell = new NormalCell(coreState);
     } else if (cellType == CELL_TYPE.GHOST) {
-      this.mainCell = new GhostCell();
+      this.mainCell = new GhostCell(coreState);
     } else if (cellType == CELL_TYPE.BOMB) {
-      this.mainCell = new BombCell();
+      this.mainCell = new BombCell(coreState);
     } else if (cellType == CELL_TYPE.DRILL) {
-      this.mainCell = new DrillCell();
+      this.mainCell = new DrillCell(coreState);
     } else if (cellType == CELL_TYPE.TOWER) {
-      this.mainCell = new TowerCell();
+      this.mainCell = new TowerCell(coreState);
     }
     this.mainCell.dxn = this.dxn;
     this.mainCell.setBaseColor(this.baseColor);
   }
 
   copyDeactivated() {
-    var copy = new Piece(this.mainCell.type);
+    var copy = new Piece(this.mainCell.type, this.coreState);
     copy.preset = this.preset;
     copy.baseColor = this.baseColor;
     copy.dxn = this.dxn;
@@ -87,8 +87,8 @@ class Piece {
 
   // The function to fill the coreState with cells corresponding to this Piece; this will
   // be used for cases like the render script accessing the color in the parents
-  createCell() {
-    var cell = new NormalCell();
+  createCell(coreState) {
+    var cell = new NormalCell(coreState);
     cell.getAttributesFrom(this.mainCell);
     return cell;
   }

@@ -11,7 +11,11 @@ import {
   BLACK,
 } from "../../../graphics/theme/ColorScheme";
 import { LIGHT_UPDATE_THRESHOLD } from "../../coreState/utils/Params";
-import { CELL_DAMP_RATE, CELL_DIM_RATE } from "../../../graphics/theme/Dynamics";
+import {
+  CELL_DAMP_RATE,
+  CELL_DIM_RATE,
+} from "../../../graphics/theme/Dynamics";
+import { Setting } from "../../control/SettingsController";
 
 // Decay rate of X and Y offsets after row breaks.
 export const CELL_BORDER_OFFSET = 2;
@@ -21,8 +25,9 @@ export const CELL_BORDER_OFFSET = 2;
 // interactions mostly decoupled from everything else, mainly control-system-like variables that change how the piece
 // is rendered and animated.
 class Cell {
-  constructor(type) {
+  constructor(type, coreState) {
     this.type = type;
+    this.coreState = coreState;
     this.setDefaults();
 
     this.baseColor = EMPTY_COLOR; // A non-changing base color for this Cell, which is used to derive all other colors
@@ -37,6 +42,8 @@ class Cell {
       shade2H: EMPTY_COLOR,
       shade4H: EMPTY_COLOR,
     };
+    this.updateCurrentColor();
+    this.updateColorSuite();
   }
 
   // Default values that a Cell is initialized with
@@ -59,6 +66,7 @@ class Cell {
   // Copy props from another Cell, regardless of what type/subclass of cell it is. This is useful for
   // transition graphics when a Cell changes its type.
   getAttributesFrom(other) {
+    this.coreState = other.coreState;
     this.baseColor = other.baseColor;
     this.xOffset = other.xOffset;
     this.yOffset = other.yOffset;
@@ -92,7 +100,13 @@ class Cell {
         (this.ttl + 1) / this.lifetime,
         linInt
       );
-      this.currentColor.add(this.lightColor);
+      if (
+        this.coreState &&
+        this.coreState.settingsController &&
+        this.coreState.settingsController.graphicsLevel == Setting.HIGH
+      ) {
+        this.currentColor.add(this.lightColor);
+      }
     } else {
       this.currentColor = this.baseColor;
     }
@@ -129,8 +143,12 @@ class Cell {
   idleUpdate() {
     this.xOffset *= CELL_DAMP_RATE;
     this.yOffset *= CELL_DAMP_RATE;
-    this.lightColor.interpolateTo(BLACK, CELL_DIM_RATE, linInt);
-    if (this.lightColor.red > LIGHT_UPDATE_THRESHOLD) {
+    if (
+      this.coreState.settingsController &&
+      this.coreState.settingsController.graphicsLevel == Setting.HIGH &&
+      this.lightColor.red > LIGHT_UPDATE_THRESHOLD
+    ) {
+      this.lightColor.interpolateTo(BLACK, CELL_DIM_RATE, linInt);
       this.updateCurrentColor();
       this.updateColorSuite();
     }

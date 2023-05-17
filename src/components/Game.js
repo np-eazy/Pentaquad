@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import GameState, { Mode } from "../game/GameState";
-import CoreState from "../game/coreState/CoreState";
 import GameController from "../game/control/GameController";
 
 import GameGraphics from "../graphics/GameGraphics";
@@ -24,16 +23,15 @@ const Game = (props) => {
   // The global flow of tempo to facilitate the useEffect update loop
   const [canvasTimer, setCanvasTimer] = useState(0);
   const [gameController, setGameController] = useState(new GameController({}));
-  const [audioController, setAudioController] = useState(
-    new AudioController({})
-  );
   const [settingsController, setSettingsController] = useState(
     new SettingsController({})
+  );
+  const [audioController, setAudioController] = useState(
+    new AudioController({ settingsController: settingsController })
   );
 
   const [gameState, setGameState] = useState(
     new GameState({
-      coreState: new CoreState({}),
       controller: gameController,
       audioController: audioController,
       settingsController: settingsController,
@@ -42,7 +40,9 @@ const Game = (props) => {
 
   // Disable spacebar scrolling down
   window.onkeydown = function (e) {
-    return e.keyCode !== 32 &&  e.keyCode !== 37 && e.keyCode !== 39 && e.key !== " ";
+    return (
+      e.keyCode !== 32 && e.keyCode !== 37 && e.keyCode !== 39 && e.key !== " "
+    );
   };
 
   // Main update loop

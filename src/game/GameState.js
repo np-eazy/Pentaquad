@@ -1,6 +1,17 @@
-import { QUEUE_INITIAL_OFFSET, DIFFUSE_ITERATIONS, DIFFUSE_RANGE, DIFFUSE_STEP_AMOUNT } from "../graphics/theme/Dynamics";
+import { BLACK, EMPTY_COLOR } from "../graphics/theme/ColorScheme";
+import {
+  QUEUE_INITIAL_OFFSET,
+  DIFFUSE_ITERATIONS,
+  DIFFUSE_RANGE,
+  DIFFUSE_STEP_AMOUNT,
+} from "../graphics/theme/Dynamics";
 import { interpolateColor } from "../graphics/utils/Colors";
 import { linInt } from "../graphics/utils/Functions";
+import { Setting } from "./control/SettingsController";
+import Piece from "./coreObjects/Piece";
+import DrillCell from "./coreObjects/cell/DrillCell";
+import TowerCell from "./coreObjects/cell/TowerCell";
+import Target from "./coreObjects/target/Target";
 import CoreState from "./coreState/CoreState";
 import { callOnDropzone } from "./coreState/utils/Dropzone";
 import { inBounds, sample, sampleAround } from "./coreState/utils/Functions";
@@ -15,19 +26,21 @@ export const Mode = {
   TUTORIAL: 1,
   SETTINGS: 2,
   SINGLE_PLAYER: 3,
-}
-
+};
 
 // Required props:
 // - coreState: the CoreState of the game
 // - controller: the GameController of the game
 const GameState = class {
   constructor(props) {
-    this.coreState = props.coreState;
     this.controller = props.controller;
     this.audioController = props.audioController;
-    this.coreState.controller = this.controller;
-    this.coreState.audioController = this.audioController;
+    this.settingsController = props.settingsController;
+    this.coreState = new CoreState({
+      controller: props.controller,
+      audioController: props.audioController,
+      settingsController: props.settingsController,
+    });
     this.ticks = 0;
     this.isRunning = false;
     this.delayTimer = 0;
@@ -35,14 +48,36 @@ const GameState = class {
     this.queueOffset = 0;
   }
 
+  update() {
+    if (
+      this.isRunning &&
+      this.delayTimer <= 0 &&
+      this.coreState &&
+      !this.coreState.scorekeeper.gameOver
+    ) {
+      // Update core logic
+      this.coreState.update();
+      this.ticks += 1;
+      // Compute graphic props after core update
+      this.unmarkBoard();
+      this.markDropZone();
+      if (this.settingsController.graphicsLevel == Setting.HIGH) {
+        for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
+          this.randomColorSwap();
+        }
+      }
+    } else {
+      this.delayTimer -= 1;
+    }
+    return this;
+  }
+
   setMode(mode, props) {
     this.mode = mode;
     if (mode == Mode.MAIN_MENU) {
-
     } else if (mode == Mode.TUTORIAL) {
-
+      this.setupTutorial();
     } else if (mode == Mode.SETTINGS) {
-      // this.isRunning = false; Commenting this out until we have another flag that says a game is currently going on
     } else if (mode == Mode.SINGLE_PLAYER) {
       if (props && props.startOver) {
         this.startOver();
@@ -51,38 +86,65 @@ const GameState = class {
     }
   }
 
+  resetBaseColors() {
+    for (var y = 0; y < this.coreState.board.length; y++) {
+      for (var x = 0; x < this.coreState.board[y].length; x++) {
+        if (this.coreState.board[y][x].type == CELL_TYPE.EMPTY) {
+          this.coreState.board[y][x].baseColor = EMPTY_COLOR;
+          this.coreState.board[y][x].lightColor = BLACK;
+          this.coreState.board[y][x].updateCurrentColor();
+          this.coreState.board[y][x].updateColorSuite();
+        }
+      }
+    }
+  }
+
+  startOver() {
+    this.coreState = new CoreState({
+      controller: this.controller,
+      audioController: this.audioController,
+      settingsController: this.settingsController,
+    });
+    this.ticks = 0;
+    this.isRunning = true;
+    this.delayTimer = 0;
+    this.resetBaseColors();
+  }
+
+  setupTutorial() {
+    this.startOver();
+    this.isRunning = false;
+    for (var i = 0; i < 5; i++) {
+      this.coreState.pieceProvider.queue.unshift(
+        new Piece(5 - i, this.coreState)
+      );
+    }
+
+    var smallTarget = new Target({
+      x0: 13,
+      y0: 13,
+      x1: 15,
+      y1: 15,
+    });
+    smallTarget.mainCell = new DrillCell(this.coreState);
+    smallTarget.activate();
+    var bigTarget = new Target({
+      x0: 3,
+      y0: 11,
+      x1: 7,
+      y1: 15,
+    });
+    bigTarget.mainCell = new TowerCell(this.coreState);
+    bigTarget.activate();
+    this.coreState.targets = [smallTarget, bigTarget];
+  }
+
   onPlacement() {
     this.yOffset += QUEUE_INITIAL_OFFSET;
   }
 
   togglePause() {
     this.isRunning = !this.isRunning;
-  }
-
-  startOver() {
-    this.coreState = new CoreState({});
-    this.coreState.controller = this.controller;
-    this.coreState.audioController = this.audioController;
-    this.ticks = 0;
-    this.isRunning = true;
-    this.delayTimer = 0;
-  }
-
-  update() {
-    if (this.isRunning && this.delayTimer <= 0 && !this.coreState.scorekeeper.gameOver) {
-      // Update core logic
-      this.coreState.update();
-      this.ticks += 1;
-      // Compute graphic props after core update
-      this.unmarkBoard();
-      this.markDropZone();
-      for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
-        this.randomColorSwap();
-      }
-    } else {
-      this.delayTimer -= 1;
-    }
-    return this;
   }
 
   // EmptyCells have marked fields set in order to render the drop
@@ -120,11 +182,20 @@ const GameState = class {
       var [x1, y1] = sampleAround(x0, y0, DIFFUSE_RANGE);
       if (inBounds(x1, y1, BOARD_SIZE)) {
         if (x0 != x1 && y0 != y1) {
-          var [cell0, cell1] = [this.coreState.board[y0][x0], this.coreState.board[y1][x1]];
+          var [cell0, cell1] = [
+            this.coreState.board[y0][x0],
+            this.coreState.board[y1][x1],
+          ];
           var [base0, base1] = [cell0.baseColor, cell1.baseColor];
-          if (cell0.type == CELL_TYPE.EMPTY) cell0.setBaseColor(interpolateColor(base0, base1, DIFFUSE_STEP_AMOUNT, linInt));
+          if (cell0.type == CELL_TYPE.EMPTY)
+            cell0.setBaseColor(
+              interpolateColor(base0, base1, DIFFUSE_STEP_AMOUNT, linInt)
+            );
           cell0.updateCurrentColor();
-          if (cell1.type == CELL_TYPE.EMPTY) cell1.setBaseColor(interpolateColor(base1, base0, DIFFUSE_STEP_AMOUNT, linInt));
+          if (cell1.type == CELL_TYPE.EMPTY)
+            cell1.setBaseColor(
+              interpolateColor(base1, base0, DIFFUSE_STEP_AMOUNT, linInt)
+            );
           cell1.updateCurrentColor();
         }
       }

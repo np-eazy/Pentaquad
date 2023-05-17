@@ -13,7 +13,7 @@ export function cellPlacementUpdate(coreState) {
       var cell = coreState.board[y][x];
       if (cell.ttl != -1) {
         if (cell.ttl == 0) {
-          var newCell = coreState.emptyCellProvider.newCell();
+          var newCell = coreState.emptyCellProvider.generateCell(coreState);
           newCell.getAttributesFrom(coreState.board[y][x]);
           coreState.board[y][x] = newCell;
         } else {
@@ -44,7 +44,7 @@ export function placeNormal(coreState, piece) {
   for (const [pid, [x_, y_]] of piece.cells) {
     [x, y] = [x_ + coreState.currPiece.cx, y_ + coreState.currPiece.cy];
     if (inBounds(x, y)) {
-      var newCell = new NormalCell();
+      var newCell = new NormalCell(coreState);
       newCell.getAttributesFrom(piece.mainCell);
       newCell.lightUp(piece.mainCell.baseColor);
       coreState.board[y][x] = newCell;
@@ -65,7 +65,7 @@ export function placeBomb(coreState, piece) {
       x < Math.min(BOARD_SIZE, piece.cx + BOMB_RADIUS + 1);
       x++
     ) {
-      coreState.board[y][x] = coreState.emptyCellProvider.newCell();
+      coreState.board[y][x] = coreState.emptyCellProvider.generateCell(coreState);
     }
   }
 }
@@ -78,7 +78,7 @@ export function placeDrill(coreState, piece) {
     piece,
     coreState.gravity,
     (x, y) => {
-      var newCell = new EmptyCell();
+      var newCell = new EmptyCell(coreState);
       newCell.getAttributesFrom(coreState.board[y][x]);
       newCell.meter = 1;
       coreState.board[y][x] = newCell;
@@ -94,7 +94,7 @@ export function placeTower(coreState, piece) {
     piece,
     coreState.gravity,
     (x, y) => {
-      coreState.board[y][x] = piece.createCell();
+      coreState.board[y][x] = piece.createCell(coreState);
       coreState.board[y][x].getAttributesFrom(piece.mainCell);
       coreState.board[y][x].lightColor.add(piece.mainCell.baseColor);
     },

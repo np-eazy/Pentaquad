@@ -24,8 +24,8 @@ const GHOST_FREQ = 0.1;
 
 // A special type of Cell which can pass through others before being placed.
 class GhostCell extends Cell {
-  constructor() {
-    super(CELL_TYPE.GHOST);
+  constructor(coreState) {
+    super(CELL_TYPE.GHOST, coreState);
   }
 
   idleUpdate() {

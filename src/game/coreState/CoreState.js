@@ -24,22 +24,25 @@ import { BOUNDARY_EXTENSION_SIZE } from "./utils/Params";
 import {
   TARGET_SPAWN_MARGIN,
   PLACEMENT_COUNTDOWN,
-  FALLING_COUNTDOWN,
   BOARD_SIZE,
   CELL_TYPE,
 } from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
-import { NORMAL_CELL_LIFETIME_LVL, FALLING_COUNTDOWN_LVL } from "../rules/Levels";
-import { AudioController, Sound } from "../../audio/AudioController";
+import {
+  NORMAL_CELL_LIFETIME_LVL,
+  FALLING_COUNTDOWN_LVL,
+} from "../rules/Levels";
+import { Sound } from "../../audio/AudioController";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
 // gravity.
 const CoreState = class {
   constructor(props) {
-    this.controller = null; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
-    this.audioController = null;
+    this.controller = props.controller; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
+    this.audioController = props.audioController;
+    this.settingsController = props.settingsController;
     this.pieceProvider = new PieceProvider({ coreState: this }); // Create a new PieceProvider to take care of creating/dispensing pieces
     this.targetProvider = new TargetProvider({
       // Create a new TargetProvider to take care of creating/dispensing targets
@@ -58,7 +61,7 @@ const CoreState = class {
     );
     for (var y = 0; y < this.board.length; y++) {
       for (var x = 0; x < this.board.length; x++) {
-        this.board[y][x] = this.emptyCellProvider.newCell();
+        this.board[y][x] = this.emptyCellProvider.generateCell(this);
       }
     }
     this.threshold = BOARD_SIZE;
@@ -98,7 +101,12 @@ const CoreState = class {
         this.audioController.queueSound(Sound.ROTATE);
         executeRotate(this, 1);
       } else if (action.type == ActionType.MOVE_TO) {
-        executeMoveTo(this, action.props.x, action.props.y, this.audioController);
+        executeMoveTo(
+          this,
+          action.props.x,
+          action.props.y,
+          this.audioController
+        );
       } else if (action.type == ActionType.FLIP) {
         this.audioController.queueSound(Sound.FLIP);
         executeFlip(this);
@@ -128,16 +136,25 @@ const CoreState = class {
     while (!piece) {
       piece = this.pieceProvider.consumePiece(this.scorekeeper.level);
     }
-    this.audioController.queueSound(piece.mainCell.type == CELL_TYPE.GHOST ? Sound.POWERUP_GHOST : 
-      piece.mainCell.type == CELL_TYPE.BOMB ? Sound.POWERUP_BOMB : 
-      piece.mainCell.type == CELL_TYPE.DRILL ? Sound.POWERUP_DRILL : 
-      piece.mainCell.type == CELL_TYPE.TOWER ? Sound.POWERUP_TOWER : Sound.NOP) 
+    this.audioController.queueSound(
+      piece.mainCell.type == CELL_TYPE.GHOST
+        ? Sound.POWERUP_GHOST
+        : piece.mainCell.type == CELL_TYPE.BOMB
+        ? Sound.POWERUP_BOMB
+        : piece.mainCell.type == CELL_TYPE.DRILL
+        ? Sound.POWERUP_DRILL
+        : piece.mainCell.type == CELL_TYPE.TOWER
+        ? Sound.POWERUP_TOWER
+        : Sound.NOP
+    );
     piece.activatePiece({
       center_x: x,
       center_y: y,
       direction: this.gravity,
       pidSize: this.pidSize,
-      ttl: NORMAL_CELL_LIFETIME_LVL[this.scorekeeper.level],
+      ttl: NORMAL_CELL_LIFETIME_LVL[this.settingsController.gameDifficulty][
+        this.scorekeeper.level
+      ],
     });
     this.currPiece = piece;
   }
@@ -154,7 +171,13 @@ const CoreState = class {
   // several frames to actually move the block downwards, and that calls other
   // updates in Cells. Corresponds to idleUpdate and fallingUpdate in Cell and Target classes
   update() {
-    if (this.timer % FALLING_COUNTDOWN_LVL[this.scorekeeper.level] == 0) {
+    if (
+      this.timer %
+        FALLING_COUNTDOWN_LVL[this.settingsController.gameDifficulty][
+          this.scorekeeper.level
+        ] ==
+      0
+    ) {
       if (this.readyToPlace) {
         this.placementUpdate();
       } else if (this.currPiece && this.collisionTimer == 0) {

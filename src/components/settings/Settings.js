@@ -23,7 +23,7 @@ export const Settings = (props) => {
         name={"Graphics"}
         labels={["FAST", "NORMAL", "FANCY"]}
         getSetting={props.settingsController.graphicsLevel}
-        clickHandler={() => props.settingsController.toggleGraphicsLevel()}
+        clickHandler={() => props.settingsController.toggleGraphicsLevel(() => props.gameState.resetBaseColors())}
         gameState={props.gameState}
       />
 

@@ -21,8 +21,8 @@ const CLOCK_FREQ = 0.01;
 
 // A cell which when placed fills everything in its falling path with normal cells.
 class TowerCell extends Cell {
-  constructor() {
-    super(CELL_TYPE.TOWER);
+  constructor(coreState) {
+    super(CELL_TYPE.TOWER, coreState);
   }
 
   idleUpdate() {

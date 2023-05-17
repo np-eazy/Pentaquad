@@ -1,6 +1,6 @@
 import { QUEUE_INITIAL_OFFSET } from "../../../graphics/theme/Dynamics";
 import Piece from "../../coreObjects/Piece";
-import { QUEUE_MAX_LENGTH } from "../../rules/Constants";
+import { CELL_TYPE, QUEUE_MAX_LENGTH } from "../../rules/Constants";
 import { generateCellType } from "../../rules/RandomGeneration";
 
 // A loading stage to provide Pieces for a CoreState and for the user to be
@@ -14,8 +14,9 @@ class PieceProvider {
     this.locked = false;
     this.yOffset = 0;
 
-    for (var i = 0; i < this.maxLength; i++) {
-      this.queue.push(new Piece(generateCellType(1)));
+    this.queue.push(new Piece(CELL_TYPE.GHOST, this.coreState));
+    for (var i = 0; i < this.maxLength - 1; i++) {
+      this.queue.push(new Piece(CELL_TYPE.NORMAL, this.coreState));
     }
   }
 
@@ -26,7 +27,7 @@ class PieceProvider {
       this.queue.unshift(piece);
     } else {
       if (this.queue.length < this.maxLength) {
-        this.queue.push(new Piece(generateCellType(level)));
+        this.queue.push(new Piece(generateCellType(level, this.coreState), this.coreState));
       }
     }
     this.yOffset += QUEUE_INITIAL_OFFSET;

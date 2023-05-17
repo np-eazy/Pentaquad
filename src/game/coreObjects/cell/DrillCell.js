@@ -12,8 +12,8 @@ const CLOCK_FREQ = 0.01;
 // A cell that converts everything below it into EmptyCells when dropped
 // or placed.
 class DrillCell extends Cell {
-  constructor() {
-    super(CELL_TYPE.DRILL);
+  constructor(coreState) {
+    super(CELL_TYPE.DRILL, coreState);
   }
 
   idleUpdate() {

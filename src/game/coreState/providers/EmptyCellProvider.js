@@ -4,11 +4,7 @@ import EmptyCell from "../../coreObjects/cell/EmptyCell";
 export class EmptyCellProvider {
   constructor() {}
 
-  generateCell() {
-    return new EmptyCell();
-  }
-
-  newCell() {
-    return this.generateCell();
+  generateCell(coreState) {
+    return new EmptyCell(coreState);
   }
 }

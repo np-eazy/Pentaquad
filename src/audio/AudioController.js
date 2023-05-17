@@ -1,3 +1,5 @@
+import { Setting } from "../game/control/SettingsController";
+
 export const Sound = {
   NOP: ["NOP", 1],
   // Menu actions
@@ -38,16 +40,25 @@ export const Sound = {
 const PATH_PREFIX = "assets/sounds/";
 const EXTENSION = ".wav";
 const MASTER_VOLUME = 0.4;
+const QUIET_COEFFICIENT = 0.25;
 
 export class AudioController {
-  constructor({}) {
+  constructor(props) {
     this.soundQueue = [];
+    this.settingsController = props.settingsController;
   }
 
   queueSound(soundNumber) {
     if (soundNumber != Sound.NOP) {
       var audio = new Audio(PATH_PREFIX + soundNumber[0] + EXTENSION);
-      audio.volume = soundNumber[1] * MASTER_VOLUME;
+      audio.volume = 0;
+      if (this.settingsController) {
+        if (this.settingsController.soundLevel == Setting.HIGH) {
+          audio.volume = soundNumber[1] * MASTER_VOLUME;
+        } else if (this.settingsController.soundLevel == Setting.MED) {
+          audio.volume = soundNumber[1] * MASTER_VOLUME * QUIET_COEFFICIENT;
+        }
+      }
       this.soundQueue.push(audio);
     }
   }

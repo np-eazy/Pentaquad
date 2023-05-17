@@ -59,7 +59,7 @@ class Target {
     // making it harder to fill up. This can change
     this.placementsToPenalty = props.ticksToGrowth;
     this.penaltyCounter = this.placementsToPenalty;
-    this.mainCell = this.generateCell();
+    this.mainCell = this.generateCell(props.coreState);
     this.mainCell.setBaseColor(EMPTY_COLOR);
     this.activated = false;
     this.isFilled = false;
@@ -72,13 +72,13 @@ class Target {
   generateCell() {
     var type = generateSuperCellType();
     if (type == CELL_TYPE.GHOST) {
-      return new GhostCell();
+      return new GhostCell(this.coreState);
     } else if (type == CELL_TYPE.BOMB) {
-      return new BombCell();
+      return new BombCell(this.coreState);
     } else if (type == CELL_TYPE.DRILL) {
-      return new DrillCell();
+      return new DrillCell(this.coreState);
     } else if (type == CELL_TYPE.TOWER) {
-      return new TowerCell();
+      return new TowerCell(this.coreState);
     }
   }
 
@@ -130,11 +130,11 @@ class Target {
   }
 
   // Clear the cells this TargetBlock covers and set its cleared flag to True
-  clear(board, emptyCellProvider) {
+  clear(coreState, board, emptyCellProvider) {
     for (var x = this.x0 - 1; x < this.x1 + 1; x++) {
       for (var y = this.y0 - 1; y < this.y1 + 1; y++) {
         if (inBounds(x, y)) {
-          board[y][x] = emptyCellProvider.newCell();
+          board[y][x] = emptyCellProvider.generateCell(coreState);
         }
       }
     }
