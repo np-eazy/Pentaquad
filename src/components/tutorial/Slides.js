@@ -65,7 +65,7 @@ const TARGET_LOCATION = {
     textAlign: "left",
 }
 
-const POWERUP_MSG = "There are four different types of power-ups."
+const POWERUP_MSG = "There are four different types of power-ups, which have different animations shown here"
 const GHOST_PIECE_MSG = "Ghost pieces can only be dropped in mid-air, but can freely pass through any blocks already placed. Can be obtained from the queue."
 const BOMB_PIECE_MSG = "Bomb pieces destroy a 5x5 area around them upon being placed. Can be obtained from the queue."
 const DRILL_PIECE_MSG = "Drill pieces destroy everything in their path when dropped. Can be obtained from filling targets."

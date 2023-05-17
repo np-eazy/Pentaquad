@@ -1,6 +1,10 @@
 import { QUEUE_INITIAL_OFFSET, DIFFUSE_ITERATIONS, DIFFUSE_RANGE, DIFFUSE_STEP_AMOUNT } from "../graphics/theme/Dynamics";
 import { interpolateColor } from "../graphics/utils/Colors";
 import { linInt } from "../graphics/utils/Functions";
+import Piece from "./coreObjects/Piece";
+import DrillCell from "./coreObjects/cell/DrillCell";
+import TowerCell from "./coreObjects/cell/TowerCell";
+import Target from "./coreObjects/target/Target";
 import CoreState from "./coreState/CoreState";
 import { callOnDropzone } from "./coreState/utils/Dropzone";
 import { inBounds, sample, sampleAround } from "./coreState/utils/Functions";
@@ -40,15 +44,39 @@ const GameState = class {
     if (mode == Mode.MAIN_MENU) {
 
     } else if (mode == Mode.TUTORIAL) {
-
+      this.setupTutorial();
     } else if (mode == Mode.SETTINGS) {
-      // this.isRunning = false; Commenting this out until we have another flag that says a game is currently going on
+
     } else if (mode == Mode.SINGLE_PLAYER) {
       if (props && props.startOver) {
         this.startOver();
       }
       this.isRunning = true;
     }
+  }
+
+  setupTutorial() {
+    this.coreState.reset();
+    for (var i = 0; i < 5; i++) {
+      this.coreState.pieceProvider.queue.unshift(new Piece(5 - i));
+    }
+    var smallTarget = new Target({
+      x0: 13,
+      y0: 13,
+      x1: 15,
+      y1: 15,
+    });
+    smallTarget.mainCell = new DrillCell();
+    smallTarget.activate();
+    var bigTarget = new Target({
+      x0: 3,
+      y0: 11,
+      x1: 7,
+      y1: 15,
+    });
+    bigTarget.mainCell = new TowerCell();
+    bigTarget.activate();
+    this.coreState.targets = [smallTarget, bigTarget];
   }
 
   onPlacement() {

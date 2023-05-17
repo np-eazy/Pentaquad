@@ -76,6 +76,32 @@ const CoreState = class {
     this.readyToPlace = true; // Flag for placing a block
   }
 
+  reset() {
+    this.pieceProvider = new PieceProvider({ coreState: this }); // Create a new PieceProvider to take care of creating/dispensing pieces
+    this.targetProvider = new TargetProvider({
+      // Create a new TargetProvider to take care of creating/dispensing targets
+      coreState: this,
+      minBound: TARGET_SPAWN_MARGIN,
+      maxBound: BOARD_SIZE - TARGET_SPAWN_MARGIN,
+    });
+    
+    this.board = [...Array(BOARD_SIZE)].map(
+      (e) => Array(BOARD_SIZE).fill(null)
+    );
+    for (var y = 0; y < this.board.length; y++) {
+      for (var x = 0; x < this.board.length; x++) {
+        this.board[y][x] = this.emptyCellProvider.newCell();
+      }
+    }
+
+    this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
+    this.currPiece = null; // The GameState's current unplaced piece
+    this.targets = []; // The GameState's roster of target blocks
+    this.timer = 0; // A timer that increments once each update updates should only be called from a higher-level state which is allowed to control the flow of "core" tempo.
+    this.collisionTimer = 0; // Keep track of how long this piece is in contact in its falling direction
+    this.readyToPlace = true; // Flag for placing a block  
+  }
+
   // Set this piece's controller, in the future this can end up being called
   // while the game is going on when players hijack each other.
   setController(controller) {
