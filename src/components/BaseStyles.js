@@ -1,10 +1,13 @@
 import { TOTAL_HEIGHT, TOTAL_WIDTH } from "../graphics/theme/Layout";
 import {
+  BLACK,
   EMPTY_COLOR,
   FILLED_COLOR,
   MARKER_COLOR,
   WHITE,
 } from "../graphics/theme/ColorScheme";
+import { interpolateColor } from "../graphics/utils/Colors";
+import { linInt } from "../graphics/utils/Functions";
 
 export const BORDER_CHANGE_RATE = 0.2;
 export const BACKGROUND_CHANGE_RATE = 0.2;
@@ -58,7 +61,7 @@ export const overlayStyle = {
   minHeight: TOTAL_HEIGHT,
   position: "absolute",
   zIndex: -1000,
-  backgroundColor: EMPTY_COLOR.getHex(),
+  backgroundColor: interpolateColor(BLACK, EMPTY_COLOR, 0.5, linInt).getHex(),
   opacity: 0.75,
 };
 
@@ -68,7 +71,10 @@ export const titleStyle = {
 
   textAlign: "center",
   color: WHITE.getHex(),
+  fontFamily: "Staatliches",
   fontSize: "48px",
+
+  filter: "drop-shadow(5px 5px 4px " + EMPTY_COLOR.getHex() + ")"
 };
 
 export const buttonStyle = {
@@ -90,6 +96,7 @@ export const buttonStyle = {
 
   textAlign: "center",
   color: WHITE.getHex(),
+  // filter: "drop-shadow(5px 5px 4px " + EMPTY_COLOR.getHex() + ")"
 };
 
 // For the settings and returnToMenu buttons

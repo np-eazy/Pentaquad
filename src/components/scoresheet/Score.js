@@ -4,8 +4,8 @@ import { WHITE } from "../../graphics/theme/ColorScheme";
 import { displayNum } from "../../graphics/utils/Functions";
 
 const scoreStyle = {
+  fontFamily: "Staatliches",
   fontSize: "32px",
-  fontWeight: "bold",
   color: WHITE.getHex(),
 };
 const targetComboStyle = {

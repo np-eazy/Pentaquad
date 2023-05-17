@@ -7,34 +7,42 @@ import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 import { FILLED_COLOR, WHITE } from "../../graphics/theme/ColorScheme";
 
 const subtitleStyle = {
-    color: WHITE.getHex(),
-    textAlign: "center",
-    fontSize: 32,
-}
+  color: WHITE.getHex(),
+  textAlign: "center",
+  fontSize: 32,
+};
 const statStyle = {
-    color: FILLED_COLOR.getHex(),
-    textAlign: "center",
-    fontSize: 20,
-}
+  color: FILLED_COLOR.getHex(),
+  textAlign: "center",
+  fontSize: 20,
+};
 export const GameOver = (props) => {
-  var scorekeeper = props.gameState.coreState.scorekeeper
+  var scorekeeper = props.gameState.coreState.scorekeeper;
   return (
     <div style={overlayWrapperStyle}>
       <div style={overlayStyle}></div>
-      <div style={{...titleStyle, paddingBottom: 50,}}>{"Game Over"}</div>
+      <div style={{ ...titleStyle, paddingBottom: 110 }}> </div>
 
       <div style={subtitleStyle}>
-        {"Score: " + scorekeeper.score.toString()}
+        {"Score: "}
+        <div style={{ fontFamily: "Staatliches", fontSize: 64 }}>
+          {scorekeeper.score.toString()}
+        </div>
       </div>
-      <div style={statStyle}>
-        {"Level: " + scorekeeper.level.toString()}
-      </div>
+      <div style={statStyle}>{"Level: " + scorekeeper.level.toString()}</div>
 
       <MenuButton
         label={"Play again"}
+        bolded={true}
         clickHandler={(e) => {
-          props.gameState.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_A, {});
-          props.gameState.audioController.queueAudioEvent(AudioEvents.GAME_START, {});
+          props.gameState.audioController.queueAudioEvent(
+            AudioEvents.CLICK_BUTTON_A,
+            {}
+          );
+          props.gameState.audioController.queueAudioEvent(
+            AudioEvents.GAME_START,
+            {}
+          );
           props.gameState.setMode(Mode.SINGLE_PLAYER, { startOver: true });
         }}
       />

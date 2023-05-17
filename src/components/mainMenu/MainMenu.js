@@ -10,14 +10,16 @@ export const MainMenu = (props) => {
       <div style={overlayStyle}></div>
       <div style={titleStyle}>{""}</div>
       <MenuButton
-        label={"Tutorial"}
+        label={"TUTORIAL"}
+        bolded={true}
         clickHandler={(e) => {
           props.gameState.setMode(Mode.TUTORIAL);
           props.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_A, {});
         }}
       />
       <MenuButton
-        label={"Play"}
+        label={"PLAY"}
+        bolded={true}
         clickHandler={(e) => {
           props.gameState.setMode(Mode.SINGLE_PLAYER, { startOver: true });
           props.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_A, {});
