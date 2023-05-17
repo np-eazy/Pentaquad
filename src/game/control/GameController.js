@@ -6,10 +6,12 @@ import { DEFAULTS } from "./SettingsController";
 
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 class GameController {
-  constructor({}) {
+  constructor(props) {
     this.actionQueue = [];
+
     this.cursorX = 0;
     this.cursorY = 0;
+
     this.toggleMoveTo = false;
     this.windowDimensions = WINDOW_DIMENSIONS;
   }
@@ -68,8 +70,10 @@ class GameController {
 
   // Map the global location of the mouse with the in-game grid index of the cursor.
   getCursorCoords(windowDimensions) {
-    var x = Math.floor((this.cursorX / windowDimensions) * BOARD_SIZE);
-    var y = Math.floor((this.cursorY / windowDimensions) * BOARD_SIZE);
+    var element = document.getElementById("gameWrapper");
+    var rect = element.getBoundingClientRect();
+    var x = Math.floor(((this.cursorX - rect.left) / windowDimensions) * BOARD_SIZE);
+    var y = Math.floor(((this.cursorY - rect.top) / windowDimensions) * BOARD_SIZE);
     return [x, y];
   }
 

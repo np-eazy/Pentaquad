@@ -8,7 +8,7 @@ export const MainMenu = (props) => {
   return (
     <div style={overlayWrapperStyle}>
       <div style={overlayStyle}></div>
-      <div style={titleStyle}>{"Pentaquad"}</div>
+      <div style={titleStyle}>{""}</div>
       <MenuButton
         label={"Tutorial"}
         clickHandler={(e) => {
