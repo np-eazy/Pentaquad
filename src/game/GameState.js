@@ -26,6 +26,7 @@ export const Mode = {
   TUTORIAL: 1,
   SETTINGS: 2,
   SINGLE_PLAYER: 3,
+  GAME_OVER: 4,
 };
 
 // Required props:
@@ -67,14 +68,22 @@ const GameState = class {
         }
       }
     } else {
+      if (this.coreState.scorekeeper.gameOver) {
+        this.setMode(Mode.GAME_OVER);
+      }
       this.delayTimer -= 1;
     }
     return this;
   }
 
   setMode(mode, props) {
+    var prevMode = this.mode;
     this.mode = mode;
     if (mode == Mode.MAIN_MENU) {
+      if (prevMode == Mode.GAME_OVER) {
+        this.startOver();
+        this.isRunning = false;
+      }
     } else if (mode == Mode.TUTORIAL) {
       this.setupTutorial();
     } else if (mode == Mode.SETTINGS) {
@@ -83,6 +92,8 @@ const GameState = class {
         this.startOver();
       }
       this.isRunning = true;
+    } else if (mode == Mode.GAME_OVER) {
+      //this.isRunning = false;
     }
   }
 
