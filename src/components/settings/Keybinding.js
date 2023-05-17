@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MouseInteraction } from "../MouseInteraction";
 import { buttonStyle, container, verticalCenterAlignment } from "../BaseStyles";
 import { FILLED_COLOR } from "../../graphics/theme/ColorScheme";
+import { BOARD_DIMENSIONS } from "../../graphics/theme/Layout";
 
 const labelStyle = {
   color: FILLED_COLOR.getHex(),
@@ -23,21 +24,41 @@ const capsLock = (c) => {
 export const Keybinding = (props) => {
   const [keyname, setKeyname] = new useState(String.fromCharCode(props.settingsController.keybindings.get(props.action)));
 
+  useEffect(() => {
+    // Update the document title using the browser API
+    var c = String.fromCharCode(props.settingsController.keybindings.get(props.action));
+    setKeyname(c == " " ? "SPACE" : c)
+  });
+
   const changeHandler = (e) => {
     var val = e.target.value;
-    var c = capsLock(val[val.length - 1])
-    if (c) {
-        if (props.settingsController && props.settingsController.validateKeybindings(props.action, c.charCodeAt(0)) == true) {
-            setKeyname(c);
-            props.settingsController.setKeybinding(props.action, c.charCodeAt(0))
+    if (val.length > 0) {
+        var c = capsLock(val[val.length - 1])
+        if (c) {
+            if (props.settingsController && props.settingsController.validateKeybindings(props.action, c.charCodeAt(0)) == true) {
+                setKeyname(c);
+                props.settingsController.setKeybinding(props.action, c.charCodeAt(0))
+            }
         }
     }
   }
+  
+  // Spaces don't trigger the onChange hook so we need special logic for this one.
+  const spacebarHandler = (e) => {
+    if (e.keyCode == " ".charCodeAt(0)) {
+        if (props.settingsController && props.settingsController.validateKeybindings(props.action, e.keyCode) == true) {
+            setKeyname("SPACE");
+            props.settingsController.setKeybinding(props.action, e.keyCode)
+        }
+        console.log("hit")
+    }
+  }
+
   return (
     <div>
       <MouseInteraction
         clickHandler={() => {}}
-        style={{ ...container, ...buttonStyle }}
+        style={{ ...container, ...buttonStyle, width: BOARD_DIMENSIONS / 2 }}
       >
         <div style={{ ...verticalCenterAlignment, float: "left" }}>
           {props.actionName}:
@@ -53,6 +74,7 @@ export const Keybinding = (props) => {
               type={"text"}
               value={keyname}
               onChange={e => changeHandler(e)}
+              onKeyDown={e => spacebarHandler(e)}
               size={10}
               style={{ ...labelStyle }}
             />

@@ -62,7 +62,7 @@ export const overlayStyle = {
 
 export const titleStyle = {
   marginTop: "50px",
-  marginBottom: "150px",
+  marginBottom: "50px",
 
   textAlign: "center",
   color: WHITE.getHex(),

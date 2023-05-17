@@ -31,7 +31,7 @@ export const DEFAULTS = {
     [KeyActions.MOVE_UP, KeyActions.MOVE_UP.charCodeAt(0)],
     [KeyActions.MOVE_LEFT, KeyActions.MOVE_LEFT.charCodeAt(0)],
     [KeyActions.MOVE_DOWN, KeyActions.MOVE_DOWN.charCodeAt(0)],
-    [KeyActions.MOVE_RIGHT, KeyActions.MOVE_UP.charCodeAt(0)],
+    [KeyActions.MOVE_RIGHT, KeyActions.MOVE_RIGHT.charCodeAt(0)],
     [KeyActions.ROTATE_LEFT, KeyActions.ROTATE_LEFT.charCodeAt(0)],
     [KeyActions.ROTATE_RIGHT, KeyActions.ROTATE_RIGHT.charCodeAt(0)],
     [KeyActions.FLIP, KeyActions.FLIP.charCodeAt(0)],
