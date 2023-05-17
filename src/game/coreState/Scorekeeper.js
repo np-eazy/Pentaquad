@@ -1,4 +1,4 @@
-import { Sound } from "../../audio/AudioController";
+import { AudioEvents } from "../../audio/AudioEventController";
 import { LEVEL_SCORE_THRESHOLDS, MAX_LEVELS } from "../rules/Levels";
 
 export const MAX_STRIKES = 3;
@@ -23,7 +23,7 @@ const Scorekeeper = class {
   levelUpdate() {
     if (this.level < MAX_LEVELS && this.score > LEVEL_SCORE_THRESHOLDS[this.level - 1]) {
       this.level += 1;
-      this.coreState.audioController.queueSound(Sound.LEVEL_UP)
+      this.coreState.audioController.queueAudioEvent(AudioEvents.LEVEL_UP, {})
     }
   }
 

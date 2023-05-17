@@ -14,7 +14,7 @@ import { GoToSettings } from "./settings/GoToSettings";
 import { overlayWrapperStyle } from "./BaseStyles";
 import { ReturnToMenu } from "./mainMenu/ReturnToMenu";
 import { DebugDisplay } from "./debug/DebugDisplay";
-import { AudioController } from "../audio/AudioController";
+import { AudioEventController } from "../audio/AudioEventController";
 import { SettingsController } from "../game/control/SettingsController";
 import { GameOver } from "./gameOver/GameOver";
 
@@ -28,7 +28,7 @@ const Game = (props) => {
     new SettingsController({})
   );
   const [audioController, setAudioController] = useState(
-    new AudioController({ settingsController: settingsController })
+    new AudioEventController({ settingsController: settingsController })
   );
 
   const [gameState, setGameState] = useState(

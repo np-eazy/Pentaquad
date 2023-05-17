@@ -1,7 +1,7 @@
 import React from "react";
 import { overlayStyle, overlayWrapperStyle, titleStyle } from "../BaseStyles";
 import { Mode } from "../../game/GameState";
-import { Sound } from "../../audio/AudioController";
+import { AudioEvents } from "../../audio/AudioEventController";
 import { MenuButton } from "../mainMenu/MenuButton";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 import { FILLED_COLOR, WHITE } from "../../graphics/theme/ColorScheme";
@@ -33,8 +33,8 @@ export const GameOver = (props) => {
       <MenuButton
         label={"Play again"}
         clickHandler={(e) => {
-          props.gameState.audioController.queueSound(Sound.CLICK_BUTTON_A);
-          props.gameState.audioController.queueSound(Sound.GAME_START);
+          props.gameState.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_A, {});
+          props.gameState.audioController.queueAudioEvent(AudioEvents.GAME_START, {});
           props.gameState.setMode(Mode.SINGLE_PLAYER, { startOver: true });
         }}
       />

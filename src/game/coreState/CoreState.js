@@ -33,7 +33,7 @@ import {
   NORMAL_CELL_LIFETIME_LVL,
   FALLING_COUNTDOWN_LVL,
 } from "../rules/Levels";
-import { Sound } from "../../audio/AudioController";
+import { AudioEvents } from "../../audio/AudioEventController";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -91,14 +91,14 @@ const CoreState = class {
     while (action) {
       if (action.type == ActionType.MOVE) {
         if (action.props.dxn.equals(this.currPiece.dxn.opposite())) {
-          this.audioController.queueSound(Sound.ROTATE);
+          this.audioController.queueAudioEvent(AudioEvents.ROTATE, {});
           executeRotate(this, 1);
         } else {
-          this.audioController.queueSound(Sound.MOVE);
+          this.audioController.queueAudioEvent(AudioEvents.MOVE, {});
           executeMove(this, action.props.dxn);
         }
       } else if (action.type == ActionType.ROTATE) {
-        this.audioController.queueSound(Sound.ROTATE);
+        this.audioController.queueAudioEvent(AudioEvents.ROTATE, {});
         executeRotate(this, 1);
       } else if (action.type == ActionType.MOVE_TO) {
         executeMoveTo(
@@ -108,19 +108,19 @@ const CoreState = class {
           this.audioController
         );
       } else if (action.type == ActionType.FLIP) {
-        this.audioController.queueSound(Sound.FLIP);
+        this.audioController.queueAudioEvent(AudioEvents.FLIP, {});
         executeFlip(this);
       } else if (action.type == ActionType.DROP) {
-        this.audioController.queueSound(Sound.DROP);
+        this.audioController.queueAudioEvent(AudioEvents.DROP, {});
         executeDrop(this);
       } else if (action.type == ActionType.PLACE) {
-        this.audioController.queueSound(Sound.PLACEMENT);
+        this.audioController.queueAudioEvent(AudioEvents.PLACEMENT, {});
         executePlace(this);
       } else if (action.type == ActionType.HOLD) {
-        this.audioController.queueSound(Sound.HOLD);
+        this.audioController.queueAudioEvent(AudioEvents.HOLD, {});
         executeHold(this, action.props.item);
       } else if (action.type == ActionType.LOCK) {
-        this.audioController.queueSound(Sound.LOCK);
+        this.audioController.queueAudioEvent(AudioEvents.LOCK, {});
         executeLock(this);
       }
       action = this.controller.consumeAction();
@@ -136,16 +136,17 @@ const CoreState = class {
     while (!piece) {
       piece = this.pieceProvider.consumePiece(this.scorekeeper.level);
     }
-    this.audioController.queueSound(
+    this.audioController.queueAudioEvent(
       piece.mainCell.type == CELL_TYPE.GHOST
-        ? Sound.POWERUP_GHOST
+        ? AudioEvents.POWERUP_GHOST
         : piece.mainCell.type == CELL_TYPE.BOMB
-        ? Sound.POWERUP_BOMB
+        ? AudioEvents.POWERUP_BOMB
         : piece.mainCell.type == CELL_TYPE.DRILL
-        ? Sound.POWERUP_DRILL
+        ? AudioEvents.POWERUP_DRILL
         : piece.mainCell.type == CELL_TYPE.TOWER
-        ? Sound.POWERUP_TOWER
-        : Sound.NOP
+        ? AudioEvents.POWERUP_TOWER
+        : AudioEvents.NOP,
+        {}
     );
     piece.activatePiece({
       center_x: x,

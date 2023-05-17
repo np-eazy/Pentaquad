@@ -5,7 +5,7 @@ import {
   ROTATION_ADJUSTMENT_SIZE,
   CELL_TYPE,
 } from "../rules/Constants";
-import { Sound } from "../../audio/AudioController";
+import { AudioEvents } from "../../audio/AudioEventController";
 
 // Different types of GameAction, with each different type telling us how the action props should be handled.
 export const ActionType = {
@@ -113,7 +113,7 @@ export function executeMoveTo(coreState, x, y, audioController) {
     iterationsLeft -= 1;
     moved = true;
   }
-  if (moved) audioController.queueSound(Sound.MOVE);
+  if (moved) audioController.queueAudioEvent(AudioEvents.MOVE, {});
 }
 // Horizontally flip the current piece; rollback if not valid
 export function executeFlip(coreState) {
