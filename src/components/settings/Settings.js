@@ -10,11 +10,10 @@ import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 import { AudioEvents } from "../../audio/AudioEventController";
 import { ThreeOptionToggler } from "./ThreeOptionToggler";
 import { Keybinding } from "./Keybinding";
-import { DEFAULTS, KeyActions } from "../../game/control/SettingsController";
+import { KeyActions } from "../../game/control/SettingsController";
 import { TOTAL_WIDTH } from "../../graphics/theme/Layout";
 import { SlideNav } from "../tutorial/SlideNav";
 import { BooleanToggler } from "./BooleanToggler";
-import { MouseInteraction } from "../MouseInteraction";
 import { MenuButton } from "../mainMenu/MenuButton";
 
 const TOTAL_SLIDES = 4;
@@ -87,7 +86,10 @@ export const Settings = (props) => {
             gameState={props.gameState}
           />
 
-          <MenuButton clickHandler={(e) => props.settingsController.reset()} label={"Reset to defaults"}/>
+          <MenuButton
+            clickHandler={(e) => props.settingsController.reset()}
+            label={"Reset to defaults"}
+          />
         </>
       ) : slideNumber == 1 ? (
         <>
@@ -112,7 +114,6 @@ export const Settings = (props) => {
             actionName={"Lock"}
             action={KeyActions.LOCK}
           />
-
         </>
       ) : slideNumber == 2 ? (
         <>
@@ -177,7 +178,9 @@ export const Settings = (props) => {
             action={KeyActions.ROTATE_RIGHT}
           />
         </>
-      ) : ("")}
+      ) : (
+        ""
+      )}
 
       <ReturnToMenu
         clickHandler={(e) => {

@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { MouseInteraction } from "../MouseInteraction";
-import { buttonStyle, container, entryWrapperStyle, verticalCenterAlignment } from "../BaseStyles";
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../../graphics/theme/ColorScheme";
+import {
+  buttonStyle,
+  container,
+  entryWrapperStyle,
+  verticalCenterAlignment,
+} from "../BaseStyles";
+import {
+  FILLED_COLOR,
+  MARKER_COLOR,
+} from "../../graphics/theme/ColorScheme";
 import { BOARD_DIMENSIONS } from "../../graphics/theme/Layout";
 import { interpolateColor } from "../../graphics/utils/Colors";
 import { linInt } from "../../graphics/utils/Functions";
 
 const labelStyle = {
-  color: FILLED_COLOR.getHex(), 
+  color: FILLED_COLOR.getHex(),
 };
 
 const valueStyle = {
@@ -96,7 +104,12 @@ export const Keybinding = (props) => {
                 ...entryWrapperStyle,
                 borderStyle: "solid",
                 borderWidth: "1px",
-                borderColor: interpolateColor(MARKER_COLOR, FILLED_COLOR, 0.35, linInt).getHex(),
+                borderColor: interpolateColor(
+                  MARKER_COLOR,
+                  FILLED_COLOR,
+                  0.35,
+                  linInt
+                ).getHex(),
               }}
             />
           </div>

@@ -5,7 +5,6 @@ import {
   entryWrapperStyle,
   verticalCenterAlignment,
 } from "../BaseStyles";
-import { ThreeOptionDisplay } from "./ThreeOptionDisplay";
 import {
   EMPTY_COLOR,
   FILLED_COLOR,
@@ -35,9 +34,7 @@ export const BooleanToggler = (props) => {
         props.clickHandler();
       }}
     >
-      <div style={{ ...verticalCenterAlignment }}>
-        {props.name}:
-      </div>
+      <div style={{ ...verticalCenterAlignment }}>{props.name}:</div>
       <div
         style={{
           ...verticalCenterAlignment,

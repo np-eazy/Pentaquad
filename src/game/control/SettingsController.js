@@ -20,8 +20,8 @@ export const KeyActions = {
   HOLD_3: "3",
   HOLD_4: "4",
   HOLD_5: "5",
-  LOCK: "C"
-}
+  LOCK: "C",
+};
 
 const getDefaultKeybindings = () => {
   return new Map([
@@ -41,7 +41,7 @@ const getDefaultKeybindings = () => {
     [KeyActions.HOLD_5, KeyActions.HOLD_5.charCodeAt(0)],
     [KeyActions.LOCK, KeyActions.LOCK.charCodeAt(0)],
   ]);
-}
+};
 
 export const DEFAULTS = {
   gameDifficulty: Setting.HIGH,
@@ -64,11 +64,11 @@ export class SettingsController {
     this.isUsingCursor = DEFAULTS.isUsingCursor;
 
     this.keybindings = getDefaultKeybindings();
-  }
+  };
 
   toggleIsUsingCursor = () => {
     this.isUsingCursor = !this.isUsingCursor;
-  }
+  };
 
   toggleGameDifficulty = () => {
     this.gameDifficulty = (this.gameDifficulty + 1) % 3;
@@ -86,7 +86,7 @@ export class SettingsController {
   };
 
   setKeybinding(action, keycode) {
-    this.keybindings.set(action, keycode)
+    this.keybindings.set(action, keycode);
   }
 
   validateKeybindings(action, keycode) {
@@ -94,6 +94,7 @@ export class SettingsController {
       if (key != action && val == keycode) {
         return false;
       }
-    } return true;
+    }
+    return true;
   }
 }
