@@ -72,7 +72,11 @@ const GameState = class {
   }
 
   startOver() {
-    this.coreState = new CoreState({});
+    this.coreState = new CoreState({
+      controller: this.controller,
+      audioController: this.audioController,
+      settingsController: this.settingsController,
+    });
     this.coreState.controller = this.controller;
     this.coreState.settingsController = this.settingsController;
     this.coreState.audioController = this.audioController;

@@ -38,9 +38,9 @@ import { AudioController, Sound } from "../../audio/AudioController";
 // gravity.
 const CoreState = class {
   constructor(props) {
-    this.controller = null; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
-    this.audioController = null;
-    this.settingsController = null;
+    this.controller = props.controller; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
+    this.audioController = props.controller;
+    this.settingsController = props.controller;
     this.pieceProvider = new PieceProvider({ coreState: this }); // Create a new PieceProvider to take care of creating/dispensing pieces
     this.targetProvider = new TargetProvider({
       // Create a new TargetProvider to take care of creating/dispensing targets
@@ -139,7 +139,7 @@ const CoreState = class {
       center_y: y,
       direction: this.gravity,
       pidSize: this.pidSize,
-      ttl: NORMAL_CELL_LIFETIME_LVL[this.scorekeeper.level],
+      ttl: NORMAL_CELL_LIFETIME_LVL[this.settingsController.gameDifficulty][this.scorekeeper.level],
     });
     this.currPiece = piece;
   }
@@ -156,7 +156,7 @@ const CoreState = class {
   // several frames to actually move the block downwards, and that calls other
   // updates in Cells. Corresponds to idleUpdate and fallingUpdate in Cell and Target classes
   update() {
-    if (this.timer % FALLING_COUNTDOWN_LVL[this.scorekeeper.level] == 0) {
+    if (this.timer % FALLING_COUNTDOWN_LVL[this.settingsController.gameDifficulty][this.scorekeeper.level] == 0) {
       if (this.readyToPlace) {
         this.placementUpdate();
       } else if (this.currPiece && this.collisionTimer == 0) {

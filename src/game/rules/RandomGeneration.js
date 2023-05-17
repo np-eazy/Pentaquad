@@ -13,8 +13,8 @@ export function generateSuperCellType(level = 1) {
 }
 
 // Generate a cell with a chance of being a powerup
-export function generateCellType(level = 1) {
-  return randint(0, POWERUP_RARITY_LVL[level]) == 0 ? generatePowerupCellType(level) : 1;
+export function generateCellType(level, coreState) {
+  return randint(0, POWERUP_RARITY_LVL[coreState.settingsController.gameDifficulty][level]) == 0 ? generatePowerupCellType(level) : 1;
 }
 
 // Generate a target within a random location specified by minBound and maxBound
@@ -29,6 +29,6 @@ export function generateRandomTarget(coreState, minBound, maxBound, radius) {
     y0: y - radius,
     x1: x + radius + 1,
     y1: y + radius + 1,
-    ticksToGrowth: TARGET_GROWTH_TIMER_LVL[coreState.scorekeeper.level],
+    ticksToGrowth: TARGET_GROWTH_TIMER_LVL[coreState.settingsController.gameDifficulty][coreState.scorekeeper.level],
   });
 }

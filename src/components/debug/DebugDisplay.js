@@ -72,11 +72,11 @@ export const DebugDisplay = (props) => {
             {"Points to next level: " + LEVEL_SCORE_THRESHOLDS[level - 1]}
           </div>
           <div>
-            {"Falling Countdown: " + FALLING_COUNTDOWN_LVL[level] + " frames"}
+            {"Falling Countdown: " + FALLING_COUNTDOWN_LVL[coreState.settingsController.gameDifficulty][level] + " frames"}
           </div>
-          <div>{"Powerup Rarity: 1/" + POWERUP_RARITY_LVL[level]}</div>
+          <div>{"Powerup Rarity: 1/" + POWERUP_RARITY_LVL[coreState.settingsController.gameDifficulty][level]}</div>
           <div>
-            {"Target spawn size: " + (1 + 2 * TARGET_SPAWN_RADIUS_LVL[level])}
+            {"Target spawn size: " + (1 + 2 * TARGET_SPAWN_RADIUS_LVL[coreState.settingsController.gameDifficulty][level])}
           </div>
         </div>
 

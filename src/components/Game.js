@@ -33,7 +33,11 @@ const Game = (props) => {
 
   const [gameState, setGameState] = useState(
     new GameState({
-      coreState: new CoreState({}),
+      coreState: new CoreState({
+        controller: gameController,
+        audioController: audioController,
+        settingsController: settingsController,        
+      }),
       controller: gameController,
       audioController: audioController,
       settingsController: settingsController,
