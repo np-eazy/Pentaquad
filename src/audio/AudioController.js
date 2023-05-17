@@ -40,6 +40,7 @@ export const Sound = {
 const PATH_PREFIX = "assets/sounds/";
 const EXTENSION = ".wav";
 const MASTER_VOLUME = 0.4;
+const QUIET_COEFFICIENT = 0.25;
 
 export class AudioController {
   constructor(props) {
@@ -55,7 +56,7 @@ export class AudioController {
         if (this.settingsController.soundLevel == Setting.HIGH) {
           audio.volume = soundNumber[1] * MASTER_VOLUME;
         } else if (this.settingsController.soundLevel == Setting.MED) {
-          audio.volume = soundNumber[1] * MASTER_VOLUME * 0.25;
+          audio.volume = soundNumber[1] * MASTER_VOLUME * QUIET_COEFFICIENT;
         }
       }
       this.soundQueue.push(audio);

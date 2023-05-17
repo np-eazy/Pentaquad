@@ -15,7 +15,7 @@ import { COLLISION_RADIUS } from "../coreState/utils/Params";
 // A single piece in the game, which can move in different directions and detect collisions
 // based on which direction is moving.
 class Piece {
-  constructor(cellType = CELL_TYPE.NORMAL, coreState = undefined) {
+  constructor(cellType, coreState) {
     this.activated = false;
     this.cx = 0;
     this.cy = 0;
@@ -57,8 +57,7 @@ class Piece {
   }
 
   // Before the piece is activated to a global location, it shouldn't be used/updated.
-  activatePiece({ coreState, center_x, center_y, direction, pidSize, ttl }) {
-    this.mainCell.coreState = coreState;
+  activatePiece({ center_x, center_y, direction, pidSize, ttl }) {
     this.activated = true;
     this.cx = center_x;
     this.cy = center_y;

@@ -13,7 +13,7 @@ export function cellPlacementUpdate(coreState) {
       var cell = coreState.board[y][x];
       if (cell.ttl != -1) {
         if (cell.ttl == 0) {
-          var newCell = coreState.emptyCellProvider.newCell(coreState);
+          var newCell = coreState.emptyCellProvider.generateCell(coreState);
           newCell.getAttributesFrom(coreState.board[y][x]);
           coreState.board[y][x] = newCell;
         } else {
@@ -65,7 +65,7 @@ export function placeBomb(coreState, piece) {
       x < Math.min(BOARD_SIZE, piece.cx + BOMB_RADIUS + 1);
       x++
     ) {
-      coreState.board[y][x] = coreState.emptyCellProvider.newCell(coreState);
+      coreState.board[y][x] = coreState.emptyCellProvider.generateCell(coreState);
     }
   }
 }

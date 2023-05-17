@@ -5,7 +5,7 @@ import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
 import { EMPTY_COLOR, FILLED_COLOR } from "../../graphics/theme/ColorScheme";
 
 export const ThreeOptionDisplay = (props) => {
-  const getIcon = (color) => (
+  const settingIcon = (color) => (
     <FontAwesomeIcon
       icon={faSquareXmark}
       color={color}
@@ -19,10 +19,10 @@ export const ThreeOptionDisplay = (props) => {
     <div>
       {Array(props.level)
         .fill(0)
-        .map((e) => getIcon(FILLED_COLOR.getHex()))}
+        .map((e) => settingIcon(FILLED_COLOR.getHex()))}
       {Array(3 - props.level)
         .fill(0)
-        .map((e) => getIcon(EMPTY_COLOR.getHex()))}
+        .map((e) => settingIcon(EMPTY_COLOR.getHex()))}
     </div>
   );
 };

@@ -74,7 +74,6 @@ class Cell {
     this.meter = other.meter;
     this.lifetime = other.lifetime;
     this.ttl = other.ttl;
-    this.updateFlag = false;
 
     this.marked = other.marked;
   }
@@ -101,7 +100,11 @@ class Cell {
         (this.ttl + 1) / this.lifetime,
         linInt
       );
-      if (this.coreState && this.coreState.settingsController && this.coreState.settingsController.graphicsLevel == Setting.HIGH) {
+      if (
+        this.coreState &&
+        this.coreState.settingsController &&
+        this.coreState.settingsController.graphicsLevel == Setting.HIGH
+      ) {
         this.currentColor.add(this.lightColor);
       }
     } else {
@@ -140,11 +143,15 @@ class Cell {
   idleUpdate() {
     this.xOffset *= CELL_DAMP_RATE;
     this.yOffset *= CELL_DAMP_RATE;
-    if (this.coreState.settingsController && this.coreState.settingsController.graphicsLevel == Setting.HIGH && this.lightColor.red > LIGHT_UPDATE_THRESHOLD) {
+    if (
+      this.coreState.settingsController &&
+      this.coreState.settingsController.graphicsLevel == Setting.HIGH &&
+      this.lightColor.red > LIGHT_UPDATE_THRESHOLD
+    ) {
       this.lightColor.interpolateTo(BLACK, CELL_DIM_RATE, linInt);
       this.updateCurrentColor();
       this.updateColorSuite();
-    } 
+    }
     this.timer += 1;
   }
 

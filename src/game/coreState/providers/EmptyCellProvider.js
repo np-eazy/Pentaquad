@@ -7,8 +7,4 @@ export class EmptyCellProvider {
   generateCell(coreState) {
     return new EmptyCell(coreState);
   }
-
-  newCell(coreState) {
-    return this.generateCell(coreState);
-  }
 }

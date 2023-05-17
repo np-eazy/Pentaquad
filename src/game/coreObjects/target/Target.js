@@ -134,7 +134,7 @@ class Target {
     for (var x = this.x0 - 1; x < this.x1 + 1; x++) {
       for (var y = this.y0 - 1; y < this.y1 + 1; y++) {
         if (inBounds(x, y)) {
-          board[y][x] = emptyCellProvider.newCell(coreState);
+          board[y][x] = emptyCellProvider.generateCell(coreState);
         }
       }
     }

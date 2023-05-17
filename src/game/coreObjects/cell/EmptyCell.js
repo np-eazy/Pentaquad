@@ -29,9 +29,7 @@ class EmptyCell extends Cell {
 
   // The meter either goes towards 0 or 1 based on whether or not the piece is marked.
   idleUpdate() {
-    if (this.coreState.settingsController && this.coreState.settingsController.graphicsLevel == Setting.HIGH) {
-      super.idleUpdate();
-    } 
+    super.idleUpdate();
     this.ttl = 8;
     if (this.marked) {
       this.meter *= METER_DECAY_RATE;
