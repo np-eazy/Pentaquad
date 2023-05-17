@@ -4,15 +4,30 @@ import { Mode } from "../../game/GameState";
 import { Sound } from "../../audio/AudioController";
 import { MenuButton } from "../mainMenu/MenuButton";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
+import { FILLED_COLOR, WHITE } from "../../graphics/theme/ColorScheme";
 
+const subtitleStyle = {
+    color: WHITE.getHex(),
+    textAlign: "center",
+    fontSize: 32,
+}
+const statStyle = {
+    color: FILLED_COLOR.getHex(),
+    textAlign: "center",
+    fontSize: 20,
+}
 export const GameOver = (props) => {
+  var scorekeeper = props.gameState.coreState.scorekeeper
   return (
     <div style={overlayWrapperStyle}>
       <div style={overlayStyle}></div>
-      <div style={titleStyle}>{"Game Over"}</div>
+      <div style={{...titleStyle, paddingBottom: 50,}}>{"Game Over"}</div>
 
-      <div style={titleStyle}>
-        {"Score: " + props.gameState.coreState.scorekeeper.score.toString()}
+      <div style={subtitleStyle}>
+        {"Score: " + scorekeeper.score.toString()}
+      </div>
+      <div style={statStyle}>
+        {"Level: " + scorekeeper.level.toString()}
       </div>
 
       <MenuButton
