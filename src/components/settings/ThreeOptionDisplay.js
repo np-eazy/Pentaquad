@@ -1,13 +1,13 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRectangleTimes } from "@fortawesome/free-solid-svg-icons";
+import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
 import { EMPTY_COLOR, FILLED_COLOR } from "../../graphics/theme/ColorScheme";
 
 export const ThreeOptionDisplay = (props) => {
   const getIcon = (color) => (
     <FontAwesomeIcon
-      icon={faRectangleTimes}
+      icon={faSquareXmark}
       color={color}
       style={{
         paddingLeft: "3px",

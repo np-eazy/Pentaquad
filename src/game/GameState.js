@@ -93,6 +93,7 @@ const GameState = class {
     for (var i = 0; i < 5; i++) {
       this.coreState.pieceProvider.queue.unshift(new Piece(5 - i, this.coreState));
     }
+
     var smallTarget = new Target({
       x0: 13,
       y0: 13,

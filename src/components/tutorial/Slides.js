@@ -55,7 +55,7 @@ const OBJECTIVE_LOCATION = {
     marginLeft: COLUMN_WIDTH,
     textAlign: "left",
 }
-const TARGET_MSG = "Targets that are not cleared in time result in a strike, of which three end the game. If a target is cleared, it destroys bonus blocks around it and gives a power-up to the next piece."
+const TARGET_MSG = "Targets that are not cleared in time result in a strike, of which three end the game. If a target is cleared, it destroys bonus blocks around it and gives a power-up to the next piece. You can see flashing squares where a target will spawn shortly before it actually does."
 const TARGET_LOCATION = {
     maxWidth: BOARD_DIMENSIONS - 100,
     padding: 10,
