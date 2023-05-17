@@ -6,6 +6,8 @@ import {
   MARKER_COLOR,
   WHITE,
 } from "../graphics/theme/ColorScheme";
+import { interpolateColor } from "../graphics/utils/Colors";
+import { linInt } from "../graphics/utils/Functions";
 
 export const BORDER_CHANGE_RATE = 0.2;
 export const BACKGROUND_CHANGE_RATE = 0.2;
@@ -59,7 +61,7 @@ export const overlayStyle = {
   minHeight: TOTAL_HEIGHT,
   position: "absolute",
   zIndex: -1000,
-  backgroundColor: EMPTY_COLOR.getHex(),
+  backgroundColor: interpolateColor(BLACK, EMPTY_COLOR, 0.5, linInt).getHex(),
   opacity: 0.75,
 };
 
