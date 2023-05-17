@@ -11,8 +11,8 @@ import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
 import { Sound } from "../../audio/AudioController";
 import { SlideNav } from "./SlideNav";
 import { TOTAL_WIDTH } from "../../graphics/theme/Layout";
+import { IntroSlide, ObjectiveSlide, PowerupSlide, SlideWrapper } from "./Slides";
 
-const TOTAL_SLIDES = 4;
 
 export const Tutorial = (props) => {
   const [slideNumber, setSlideNumber] = new useState(0);
@@ -20,13 +20,17 @@ export const Tutorial = (props) => {
     console.log(e.keyCode);
     if (e.keycode == 37 /* left arrow */) {
     } else if (e.keyCode == 39) {
-      setSlideNumber(slideNumber == 0 ? TOTAL_SLIDES - 1 : slideNumber - 1);
+      setSlideNumber(slideNumber == 0 ? SLIDE_FILES.length - 1 : slideNumber - 1);
     }
   };
+  const SLIDE_FILES = [
+    <IntroSlide />,
+    <ObjectiveSlide />,
+    <PowerupSlide />,
+  ]
 
   return (
     <div style={{ ...overlayWrapperStyle }} onKeyDown={keyHandler}>
-      <div style={overlayStyle}></div>
 
       <div style={{ ...verticalCenterAlignment, width: TOTAL_WIDTH, zIndex: 100 }}>
         <div style={{ float: "left" }}>
@@ -34,7 +38,7 @@ export const Tutorial = (props) => {
             direction={false}
             clickHandler={(e) =>
               setSlideNumber(
-                slideNumber == 0 ? TOTAL_SLIDES - 1 : slideNumber - 1
+                slideNumber == 0 ? SLIDE_FILES.length - 1 : slideNumber - 1
               )
             }
           />
@@ -43,16 +47,15 @@ export const Tutorial = (props) => {
           <SlideNav
             direction={true}
             clickHandler={(e) =>
-              setSlideNumber((slideNumber + 1) % TOTAL_SLIDES)
+              setSlideNumber((slideNumber + 1) % SLIDE_FILES.length)
             }
           />
         </div>
       </div>
-
-      <div style={{ ...mainStyle, marginTop: "25px" }}>
-        {"Use left and right arrows to navigate"}
-      </div>
-      <div style={titleStyle}>{"Tutorial" + slideNumber.toString()}</div>
+      
+      <SlideWrapper>
+        {SLIDE_FILES[slideNumber]}
+      </SlideWrapper>
 
       <ReturnToMenu
         clickHandler={(e) => {

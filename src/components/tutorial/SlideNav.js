@@ -12,7 +12,7 @@ const slideNavStyle = {
   borderStyle: "solid",
   borderWidth: "1px",
   borderRadius: "5px",
-  opacity: 0.5,
+  opacity: 0.75
 };
 
 const bracketStyle = {
