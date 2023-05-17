@@ -16,6 +16,7 @@ import { ReturnToMenu } from "./mainMenu/ReturnToMenu";
 import { DebugDisplay } from "./debug/DebugDisplay";
 import { AudioController } from "../audio/AudioController";
 import { SettingsController } from "../game/control/SettingsController";
+import { GameOver } from "./gameOver/GameOver";
 
 // The main component that displays the game. It is intended to hold nothing more than the game,
 // and to be surrounded by other components that represent menus, settings, etc.
@@ -96,6 +97,14 @@ const Game = (props) => {
           <Scoresheet
             gameState={gameState}
             togglePauseGame={(e) => gameState.togglePause()}
+            startNewGame={(e) => gameState.startNewGame()}
+          />
+        ) : (
+          ""
+        )}
+        {gameState.mode == Mode.GAME_OVER ? (
+          <GameOver
+            gameState={gameState}
             startNewGame={(e) => gameState.startNewGame()}
           />
         ) : (
