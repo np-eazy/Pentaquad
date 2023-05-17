@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MouseInteraction } from "../MouseInteraction";
 import { buttonStyle, container, verticalCenterAlignment } from "../BaseStyles";
-import { FILLED_COLOR } from "../../graphics/theme/ColorScheme";
+import { EMPTY_COLOR, FILLED_COLOR } from "../../graphics/theme/ColorScheme";
 import { BOARD_DIMENSIONS } from "../../graphics/theme/Layout";
 
 const labelStyle = {
@@ -50,7 +50,6 @@ export const Keybinding = (props) => {
             setKeyname("SPACE");
             props.settingsController.setKeybinding(props.action, e.keyCode)
         }
-        console.log("hit")
     }
   }
 
@@ -75,8 +74,8 @@ export const Keybinding = (props) => {
               value={keyname}
               onChange={e => changeHandler(e)}
               onKeyDown={e => spacebarHandler(e)}
-              size={10}
-              style={{ ...labelStyle }}
+              size={6}
+              style={{ ...labelStyle, backgroundColor: EMPTY_COLOR.getHex(), borderRadius: "6px", fontSize: "16px", borderWidth: "0", textAlign: "center", padding: "3px" }}
             />
           </div>
         </div>
