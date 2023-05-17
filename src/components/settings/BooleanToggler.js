@@ -56,6 +56,7 @@ export const BooleanToggler = (props) => {
             color: props.getSetting
               ? EMPTY_COLOR.getHex()
               : FILLED_COLOR.getHex(),
+            float: "right",
           }}
         >
           {props.getSetting ? "ON" : "OFF"}

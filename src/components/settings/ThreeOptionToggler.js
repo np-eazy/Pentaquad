@@ -17,7 +17,6 @@ const valueStyle = {
   right: "20px",
   textAlign: "right",
   minWidth: "175px",
-  
 };
 
 const DISABLED_OPACITY = 0.25;
