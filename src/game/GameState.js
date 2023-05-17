@@ -1,6 +1,8 @@
+import { BLACK, EMPTY_COLOR } from "../graphics/theme/ColorScheme";
 import { QUEUE_INITIAL_OFFSET, DIFFUSE_ITERATIONS, DIFFUSE_RANGE, DIFFUSE_STEP_AMOUNT } from "../graphics/theme/Dynamics";
 import { interpolateColor } from "../graphics/utils/Colors";
 import { linInt } from "../graphics/utils/Functions";
+import { Setting } from "./control/SettingsController";
 import Piece from "./coreObjects/Piece";
 import DrillCell from "./coreObjects/cell/DrillCell";
 import TowerCell from "./coreObjects/cell/TowerCell";
@@ -21,7 +23,6 @@ export const Mode = {
   SINGLE_PLAYER: 3,
 }
 
-
 // Required props:
 // - coreState: the CoreState of the game
 // - controller: the GameController of the game
@@ -30,8 +31,10 @@ const GameState = class {
     this.coreState = props.coreState;
     this.controller = props.controller;
     this.audioController = props.audioController;
+    this.settingsController = props.settingsController;
     this.coreState.controller = this.controller;
     this.coreState.audioController = this.audioController;
+    this.coreState.settingsController = this.settingsController;
     this.ticks = 0;
     this.isRunning = false;
     this.delayTimer = 0;
@@ -55,10 +58,35 @@ const GameState = class {
     }
   }
 
+  resetBaseColors() {
+    for (var y = 0; y < this.coreState.board.length; y++) {
+      for (var x = 0; x < this.coreState.board[y].length; x++) {
+        if (this.coreState.board[y][x].type == CELL_TYPE.EMPTY) {
+          this.coreState.board[y][x].baseColor = EMPTY_COLOR;
+          this.coreState.board[y][x].lightColor = BLACK;
+          this.coreState.board[y][x].updateCurrentColor();
+          this.coreState.board[y][x].updateColorSuite();
+        }
+      }
+    }
+  }
+
+  startOver() {
+    this.coreState = new CoreState({});
+    this.coreState.controller = this.controller;
+    this.coreState.settingsController = this.settingsController;
+    this.coreState.audioController = this.audioController;
+    this.ticks = 0;
+    this.isRunning = true;
+    this.delayTimer = 0;
+    this.resetBaseColors();
+  }
+
+
   setupTutorial() {
-    this.coreState.reset();
+    this.startOver();
     for (var i = 0; i < 5; i++) {
-      this.coreState.pieceProvider.queue.unshift(new Piece(5 - i));
+      this.coreState.pieceProvider.queue.unshift(new Piece(5 - i, this.coreState));
     }
     var smallTarget = new Target({
       x0: 13,
@@ -66,7 +94,7 @@ const GameState = class {
       x1: 15,
       y1: 15,
     });
-    smallTarget.mainCell = new DrillCell();
+    smallTarget.mainCell = new DrillCell(this.coreState);
     smallTarget.activate();
     var bigTarget = new Target({
       x0: 3,
@@ -74,7 +102,7 @@ const GameState = class {
       x1: 7,
       y1: 15,
     });
-    bigTarget.mainCell = new TowerCell();
+    bigTarget.mainCell = new TowerCell(this.coreState);
     bigTarget.activate();
     this.coreState.targets = [smallTarget, bigTarget];
   }
@@ -87,15 +115,7 @@ const GameState = class {
     this.isRunning = !this.isRunning;
   }
 
-  startOver() {
-    this.coreState = new CoreState({});
-    this.coreState.controller = this.controller;
-    this.coreState.audioController = this.audioController;
-    this.ticks = 0;
-    this.isRunning = true;
-    this.delayTimer = 0;
-  }
-
+  
   update() {
     if (this.isRunning && this.delayTimer <= 0 && !this.coreState.scorekeeper.gameOver) {
       // Update core logic
@@ -104,8 +124,10 @@ const GameState = class {
       // Compute graphic props after core update
       this.unmarkBoard();
       this.markDropZone();
-      for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
-        this.randomColorSwap();
+      if (this.settingsController.graphicsLevel == Setting.HIGH) {
+        for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
+          this.randomColorSwap();
+        }
       }
     } else {
       this.delayTimer -= 1;

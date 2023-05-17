@@ -14,6 +14,7 @@ import {
 } from "../../../graphics/theme/ColorScheme";
 import { CELL_BORDER_OFFSET } from "./Cell";
 import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
+import { Setting } from "../../control/SettingsController";
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;
@@ -23,8 +24,8 @@ const METER_FREQ = 0.03;
 // ghost cells. Whenever a piece of any type is placed, newly added Cells are always
 // normal cells.
 class NormalCell extends Cell {
-  constructor() {
-    super(CELL_TYPE.NORMAL);
+  constructor(coreState) {
+    super(CELL_TYPE.NORMAL, coreState);
   }
 
   idleUpdate() {
@@ -55,24 +56,26 @@ class NormalCell extends Cell {
       var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
       drawRect(canvas, x, y, width, height, this.currentColor.getHex());
-      drawRectOffset(
-        canvas,
-        x,
-        y,
-        width,
-        height,
-        this.colorSuite.shade2H.getHex(),
-        d
-      );
-      drawRectOffset(
-        canvas,
-        x,
-        y,
-        width,
-        height,
-        this.colorSuite.shade4H.getHex(),
-        2 * d
-      );
+      if (this.coreState.settingsController.graphicsLevel != Setting.LOW) {
+        drawRectOffset(
+          canvas,
+          x,
+          y,
+          width,
+          height,
+          this.colorSuite.shade2H.getHex(),
+          d
+        );
+        drawRectOffset(
+          canvas,
+          x,
+          y,
+          width,
+          height,
+          this.colorSuite.shade4H.getHex(),
+          2 * d
+        );
+      }
       outlineRectOffset(
         canvas,
         x,

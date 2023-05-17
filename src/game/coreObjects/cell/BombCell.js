@@ -14,8 +14,8 @@ const METER_LEVEL = 1;
 // A cell that converts an area of other cells into EmptyCells
 // when placed or dropped.
 class BombCell extends Cell {
-  constructor() {
-    super(CELL_TYPE.BOMB);
+  constructor(coreState) {
+    super(CELL_TYPE.BOMB, coreState);
   }
 
   idleUpdate() {

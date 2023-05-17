@@ -15,7 +15,7 @@ class PieceProvider {
     this.yOffset = 0;
 
     for (var i = 0; i < this.maxLength; i++) {
-      this.queue.push(new Piece(generateCellType(1)));
+      this.queue.push(new Piece(generateCellType(1), this.coreState));
     }
   }
 
@@ -26,7 +26,7 @@ class PieceProvider {
       this.queue.unshift(piece);
     } else {
       if (this.queue.length < this.maxLength) {
-        this.queue.push(new Piece(generateCellType(level)));
+        this.queue.push(new Piece(generateCellType(level), this.coreState));
       }
     }
     this.yOffset += QUEUE_INITIAL_OFFSET;

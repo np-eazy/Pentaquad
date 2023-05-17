@@ -39,8 +39,11 @@ export class SettingsController {
     this.gameDifficulty = (this.gameDifficulty + 1) % 3;
   };
 
-  toggleGraphicsLevel = () => {
+  toggleGraphicsLevel = (callback) => {
     this.graphicsLevel = (this.graphicsLevel + 1) % 3;
+    if (callback) {
+      callback();
+    }
   };
 
   toggleSoundLevel = () => {
