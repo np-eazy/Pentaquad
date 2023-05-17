@@ -2,7 +2,7 @@ import React from "react";
 import { Mode } from "../../game/GameState";
 import { overlayStyle, overlayWrapperStyle, titleStyle } from "../BaseStyles";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
-import { Sound } from "../../audio/AudioController";
+import { AudioEvents } from "../../audio/AudioEventController";
 import { ThreeOptionToggler } from "./ThreeOptionToggler";
 
 export const Settings = (props) => {
@@ -40,7 +40,7 @@ export const Settings = (props) => {
           props.gameState.setMode(
             props.gameState.isRunning ? Mode.SINGLE_PLAYER : Mode.MAIN_MENU
           );
-          props.audioController.queueSound(Sound.CLICK_BUTTON_B);
+          props.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_B, {});
         }}
       />
     </div>

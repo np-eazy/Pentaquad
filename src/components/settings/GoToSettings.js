@@ -3,7 +3,7 @@ import { lowerRightAlignment, navButtonStyle } from "../BaseStyles";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
-import { Sound } from "../../audio/AudioController";
+import { AudioEvents } from "../../audio/AudioEventController";
 import { FILLED_COLOR } from "../../graphics/theme/ColorScheme";
 import { MouseInteraction } from "../MouseInteraction";
 
@@ -19,7 +19,7 @@ export const GoToSettings = (props) => {
       style={goToSettingsStyle}
       clickHandler={(e) => {
         props.clickHandler();
-        props.audioController.queueSound(Sound.CLICK_BUTTON_X);
+        props.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_X, {});
       }}
     >
       <FontAwesomeIcon icon={faGear} />

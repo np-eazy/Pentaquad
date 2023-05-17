@@ -1,7 +1,7 @@
 import React from "react";
 import { overlayStyle, overlayWrapperStyle, titleStyle } from "../BaseStyles";
 import { Mode } from "../../game/GameState";
-import { Sound } from "../../audio/AudioController";
+import { AudioEvents } from "../../audio/AudioEventController";
 import { MenuButton } from "./MenuButton";
 
 export const MainMenu = (props) => {
@@ -13,15 +13,15 @@ export const MainMenu = (props) => {
         label={"Tutorial"}
         clickHandler={(e) => {
           props.gameState.setMode(Mode.TUTORIAL);
-          props.audioController.queueSound(Sound.CLICK_BUTTON_A);
+          props.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_A, {});
         }}
       />
       <MenuButton
         label={"Play"}
         clickHandler={(e) => {
           props.gameState.setMode(Mode.SINGLE_PLAYER, { startOver: true });
-          props.audioController.queueSound(Sound.CLICK_BUTTON_A);
-          props.audioController.queueSound(Sound.GAME_START);
+          props.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_A, {});
+          props.audioController.queueAudioEvent(AudioEvents.GAME_START, {});
         }}
       />
     </div>

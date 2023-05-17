@@ -1,4 +1,4 @@
-import { Sound } from "../../../audio/AudioController";
+import { AudioEvents } from "../../../audio/AudioEventController";
 import { BOARD_SIZE } from "../../rules/Constants";
 import { Angle, Dxn } from "./Direction";
 
@@ -90,7 +90,7 @@ export const handleClearedLines = (coreState) => {
       }
     }
   }
-  coreState.audioController.queueSound(linesCleared > 1 ? Sound.CLEAR_MULTI_TARGET :
-    linesCleared == 1 ? Sound.CLEAR_SINGLE_TARGET : Sound.NOP);
+  coreState.audioController.queueAudioEvent(linesCleared > 1 ? AudioEvents.CLEAR_MULTI_TARGET :
+    linesCleared == 1 ? AudioEvents.CLEAR_SINGLE_TARGET : AudioEvents.NOP, {});
   scorekeeper.scoreFilledLines(linesCleared);
 };

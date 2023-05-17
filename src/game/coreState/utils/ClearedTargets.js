@@ -1,4 +1,4 @@
-import { Sound } from "../../../audio/AudioController";
+import { AudioEvents } from "../../../audio/AudioEventController";
 import { CELL_TYPE } from "../../rules/Constants";
 
 // Check all filled targets, remove them from targetBlocks, and erase all
@@ -27,11 +27,11 @@ export const handleClearedTargets = (coreState) => {
         }
       }
     } else if (target.isCleared) {
-      coreState.audioController.queueSound(Sound.STRIKE);
+      coreState.audioController.queueAudioEvent(AudioEvents.STRIKE, {});
       target.markTargetArea(board, coreState.emptyCellProvider);
       scorekeeper.strike();
       if (scorekeeper.gameOver) {
-        coreState.audioController.queueSound(Sound.GAME_OVER);
+        coreState.audioController.queueAudioEvent(AudioEvents.GAME_OVER, {});
       }
     }
   });
@@ -43,7 +43,7 @@ export const handleClearedTargets = (coreState) => {
       i += 1;
     }
   }
-  coreState.audioController.queueSound(clearedTargets > 1 ? Sound.CLEAR_MULTI_TARGET :
-    clearedTargets == 1 ? Sound.CLEAR_SINGLE_TARGET : Sound.NOP);
+  coreState.audioController.queueAudioEvent(clearedTargets > 1 ? AudioEvents.CLEAR_MULTI_TARGET :
+    clearedTargets == 1 ? AudioEvents.CLEAR_SINGLE_TARGET : AudioEvents.NOP, {});
   scorekeeper.scoreTargets(clearedTargets);
 };

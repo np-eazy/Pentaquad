@@ -5,7 +5,7 @@ import {
   verticalCenterAlignment,
 } from "../BaseStyles";
 import { ReturnToMenu } from "../mainMenu/ReturnToMenu";
-import { Sound } from "../../audio/AudioController";
+import { AudioEvents } from "../../audio/AudioEventController";
 import { SlideNav } from "./SlideNav";
 import { TOTAL_WIDTH } from "../../graphics/theme/Layout";
 import { IntroSlide, ObjectiveSlide, PowerupSlide, SlideWrapper } from "./Slides";
@@ -51,7 +51,7 @@ export const Tutorial = (props) => {
       <ReturnToMenu
         clickHandler={(e) => {
           props.gameState.setMode(Mode.MAIN_MENU);
-          props.audioController.queueSound(Sound.CLICK_BUTTON_B);
+          props.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_B, {});
         }}
       />
     </div>
