@@ -10,9 +10,17 @@ export const MenuButton = (props) => {
         ...buttonStyle,
       }}
       clickHandler={props.clickHandler}
-      
     >
-      <div style={{...centerAlignment, ...(props.bolded ? {fontFamily: "Staatliches", fontSize: "24px"} : {})}}>{props.label}</div>
+      <div
+        style={{
+          ...centerAlignment,
+          ...(props.bolded
+            ? { fontFamily: "Staatliches", fontSize: "24px" }
+            : {}),
+        }}
+      >
+        {props.label}
+      </div>
     </MouseInteraction>
   );
 };
