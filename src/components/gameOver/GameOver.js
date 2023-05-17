@@ -21,10 +21,12 @@ export const GameOver = (props) => {
   return (
     <div style={overlayWrapperStyle}>
       <div style={overlayStyle}></div>
-      <div style={{...titleStyle, paddingBottom: 50,}}>{"Game Over"}</div>
+      <div style={{...titleStyle, paddingBottom: 110,}}>{" "}</div>
 
       <div style={subtitleStyle}>
-        {"Score: " + scorekeeper.score.toString()}
+        <p>
+          {"Score: "}<div style={{fontFamily:"Staatliches", fontSize: 64}}>{scorekeeper.score.toString()}</div>
+        </p>
       </div>
       <div style={statStyle}>
         {"Level: " + scorekeeper.level.toString()}
@@ -32,6 +34,7 @@ export const GameOver = (props) => {
 
       <MenuButton
         label={"Play again"}
+        bolded={true}
         clickHandler={(e) => {
           props.gameState.audioController.queueAudioEvent(AudioEvents.CLICK_BUTTON_A, {});
           props.gameState.audioController.queueAudioEvent(AudioEvents.GAME_START, {});
