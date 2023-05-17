@@ -104,6 +104,7 @@ export const Keybinding = (props) => {
                 ...entryWrapperStyle,
                 borderStyle: "solid",
                 borderWidth: "1px",
+                fontFamily: "Abel",
                 borderColor: interpolateColor(
                   MARKER_COLOR,
                   FILLED_COLOR,

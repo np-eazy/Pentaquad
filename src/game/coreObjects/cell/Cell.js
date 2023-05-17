@@ -1,6 +1,6 @@
 import { NORMAL_CELL_LIFETIME } from "../../rules/Constants";
 
-import { Color, interpolateColor } from "../../../graphics/utils/Colors";
+import { Color, copy, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 import {
   EMPTY_COLOR,
@@ -30,17 +30,13 @@ class Cell {
     this.coreState = coreState;
     this.setDefaults();
 
-    this.baseColor = EMPTY_COLOR; // A non-changing base color for this Cell, which is used to derive all other colors
-    this.lightColor = new Color({
-      red: 0,
-      green: 0,
-      blue: 0,
-    });
-    this.currentColor = EMPTY_COLOR; // A dynamically changing main color derived from interpolating the baseColor
+    this.baseColor = copy(EMPTY_COLOR); // A non-changing base color for this Cell, which is used to derive all other colors
+    this.lightColor = copy(BLACK);
+    this.currentColor = copy(EMPTY_COLOR); // A dynamically changing main color derived from interpolating the baseColor
     this.colorSuite = {
       // A set of colors derived from the main color and can be updated very sparingly
-      shade2H: EMPTY_COLOR,
-      shade4H: EMPTY_COLOR,
+      shade2H: copy(EMPTY_COLOR),
+      shade4H: copy(EMPTY_COLOR),
     };
     this.updateCurrentColor();
     this.updateColorSuite();

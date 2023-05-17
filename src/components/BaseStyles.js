@@ -1,5 +1,6 @@
 import { TOTAL_HEIGHT, TOTAL_WIDTH } from "../graphics/theme/Layout";
 import {
+  BLACK,
   EMPTY_COLOR,
   FILLED_COLOR,
   MARKER_COLOR,
@@ -68,7 +69,10 @@ export const titleStyle = {
 
   textAlign: "center",
   color: WHITE.getHex(),
+  fontFamily: "Staatliches",
   fontSize: "48px",
+
+  filter: "drop-shadow(5px 5px 4px " + EMPTY_COLOR.getHex() + ")"
 };
 
 export const buttonStyle = {
@@ -90,6 +94,7 @@ export const buttonStyle = {
 
   textAlign: "center",
   color: WHITE.getHex(),
+  // filter: "drop-shadow(5px 5px 4px " + EMPTY_COLOR.getHex() + ")"
 };
 
 // For the settings and returnToMenu buttons
