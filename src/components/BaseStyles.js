@@ -111,3 +111,12 @@ export const navButtonStyle = {
   color: FILLED_COLOR.getHex(),
   fontSize: "20px",
 };
+
+export const entryWrapperStyle = {
+  backgroundColor: EMPTY_COLOR.getHex(),
+  borderRadius: "6px",
+  fontSize: "16px",
+  borderWidth: "0",
+  textAlign: "center",
+  padding: "3px",
+}

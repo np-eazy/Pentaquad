@@ -23,11 +23,8 @@ export const KeyActions = {
   LOCK: "C"
 }
 
-export const DEFAULTS = {
-  gameDifficulty: Setting.HIGH,
-  graphicsLevel: Setting.HIGH,
-  soundLevel: Setting.HIGH,
-  keybindings: new Map([
+const getDefaultKeybindings = () => {
+  return new Map([
     [KeyActions.MOVE_UP, KeyActions.MOVE_UP.charCodeAt(0)],
     [KeyActions.MOVE_LEFT, KeyActions.MOVE_LEFT.charCodeAt(0)],
     [KeyActions.MOVE_DOWN, KeyActions.MOVE_DOWN.charCodeAt(0)],
@@ -43,7 +40,14 @@ export const DEFAULTS = {
     [KeyActions.HOLD_4, KeyActions.HOLD_4.charCodeAt(0)],
     [KeyActions.HOLD_5, KeyActions.HOLD_5.charCodeAt(0)],
     [KeyActions.LOCK, KeyActions.LOCK.charCodeAt(0)],
-  ])
+  ]);
+}
+
+export const DEFAULTS = {
+  gameDifficulty: Setting.HIGH,
+  graphicsLevel: Setting.HIGH,
+  soundLevel: Setting.HIGH,
+  isUsingCursor: true,
 };
 
 // A state-only class used to organize/facilitate controls that can
@@ -53,8 +57,24 @@ export class SettingsController {
     this.gameDifficulty = DEFAULTS.gameDifficulty;
     this.graphicsLevel = DEFAULTS.graphicsLevel;
     this.soundLevel = DEFAULTS.graphicsLevel;
-    this.keybindings = DEFAULTS.keybindings;
+    this.isUsingCursor = DEFAULTS.isUsingCursor;
+
+    this.keybindings = getDefaultKeybindings();
   }
+
+  reset = () => {
+    this.gameDifficulty = DEFAULTS.gameDifficulty;
+    this.graphicsLevel = DEFAULTS.graphicsLevel;
+    this.soundLevel = DEFAULTS.graphicsLevel;
+    this.isUsingCursor = DEFAULTS.isUsingCursor;
+
+    this.keybindings = getDefaultKeybindings();
+  }
+
+  toggleIsUsingCursor = () => {
+    this.isUsingCursor = !this.isUsingCursor;
+  }
+
   toggleGameDifficulty = () => {
     this.gameDifficulty = (this.gameDifficulty + 1) % 3;
   };

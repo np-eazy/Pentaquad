@@ -12,7 +12,6 @@ class GameController {
     this.cursorX = 0;
     this.cursorY = 0;
 
-    this.toggleMoveTo = false;
     this.settingsController = props.settingsController;
     this.windowDimensions = WINDOW_DIMENSIONS;
   }
@@ -62,16 +61,15 @@ class GameController {
     return this;
   }
 
+  handleMouseDown(event) {
+  }
+
   // Update the mouse position
   handleMouseMove(event) {
     this.cursorX = event.clientX - BOARD_X0;
     this.cursorY = event.clientY - BOARD_Y0;
   }
 
-  // Toggle the moveTo flag to continuously produce MOVE_TO actions.
-  handleMouseDown(event) {
-    this.toggleMoveTo = !this.toggleMoveTo;
-  }
 
   // Map the global location of the mouse with the in-game grid index of the cursor.
   getCursorCoords(windowDimensions) {
@@ -88,7 +86,7 @@ class GameController {
     if (action) {
       return action;
     } else {
-      if (this.toggleMoveTo) {
+      if (this.settingsController.isUsingCursor) {
         var [x_, y_] = this.getCursorCoords(this.windowDimensions);
         this.actionQueue.push(
           new GameAction(ActionType.MOVE_TO, { x: x_, y: y_ })

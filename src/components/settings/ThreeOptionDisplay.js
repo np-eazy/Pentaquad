@@ -11,6 +11,7 @@ export const ThreeOptionDisplay = (props) => {
       color={color}
       style={{
         paddingLeft: "3px",
+        paddingTop: "4px",
       }}
     />
   );

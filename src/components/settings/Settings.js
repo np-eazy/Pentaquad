@@ -13,6 +13,9 @@ import { Keybinding } from "./Keybinding";
 import { DEFAULTS, KeyActions } from "../../game/control/SettingsController";
 import { TOTAL_WIDTH } from "../../graphics/theme/Layout";
 import { SlideNav } from "../tutorial/SlideNav";
+import { BooleanToggler } from "./BooleanToggler";
+import { MouseInteraction } from "../MouseInteraction";
+import { MenuButton } from "../mainMenu/MenuButton";
 
 const TOTAL_SLIDES = 4;
 
@@ -76,6 +79,15 @@ export const Settings = (props) => {
             clickHandler={() => props.settingsController.toggleSoundLevel()}
             gameState={props.gameState}
           />
+
+          <BooleanToggler
+            name={"Cursor control"}
+            getSetting={props.settingsController.isUsingCursor}
+            clickHandler={() => props.settingsController.toggleIsUsingCursor()}
+            gameState={props.gameState}
+          />
+
+          <MenuButton clickHandler={(e) => props.settingsController.reset()} label={"Reset to defaults"}/>
         </>
       ) : slideNumber == 1 ? (
         <>
@@ -100,6 +112,7 @@ export const Settings = (props) => {
             actionName={"Lock"}
             action={KeyActions.LOCK}
           />
+
         </>
       ) : slideNumber == 2 ? (
         <>
