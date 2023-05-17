@@ -54,12 +54,7 @@ export const DEFAULTS = {
 // be changed by interacting with the Settings component
 export class SettingsController {
   constructor() {
-    this.gameDifficulty = DEFAULTS.gameDifficulty;
-    this.graphicsLevel = DEFAULTS.graphicsLevel;
-    this.soundLevel = DEFAULTS.graphicsLevel;
-    this.isUsingCursor = DEFAULTS.isUsingCursor;
-
-    this.keybindings = getDefaultKeybindings();
+    this.reset();
   }
 
   reset = () => {
