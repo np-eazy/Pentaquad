@@ -9,12 +9,11 @@ import {
 export const BORDER_CHANGE_RATE = 0.2;
 export const BACKGROUND_CHANGE_RATE = 0.2;
 
-
 export const mainStyle = {
   color: WHITE.getHex(),
   fontSize: "16px",
   textAlign: "center",
-}
+};
 
 export const container = {
   position: "relative",
@@ -33,12 +32,14 @@ export const centerAlignment = {
   transform: "translateX(-50%) translateY(-50%)",
 };
 
+// For nav button
 export const lowerRightAlignment = {
   position: "absolute",
   right: "0px",
   bottom: "0px",
-}
+};
 
+// Wrapper to overlay translucent div
 export const overlayWrapperStyle = {
   width: TOTAL_WIDTH,
   height: TOTAL_HEIGHT,
@@ -51,6 +52,7 @@ export const overlayWrapperStyle = {
   zIndex: 100,
 };
 
+// Shadow to block out game to make component displays nicer
 export const overlayStyle = {
   minWidth: TOTAL_WIDTH,
   minHeight: TOTAL_HEIGHT,
@@ -62,7 +64,7 @@ export const overlayStyle = {
 
 export const titleStyle = {
   marginTop: "50px",
-  marginBottom: "150px",
+  marginBottom: "50px",
 
   textAlign: "center",
   color: WHITE.getHex(),
@@ -90,6 +92,7 @@ export const buttonStyle = {
   color: WHITE.getHex(),
 };
 
+// For the settings and returnToMenu buttons
 export const navButtonStyle = {
   maxWidth: "25px",
   maxHeight: "25px",
@@ -108,6 +111,16 @@ export const navButtonStyle = {
   borderColor: FILLED_COLOR.getHex(),
 
   textAlign: "center",
-  color: FILLED_COLOR.getHex(),
+  color: WHITE.getHex(),
   fontSize: "20px",
+};
+
+// Wrapper for Settings options
+export const entryWrapperStyle = {
+  backgroundColor: EMPTY_COLOR.getHex(),
+  borderRadius: "6px",
+  fontSize: "16px",
+  borderWidth: "0",
+  textAlign: "center",
+  padding: "3px",
 };

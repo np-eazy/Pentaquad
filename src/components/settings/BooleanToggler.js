@@ -5,8 +5,11 @@ import {
   entryWrapperStyle,
   verticalCenterAlignment,
 } from "../BaseStyles";
-import { ThreeOptionDisplay } from "./ThreeOptionDisplay";
-import { FILLED_COLOR, MARKER_COLOR } from "../../graphics/theme/ColorScheme";
+import {
+  EMPTY_COLOR,
+  FILLED_COLOR,
+  MARKER_COLOR,
+} from "../../graphics/theme/ColorScheme";
 import { MouseInteraction } from "../MouseInteraction";
 
 const labelStyle = {
@@ -21,7 +24,7 @@ const valueStyle = {
 
 const DISABLED_OPACITY = 0.25;
 
-export const ThreeOptionToggler = (props) => {
+export const BooleanToggler = (props) => {
   return (
     <MouseInteraction
       style={{ ...container, ...buttonStyle }}
@@ -31,7 +34,7 @@ export const ThreeOptionToggler = (props) => {
         props.clickHandler();
       }}
     >
-      <div style={{ ...verticalCenterAlignment, float: "left" }}>{props.name}:</div>
+      <div style={{ ...verticalCenterAlignment }}>{props.name}:</div>
       <div
         style={{
           ...verticalCenterAlignment,
@@ -39,13 +42,22 @@ export const ThreeOptionToggler = (props) => {
           opacity: props.blocked ? DISABLED_OPACITY : 1,
         }}
       >
-        <div style={{ ...labelStyle, ...entryWrapperStyle, width: 100, float: "left" }}>
-          {props.labels[props.getSetting]}
+        <div
+          style={{
+            ...labelStyle,
+            ...entryWrapperStyle,
+            width: 100,
+            backgroundColor: props.getSetting
+              ? FILLED_COLOR.getHex()
+              : EMPTY_COLOR.getHex(),
+            color: props.getSetting
+              ? EMPTY_COLOR.getHex()
+              : FILLED_COLOR.getHex(),
+            float: "right",
+          }}
+        >
+          {props.getSetting ? "ON" : "OFF"}
         </div>
-        <ThreeOptionDisplay
-          level={props.getSetting + 1}
-          style={{ float: "right" }}
-        />
       </div>
     </MouseInteraction>
   );
