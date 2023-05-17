@@ -101,7 +101,7 @@ class Cell {
         (this.ttl + 1) / this.lifetime,
         linInt
       );
-      if (this.coreState.settingsController && this.coreState.settingsController.graphicsLevel == Setting.HIGH) {
+      if (this.coreState && this.coreState.settingsController && this.coreState.settingsController.graphicsLevel == Setting.HIGH) {
         this.currentColor.add(this.lightColor);
       }
     } else {

@@ -85,6 +85,7 @@ const GameState = class {
 
   setupTutorial() {
     this.startOver();
+    this.isRunning = false;
     for (var i = 0; i < 5; i++) {
       this.coreState.pieceProvider.queue.unshift(new Piece(5 - i, this.coreState));
     }

@@ -43,22 +43,16 @@ class EmptyCell extends Cell {
   // Update the cell's main color based on its TTL; this is the default update color but it can
   // be overridden by extensions for cooler effects.
   updateCurrentColor() {
-    console.log(this.coreState.settingsController);
-    if (this.coreState.settingsController && this.coreState.settingsController.graphicsLevel == Setting.HIGH) {
-      if (this.ttl != -1 && this.currentColor) {
-        this.currentColor = interpolateColor(
-          EMPTY_COLOR,
-          this.baseColor,
-          EMPTY_BASE_COLOR_BLEND,
-          linInt
-        );
-        this.currentColor.add(this.lightColor);
-      } else {
-        this.currentColor = this.baseColor;
-      }
+    if (this.ttl != -1 && this.currentColor) {
+      this.currentColor = interpolateColor(
+        EMPTY_COLOR,
+        this.baseColor,
+        EMPTY_BASE_COLOR_BLEND,
+        linInt
+      );
+      this.currentColor.add(this.lightColor);
     } else {
-      this.baseColor = EMPTY_COLOR;
-      this.currentColor = EMPTY_COLOR;
+      this.currentColor = this.baseColor;
     }
   }
 
