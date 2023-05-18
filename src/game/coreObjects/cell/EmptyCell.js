@@ -7,10 +7,9 @@ import {
   outlineRect,
 } from "../../../graphics/CanvasPipeline";
 import { METER_DECAY_RATE } from "../../../graphics/theme/Dynamics";
-import { BLACK, EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR, MARKER_COLOR_2, WHITE } from "../../../graphics/theme/ColorScheme";
+import { BLACK, EMPTY_COLOR, MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
 import { Color, copy, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
-import { Setting } from "../../control/SettingsController";
 
 const EMPTY_BASE_COLOR_BLEND = 0.15;
 const EMPTY_2H_LIGHT = 10;
@@ -22,7 +21,7 @@ class EmptyCell extends Cell {
   constructor(coreState) {
     super(CELL_TYPE.EMPTY, coreState);
     this.lightColor = copy(BLACK);
-    this.baseColor = copy(EMPTY_COLOR);
+    this.baseColor = copy(MARKER_COLOR);
 
     this.meter = 0;
   }
@@ -89,7 +88,7 @@ class EmptyCell extends Cell {
       var d = ((1 - (this.meter * 2 - 1)) * width) / 2;
       drawRectOffset(canvas, x, y, width, height, this.currentColor.getHex(), d);
     }
-    // outlineRect(canvas, x, y, width, height, MARKER_COLOR.getHex());
+    outlineRect(canvas, x, y, width, height, (this.meter < 0.5 ? this.colorSuite.shade4H : this.colorSuite.shade2H).getHex());
   }
 }
 

@@ -96,27 +96,38 @@ class Piece {
   // Return whether or not the block has a collision with this angle.
   // Null angle option is for rotation collision check, only to make sure that the piece
   // doesn't rotate into any overlaps with filled cells.
-  checkCollision(dxn, board, collisionSets) {
+  checkCollision(dxn, board, collisionSets, fallingDxn) {
     var [xSize, ySize] = [board.length, board[0].length];
 
     var collisionDxn = dxn == null ? { dx: 0, dy: 0 } : dxn;
-    var boundarySet =
-      dxn == null ? new Set() : collisionSets.boundarySets[dxn.angle];
+    
     var collision = false;
+    const checkBoundarySet = (boundarySet) => {
+      var collision = false;
+      // Check for a boundary collision
+      this.cells.forEach((val) => {
+        var globalPid = getPID(
+          val[0] + this.cx + collisionDxn.dx,
+          val[1] + this.cy + collisionDxn.dy,
+          this.pidSize
+        );
+        if (!collision && boundarySet && boundarySet.has(globalPid)) {
+          collision = true;
+        }
+      });
+      return collision;
+    }
 
-    // Check for a boundary collision
-    this.cells.forEach((val) => {
-      var globalPid = getPID(
-        val[0] + this.cx + collisionDxn.dx,
-        val[1] + this.cy + collisionDxn.dy,
-        this.pidSize
-      );
-      if (!collision && boundarySet.has(globalPid)) {
-        collision = true;
-      }
-    });
-    if (collision == true) {
+    var groundSet = dxn == null ? new Set() : collisionSets.boundarySets[dxn.angle];
+    
+    if (checkBoundarySet(groundSet) == true) {
       return true;
+    } else if (fallingDxn) { // If a 4th arg is passed, we are doing a more careful check for rotations. 
+      var wallSetLeft = collisionSets.boundarySets[(fallingDxn.angle + 1) % 4]
+      var wallSetRight = collisionSets.boundarySets[(fallingDxn.angle + 3) % 4]
+      if (checkBoundarySet(wallSetLeft) || checkBoundarySet(wallSetRight)) {
+        return true;
+      }
     }
 
     if (this.mainCell.type != CELL_TYPE.GHOST) {
@@ -138,7 +149,7 @@ class Piece {
               y - this.cy - collisionDxn.dy,
               this.pidSize
             );
-            if (!collision && this.cells.has(globalPid)) {
+            if (!collision && this.cells && this.cells.has(globalPid)) {
               return true;
             }
           }

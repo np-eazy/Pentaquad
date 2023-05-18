@@ -1,4 +1,5 @@
 import { AudioEvents } from "../../../audio/AudioEventController";
+import { copy } from "../../../graphics/utils/Colors";
 import { CELL_TYPE } from "../../rules/Constants";
 
 // Check all filled targets, remove them from targetBlocks, and erase all
@@ -23,7 +24,9 @@ export const handleClearedTargets = (coreState) => {
           i += 1;
         }
         if (i < queue.length) {
+          var baseColor = queue[i].mainCell.baseColor;
           queue[i].mainCell = target.mainCell;
+          target.mainCell.setBaseColor(copy(baseColor));
         }
       }
     } else if (target.isCleared) {

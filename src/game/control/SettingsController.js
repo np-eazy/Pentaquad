@@ -44,9 +44,9 @@ const getDefaultKeybindings = () => {
 };
 
 export const DEFAULTS = {
-  gameDifficulty: Setting.HIGH,
+  gameDifficulty: Setting.MED,
   graphicsLevel: Setting.HIGH,
-  soundLevel: Setting.HIGH,
+  soundLevel: Setting.MED,
   isUsingCursor: true,
 };
 
