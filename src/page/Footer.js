@@ -1,4 +1,5 @@
 import React from "react";
+import pkg from "../../package.json";
 import { EMPTY_COLOR, FILLED_COLOR } from "../graphics/theme/ColorScheme";
 import { TOTAL_HEIGHT } from "../graphics/theme/Layout";
 
@@ -23,7 +24,7 @@ const linkStyle = {
 export const Footer = (props) => {
   return (
     <div style={footerStyle}>
-      <div style={linkStyle}>{"Beta release v0.1.0"}</div>
+      <div style={linkStyle}>{"Beta release v" + pkg.version}</div>
       <div style={linkStyle}>
         <a
           style={{ color: FILLED_COLOR.getHex() }}

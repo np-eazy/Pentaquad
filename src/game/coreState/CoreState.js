@@ -34,6 +34,7 @@ import {
   FALLING_COUNTDOWN_LVL,
 } from "../rules/Levels";
 import { AudioEvents } from "../../audio/AudioEventController";
+import { Setting } from "../control/SettingsController";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -124,6 +125,16 @@ const CoreState = class {
         executeLock(this);
       }
       action = this.controller.consumeAction();
+    }
+  }
+
+  changeGravity() {
+    if (this.settingsController.gameDifficulty == Setting.HIGH) {
+      this.gravity.turn(-1);
+    } else if (this.settingsController.gameDifficulty == Setting.MED) {
+      this.gravity.turn(
+        this.gravity && this.gravity.equals(Dxn[Angle.DOWN]) ? 1 : -1
+      );
     }
   }
 
@@ -222,9 +233,8 @@ const CoreState = class {
   // changes. Corresponds to placementUpdate in Cell and Target classes.
   placementUpdate() {
     place(this, this.currPiece);
-    this.gravity.turn(
-      this.gravity && this.gravity.equals(Dxn[Angle.DOWN]) ? 1 : -1
-    );
+    this.changeGravity();
+
     // Check and clear any filled targets or lines
     handleClearedTargets(this);
     handleClearedLines(this);
