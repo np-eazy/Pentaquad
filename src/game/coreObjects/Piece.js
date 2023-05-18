@@ -111,7 +111,7 @@ class Piece {
         val[1] + this.cy + collisionDxn.dy,
         this.pidSize
       );
-      if (!collision && boundarySet.has(globalPid)) {
+      if (!collision && boundarySet && boundarySet.has(globalPid)) {
         collision = true;
       }
     });
@@ -138,7 +138,7 @@ class Piece {
               y - this.cy - collisionDxn.dy,
               this.pidSize
             );
-            if (!collision && this.cells.has(globalPid)) {
+            if (!collision && this.cells && this.cells.has(globalPid)) {
               return true;
             }
           }

@@ -1,4 +1,4 @@
-import { Angle, Dxn } from "../coreState/utils/Direction";
+import { Angle, Direction, Dxn } from "../coreState/utils/Direction";
 import { placeTower } from "../coreState/Placement";
 import {
   PLACEMENT_COUNTDOWN,
@@ -59,31 +59,23 @@ export function executeRotate(coreState, angle) {
       null,
       coreState.board,
       coreState.collisionSets
-    )
+    ) // Normal rotation causes collision
   ) {
-    var adjustment = 0;
-    while (
-      coreState.currPiece.checkCollision(
-        null,
+    // Passing in direction is equivalent to shifting the piece and checking normal collision,
+    // loop through these from right direction counterclockwise and take the first one.
+    var wallKick = false;
+    for (var i = 0; i < 4; i++) {
+      if (!coreState.currPiece.checkCollision( // If no collision, move the piece in that direction
+        Dxn[i],
         coreState.board,
         coreState.collisionSets
-      ) &&
-      adjustment < ROTATION_ADJUSTMENT_SIZE
-    ) {
-      coreState.currPiece.move(coreState.gravity.opposite());
-      adjustment += 1;
-    }
-    // Rollback if max rotation adjustment has been reached
-    if (
-      coreState.currPiece.checkCollision(
-        null,
-        coreState.board,
-        coreState.collisionSets
-      )
-    ) {
-      for (var i = 0; i < adjustment; i++) {
-        coreState.currPiece.move(coreState.currPiece.dxn);
+      )) {
+        wallKick = true;
+        coreState.currPiece.move(Dxn[i]);
+        break;
       }
+    }
+    if (!wallKick) {
       coreState.currPiece.rotate(-angle);
     }
   }
