@@ -58,7 +58,8 @@ export function executeRotate(coreState, angle) {
     coreState.currPiece.checkCollision(
       null,
       coreState.board,
-      coreState.collisionSets
+      coreState.collisionSets,
+      coreState.gravity,
     ) // Normal rotation causes collision
   ) {
     // Passing in direction is equivalent to shifting the piece and checking normal collision,
@@ -68,7 +69,8 @@ export function executeRotate(coreState, angle) {
       if (!coreState.currPiece.checkCollision( // If no collision, move the piece in that direction
         Dxn[i],
         coreState.board,
-        coreState.collisionSets
+        coreState.collisionSets,
+        coreState.gravity,
       )) {
         wallKick = true;
         coreState.currPiece.move(Dxn[i]);
