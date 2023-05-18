@@ -8,7 +8,7 @@ const footerStyle = {
   minHeight: 1000,
 
   position: "relative",
-  top: TOTAL_HEIGHT + 200,
+  top: TOTAL_HEIGHT + 120,
   textAlign: "center",
   marginTop: 0,
   color: FILLED_COLOR.getHex(),
@@ -21,9 +21,16 @@ const linkStyle = {
   color: FILLED_COLOR.getHex(),
 };
 
+const DESCRIPTION_MSG = "Pentaquad is a Tetris-based game based on filling up squares rather than lines. Difficulty, graphics, and keybindings can be changed in the Settings on the lower right."
+
 export const Footer = (props) => {
   return (
     <div style={footerStyle}>
+      <div style={{marginBottom: 100}}>
+        <p>
+          {DESCRIPTION_MSG}
+        </p>
+      </div>
       <div style={linkStyle}>{"Beta release v" + pkg.version}</div>
       <div style={linkStyle}>
         <a
