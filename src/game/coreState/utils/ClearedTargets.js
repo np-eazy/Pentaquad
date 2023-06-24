@@ -24,9 +24,7 @@ export const handleClearedTargets = (coreState) => {
           i += 1;
         }
         if (i < queue.length) {
-          var baseColor = queue[i].mainCell.baseColor;
-          queue[i].mainCell = target.mainCell;
-          target.mainCell.setBaseColor(copy(baseColor));
+          queue[i].upgradeTo(target.mainCell);
         }
       }
     } else if (target.isCleared) {

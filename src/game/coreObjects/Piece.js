@@ -5,8 +5,11 @@ import BombCell from "./cell/BombCell";
 import DrillCell from "./cell/DrillCell";
 import TowerCell from "./cell/TowerCell";
 
+import BombIndicator from "./cell/indicator/BombIndicator";
+
+
 import { PRESETS, CELL_TYPE, DEBUG } from "../rules/Constants";
-import { BASE_COLORS } from "../../graphics/theme/ColorScheme";
+import { BASE_COLORS, FILLED_COLOR, THEME_RED } from "../../graphics/theme/ColorScheme";
 import { randomDxn } from "../coreState/utils/Direction";
 import { randint, getPID } from "../coreState/utils/Functions";
 
@@ -38,14 +41,21 @@ class Piece {
     } else if (cellType == CELL_TYPE.GHOST) {
       this.mainCell = new GhostCell(coreState);
     } else if (cellType == CELL_TYPE.BOMB) {
-      this.mainCell = new BombCell(coreState);
+      this.mainCell = new BombCell(coreState);   
+      this.graphicCell = new BombIndicator(coreState);
+      this.graphicCell.setBaseColor(THEME_RED);
     } else if (cellType == CELL_TYPE.DRILL) {
       this.mainCell = new DrillCell(coreState);
     } else if (cellType == CELL_TYPE.TOWER) {
       this.mainCell = new TowerCell(coreState);
     }
-    
     this.mainCell.setBaseColor(this.baseColor);
+  }
+
+  upgradeTo(newCell) {
+    const tempColor = this.mainCell.baseColor;
+    this.mainCell = newCell;
+    newCell.setBaseColor(tempColor);
   }
 
   copyDeactivated() {
@@ -55,6 +65,7 @@ class Piece {
     copy.baseColor = this.baseColor;
     copy.dxn = this.dxn;
     copy.mainCell.setBaseColor(this.baseColor);
+    copy.graphicCell = this.graphicCell;
     return copy;
   }
 

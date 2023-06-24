@@ -31,7 +31,6 @@ export const AudioEvents = {
   POWERUP_TOWER: ["SPIN", 0.5],
   PLACE_TOWER: ["BIG_BOOM", 0.4],
   LOCK: ["FILL", 0.35, (eventData) => {
-    console.log(eventData.gameState);
     if (eventData.gameState) {
       eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
       // TODO: Initiate a callback animation in GameState

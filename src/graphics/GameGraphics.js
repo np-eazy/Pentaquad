@@ -21,14 +21,6 @@ const GameGraphics = (props) => {
   function graphicLoop(canvas) {
     var gameState = props.gameState;
     var coreState = props.gameState.coreState;
-    renderBoard(canvas, board, cellWidth, cellHeight, {
-      piece: coreState.currPiece,
-      targets: coreState.targets,
-      targetProvider: coreState.targetProvider,
-      controller: gameState.controller,
-    });
-    renderQueue(canvas, coreState.pieceProvider);
-    renderPalette(canvas, coreState.pieceProvider);
 
     updateBoard(board, {
       piece: coreState.currPiece,
@@ -37,6 +29,15 @@ const GameGraphics = (props) => {
     });
     updateQueue(coreState.pieceProvider);
     updatePalette(coreState.pieceProvider);
+
+    renderBoard(canvas, board, cellWidth, cellHeight, {
+      piece: coreState.currPiece,
+      targets: coreState.targets,
+      targetProvider: coreState.targetProvider,
+      controller: gameState.controller,
+    });
+    renderQueue(canvas, coreState.pieceProvider);
+    renderPalette(canvas, coreState.pieceProvider);
   }
 
   // A placeholder empty loop in case there is no GameState loaded
