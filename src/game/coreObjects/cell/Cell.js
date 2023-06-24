@@ -93,16 +93,11 @@ class Cell {
   updateCurrentColor() {
     if (this.ttl != -1 && this.currentColor) {
       this.currentColor = interpolateColor(
-        EMPTY_COLOR,
-        interpolateColor(
-          FILLED_COLOR,
-          this.baseColor,
-          CELL_BASE_COLOR_BLEND,
-          linInt
-        ),
-        (this.ttl + 1) / this.lifetime,
+        FILLED_COLOR,
+        this.baseColor,
+        CELL_BASE_COLOR_BLEND,
         linInt
-      );
+      )
       if (
         this.coreState &&
         this.coreState.settingsController &&

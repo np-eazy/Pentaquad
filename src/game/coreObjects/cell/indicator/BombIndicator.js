@@ -35,15 +35,6 @@ class BombIndicator extends Cell {
     this.meter = METER_LEVEL - METER_AMP * Math.sin(this.timer * METER_FREQ);
   }
 
-  fallingUpdate() {
-    super.fallingUpdate();
-  }
-
-  placementUpdate(computeColors) {
-    super.placementUpdate(computeColors);
-  }
-
-
   render(canvas, x0, y0, width, height, activated=false) {
     var borderColor = interpolateColor(
       MARKER_COLOR,

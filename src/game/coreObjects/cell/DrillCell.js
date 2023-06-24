@@ -42,7 +42,7 @@ class DrillCell extends Cell {
     );
     var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
-    canvas.globalAlpha = sinusoid({level: 0.5, frequency: 10, amplitude: 0.2}, this.timer);
+    canvas.globalAlpha = sinusoid({level: 0.5, frequency: 5, amplitude: 0.2}, this.timer);
     drawRect(canvas, x, y, width, height, this.currentColor.getHex());
     if (this.coreState && this.coreState.settingsController && this.coreState.settingsController.graphicsLevel != Setting.LOW) {
       drawRectOffset(

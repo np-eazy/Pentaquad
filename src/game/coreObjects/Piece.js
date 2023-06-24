@@ -25,7 +25,6 @@ class Piece {
     this.cy = 0;
     this.dxn = undefined;
     this.pidSize = undefined;
-    this.graphicCell = null;
 
     var index = randint(0, PRESETS.length);
     if (DEBUG) {
@@ -57,11 +56,6 @@ class Piece {
     const tempColor = this.mainCell.baseColor;
     this.mainCell = newCell;
     newCell.setBaseColor(tempColor);
-    if (this.mainCell.type == CELL_TYPE.DRILL) {
-      this.graphicCell.setBaseColor(THEME_RED);
-    } else if (this.mainCell.type == CELL_TYPE.TOWER) {
-      this.graphicCell.setBaseColor(FILLED_COLOR);
-    }
   }
 
   copyDeactivated() {

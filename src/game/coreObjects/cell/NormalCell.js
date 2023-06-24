@@ -24,6 +24,7 @@ const METER_FREQ = 0.03;
 class NormalCell extends Cell {
   constructor(coreState) {
     super(CELL_TYPE.NORMAL, coreState);
+    this.setBaseColor(THEME_RED);
   }
 
   idleUpdate() {
@@ -53,6 +54,10 @@ class NormalCell extends Cell {
       );
       var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
+      canvas.globalAlpha = (this.ttl + 1) / this.lifetime;
+      if (this.ttl == 0) {
+        canvas.globalAlpha *= sinusoid({level: 0.75, frequency: 0.25, amplitude: 0.25}, this.coreState.timer);
+      }
       drawRect(canvas, x, y, width, height, this.currentColor.getHex());
       if (
         this.coreState &&
@@ -87,10 +92,11 @@ class NormalCell extends Cell {
         borderColor.getHex(),
         CELL_BORDER_OFFSET
       );
+      canvas.globalAlpha = 1;
     }
 
     if (this.marked == CELL_TYPE.DRILL) {
-      canvas.globalAlpha = 0.5;
+      canvas.globalAlpha = 0.5; 
       drawRectOffset(
         canvas,
         x,

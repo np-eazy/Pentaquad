@@ -171,9 +171,8 @@ const GameState = class {
       }
     }
   }
+
   // TODO (opt): only call this when the piece's position changes
-  // TODO: call this before rendering
-  // TODO (opt): make less inBounds calls?
   markDropZone() {
     var piece = this.coreState.currPiece;
     if (piece && piece.mainCell.type != CELL_TYPE.GHOST) {
@@ -183,11 +182,6 @@ const GameState = class {
         this.coreState.gravity,
         (x, y) => {
           this.coreState.board[y][x].marked = piece.mainCell.type;
-          if (this.coreState.board[y][x].type == CELL_TYPE.EMPTY && piece.mainCell.type == CELL_TYPE.TOWER) {
-            this.coreState.board[y][x].marked = CELL_TYPE.TOWER;
-          } else if (this.coreState.board[y][x].type == CELL_TYPE.NORMAL && piece.mainCell.type == CELL_TYPE.DRILL) {
-            this.coreState.board[y][x].marked = CELL_TYPE.DRILL;
-          }
           this.coreState.board[y][x].markerAngle = this.coreState.gravity.angle;
         },
         piece.mainCell.type == CELL_TYPE.DRILL,
