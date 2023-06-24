@@ -74,7 +74,7 @@ class GhostCell extends Cell {
           2 * d
         );
       }
-    canvas.globalAlpha = 0.1;
+    canvas.globalAlpha = 0.25 * this.meter;
     drawRect(canvas, x, y, width, height, this.currentColor.getHex());
     if (this.coreState && this.coreState.settingsController && this.coreState.settingsController.graphicsLevel != Setting.LOW) {
       drawRectOffset(

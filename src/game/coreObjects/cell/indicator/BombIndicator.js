@@ -45,7 +45,7 @@ class BombIndicator extends Cell {
     var [x, y] = super.getPosition(x0, y0, width);
     var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
     canvas.globalAlpha = 0.75;
-      if (this.coreState && this.coreState.settingsController && this.coreState.settingsController.graphicsLevel != Setting.LOW) {
+      if (this.coreState.settingsController.graphicsLevel != Setting.LOW) {
         outlineRectOffset(
           canvas,
           x,
