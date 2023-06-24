@@ -1,18 +1,18 @@
-import Cell from "./Cell";
-import { CELL_TYPE } from "../../rules/Constants";
+import Cell from "../Cell";
+import { CELL_TYPE } from "../../../rules/Constants";
 
 import {
   drawRect,
   drawRectOffset,
   outlineRect,
   outlineRectOffset,
-} from "../../../graphics/CanvasPipeline";
-import { interpolateColor } from "../../../graphics/utils/Colors";
-import { linInt, sinusoid } from "../../../graphics/utils/Functions";
-import { EMPTY_COLOR, MARKER_COLOR, THEME_RED } from "../../../graphics/theme/ColorScheme";
-import { CELL_BORDER_OFFSET } from "./Cell";
-import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
-import { Setting } from "../../control/SettingsController";
+} from "../../../../graphics/CanvasPipeline";
+import { interpolateColor } from "../../../../graphics/utils/Colors";
+import { linInt, sinusoid } from "../../../../graphics/utils/Functions";
+import { EMPTY_COLOR, MARKER_COLOR, THEME_RED } from "../../../../graphics/theme/ColorScheme";
+import { CELL_BORDER_OFFSET } from "../Cell";
+import { LIGHT_AMPLITUDE } from "../../../../graphics/theme/Dynamics";
+import { Setting } from "../../../control/SettingsController";
 
 const CLOCK_FREQ = 0.01;
 
@@ -115,6 +115,16 @@ class BombIndicator extends Cell {
             THEME_RED.getHex(),
             CELL_BORDER_OFFSET
         );
+        canvas.globalAlpha = 0.1 * canvas.globalAlpha;
+        drawRectOffset(
+          canvas,
+          x - width * 2,
+          y - height * 2,
+          width * 5,
+          height * 5,
+          THEME_RED.getHex(),
+          CELL_BORDER_OFFSET
+      );
     }
     canvas.globalAlpha = 1.0;
   }

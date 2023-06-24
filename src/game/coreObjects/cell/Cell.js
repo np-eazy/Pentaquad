@@ -77,7 +77,7 @@ class Cell {
 
   // Set this Cell's base color and propagate the update to the current color and ColorSuite.
   setBaseColor(color) {
-    if (this.type == CELL_TYPE.BOMB) {
+    if (this.type == CELL_TYPE.TOWER) {
       this.baseColor = FILLED_COLOR;
     } else if (this.type == CELL_TYPE.DRILL) {
       this.baseColor = THEME_RED;
@@ -169,7 +169,9 @@ class Cell {
   }
 
   // No matter what subclass, they should all have render() with these arguments set
-  render(canvas, x0, y0, width, height) {}
+  render(canvas, x0, y0, width, height) {
+
+  }
 }
 
 export default Cell;

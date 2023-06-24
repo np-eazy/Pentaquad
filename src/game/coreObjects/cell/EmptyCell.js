@@ -6,12 +6,12 @@ import {
   drawRectOffset,
   outlineRect,
 } from "../../../graphics/CanvasPipeline";
-import { METER_DECAY_RATE } from "../../../graphics/theme/Dynamics";
-import { BLACK, EMPTY_COLOR, MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
+import { LIGHT_AMPLITUDE, METER_DECAY_RATE } from "../../../graphics/theme/Dynamics";
+import { BLACK, EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR, THEME_RED } from "../../../graphics/theme/ColorScheme";
 import { Color, copy, interpolateColor } from "../../../graphics/utils/Colors";
-import { linInt } from "../../../graphics/utils/Functions";
+import { linInt, sinusoid } from "../../../graphics/utils/Functions";
 
-const EMPTY_BASE_COLOR_BLEND = 0.15;
+const EMPTY_BASE_COLOR_BLEND = 0.05;
 const EMPTY_2H_LIGHT = 10;
 const EMPTY_4H_LIGHT = 20;
 // The default empty value of a Cell on the 2D board. It has the special
@@ -79,9 +79,7 @@ class EmptyCell extends Cell {
   render(canvas, x0, y0, width, height) {
     if (this.meter < 0.5) {
       var [x, y] = super.getPosition(x0, y0, width);
-      drawRect(canvas, x, y, width, height, this.colorSuite.shade4H.getHex());
-      var d = ((1 - (this.meter * 2)) * width) / 2;
-      drawRectOffset(canvas, x, y, width, height, this.colorSuite.shade2H.getHex(), d);
+      drawRect(canvas, x, y, width, height, this.colorSuite.shade2H.getHex());
     } else {
       var [x, y] = super.getPosition(x0, y0, width);
       drawRect(canvas, x, y, width, height, this.colorSuite.shade2H.getHex());
@@ -89,7 +87,64 @@ class EmptyCell extends Cell {
       drawRectOffset(canvas, x, y, width, height, this.currentColor.getHex(), d);
     }
     outlineRect(canvas, x, y, width, height, (this.meter < 0.5 ? this.colorSuite.shade4H : this.colorSuite.shade2H).getHex());
+    
+    if (this.marked == CELL_TYPE.DRILL) {
+      canvas.globalAlpha = 0.8;
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        EMPTY_COLOR.getHex(),
+        0,
+      );
+
+      canvas.globalAlpha = 0.1 * sinusoid({level: 0.5, frequency: 5, amplitude: 0.5}, this.coreState.timer);
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        THEME_RED.getHex(),
+        0,
+      );
+      canvas.globalAlpha = 1;
+    } else if (this.marked == CELL_TYPE.TOWER) {
+      canvas.globalAlpha = 0.1 * sinusoid({level: 0.5, frequency: 0.1, amplitude: 0.5}, this.coreState.timer);
+      var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        FILLED_COLOR.getHex(),
+        0
+      );
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        FILLED_COLOR.getHex(),
+        d
+      );
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        FILLED_COLOR.getHex(),
+        2 * d
+      );
+      canvas.globalAlpha = 1;
+    }
+    }
   }
-}
+
 
 export default EmptyCell;

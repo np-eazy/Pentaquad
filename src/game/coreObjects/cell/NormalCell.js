@@ -8,10 +8,8 @@ import {
   outlineRectOffset,
 } from "../../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../../graphics/utils/Colors";
-import { linInt } from "../../../graphics/utils/Functions";
-import {
-  MARKER_COLOR,
-} from "../../../graphics/theme/ColorScheme";
+import { linInt, sinusoid } from "../../../graphics/utils/Functions";
+import { EMPTY_COLOR, MARKER_COLOR, THEME_RED } from "../../../graphics/theme/ColorScheme";
 import { CELL_BORDER_OFFSET } from "./Cell";
 import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
 import { Setting } from "../../control/SettingsController";
@@ -56,7 +54,11 @@ class NormalCell extends Cell {
       var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
       drawRect(canvas, x, y, width, height, this.currentColor.getHex());
-      if (this.coreState && this.coreState.settingsController && this.coreState.settingsController.graphicsLevel != Setting.LOW) {
+      if (
+        this.coreState &&
+        this.coreState.settingsController &&
+        this.coreState.settingsController.graphicsLevel != Setting.LOW
+      ) {
         drawRectOffset(
           canvas,
           x,
@@ -85,6 +87,30 @@ class NormalCell extends Cell {
         borderColor.getHex(),
         CELL_BORDER_OFFSET
       );
+    }
+
+    if (this.marked == CELL_TYPE.DRILL) {
+      canvas.globalAlpha = 0.5;
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        EMPTY_COLOR.getHex(),
+        0,
+      );
+      canvas.globalAlpha = 0.25 * sinusoid({level: 0.5, frequency: 5, amplitude: 0.5}, this.coreState.timer);
+      drawRectOffset(
+        canvas,
+        x,
+        y,
+        width,
+        height,
+        THEME_RED.getHex(),
+        0,
+      );
+      canvas.globalAlpha = 1;
     }
   }
 }
