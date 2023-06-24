@@ -42,9 +42,23 @@ class PieceProvider {
     this.palette[slotNumber] = piece;
   }
 
+  isLockAllowed() {
+    for (const piece of this.palette) {
+      if (!piece) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   lock(piece) {
-    for (var i = 0; i < QUEUE_MAX_LENGTH; i++) {
-      this.queue.unshift(piece.copyDeactivated());
+    if (this.isLockAllowed()) {
+      for (var i = 0; i < QUEUE_MAX_LENGTH; i++) {
+        this.queue.unshift(piece.copyDeactivated());
+      }
+      for (var i = 0; i < QUEUE_MAX_LENGTH; i++) {
+        this.palette[i] = null;
+      }
     }
   }
 }

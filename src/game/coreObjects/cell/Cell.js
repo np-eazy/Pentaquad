@@ -140,6 +140,7 @@ class Cell {
     this.xOffset *= CELL_DAMP_RATE;
     this.yOffset *= CELL_DAMP_RATE;
     if (
+      this.coreState &&
       this.coreState.settingsController &&
       this.coreState.settingsController.graphicsLevel == Setting.HIGH &&
       this.lightColor.red > LIGHT_UPDATE_THRESHOLD

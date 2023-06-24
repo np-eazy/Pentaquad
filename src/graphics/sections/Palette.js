@@ -22,6 +22,7 @@ const TEXT_SIZE = 16;
 
 export function renderPalette(canvas, pieceProvider) {
   drawBackground(canvas, PALETTE_X0, PALETTE_Y0, PALETTE_WIDTH, PALETTE_HEIGHT);
+  
   for (var i = 0; i < pieceProvider.palette.length; i++) {
     var [x_, y_] = [CELL_OFFSET, CELL_OFFSET + Y_CELL_INCREMENT * i];
     var [x0, y0] = [PALETTE_X0, PALETTE_Y0 + Y_CELL_INCREMENT * QUEUE_CELL_DIMENSIONS * i]
@@ -38,7 +39,7 @@ export function renderPalette(canvas, pieceProvider) {
       y0,
       PALETTE_WIDTH,
       (Y_CELL_INCREMENT + 1) * QUEUE_CELL_DIMENSIONS,
-      EMPTY_COLOR.getHex(),
+      pieceProvider.palette[i] ? FILLED_COLOR.getHex() : EMPTY_COLOR.getHex(),
       16,
     );
     canvas.font = TEXT_SIZE.toString() + "px Arial";

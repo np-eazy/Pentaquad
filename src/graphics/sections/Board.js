@@ -7,6 +7,10 @@ import {
 } from "../theme/Layout";
 import { drawCursor } from "../objects/Cursor";
 import { drawPiece, updatePiece } from "../objects/Piece";
+import { outlineRectOffset } from "../CanvasPipeline";
+import { interpolateColor } from "../utils/Colors";
+import { EMPTY_COLOR, FILLED_COLOR, WHITE } from "../theme/ColorScheme";
+import { linInt, sinusoid } from "../utils/Functions";
 
 // For convention, a Section is effectively a rectangle with its own reference point
 // for coordinates. It provides a way to organize render-update calls to BaseObjects
@@ -43,6 +47,11 @@ export const renderBoard = (
     target.render(canvas, cellWidth, cellHeight)
   );
   drawCursor(canvas, board, controller, BOARD_HEIGHT, cellWidth, cellHeight);
+
+  if (targetProvider.coreState.pieceProvider.isLockAllowed()) {
+    outlineRectOffset(canvas, BOARD_X0, BOARD_Y0, BOARD_WIDTH, BOARD_HEIGHT, interpolateColor(
+      FILLED_COLOR, WHITE, sinusoid({ level: 0.5, frequency: 5, amplitude: 0.5}, targetProvider.coreState.timer), linInt).getHex(), 4)
+  }
 };
 
 export const updateBoard = (board, { piece, targets, targetProvider }) => {

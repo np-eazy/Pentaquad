@@ -56,7 +56,7 @@ class NormalCell extends Cell {
       var d = this.meter * LIGHT_AMPLITUDE + LIGHT_AMPLITUDE;
 
       drawRect(canvas, x, y, width, height, this.currentColor.getHex());
-      if (this.coreState.settingsController && this.coreState.settingsController.graphicsLevel != Setting.LOW) {
+      if (this.coreState && this.coreState.settingsController && this.coreState.settingsController.graphicsLevel != Setting.LOW) {
         drawRectOffset(
           canvas,
           x,

@@ -16,6 +16,7 @@ import { COLLISION_RADIUS } from "../coreState/utils/Params";
 // based on which direction is moving.
 class Piece {
   constructor(cellType, coreState) {
+    this.coreState = coreState;
     this.activated = false;
     this.cx = 0;
     this.cy = 0;
@@ -43,12 +44,13 @@ class Piece {
     } else if (cellType == CELL_TYPE.TOWER) {
       this.mainCell = new TowerCell(coreState);
     }
-    this.mainCell.dxn = this.dxn;
+    
     this.mainCell.setBaseColor(this.baseColor);
   }
 
   copyDeactivated() {
     var copy = new Piece(this.mainCell.type, this.coreState);
+    copy.shapeIndex = this.shapeIndex;
     copy.preset = this.preset;
     copy.baseColor = this.baseColor;
     copy.dxn = this.dxn;
@@ -62,6 +64,7 @@ class Piece {
     this.cx = center_x;
     this.cy = center_y;
     this.dxn = direction;
+    this.mainCell.dxn = this.dxn;
     this.pidSize = pidSize;
     this.mainCell.setTTL(ttl);
 
