@@ -41,6 +41,7 @@ import { Setting } from "../control/SettingsController";
 // gravity.
 const CoreState = class {
   constructor(props) {
+    this.gameState = props.gameState;
     this.controller = props.controller; // The GameState's main controller, postInit to allow impl room for 2-player hijacking
     this.audioController = props.audioController;
     this.settingsController = props.settingsController;
@@ -121,7 +122,11 @@ const CoreState = class {
         this.audioController.queueAudioEvent(AudioEvents.HOLD, {});
         executeHold(this, action.props.item);
       } else if (action.type == ActionType.LOCK) {
-        this.audioController.queueAudioEvent(AudioEvents.LOCK, {});
+        if (this.pieceProvider.isLockAllowed()) {
+          this.audioController.queueAudioEvent(AudioEvents.LOCK, {
+            gameState: this.gameState,
+          });
+        }
         executeLock(this);
       }
       action = this.controller.consumeAction();

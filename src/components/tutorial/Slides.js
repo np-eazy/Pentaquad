@@ -85,7 +85,7 @@ const TOWER_PIECE_MSG =
   "Tower pieces when dropped cover their entire path in blocks, essentially the opposite of a drill piece. Can be obtained from filling targets.";
 
 const LOCK_MSG =
-  "If available, you have the option to lock the current piece by pressing [C]. You will get to place this identical piece another five times, and combined with a tower or drill block can place or clear huge areas of the board.";
+  "If all five slots are filled, you have the option to lock the current piece by pressing [C]. You will get to place this identical piece another five times, and combined with a tower or drill block can place or clear huge areas of the board.";
 const LOCK_LOCATION = {
   maxWidth: 200,
   padding: 10,

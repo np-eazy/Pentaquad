@@ -38,6 +38,7 @@ const GameState = class {
     this.audioController = props.audioController;
     this.settingsController = props.settingsController;
     this.coreState = new CoreState({
+      gameState: this,
       controller: props.controller,
       audioController: props.audioController,
       settingsController: props.settingsController,
@@ -112,6 +113,7 @@ const GameState = class {
 
   startOver() {
     this.coreState = new CoreState({
+      gameState: this,
       controller: this.controller,
       audioController: this.audioController,
       settingsController: this.settingsController,

@@ -1,9 +1,11 @@
 import { Setting } from "../game/control/SettingsController";
+import { WHITE } from "../graphics/theme/ColorScheme";
 
 // This class aims to organize event-driven interaction when going upstream in the dependencies,
 // the reason it is tightly coupled with the audio is because originally it was only for the latter
 // but was easily extensible. I am keeping the convention of associating most events with audio
 // so it more closely aligns with the user interface.
+export const TRANSITION_DELAY_TICKS = 60;
 
 export const AudioEvents = {
   NOP: ["NOP", 1],
@@ -28,12 +30,28 @@ export const AudioEvents = {
   PLACE_DRILL: ["BIG_BOOM", 0.4],
   POWERUP_TOWER: ["SPIN", 0.5],
   PLACE_TOWER: ["BIG_BOOM", 0.4],
-  LOCK: ["SPIN", 0.5],
+  LOCK: ["FILL", 0.35, (eventData) => {
+    console.log(eventData.gameState);
+    if (eventData.gameState) {
+      eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
+      // TODO: Initiate a callback animation in GameState
+      eventData.gameState.coreState.currPiece.mainCell.lightUp(WHITE);
+    }
+}],
 
   // Scorekeeper
-  CLEAR_SINGLE_LINE: ["FILL", 0.35, (eventData) => {if (eventData.gameState) eventData.gameState.setDelayTimer(20);}],
+  CLEAR_SINGLE_LINE: ["FILL", 0.35, (eventData) => {
+    if (eventData.gameState) {
+      eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
+
+    };
+  }],
   CLEAR_MULTI_LINES: ["FILL", 0.35],
-  CLEAR_SINGLE_TARGET: ["FILL", 0.35, (eventData) => {if (eventData.gameState) eventData.gameState.setDelayTimer(20);}],
+  CLEAR_SINGLE_TARGET: ["FILL", 0.35, (eventData) => {
+    if (eventData.gameState) {
+      eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
+    };
+  }],
   CLEAR_MULTI_TARGET: ["FILL", 0.35],
   STRIKE: ["STRIKE", 0.4],
   LEVEL_UP: ["LEVEL_UP", 0.4],
