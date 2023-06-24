@@ -1,4 +1,4 @@
-import { NORMAL_CELL_LIFETIME } from "../../rules/Constants";
+import { CELL_TYPE, NORMAL_CELL_LIFETIME } from "../../rules/Constants";
 
 import { Color, copy, interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
@@ -9,6 +9,7 @@ import {
   LIGHT_4H,
   CELL_BASE_COLOR_BLEND,
   BLACK,
+  THEME_RED,
 } from "../../../graphics/theme/ColorScheme";
 import { LIGHT_UPDATE_THRESHOLD } from "../../coreState/utils/Params";
 import {
@@ -76,7 +77,13 @@ class Cell {
 
   // Set this Cell's base color and propagate the update to the current color and ColorSuite.
   setBaseColor(color) {
-    this.baseColor = color;
+    if (this.type == CELL_TYPE.BOMB) {
+      this.baseColor = FILLED_COLOR;
+    } else if (this.type == CELL_TYPE.DRILL) {
+      this.baseColor = THEME_RED;
+    } else {
+      this.baseColor = color;
+    }
     this.updateCurrentColor();
     this.updateColorSuite();
   }

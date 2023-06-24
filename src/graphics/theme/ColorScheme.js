@@ -11,8 +11,9 @@ export const THEME_GRAY_4H = new Color({red: 159, green: 149, blue: 173});
 export const THEME_GRAY_6H = new Color({red: 182, green: 173, blue: 196});
 export const THEME_GREEN = new Color({red: 84, green: 239, blue: 189});
 export const THEME_BLUE = new Color({red: 66, green: 210, blue: 234});
-export const THEME_MAGENTA = new Color({red: 234, green: 75, blue: 166});
-export const THEME_ORANGE = new Color({red: 239, green: 142, blue: 46});
+export const THEME_MAGENTA = new Color({red: 123, green: 37, blue: 166});
+export const THEME_ORANGE = new Color({red: 239, green: 200, blue: 0});
+export const THEME_RED = new Color({red: 255, green: 50, blue: 50});
 
 export const GRID_COLOR = new Color({
   // EmptyCell color
