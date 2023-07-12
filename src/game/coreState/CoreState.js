@@ -36,7 +36,7 @@ import {
 } from "../rules/Levels";
 import { AudioEvents } from "../../audio/AudioEventController";
 import { Setting } from "../control/SettingsController";
-import { initializeBoundarySets } from "../coreObjects/Boundary";
+import { initializeBoundarySets, placementUpdateBoundarySets } from "../coreObjects/Boundary";
 import DeadCell from "../coreObjects/cell/DeadCell";
 
 // The most essential level of state in the game. Each update() call either
@@ -247,7 +247,8 @@ const CoreState = class {
   placementUpdate() {
     place(this, this.currPiece);
     this.changeGravity();
-
+    placementUpdateBoundarySets(this.collisionSets, this.gravity);
+    
     // Check and clear any filled targets or lines
     handleClearedTargets(this);
     handleClearedLines(this);

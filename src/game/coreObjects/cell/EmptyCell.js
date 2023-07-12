@@ -84,7 +84,7 @@ class EmptyCell extends Cell {
       var [x, y] = super.getPosition(x0, y0, width);
       drawRect(canvas, x, y, width, height, this.colorSuite.shade2H.getHex());
       var d = ((1 - (this.meter * 2 - 1)) * width) / 2;
-      drawRectOffset(canvas, x, y, width, height, this.currentColor.getHex(), d);
+      drawRectOffset(canvas, x, y, width, height, this.currentColor.getHex(), Math.max(0, d));
     }
     outlineRect(canvas, x, y, width, height, (this.meter < 0.5 ? this.colorSuite.shade4H : this.colorSuite.shade2H).getHex());
     
@@ -130,7 +130,7 @@ class EmptyCell extends Cell {
         width,
         height,
         FILLED_COLOR.getHex(),
-        d
+        Math.max(0, d)
       );
       drawRectOffset(
         canvas,
@@ -139,7 +139,7 @@ class EmptyCell extends Cell {
         width,
         height,
         FILLED_COLOR.getHex(),
-        2 * d
+        2 * Math.max(0, d)
       );
       canvas.globalAlpha = 1;
     }

@@ -36,6 +36,7 @@ const GameGraphics = (props) => {
       targets: coreState.targets,
       targetProvider: coreState.targetProvider,
       controller: gameState.controller,
+      boundarySets: coreState.collisionSets,
     });
     renderQueue(canvas, coreState.pieceProvider);
     renderPalette(canvas, coreState.pieceProvider);

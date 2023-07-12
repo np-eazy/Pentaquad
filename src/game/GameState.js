@@ -8,6 +8,7 @@ import {
 import { interpolateColor } from "../graphics/utils/Colors";
 import { linInt } from "../graphics/utils/Functions";
 import { Setting } from "./control/SettingsController";
+import { idleUpdateBoundarySets } from "./coreObjects/Boundary";
 import Piece from "./coreObjects/Piece";
 import DrillCell from "./coreObjects/cell/DrillCell";
 import TowerCell from "./coreObjects/cell/TowerCell";
@@ -63,6 +64,7 @@ const GameState = class {
       // Compute graphic props after core update
       this.unmarkBoard();
       this.markDropZone();
+      idleUpdateBoundarySets(this.coreState.collisionSets);
       if (this.settingsController.graphicsLevel == Setting.HIGH) {
         for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
           this.randomColorSwap();
