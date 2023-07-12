@@ -76,9 +76,9 @@ class GameController {
     var element = document.getElementById("gameWrapper");
     var rect = element.getBoundingClientRect();
     var cellSize = BOARD_DIMENSIONS / BOARD_SIZE;
-    var x = Math.floor((((this.cursorX - cellSize * BOARD_MARGIN) - rect.left) / windowDimensions) * BOARD_SIZE);
-    var y = Math.floor((((this.cursorY - cellSize * BOARD_MARGIN) - rect.top) / windowDimensions) * BOARD_SIZE);
-    return [x + BOARD_MARGIN, y + BOARD_MARGIN];
+    var x = Math.floor((((this.cursorX + cellSize * BOARD_MARGIN) - rect.left) / windowDimensions) * BOARD_SIZE);
+    var y = Math.floor((((this.cursorY + cellSize * BOARD_MARGIN) - rect.top) / windowDimensions) * BOARD_SIZE);
+    return [x, y];
   }
 
   // Consume the last action registered in the queue.
