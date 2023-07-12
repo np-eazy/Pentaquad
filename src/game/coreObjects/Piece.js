@@ -8,7 +8,7 @@ import TowerCell from "./cell/TowerCell";
 import BombIndicator from "./cell/indicator/BombIndicator";
 
 
-import { PRESETS, CELL_TYPE, DEBUG } from "../rules/Constants";
+import { PRESETS, CELL_TYPE, DEBUG, GLOBAL_SIZE, BOARD_MARGIN } from "../rules/Constants";
 import { BASE_COLORS, FILLED_COLOR, THEME_RED } from "../../graphics/theme/ColorScheme";
 import { randomDxn } from "../coreState/utils/Direction";
 import { randint, getPID } from "../coreState/utils/Functions";
@@ -118,7 +118,6 @@ class Piece {
     var collision = false;
     const checkBoundarySet = (boundarySet) => {
       var collision = false;
-      // Check for a boundary collision
       this.cells.forEach((val) => {
         var globalPid = getPID(
           val[0] + this.cx + collisionDxn.dx,
@@ -132,13 +131,13 @@ class Piece {
       return collision;
     }
 
-    var groundSet = dxn == null ? new Set() : collisionSets.boundarySets[dxn.angle];
+    var groundSet = dxn == null ? new Set() : collisionSets[dxn.angle];
     
     if (checkBoundarySet(groundSet) == true) {
       return true;
     } else if (fallingDxn) { // If a 4th arg is passed, we are doing a more careful check for rotations. 
-      var wallSetLeft = collisionSets.boundarySets[(fallingDxn.angle + 1) % 4]
-      var wallSetRight = collisionSets.boundarySets[(fallingDxn.angle + 3) % 4]
+      var wallSetLeft = collisionSets[(fallingDxn.angle + 1) % 4]
+      var wallSetRight = collisionSets[(fallingDxn.angle + 3) % 4]
       if (checkBoundarySet(wallSetLeft) || checkBoundarySet(wallSetRight)) {
         return true;
       }
@@ -146,13 +145,13 @@ class Piece {
 
     if (this.mainCell.type != CELL_TYPE.GHOST) {
       for (
-        var y = Math.max(0, this.cy - COLLISION_RADIUS);
-        y < Math.min(this.cy + COLLISION_RADIUS + 1, ySize);
+        var y = Math.max(BOARD_MARGIN, this.cy - COLLISION_RADIUS);
+        y < Math.min(this.cy + COLLISION_RADIUS + 1, GLOBAL_SIZE - BOARD_MARGIN);
         y++
       ) {
         for (
-          var x = Math.max(0, this.cx - COLLISION_RADIUS);
-          x < Math.min(this.cx + COLLISION_RADIUS + 1, xSize);
+          var x = Math.max(BOARD_MARGIN, this.cx - COLLISION_RADIUS);
+          x < Math.min(this.cx + COLLISION_RADIUS + 1, GLOBAL_SIZE - BOARD_MARGIN);
           x++
         ) {
           if (board[y][x].type > 0) {

@@ -4,7 +4,6 @@ import { CELL_TYPE } from "../../rules/Constants";
 import {
   drawRect,
   drawRectOffset,
-  outlineRect,
   outlineRectOffset,
 } from "../../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../../graphics/utils/Colors";

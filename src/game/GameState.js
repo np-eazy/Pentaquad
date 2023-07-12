@@ -8,6 +8,7 @@ import {
 import { interpolateColor } from "../graphics/utils/Colors";
 import { linInt } from "../graphics/utils/Functions";
 import { Setting } from "./control/SettingsController";
+import { idleUpdateBoundarySets } from "./coreObjects/Boundary";
 import Piece from "./coreObjects/Piece";
 import DrillCell from "./coreObjects/cell/DrillCell";
 import TowerCell from "./coreObjects/cell/TowerCell";
@@ -15,7 +16,7 @@ import Target from "./coreObjects/target/Target";
 import CoreState from "./coreState/CoreState";
 import { callOnDropzone } from "./coreState/utils/Dropzone";
 import { inBounds, sample, sampleAround } from "./coreState/utils/Functions";
-import { CELL_TYPE, BOARD_SIZE } from "./rules/Constants";
+import { CELL_TYPE, GLOBAL_SIZE } from "./rules/Constants";
 
 // A wrapper state for CoreState, which controls the advancement of the game. GameState
 // controls the flow of CoreState to effectively slow down, speed up, pause the game,
@@ -63,6 +64,7 @@ const GameState = class {
       // Compute graphic props after core update
       this.unmarkBoard();
       this.markDropZone();
+      idleUpdateBoundarySets(this.coreState.collisionSets);
       if (this.settingsController.graphicsLevel == Setting.HIGH) {
         for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
           this.randomColorSwap();
@@ -165,8 +167,8 @@ const GameState = class {
   // before each frame when the piece could have moved elsewhere.
   unmarkBoard() {
     var board = this.coreState.board;
-    for (var x = 0; x < BOARD_SIZE; x++) {
-      for (var y = 0; y < BOARD_SIZE; y++) {
+    for (var x = 0; x < GLOBAL_SIZE; x++) {
+      for (var y = 0; y < GLOBAL_SIZE; y++) {
         board[y][x].marked = false;
       }
     }
@@ -194,7 +196,7 @@ const GameState = class {
     var [x0, y0] = sample();
     if (this.coreState.board[y0][x0].type == CELL_TYPE.EMPTY) {
       var [x1, y1] = sampleAround(x0, y0, DIFFUSE_RANGE);
-      if (inBounds(x1, y1, BOARD_SIZE)) {
+      if (inBounds(x1, y1, GLOBAL_SIZE)) {
         if (x0 != x1 && y0 != y1) {
           var [cell0, cell1] = [
             this.coreState.board[y0][x0],
