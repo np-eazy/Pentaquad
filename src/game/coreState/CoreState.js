@@ -72,7 +72,7 @@ const CoreState = class {
         }
       }
     }
-    this.threshold = BOARD_SIZE;
+    this.lineClearThreshold = BOARD_SIZE - BOARD_MARGIN * 2;
     // Create 4 different sets to check if a boundary has been hit
     this.collisionSets = initializeBoundarySets(
       BOUNDARY_EXTENSION_SIZE,
