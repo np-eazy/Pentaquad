@@ -42,7 +42,7 @@ export const initializeBoundarySets = (boundaryMargin, pidSize, inset=0) => {
     for (var i = 0; i < 4; i++) {
       boundarySets.push(new Map());
     }
-    for (var i = -boundaryMargin; i < ySize + boundaryMargin; i++) {
+    for (var i = 0; i < GLOBAL_SIZE; i++) {
       pid = getPID(xSize - inset, i, pidSize);
       boundarySets[Angle.RIGHT].set(pid, new Boundary(xSize - inset, i, Angle.RIGHT));
 
