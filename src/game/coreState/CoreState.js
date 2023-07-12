@@ -23,9 +23,10 @@ import { BOUNDARY_EXTENSION_SIZE } from "./utils/Params";
 import {
   TARGET_SPAWN_MARGIN,
   PLACEMENT_COUNTDOWN,
-  BOARD_SIZE,
+  GLOBAL_SIZE,
   CELL_TYPE,
   BOARD_MARGIN,
+  BOARD_SIZE,
 } from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
@@ -52,27 +53,27 @@ const CoreState = class {
       // Create a new TargetProvider to take care of creating/dispensing targets
       coreState: this,
       minBound: TARGET_SPAWN_MARGIN,
-      maxBound: BOARD_SIZE - TARGET_SPAWN_MARGIN,
+      maxBound: GLOBAL_SIZE - TARGET_SPAWN_MARGIN,
     });
     this.emptyCellProvider = new EmptyCellProvider();
     this.scorekeeper = new Scorekeeper({ coreState: this });
 
-    this.pidSize = (BOARD_SIZE + BOUNDARY_EXTENSION_SIZE * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
-    this.board = [...Array(BOARD_SIZE)].map(
+    this.pidSize = (GLOBAL_SIZE + BOUNDARY_EXTENSION_SIZE * 2) * 2; // All sets of (x, y) pairs checking each other for collisions will have a unique PID dependent on a 3rd parameter describing the max size of the PID group, in order for uniqueness to work.
+    this.board = [...Array(GLOBAL_SIZE)].map(
       (
         e // Create the main board for the game
-      ) => Array(BOARD_SIZE).fill(null)
+      ) => Array(GLOBAL_SIZE).fill(null)
     );
     for (var y = 0; y < this.board.length; y++) {
       for (var x = 0; x < this.board.length; x++) {
-        if (x >= BOARD_MARGIN && x < BOARD_SIZE - BOARD_MARGIN && y >= BOARD_MARGIN && y < BOARD_SIZE - BOARD_MARGIN) {
+        if (x >= BOARD_MARGIN && x < GLOBAL_SIZE - BOARD_MARGIN && y >= BOARD_MARGIN && y < GLOBAL_SIZE - BOARD_MARGIN) {
           this.board[y][x] = this.emptyCellProvider.generateCell(this);
         } else {
           this.board[y][x] = new DeadCell(this);
         }
       }
     }
-    this.lineClearThreshold = BOARD_SIZE - BOARD_MARGIN * 2;
+    this.lineClearThreshold = BOARD_SIZE;
     // Create 4 different sets to check if a boundary has been hit
     this.collisionSets = initializeBoundarySets(
       BOUNDARY_EXTENSION_SIZE,

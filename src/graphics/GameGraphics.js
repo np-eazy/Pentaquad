@@ -8,11 +8,12 @@ import {
   TOTAL_HEIGHT,
   TOTAL_WIDTH,
 } from "./theme/Layout";
+import { BOARD_SIZE } from "../game/rules/Constants";
 
 // The class which organizes all canvas and graphics-related code. Each
 const GameGraphics = (props) => {
   var board = props.gameState.coreState.board;
-  var [xSize, ySize] = [board[0].length, board.length];
+  var [xSize, ySize] = [BOARD_SIZE, BOARD_SIZE];
   var [cellWidth, cellHeight] = [BOARD_WIDTH / xSize, BOARD_HEIGHT / ySize];
 
   // A single loop of rendering and "updating"; these updates however are all downstream

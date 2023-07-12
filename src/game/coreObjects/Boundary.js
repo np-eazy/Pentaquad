@@ -1,6 +1,6 @@
 import { getPID } from "../coreState/utils/Functions";
 import { Angle } from "../coreState/utils/Direction";
-import { BOARD_SIZE } from "../rules/Constants";
+import { GLOBAL_SIZE } from "../rules/Constants";
 
 export const BoundaryFlags = {
     EMPTY: 0,
@@ -37,7 +37,7 @@ export class Boundary {
 
 export const initializeBoundarySets = (boundaryMargin, pidSize, inset=0) => {
     var boundarySets = [];
-    var [xSize, ySize] = [BOARD_SIZE, BOARD_SIZE];
+    var [xSize, ySize] = [GLOBAL_SIZE, GLOBAL_SIZE];
     var pid;
     for (var i = 0; i < 4; i++) {
       boundarySets.push(new Map());

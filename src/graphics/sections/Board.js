@@ -11,6 +11,7 @@ import { outlineRectOffset } from "../CanvasPipeline";
 import { interpolateColor } from "../utils/Colors";
 import { EMPTY_COLOR, FILLED_COLOR, WHITE } from "../theme/ColorScheme";
 import { linInt, sinusoid } from "../utils/Functions";
+import { BOARD_MARGIN, GLOBAL_SIZE } from "../../game/rules/Constants";
 
 // For convention, a Section is effectively a rectangle with its own reference point
 // for coordinates. It provides a way to organize render-update calls to BaseObjects
@@ -30,12 +31,12 @@ export const renderBoard = (
   // Draw grid cells
   drawBackground(canvas, BOARD_X0, BOARD_Y0, BOARD_WIDTH, BOARD_HEIGHT);
   var [xSize, ySize] = [board[0].length, board.length];
-  for (var y = 0; y < ySize; y++) {
-    for (var x = 0; x < xSize; x++) {
+  for (var y = BOARD_MARGIN; y < GLOBAL_SIZE - BOARD_MARGIN; y++) {
+    for (var x = BOARD_MARGIN; x < GLOBAL_SIZE - BOARD_MARGIN; x++) {
       board[y][x].render(
         canvas,
-        x * cellWidth + BOARD_X0,
-        y * cellHeight + BOARD_Y0,
+        (x - BOARD_MARGIN) * cellWidth + BOARD_X0,
+        (y - BOARD_MARGIN) * cellHeight + BOARD_Y0,
         cellWidth,
         cellHeight
       );
