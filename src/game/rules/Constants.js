@@ -7,6 +7,7 @@ export const DEBUG = false;
 
 // Board parameters
 export const BOARD_SIZE = 16;
+export const BOARD_MARGIN = 2;
 export const PLACEMENT_COUNTDOWN = 100; // The number of ticks contact must take place in order to place a piece.
 export const FALLING_COUNTDOWN = 30; // Wait this many ticks between each fallingUpdate() call on coreState
 
@@ -28,6 +29,7 @@ export const BOMB_RADIUS = 2;
 export const ROTATION_ADJUSTMENT_SIZE = 2;
 
 export const CELL_TYPE = {
+  DEAD: -1,
   EMPTY: 0,
   NORMAL: 1,
   GHOST: 2,

@@ -25,6 +25,7 @@ import {
   PLACEMENT_COUNTDOWN,
   BOARD_SIZE,
   CELL_TYPE,
+  BOARD_MARGIN,
 } from "../rules/Constants";
 import Scorekeeper from "./Scorekeeper";
 import { EmptyCellProvider } from "./providers/EmptyCellProvider";
@@ -35,6 +36,7 @@ import {
 import { AudioEvents } from "../../audio/AudioEventController";
 import { Setting } from "../control/SettingsController";
 import { initializeBoundarySets } from "../coreObjects/Boundary";
+import DeadCell from "../coreObjects/cell/DeadCell";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -63,7 +65,11 @@ const CoreState = class {
     );
     for (var y = 0; y < this.board.length; y++) {
       for (var x = 0; x < this.board.length; x++) {
-        this.board[y][x] = this.emptyCellProvider.generateCell(this);
+        if (x >= BOARD_MARGIN && x < BOARD_SIZE - BOARD_MARGIN && y >= BOARD_MARGIN && y < BOARD_SIZE - BOARD_MARGIN) {
+          this.board[y][x] = this.emptyCellProvider.generateCell(this);
+        } else {
+          this.board[y][x] = new DeadCell(this);
+        }
       }
     }
     this.threshold = BOARD_SIZE;
@@ -71,7 +77,7 @@ const CoreState = class {
     this.collisionSets = initializeBoundarySets(
       BOUNDARY_EXTENSION_SIZE,
       this.pidSize,
-      2,
+      BOARD_MARGIN,
     );
 
     this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
