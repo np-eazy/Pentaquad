@@ -1,4 +1,3 @@
-import BoundarySets from "./utils/BoundarySets";
 import PieceProvider from "./providers/PieceProvider";
 import TargetProvider from "./providers/TargetProvider";
 
@@ -35,6 +34,7 @@ import {
 } from "../rules/Levels";
 import { AudioEvents } from "../../audio/AudioEventController";
 import { Setting } from "../control/SettingsController";
+import { initializeBoundarySets } from "../coreObjects/Boundary";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -68,9 +68,10 @@ const CoreState = class {
     }
     this.threshold = BOARD_SIZE;
     // Create 4 different sets to check if a boundary has been hit
-    this.collisionSets = new BoundarySets(
+    this.collisionSets = initializeBoundarySets(
       BOUNDARY_EXTENSION_SIZE,
-      this.pidSize
+      this.pidSize,
+      2,
     );
 
     this.gravity = new Direction(Angle.DOWN); // The direction in which the piece moves, and in which the board moves after a line is cleared.
