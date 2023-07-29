@@ -5,7 +5,7 @@ import { WHITE } from "../graphics/theme/ColorScheme";
 // the reason it is tightly coupled with the audio is because originally it was only for the latter
 // but was easily extensible. I am keeping the convention of associating most events with audio
 // so it more closely aligns with the user interface.
-export const TRANSITION_DELAY_TICKS = 60;
+export const TRANSITION_DELAY_TICKS = 0;
 
 export const AudioEvents = {
   NOP: ["NOP", 1],
