@@ -245,7 +245,6 @@ const GameState = class {
 
   updateFillMarkers() {
     this.fillMarkers.forEach((fillMarker) => {fillMarker.idleUpdate()});
-    console.log(this.fillMarkers.length)
     if (this.fillMarkers.length > 0 && this.fillMarkers[0].ttl <= 0) {
       this.fillMarkers.shift();
     }

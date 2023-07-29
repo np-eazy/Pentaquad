@@ -17,7 +17,7 @@ import {
 } from "../../../graphics/theme/ColorScheme";
 import { sinusoid } from "../../../graphics/utils/Functions";
 import { BOARD_X0, BOARD_Y0 } from "../../../graphics/theme/Layout";
-import { CELL_TYPE } from "../../rules/Constants";
+import { BOARD_MARGIN, CELL_TYPE } from "../../rules/Constants";
 import {
   generateSuperCellType,
 } from "../../rules/RandomGeneration";
@@ -150,8 +150,8 @@ class Target {
   render(canvas, cellWidth, cellHeight) {
     outlineRectOffset(
       canvas,
-      BOARD_X0 + this.x0 * cellWidth,
-      BOARD_Y0 + this.y0 * cellHeight,
+      BOARD_X0 + (this.x0 - BOARD_MARGIN) * cellWidth,
+      BOARD_Y0 + (this.y0 - BOARD_MARGIN) * cellHeight,
       (this.x1 - this.x0) * cellWidth,
       (this.y1 - this.y0) * cellHeight,
       EMPTY_COLOR.getHex(),
@@ -160,8 +160,8 @@ class Target {
     canvas.globalAlpha = 0.3;
     outlineRectOffset(
       canvas,
-      BOARD_X0 + this.x0 * cellWidth,
-      BOARD_Y0 + this.y0 * cellHeight,
+      BOARD_X0 + (this.x0 - BOARD_MARGIN) * cellWidth,
+      BOARD_Y0 + (this.y0 - BOARD_MARGIN) * cellHeight,
       (this.x1 - this.x0) * cellWidth,
       (this.y1 - this.y0) * cellHeight,
       WHITE.getHex(),
@@ -169,8 +169,8 @@ class Target {
     );
     outlineRect(
       canvas,
-      BOARD_X0 + this.x0 * cellWidth,
-      BOARD_Y0 + this.y0 * cellHeight,
+      BOARD_X0 + (this.x0 - BOARD_MARGIN) * cellWidth,
+      BOARD_Y0 + (this.y0 - BOARD_MARGIN) * cellHeight,
       (this.x1 - this.x0) * cellWidth,
       (this.y1 - this.y0) * cellHeight,
       WHITE.getHex()
@@ -186,8 +186,8 @@ class Target {
     canvas.globalAlpha = this.penaltyCounter <= 3 ? 0.3 * sinusoid(WARNING_WAVE_1, this.timer) : 0.3;
     drawRectOffset(
       canvas,
-      BOARD_X0 + this.x0 * cellWidth,
-      BOARD_Y0 + this.y0 * cellHeight,
+      BOARD_X0 + (this.x0 - BOARD_MARGIN) * cellWidth,
+      BOARD_Y0 + (this.y0 - BOARD_MARGIN) * cellHeight,
       (this.x1 - this.x0) * cellWidth,
       (this.y1 - this.y0) * cellHeight,
       (this.activated ? WHITE : EMPTY_COLOR).getHex(),
@@ -210,8 +210,8 @@ class Target {
     canvas.globalAlpha = 0.6 * sinusoid(WARNING_WAVE_1, this.timer);
     drawRectOffset(
       canvas,
-      BOARD_X0 + this.x0 * cellWidth,
-      BOARD_Y0 + this.y0 * cellHeight,
+      BOARD_X0 + (this.x0 - BOARD_MARGIN) * cellWidth,
+      BOARD_Y0 + (this.y0 - BOARD_MARGIN) * cellHeight,
       cellWidth,
       cellHeight,
       EMPTY_COLOR.getHex(),
@@ -221,17 +221,18 @@ class Target {
     canvas.font = cellWidth - 24;
     canvas.fillStyle = WHITE.getHex();
     canvas.fillText((this.penaltyCounter).toString(),
-      BOARD_X0 + (this.x0 + 0.4) * cellWidth,
-      BOARD_Y0 + (this.y0 + 0.6) * cellHeight,
+      BOARD_X0 + ((this.x0 - BOARD_MARGIN) + 0.4) * cellWidth,
+      BOARD_Y0 + ((this.y0 - BOARD_MARGIN) + 0.6) * cellHeight,
     );
   }
+  
 
   // If the Target is holding onto a Cell with a special ability, the Target
   // is rendered with an animation matching the type of cell it is holding.
   renderPowerup(canvas, cellWidth, cellHeight) {
     var [x, y] = [
-      BOARD_X0 + this.x0 * cellWidth,
-      BOARD_Y0 + this.y0 * cellHeight,
+      BOARD_X0 + (this.x0 - BOARD_MARGIN) * cellWidth,
+      BOARD_Y0 + (this.y0 - BOARD_MARGIN) * cellHeight,
     ];
     var [targetWidth, targetHeight] = [
       cellWidth * (this.x1 - this.x0),

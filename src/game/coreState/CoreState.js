@@ -13,8 +13,8 @@ import {
   executeRotate,
 } from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
-import { handleClearedLines } from "./utils/ClearedLines";
-import { handleClearedTargets } from "./utils/ClearedTargets";
+import { handleClearedLines } from "./utils/LineUtils";
+import { handleClearedTargets } from "./utils/TargetUtils";
 import { getSpawnPosition } from "./utils/Functions";
 
 import { cellPlacementUpdate, place } from "./Placement";
