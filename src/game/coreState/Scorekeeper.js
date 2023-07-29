@@ -21,7 +21,7 @@ const Scorekeeper = class {
 
   // Check for level update thresholds
   levelUpdate() {
-    if (this.level < MAX_LEVELS && this.score > LEVEL_SCORE_THRESHOLDS[this.level - 1]) {
+    if (this.level < MAX_LEVELS && this.score > LEVEL_SCORE_THRESHOLDS[this.coreState.settingsController.gameDifficulty][this.level - 1]) {
       this.level += 1;
       this.coreState.audioController.queueAudioEvent(AudioEvents.LEVEL_UP, {})
     }

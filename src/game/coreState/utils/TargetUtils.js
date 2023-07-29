@@ -87,7 +87,6 @@ const isOverlap = (target, x0, y0, x1, y1) => {
     (top1 < bottom2 || top2 < bottom1) &&
     (right1 < left2 || right2 < left1)
   ) {
-    console.log(target, x0, y0, x1, y1);
     return false;
   }
 
