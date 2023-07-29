@@ -1,10 +1,8 @@
 import { AudioEvents } from "../../../audio/AudioEventController";
-import { copy } from "../../../graphics/utils/Colors";
 import { CELL_TYPE } from "../../rules/Constants";
 
 // Check all filled targets, remove them from targetBlocks, and erase all
 // covered cells to replace with a call to newCell
-
 export const handleClearedTargets = (coreState) => {
   var targets = coreState.targets;
   var board = coreState.board;
@@ -44,7 +42,55 @@ export const handleClearedTargets = (coreState) => {
       i += 1;
     }
   }
-  coreState.audioController.queueAudioEvent(clearedTargets > 1 ? AudioEvents.CLEAR_MULTI_TARGET :
-    clearedTargets == 1 ? AudioEvents.CLEAR_SINGLE_TARGET : AudioEvents.NOP, {});
+  coreState.audioController.queueAudioEvent(
+    clearedTargets > 1
+      ? AudioEvents.CLEAR_MULTI_TARGET
+      : clearedTargets == 1
+      ? AudioEvents.CLEAR_SINGLE_TARGET
+      : AudioEvents.NOP,
+    {}
+  );
   scorekeeper.scoreTargets(clearedTargets);
+};
+
+const MARGIN = 0;
+
+// Not in use; originally used to prevent neighboring targets, but that is no longer a requirement
+export const validateTargetBounds = (coreState, x0, y0, x1, y1) => {
+  for (var i = 0; i < coreState.targets.length; i++) {
+    var t = coreState.targets[i];
+    if (isOverlap(t, x0, y0, x1, y1)) {
+      return false;
+    }
+  }
+  for (var i = 0; i < coreState.targetProvider.nextTargets.length; i++) {
+    var t = coreState.targetProvider.nextTargets[i];
+    if (isOverlap(t, x0, y0, x1, y1)) {
+      return false;
+    }
+  }
+  return true;
+};
+
+
+// Not in use; originally used to prevent neighboring targets, but that is no longer a requirement
+const isOverlap = (target, x0, y0, x1, y1) => {
+  let [left1, top1, right1, bottom1] = [x0, y0, x1, y1];
+  let [left2, top2, right2, bottom2] = [
+    target.x0 - MARGIN,
+    target.y0 - MARGIN,
+    target.x1 + MARGIN,
+    target.y1 + MARGIN,
+  ];
+  // The first rectangle is under the second or vice versa
+  if (
+    (top1 < bottom2 || top2 < bottom1) &&
+    (right1 < left2 || right2 < left1)
+  ) {
+    console.log(target, x0, y0, x1, y1);
+    return false;
+  }
+
+  // Rectangles overlap
+  return true;
 };

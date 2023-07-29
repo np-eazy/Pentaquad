@@ -1,5 +1,7 @@
 import Target from "../coreObjects/target/Target";
 import { randint } from "../coreState/utils/Functions";
+import { validateTargetBounds } from "../coreState/utils/TargetUtils";
+import { BOARD_MARGIN, BOARD_SIZE } from "./Constants";
 import { POWERUP_RARITY_LVL, TARGET_GROWTH_TIMER_LVL } from "./Levels";
 
 // Generate a CellType with a powerup
@@ -18,11 +20,14 @@ export function generateCellType(level, coreState) {
 }
 
 // Generate a target within a random location specified by minBound and maxBound
-export function generateRandomTarget(coreState, minBound, maxBound, radius) {
-  var [x, y] = [
-    randint(minBound, maxBound - radius * 2),
-    randint(minBound, maxBound - radius * 2),
-  ];
+export function generateRandomTarget(coreState, radius) {
+  var valid = false;
+  while (!valid) {
+    var x = randint(BOARD_MARGIN + radius, BOARD_SIZE + BOARD_MARGIN - radius - 1);
+    var y = randint(BOARD_MARGIN + radius, BOARD_SIZE + BOARD_MARGIN - radius - 1);
+    //valid = validateTargetBounds(coreState, x - radius, y - radius, x + radius + 1, y + radius + 1)
+    valid = true;
+  }
   return new Target({
     coreState: coreState,
     x0: x - radius,

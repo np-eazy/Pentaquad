@@ -13,8 +13,8 @@ import {
   executeRotate,
 } from "../control/GameAction";
 import { Angle, Direction, Dxn } from "./utils/Direction";
-import { handleClearedLines } from "./utils/ClearedLines";
-import { handleClearedTargets } from "./utils/ClearedTargets";
+import { handleClearedLines } from "./utils/LineUtils";
+import { handleClearedTargets } from "./utils/TargetUtils";
 import { getSpawnPosition } from "./utils/Functions";
 
 import { cellPlacementUpdate, place } from "./Placement";
@@ -37,7 +37,7 @@ import {
 import { AudioEvents } from "../../audio/AudioEventController";
 import { Setting } from "../control/SettingsController";
 import { initializeBoundarySets, placementUpdateBoundarySets } from "../coreObjects/Boundary";
-import DeadCell from "../coreObjects/cell/DeadCell";
+import { DeadCell } from "../coreObjects/cell/DeadCell";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting

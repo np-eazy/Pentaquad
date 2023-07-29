@@ -1,3 +1,4 @@
+import { FillMarker } from "../graphics/objects/FillMarker";
 import { BLACK, EMPTY_COLOR } from "../graphics/theme/ColorScheme";
 import {
   QUEUE_INITIAL_OFFSET,
@@ -49,6 +50,7 @@ const GameState = class {
     this.delayTimer = 0;
     this.setMode(Mode.MAIN_MENU);
     this.queueOffset = 0;
+    this.fillMarkers = [];
   }
 
   update() {
@@ -64,6 +66,7 @@ const GameState = class {
       // Compute graphic props after core update
       this.unmarkBoard();
       this.markDropZone();
+      this.updateFillMarkers();
       idleUpdateBoundarySets(this.coreState.collisionSets);
       if (this.settingsController.graphicsLevel == Setting.HIGH) {
         for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
@@ -186,7 +189,7 @@ const GameState = class {
           this.coreState.board[y][x].marked = piece.mainCell.type;
           this.coreState.board[y][x].markerAngle = this.coreState.gravity.angle;
         },
-        piece.mainCell.type == CELL_TYPE.DRILL,
+        piece.mainCell.type == CELL_TYPE.DRILL
       );
     }
   }
@@ -230,6 +233,21 @@ const GameState = class {
 
   executeAction(action) {
     this.coreState.executeAction();
+  }
+
+  rowFillMarker(i) {
+    this.fillMarkers.push(new FillMarker(true, i));
+  }
+
+  colFillMarker(i) {
+    this.fillMarkers.push(new FillMarker(false, i));
+  }
+
+  updateFillMarkers() {
+    this.fillMarkers.forEach((fillMarker) => {fillMarker.idleUpdate()});
+    if (this.fillMarkers.length > 0 && this.fillMarkers[0].ttl <= 0) {
+      this.fillMarkers.shift();
+    }
   }
 };
 

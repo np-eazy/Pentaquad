@@ -5,7 +5,7 @@ import { WHITE } from "../graphics/theme/ColorScheme";
 // the reason it is tightly coupled with the audio is because originally it was only for the latter
 // but was easily extensible. I am keeping the convention of associating most events with audio
 // so it more closely aligns with the user interface.
-export const TRANSITION_DELAY_TICKS = 60;
+export const TRANSITION_DELAY_TICKS = 0;
 
 export const AudioEvents = {
   NOP: ["NOP", 1],
@@ -33,7 +33,6 @@ export const AudioEvents = {
   LOCK: ["FILL", 0.35, (eventData) => {
     if (eventData.gameState) {
       eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
-      // TODO: Initiate a callback animation in GameState
       eventData.gameState.coreState.currPiece.mainCell.lightUp(WHITE);
     }
 }],
@@ -42,13 +41,22 @@ export const AudioEvents = {
   CLEAR_SINGLE_LINE: ["FILL", 0.35, (eventData) => {
     if (eventData.gameState) {
       eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
-
+      if (eventData.rows.length > 0) {
+        eventData.rows.forEach((row) => eventData.gameState.rowFillMarker(row));
+      } else {
+        eventData.columns.forEach((col) =>  eventData.gameState.colFillMarker(col));
+      }
     };
   }],
   CLEAR_MULTI_LINES: ["FILL", 0.35],
   CLEAR_SINGLE_TARGET: ["FILL", 0.35, (eventData) => {
     if (eventData.gameState) {
       eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
+      if (eventData.rows.length > 0) {
+        eventData.rows.forEach((row) => eventData.gameState.rowFillMarker(row));
+      } else {
+        eventData.columns.forEach((col) =>  eventData.gameState.colFillMarker(col));
+      }
     };
   }],
   CLEAR_MULTI_TARGET: ["FILL", 0.35],

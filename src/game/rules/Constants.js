@@ -6,7 +6,7 @@ export const REFRESH_MS = 10;
 export const DEBUG = false;
 
 // Board parameters
-export const GLOBAL_SIZE = 24;
+export const GLOBAL_SIZE = 20;
 export const BOARD_MARGIN = 4;
 export const BOARD_SIZE = GLOBAL_SIZE - BOARD_MARGIN * 2
 export const PLACEMENT_COUNTDOWN = 100; // The number of ticks contact must take place in order to place a piece.
@@ -18,11 +18,11 @@ export const POWERUP_RARITY = 1;
 export const PIECE_SPAWN_MARGIN = 2;
 
 // Target spawning
-export const TARGET_PROVIDER_MAX_LENGTH = 2;
+export const TARGET_PROVIDER_MAX_LENGTH = 1;
 export const TARGET_GRACE_PERIOD = 0;
 export const TARGET_SPAWN_RADIUS = 1;
-export const TARGET_SPAWN_TIMER = 4;
-export const TARGET_GROWTH_TIMER = 6;
+export const TARGET_SPAWN_TIMER = 5;
+export const TARGET_GROWTH_TIMER = 7;
 export const TARGET_SPAWN_MARGIN = 4;
 
 export const NORMAL_CELL_LIFETIME = 8;

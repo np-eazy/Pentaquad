@@ -11,6 +11,8 @@ export const handleClearedLines = (coreState) => {
   var scorekeeper = coreState.scorekeeper;
 
   var linesCleared = 0;
+  var clearedRowIndices = [];
+  var clearedColumnIndices = [];
   if (dxn.isHorizontal()) {
     for (var x = BOARD_MARGIN; x < GLOBAL_SIZE - BOARD_MARGIN; x++) {
       var count = 0;
@@ -22,6 +24,7 @@ export const handleClearedLines = (coreState) => {
       // Horizontally shift everything on the left or the right of the cleared line
       if (count >= threshold) {
         linesCleared += 1;
+        clearedColumnIndices.push(x);
         if (dxn.equals(Dxn[Angle.RIGHT])) {
           for (var i = x - 1; i >= BOARD_MARGIN; i--) {
             for (var y_ = BOARD_MARGIN; y_ < GLOBAL_SIZE - BOARD_MARGIN; y_++) {
@@ -35,7 +38,8 @@ export const handleClearedLines = (coreState) => {
           for (var y_ = BOARD_MARGIN; y_ < GLOBAL_SIZE - BOARD_MARGIN; y_++) {
             // There will be one row left at the "top" which will have to be filled with new empty values
             // after everything else is shifted down.
-            board[y_][BOARD_MARGIN] = coreState.emptyCellProvider.generateCell(coreState);
+            board[y_][BOARD_MARGIN] =
+              coreState.emptyCellProvider.generateCell(coreState);
             board[y_][BOARD_MARGIN].xOffset = -1;
           }
           // The above block is effectively implemented once for each direction in the else-if blocks below.
@@ -47,7 +51,8 @@ export const handleClearedLines = (coreState) => {
             }
           }
           for (var y_ = BOARD_MARGIN; y_ < GLOBAL_SIZE - BOARD_MARGIN; y_++) {
-            board[y_][GLOBAL_SIZE - BOARD_MARGIN - 1] = coreState.emptyCellProvider.generateCell(coreState);
+            board[y_][GLOBAL_SIZE - BOARD_MARGIN - 1] =
+              coreState.emptyCellProvider.generateCell(coreState);
             board[y_][GLOBAL_SIZE - BOARD_MARGIN - 1].xOffset = 1;
           }
         }
@@ -64,6 +69,7 @@ export const handleClearedLines = (coreState) => {
       // Vertically shift everything on the top or bottom of the cleared line
       if (count >= threshold) {
         linesCleared += 1;
+        clearedRowIndices.push(y);
         if (dxn.equals(Dxn[Angle.DOWN])) {
           for (var i = y - 1; i >= 0; i--) {
             for (var x_ = BOARD_MARGIN; x_ < GLOBAL_SIZE - BOARD_MARGIN; x_++) {
@@ -72,7 +78,8 @@ export const handleClearedLines = (coreState) => {
             }
           }
           for (var x_ = BOARD_MARGIN; x_ < GLOBAL_SIZE - BOARD_MARGIN; x_++) {
-            board[BOARD_MARGIN][x_] = coreState.emptyCellProvider.generateCell(coreState);
+            board[BOARD_MARGIN][x_] =
+              coreState.emptyCellProvider.generateCell(coreState);
             board[BOARD_MARGIN][x_].yOffset = -1;
           }
         } else {
@@ -83,14 +90,25 @@ export const handleClearedLines = (coreState) => {
             }
           }
           for (var x_ = BOARD_MARGIN; x_ < GLOBAL_SIZE - BOARD_MARGIN; x_++) {
-            board[GLOBAL_SIZE - BOARD_MARGIN - 1][x_] = coreState.emptyCellProvider.generateCell(coreState);
+            board[GLOBAL_SIZE - BOARD_MARGIN - 1][x_] =
+              coreState.emptyCellProvider.generateCell(coreState);
             board[GLOBAL_SIZE - BOARD_MARGIN - 1][x_].yOffset = 1;
           }
         }
       }
     }
   }
-  coreState.audioController.queueAudioEvent(linesCleared > 1 ? AudioEvents.CLEAR_MULTI_TARGET :
-    linesCleared == 1 ? AudioEvents.CLEAR_SINGLE_TARGET : AudioEvents.NOP, {});
+  coreState.audioController.queueAudioEvent(
+    linesCleared > 1
+      ? AudioEvents.CLEAR_MULTI_LINES
+      : linesCleared == 1
+      ? AudioEvents.CLEAR_SINGLE_LINE
+      : AudioEvents.NOP,
+    {
+      gameState: coreState.gameState,
+      rows: clearedRowIndices,
+      columns: clearedColumnIndices,
+    }
+  );
   scorekeeper.scoreFilledLines(linesCleared);
 };

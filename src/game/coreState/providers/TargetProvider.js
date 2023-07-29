@@ -35,8 +35,6 @@ class TargetProvider {
         this.nextTargets.push(
           generateRandomTarget(
             this.coreState,
-            this.minBound,
-            this.maxBound,
             TARGET_SPAWN_RADIUS_LVL[this.coreState.settingsController.gameDifficulty][this.coreState.scorekeeper.level]
           )
         );
