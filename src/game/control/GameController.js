@@ -1,7 +1,7 @@
 import { Angle, Dxn } from "../coreState/utils/Direction";
-import { BOARD_X0, BOARD_Y0 } from "../../graphics/theme/Layout";
+import { BOARD_DIMENSIONS, BOARD_X0, BOARD_Y0 } from "../../graphics/theme/Layout";
 import { GameAction, ActionType } from "./GameAction";
-import { BOARD_SIZE, WINDOW_DIMENSIONS } from "../rules/Constants";
+import { BOARD_MARGIN, BOARD_SIZE, GLOBAL_SIZE, WINDOW_DIMENSIONS } from "../rules/Constants";
 import { DEFAULTS, KeyActions } from "./SettingsController";
 
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
@@ -75,8 +75,9 @@ class GameController {
   getCursorCoords(windowDimensions) {
     var element = document.getElementById("gameWrapper");
     var rect = element.getBoundingClientRect();
-    var x = Math.floor(((this.cursorX - rect.left) / windowDimensions) * BOARD_SIZE);
-    var y = Math.floor(((this.cursorY - rect.top) / windowDimensions) * BOARD_SIZE);
+    var cellSize = BOARD_DIMENSIONS / BOARD_SIZE;
+    var x = Math.floor((((this.cursorX + cellSize * BOARD_MARGIN) - rect.left) / windowDimensions) * BOARD_SIZE);
+    var y = Math.floor((((this.cursorY + cellSize * BOARD_MARGIN) - rect.top) / windowDimensions) * BOARD_SIZE);
     return [x, y];
   }
 

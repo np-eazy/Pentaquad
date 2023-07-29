@@ -1,7 +1,7 @@
 import React from "react";
 import { overlayWrapperStyle } from "../BaseStyles";
 import { BOARD_DIMENSIONS } from "../../graphics/theme/Layout";
-import { BOARD_SIZE, PLACEMENT_COUNTDOWN } from "../../game/rules/Constants";
+import { GLOBAL_SIZE, PLACEMENT_COUNTDOWN } from "../../game/rules/Constants";
 import { inBounds, insideTarget } from "../../game/coreState/utils/Functions";
 import {
   FALLING_COUNTDOWN_LVL,
@@ -34,7 +34,7 @@ export const DebugDisplay = (props) => {
 
   var [x, y] = gameState.controller.getCursorCoords(
     BOARD_DIMENSIONS,
-    BOARD_SIZE
+    GLOBAL_SIZE
   );
 
   const targetDisplay = (target) => {
@@ -62,7 +62,7 @@ export const DebugDisplay = (props) => {
     );
   };
 
-  var cell = inBounds(x, y, BOARD_SIZE) ? coreState.board[y][x] : undefined;
+  var cell = inBounds(x, y, GLOBAL_SIZE) ? coreState.board[y][x] : undefined;
   return (
     <div style={overlayWrapperStyle}>
       <div style={{ ...debugSectionStyle, float: "left" }}>

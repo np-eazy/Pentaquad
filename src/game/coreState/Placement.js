@@ -3,13 +3,13 @@ import NormalCell from "../coreObjects/cell/NormalCell";
 import { callOnDropzone } from "./utils/Dropzone";
 import { inBounds } from "./utils/Functions";
 
-import { BOARD_SIZE, BOMB_RADIUS, CELL_TYPE } from "../rules/Constants";
+import { GLOBAL_SIZE, BOMB_RADIUS, CELL_TYPE } from "../rules/Constants";
 import { AudioEvents } from "../../audio/AudioEventController";
 
 // increment times to live for each cell before converting to empty cell
 export function cellPlacementUpdate(coreState) {
-  for (var y = 0; y < BOARD_SIZE; y++) {
-    for (var x = 0; x < BOARD_SIZE; x++) {
+  for (var y = 0; y < GLOBAL_SIZE; y++) {
+    for (var x = 0; x < GLOBAL_SIZE; x++) {
       var cell = coreState.board[y][x];
       if (cell.ttl != -1) {
         if (cell.ttl == 0) {
@@ -43,7 +43,7 @@ export function placeNormal(coreState, piece) {
   var [x, y] = [0, 0];
   for (const [pid, [x_, y_]] of piece.cells) {
     [x, y] = [x_ + coreState.currPiece.cx, y_ + coreState.currPiece.cy];
-    if (inBounds(x, y)) {
+    if (inBounds(x, y) && coreState.board[y][x].type != CELL_TYPE.DEAD) {
       var newCell = new NormalCell(coreState);
       newCell.getAttributesFrom(piece.mainCell);
       newCell.lightUp(piece.mainCell.baseColor);
@@ -57,15 +57,17 @@ export function placeBomb(coreState, piece) {
   coreState.audioController.queueAudioEvent(AudioEvents.PLACE_BOMB, {})
   for (
     var y = Math.max(0, piece.cy - BOMB_RADIUS);
-    y < Math.min(BOARD_SIZE, piece.cy + BOMB_RADIUS + 1);
+    y < Math.min(GLOBAL_SIZE, piece.cy + BOMB_RADIUS + 1);
     y++
   ) {
     for (
       var x = Math.max(0, piece.cx - BOMB_RADIUS);
-      x < Math.min(BOARD_SIZE, piece.cx + BOMB_RADIUS + 1);
+      x < Math.min(GLOBAL_SIZE, piece.cx + BOMB_RADIUS + 1);
       x++
     ) {
-      coreState.board[y][x] = coreState.emptyCellProvider.generateCell(coreState);
+      if (inBounds(x, y) && coreState.board[y][x].type != CELL_TYPE.DEAD) {
+        coreState.board[y][x] = coreState.emptyCellProvider.generateCell(coreState);
+      }
     }
   }
 }
@@ -78,10 +80,12 @@ export function placeDrill(coreState, piece) {
     piece,
     coreState.gravity,
     (x, y) => {
-      var newCell = new EmptyCell(coreState);
-      newCell.getAttributesFrom(coreState.board[y][x]);
-      newCell.meter = 1;
-      coreState.board[y][x] = newCell;
+      if (inBounds(x, y) && coreState.board[y][x].type != CELL_TYPE.DEAD) {
+        var newCell = new EmptyCell(coreState);
+        newCell.getAttributesFrom(coreState.board[y][x]);
+        newCell.meter = 1;
+        coreState.board[y][x] = newCell;
+      }
     },
     true
   );
@@ -94,9 +98,11 @@ export function placeTower(coreState, piece) {
     piece,
     coreState.gravity,
     (x, y) => {
-      coreState.board[y][x] = piece.createCell(coreState);
-      coreState.board[y][x].getAttributesFrom(piece.mainCell);
-      coreState.board[y][x].lightColor.add(piece.mainCell.baseColor);
+      if (inBounds(x, y) && coreState.board[y][x].type != CELL_TYPE.DEAD) {
+        coreState.board[y][x] = piece.createCell(coreState);
+        coreState.board[y][x].getAttributesFrom(piece.mainCell);
+        coreState.board[y][x].lightColor.add(piece.mainCell.baseColor);
+      }
     },
     false
   );

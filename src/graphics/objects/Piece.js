@@ -1,4 +1,4 @@
-import { CELL_TYPE } from "../../game/rules/Constants";
+import { BOARD_MARGIN, CELL_TYPE } from "../../game/rules/Constants";
 
 export const drawPiece = (canvas, piece, x0, y0, cellWidth, cellHeight) => {
   // Fill in cells from the coreState current piece.
@@ -6,9 +6,10 @@ export const drawPiece = (canvas, piece, x0, y0, cellWidth, cellHeight) => {
   // TODO: Improve
   if (piece) {
     var mainCell = piece.mainCell;
+    const globalOffset = piece.activated ? BOARD_MARGIN : 0;
     if (piece.cells) {
       for (const [pid, [x_, y_]] of piece.cells) {
-        [x, y] = [x_ + piece.cx, y_ + piece.cy];
+        [x, y] = [x_ + piece.cx - globalOffset, y_ + piece.cy - globalOffset];
         mainCell.render(
           canvas,
           x0 + x * cellWidth,
@@ -34,8 +35,8 @@ export const drawPiece = (canvas, piece, x0, y0, cellWidth, cellHeight) => {
     if (piece.mainCell.type == CELL_TYPE.BOMB) {
       piece.graphicCell.render(
         canvas,
-        x0 + piece.cx * cellWidth,
-        y0 + piece.cy * cellHeight,
+        x0 + (piece.cx - globalOffset) * cellWidth,
+        y0 + (piece.cy - globalOffset) * cellHeight,
         cellWidth,
         cellHeight,
         piece.activated,
