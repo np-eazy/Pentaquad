@@ -68,7 +68,6 @@ export const renderBoard = (
   }
 
   coreState.gameState.fillMarkers.forEach((fillMarker) => fillMarker.render(canvas));
-  coreState.gameState.fillMarkers.forEach((fillMarker) => fillMarker.idleUpdate());
 
 };
 
