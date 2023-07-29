@@ -13,8 +13,8 @@ export const LEVEL_SCORE_THRESHOLDS = [
 // Board parameters
 export const FALLING_COUNTDOWN_LVL = [
   [60, 56, 44, 36, 30, 40, 36, 32, 28, 24],
-  [30, 26, 22, 18, 15, 40, 36, 32, 28, 24],
-  [30, 26, 22, 18, 15, 40, 36, 32, 28, 24],
+  [45, 40, 36, 33, 31, 30, 29, 28, 40, 35],
+  [35, 26, 22, 18, 15, 40, 36, 32, 28, 24],
 ]; // Wait this many ticks between each fallingUpdate() call on coreState
 
 // Piece spawning

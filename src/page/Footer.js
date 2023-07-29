@@ -31,7 +31,7 @@ export const Footer = (props) => {
           {DESCRIPTION_MSG}
         </p>
       </div>
-      <div style={linkStyle}>{"Beta release v" + pkg.version}</div>
+      <div style={linkStyle}>{"Initial release v" + pkg.version}</div>
       <div style={linkStyle}>
         <a
           style={{ color: FILLED_COLOR.getHex() }}

@@ -78,11 +78,11 @@ const POWERUP_MSG =
 const GHOST_PIECE_MSG =
   "Ghost pieces can only be dropped in mid-air, but can freely pass through any blocks already placed. Can be obtained from the queue.";
 const BOMB_PIECE_MSG =
-  "Bomb pieces destroy a 5x5 area around them upon being placed. Can be obtained from the queue.";
+  "Bomb pieces destroy a 3x3 area around them upon being placed, but they do not drop. Can be obtained from the queue.";
 const DRILL_PIECE_MSG =
-  "Drill pieces destroy everything in their path when dropped. Can be obtained from filling targets.";
+  "Drill pieces are red and destroy everything in their path when dropped. Can be obtained from filling targets.";
 const TOWER_PIECE_MSG =
-  "Tower pieces when dropped cover their entire path in blocks, essentially the opposite of a drill piece. Can be obtained from filling targets.";
+  "Tower pieces are white and when dropped cover their entire path in blocks, essentially the opposite of a drill piece. Can be obtained from filling targets.";
 
 const LOCK_MSG =
   "If all five slots are filled, you have the option to lock the current piece by pressing [C]. You will get to place this identical piece another five times, and combined with a tower or drill block can place or clear huge areas of the board.";
