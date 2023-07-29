@@ -1,5 +1,5 @@
 import Cell from "../Cell";
-import { CELL_TYPE } from "../../../rules/Constants";
+import { BOMB_RADIUS, CELL_TYPE } from "../../../rules/Constants";
 
 import {
   drawRect,
@@ -89,23 +89,23 @@ class BombIndicator extends Cell {
       borderColor.getHex(),
       CELL_BORDER_OFFSET
     );
-    if (activated) {
+    if (true) {
         outlineRectOffset(
             canvas,
-            x - width * 2,
-            y - height * 2,
-            width * 5,
-            height * 5,
+            x - width * BOMB_RADIUS,
+            y - height * BOMB_RADIUS,
+            width * (BOMB_RADIUS * 2  +1),
+            height * (BOMB_RADIUS * 2  +1),
             THEME_RED.getHex(),
             CELL_BORDER_OFFSET
         );
         canvas.globalAlpha = 0.1 * canvas.globalAlpha;
         drawRectOffset(
           canvas,
-          x - width * 2,
-          y - height * 2,
-          width * 5,
-          height * 5,
+          x - width * BOMB_RADIUS,
+          y - height * BOMB_RADIUS,
+          width * (BOMB_RADIUS * 2  +1),
+          height * (BOMB_RADIUS * 2  +1),
           THEME_RED.getHex(),
           CELL_BORDER_OFFSET
       );
