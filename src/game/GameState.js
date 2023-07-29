@@ -53,6 +53,22 @@ const GameState = class {
     this.fillMarkers = [];
   }
 
+  startOver() {
+    this.controller.reset();
+    this.audioController.reset();
+    this.coreState = new CoreState({
+      gameState: this,
+      controller: this.controller,
+      audioController: this.audioController,
+      settingsController: this.settingsController,
+    });
+    this.ticks = 0;
+    this.isRunning = false;
+    this.delayTimer = 0;
+    this.queueOffset = 0;
+    this.fillMarkers = [];
+  }
+
   update() {
     if (
       this.isRunning &&
@@ -116,18 +132,7 @@ const GameState = class {
     }
   }
 
-  startOver() {
-    this.coreState = new CoreState({
-      gameState: this,
-      controller: this.controller,
-      audioController: this.audioController,
-      settingsController: this.settingsController,
-    });
-    this.ticks = 0;
-    this.isRunning = true;
-    this.delayTimer = 0;
-    this.resetBaseColors();
-  }
+  
 
   setupTutorial() {
     this.startOver();

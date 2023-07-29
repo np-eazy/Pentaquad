@@ -4,6 +4,12 @@ import { GameAction, ActionType } from "./GameAction";
 import { BOARD_MARGIN, BOARD_SIZE, GLOBAL_SIZE, WINDOW_DIMENSIONS } from "../rules/Constants";
 import { DEFAULTS, KeyActions } from "./SettingsController";
 
+
+// This action is specifically reserved for user input delays; when NOP is at the front of the queue, its multiple references are consumed one by one,
+// as opposed to dumping the queue normally.
+const NOP = new GameAction(ActionType.NOP, {});
+const DELAY_BUFFER = 4;
+
 // A class whose instance acts as a UseState for canvas to listen and hold onto keystrokes, to be consumed by a GameState on its update.
 class GameController {
   constructor(props) {
@@ -14,6 +20,10 @@ class GameController {
 
     this.settingsController = props.settingsController;
     this.windowDimensions = WINDOW_DIMENSIONS;
+  }
+
+  reset() {
+    this.actionQueue = [];
   }
   // We should have two types of controls: holdable keys which follow the rule above, and single-press keys which already work as
   // intended with keyDown. Holdable keys include WASD movement, and single-press keys include SPACE and QE for placing/rotation.
@@ -56,6 +66,9 @@ class GameController {
     }
 
     if (action != null) {
+      for (var i = 0; i < DELAY_BUFFER; i++) {
+        this.actionQueue.push(NOP);
+      }
       this.actionQueue.push(action);
     }
     return this;

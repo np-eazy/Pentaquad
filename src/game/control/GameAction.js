@@ -9,6 +9,7 @@ import { AudioEvents } from "../../audio/AudioEventController";
 
 // Different types of GameAction, with each different type telling us how the action props should be handled.
 export const ActionType = {
+  NOP: -1,
   MOVE: 0,
   ROTATE: 1,
   MOVE_TO: 2,

@@ -78,6 +78,10 @@ export class AudioEventController {
     this.settingsController = props.settingsController;
   }
 
+  reset() {
+    this.soundQueue = [];
+  }
+
   // Most events only play a sound, but with event data and with the right callback function then
   // upstream interactions can be organized very well.
   queueAudioEvent(audioEvent, eventData) {

@@ -38,6 +38,7 @@ import { AudioEvents } from "../../audio/AudioEventController";
 import { Setting } from "../control/SettingsController";
 import { initializeBoundarySets, placementUpdateBoundarySets } from "../coreObjects/Boundary";
 import { DeadCell } from "../coreObjects/cell/DeadCell";
+import { CONSUME_BATCH_SIZE } from "../control/GameController";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting
@@ -98,7 +99,7 @@ const CoreState = class {
   // (Facilitated by Controller) Take in a GameAction and use it to change the GameState
   performNextAction(action) {
     var action = this.controller.consumeAction();
-    while (action) {
+    while (action && action.type != ActionType.NOP) {
       if (action.type == ActionType.MOVE) {
         if (action.props.dxn.equals(this.currPiece.dxn.opposite())) {
           this.audioController.queueAudioEvent(AudioEvents.ROTATE, {});
