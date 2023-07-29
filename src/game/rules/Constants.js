@@ -6,9 +6,9 @@ export const REFRESH_MS = 10;
 export const DEBUG = false;
 
 // Board parameters
-export const GLOBAL_SIZE = 22;
-export const BOARD_MARGIN = 4;
-export const BOARD_SIZE = GLOBAL_SIZE - BOARD_MARGIN * 2
+export const GLOBAL_SIZE = 22; // The "true" size including off-screen cells
+export const BOARD_MARGIN = 4; // The size of off-screen cells in which pieces spawn
+export const BOARD_SIZE = GLOBAL_SIZE - BOARD_MARGIN * 2 // 14
 export const PLACEMENT_COUNTDOWN = 100; // The number of ticks contact must take place in order to place a piece.
 export const FALLING_COUNTDOWN = 30; // Wait this many ticks between each fallingUpdate() call on coreState
 

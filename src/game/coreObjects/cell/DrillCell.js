@@ -73,40 +73,6 @@ class DrillCell extends Cell {
       borderColor.getHex(),
       CELL_BORDER_OFFSET
     );
-
-    // var borderColor = interpolateColor(
-    //   MARKER_COLOR,
-    //   this.currentColor,
-    //   1 - this.meter,
-    //   linInt
-    // );
-    // outlineRectOffset(
-    //   canvas,
-    //   x,
-    //   y,
-    //   width,
-    //   height,
-    //   borderColor.getHex(),
-    //   CELL_BORDER_OFFSET
-    // );
-
-    // var clock = (this.timer * CLOCK_FREQ) % 1;
-    // var innerLength = (clock * width) / 2;
-    // var innerColor = interpolateColor(
-    //   this.colorSuite.shade2H,
-    //   EMPTY_COLOR,
-    //   clock,
-    //   linInt
-    // );
-    // outlineRectOffset(
-    //   canvas,
-    //   x,
-    //   y,
-    //   width,
-    //   height,
-    //   innerColor.getHex(),
-    //   innerLength
-    // );
     canvas.globalAlpha = 1;
   }
 }

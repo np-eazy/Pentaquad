@@ -3,7 +3,6 @@ import { CELL_TYPE } from "../../rules/Constants";
 import {
   drawRect,
   drawRectOffset,
-  outlineRect,
   outlineRectOffset,
 } from "../../../graphics/CanvasPipeline";
 

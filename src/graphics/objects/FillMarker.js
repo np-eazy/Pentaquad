@@ -1,4 +1,3 @@
-import { faCropSimple } from "@fortawesome/free-solid-svg-icons";
 import { BOARD_MARGIN, BOARD_SIZE } from "../../game/rules/Constants";
 import { drawRect } from "../CanvasPipeline";
 import { WHITE } from "../theme/ColorScheme";
@@ -7,6 +6,7 @@ import { BOARD_DIMENSIONS, BOARD_X0, BOARD_Y0 } from "../theme/Layout";
 const FILL_MARKER_TTL = 30.0;
 const FILL_MARKER_EXP_RATE = 1.2;
 
+// A white bar that renders, expands, and fades wherever a line has been cleared.
 export class FillMarker {
     constructor(isRow, index) {
         this.isRow = isRow;

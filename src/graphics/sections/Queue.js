@@ -7,8 +7,8 @@ import {
   QUEUE_CELL_DIMENSIONS,
   drawBackground,
 } from "../theme/Layout";
-import { drawRectOffset, outlineRect, outlineRectOffset } from "../CanvasPipeline";
-import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "../theme/ColorScheme";
+import { drawRectOffset, outlineRectOffset } from "../CanvasPipeline";
+import { EMPTY_COLOR, MARKER_COLOR } from "../theme/ColorScheme";
 import { QUEUE_DAMP_RATE } from "../theme/Dynamics";
 
 const CELL_OFFSET = 3;

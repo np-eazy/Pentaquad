@@ -4,7 +4,7 @@ import { GLOBAL_SIZE } from "../rules/Constants";
 import { drawRect } from "../../graphics/CanvasPipeline";
 import { FILLED_COLOR, WHITE } from "../../graphics/theme/ColorScheme";
 import { interpolateColor } from "../../graphics/utils/Colors";
-import { linInt, sinusoid } from "../../graphics/utils/Functions";
+import { linInt } from "../../graphics/utils/Functions";
 
 export const BoundaryFlags = {
   EMPTY: 0,
@@ -19,6 +19,10 @@ const BOUNDARY_COLOR = interpolateColor(
     0.75,
     linInt,
 )
+
+// The Boundary class is tasked with two things: holding positions for boundary collision detection,
+// and also rendering active vs inactive boundaries.
+
 export class Boundary {
   constructor(x, y, fallingDxn) {
     this.x = x;

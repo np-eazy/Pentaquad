@@ -48,7 +48,9 @@ export const AudioEvents = {
       }
     };
   }],
+
   CLEAR_MULTI_LINES: ["FILL", 0.35],
+
   CLEAR_SINGLE_TARGET: ["FILL", 0.35, (eventData) => {
     if (eventData.gameState) {
       eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
@@ -59,7 +61,9 @@ export const AudioEvents = {
       }
     };
   }],
+
   CLEAR_MULTI_TARGET: ["FILL", 0.35],
+  
   STRIKE: ["STRIKE", 0.4],
   LEVEL_UP: ["LEVEL_UP", 0.4],
   GAME_START: ["GAME_START", 0.4],

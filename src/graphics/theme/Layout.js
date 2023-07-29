@@ -1,4 +1,4 @@
-import { drawRect, outlineRect, outlineRectOffset } from "../CanvasPipeline";
+import { drawRect, outlineRectOffset } from "../CanvasPipeline";
 import { EMPTY_COLOR, FILLED_COLOR, MARKER_COLOR } from "./ColorScheme";
 
 // Layout.js is concerned with the "global" level of rendering, and managing

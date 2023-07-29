@@ -1,8 +1,7 @@
-import { Angle, Direction, Dxn } from "../coreState/utils/Direction";
+import { Angle, Dxn } from "../coreState/utils/Direction";
 import { placeTower } from "../coreState/Placement";
 import {
   PLACEMENT_COUNTDOWN,
-  ROTATION_ADJUSTMENT_SIZE,
   CELL_TYPE,
 } from "../rules/Constants";
 import { AudioEvents } from "../../audio/AudioEventController";

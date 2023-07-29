@@ -14,6 +14,7 @@ import { linInt, sinusoid } from "../../../graphics/utils/Functions";
 const EMPTY_BASE_COLOR_BLEND = 0.05;
 const EMPTY_2H_LIGHT = 10;
 const EMPTY_4H_LIGHT = 20;
+
 // The default empty value of a Cell on the 2D board. It has the special
 // property of lighting up a different color if marked, which is taken care of
 // during a GameState update.

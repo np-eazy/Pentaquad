@@ -1,8 +1,8 @@
 import { Angle, Dxn } from "../coreState/utils/Direction";
 import { BOARD_DIMENSIONS, BOARD_X0, BOARD_Y0 } from "../../graphics/theme/Layout";
 import { GameAction, ActionType } from "./GameAction";
-import { BOARD_MARGIN, BOARD_SIZE, GLOBAL_SIZE, WINDOW_DIMENSIONS } from "../rules/Constants";
-import { DEFAULTS, KeyActions } from "./SettingsController";
+import { BOARD_MARGIN, BOARD_SIZE, WINDOW_DIMENSIONS } from "../rules/Constants";
+import { KeyActions } from "./SettingsController";
 
 
 // This action is specifically reserved for user input delays; when NOP is at the front of the queue, its multiple references are consumed one by one,

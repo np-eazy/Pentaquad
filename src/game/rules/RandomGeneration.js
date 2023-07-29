@@ -1,6 +1,5 @@
 import Target from "../coreObjects/target/Target";
 import { randint } from "../coreState/utils/Functions";
-import { validateTargetBounds } from "../coreState/utils/TargetUtils";
 import { BOARD_MARGIN, BOARD_SIZE } from "./Constants";
 import { POWERUP_RARITY_LVL, TARGET_GROWTH_TIMER_LVL } from "./Levels";
 
@@ -25,7 +24,6 @@ export function generateRandomTarget(coreState, radius) {
   while (!valid) {
     var x = randint(BOARD_MARGIN + radius, BOARD_SIZE + BOARD_MARGIN - radius - 1);
     var y = randint(BOARD_MARGIN + radius, BOARD_SIZE + BOARD_MARGIN - radius - 1);
-    //valid = validateTargetBounds(coreState, x - radius, y - radius, x + radius + 1, y + radius + 1)
     valid = true;
   }
   return new Target({

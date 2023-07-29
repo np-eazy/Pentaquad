@@ -68,7 +68,7 @@ const Game = (props) => {
       onMouseMove={(e) => gameController.handleMouseMove(e)}
       onMouseDown={(e) => gameController.handleMouseDown(e)}
     >
-      <canvas id="gameGraphics" width={TOTAL_WIDTH} height={TOTAL_HEIGHT}>
+      <canvas id="gameGraphics" style={{outline: "none"}} width={TOTAL_WIDTH} height={TOTAL_HEIGHT}>
         <GameGraphics gameState={gameState} />
       </canvas>
       <div style={overlayWrapperStyle}>

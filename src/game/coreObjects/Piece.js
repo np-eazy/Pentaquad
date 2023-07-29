@@ -9,7 +9,7 @@ import BombIndicator from "./cell/indicator/BombIndicator";
 
 
 import { PRESETS, CELL_TYPE, DEBUG, GLOBAL_SIZE, BOARD_MARGIN, BOMB } from "../rules/Constants";
-import { BASE_COLORS, FILLED_COLOR, THEME_RED } from "../../graphics/theme/ColorScheme";
+import { BASE_COLORS, THEME_RED } from "../../graphics/theme/ColorScheme";
 import { randomDxn } from "../coreState/utils/Direction";
 import { randint, getPID } from "../coreState/utils/Functions";
 

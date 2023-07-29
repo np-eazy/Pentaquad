@@ -30,6 +30,7 @@ const WARNING_WAVE_1 = {
 
 
 // A single block whose corner bounds must be filled with Cells to achieve game objectives.
+
 class Target {
   constructor(props) {
     this.coreState = props.coreState;

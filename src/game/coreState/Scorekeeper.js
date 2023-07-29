@@ -5,9 +5,11 @@ export const MAX_STRIKES = 3;
 
 const BASE_LINE_SCORE = 100;
 const BASE_TARGET_SCORE = 250;
-const BASE_DROP_SCORE = 5;
 
-// A class which takes care of keeping score and strikes
+// A class which takes care of keeping score and strikes as the game progresses.
+
+// This pattern has a lot of potential to extend into turn-based multiplayer on the same device (pass and play).
+
 const Scorekeeper = class {
   constructor(props) {
     this.score = 0;

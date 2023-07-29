@@ -17,7 +17,9 @@ const METER_LEVEL = 1;
 const METER_AMP = 0.5;
 const METER_FREQ = 0.03;
 
-// A special type of Cell which can pass through others before being placed.
+// A special type of Cell which can pass through others before being placed. Indicators are
+// mostly just treated as graphic pieces where their cells don't carry any game-relevant state or info.
+
 class BombIndicator extends Cell {
   constructor(coreState) {
     super(CELL_TYPE.GHOST, coreState);

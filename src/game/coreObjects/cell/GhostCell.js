@@ -8,7 +8,6 @@ import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 import { MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
 import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
-import { Setting } from "../../control/SettingsController";
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;

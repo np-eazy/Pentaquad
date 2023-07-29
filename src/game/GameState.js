@@ -32,8 +32,10 @@ export const Mode = {
 };
 
 // Required props:
-// - coreState: the CoreState of the game
 // - controller: the GameController of the game
+// - audioController: the AudioController of the game
+// - settingsController: the SettingsController of the game
+
 const GameState = class {
   constructor(props) {
     this.controller = props.controller;
@@ -69,35 +71,35 @@ const GameState = class {
     this.fillMarkers = [];
   }
 
-  update() {
-    if (
-      this.isRunning &&
-      this.delayTimer <= 0 &&
-      this.coreState &&
-      !this.coreState.scorekeeper.gameOver
-    ) {
-      // Update core logic
-      this.coreState.update();
-      this.ticks += 1;
-      // Compute graphic props after core update
-      this.unmarkBoard();
-      this.markDropZone();
-      this.updateFillMarkers();
-      idleUpdateBoundarySets(this.coreState.collisionSets);
-      if (this.settingsController.graphicsLevel == Setting.HIGH) {
-        for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
-          this.randomColorSwap();
-        }
-      }
-    } else {
-      if (this.coreState.scorekeeper.gameOver) {
-        this.setMode(Mode.GAME_OVER);
-      }
-      this.delayTimer -= 1;
+  // A special mode which creates a setup for a tutorial
+  setupTutorial() {
+    this.startOver();
+    this.isRunning = false;
+    for (var i = 0; i < 5; i++) {
+      this.coreState.pieceProvider.queue.unshift(
+        new Piece(5 - i, this.coreState)
+      );
     }
-    return this;
+    var smallTarget = new Target({
+      x0: 13,
+      y0: 13,
+      x1: 15,
+      y1: 15,
+    });
+    smallTarget.mainCell = new DrillCell(this.coreState);
+    smallTarget.activate();
+    var bigTarget = new Target({
+      x0: 3,
+      y0: 11,
+      x1: 7,
+      y1: 15,
+    });
+    bigTarget.mainCell = new TowerCell(this.coreState);
+    bigTarget.activate();
+    this.coreState.targets = [smallTarget, bigTarget];
   }
 
+  // Set the display mode of this game (NOT game mode). 
   setMode(mode, props) {
     var prevMode = this.mode;
     this.mode = mode;
@@ -119,6 +121,7 @@ const GameState = class {
     }
   }
 
+  // Globally reset all the cells' base colors in the board.
   resetBaseColors() {
     for (var y = 0; y < this.coreState.board.length; y++) {
       for (var x = 0; x < this.coreState.board[y].length; x++) {
@@ -132,42 +135,27 @@ const GameState = class {
     }
   }
 
-  
-
-  setupTutorial() {
-    this.startOver();
-    this.isRunning = false;
-    for (var i = 0; i < 5; i++) {
-      this.coreState.pieceProvider.queue.unshift(
-        new Piece(5 - i, this.coreState)
-      );
-    }
-
-    var smallTarget = new Target({
-      x0: 13,
-      y0: 13,
-      x1: 15,
-      y1: 15,
-    });
-    smallTarget.mainCell = new DrillCell(this.coreState);
-    smallTarget.activate();
-    var bigTarget = new Target({
-      x0: 3,
-      y0: 11,
-      x1: 7,
-      y1: 15,
-    });
-    bigTarget.mainCell = new TowerCell(this.coreState);
-    bigTarget.activate();
-    this.coreState.targets = [smallTarget, bigTarget];
-  }
-
+  // Add a y offset to the piece queue to initiate a sliding animation.
   onPlacement() {
     this.yOffset += QUEUE_INITIAL_OFFSET;
   }
 
   togglePause() {
     this.isRunning = !this.isRunning;
+  }
+
+  // Delay any actions for the next t ticks to leave room for graphic transitions.
+  setDelayTimer(t) {
+    this.delayTimer = t;
+  }
+
+  // Pause/resume the game
+  toggleRunningFlag() {
+    this.isRunning = !this.isRunning;
+  }
+
+  executeAction(action) {
+    this.coreState.executeAction();
   }
 
   // EmptyCells have marked fields set in order to render the drop
@@ -226,33 +214,54 @@ const GameState = class {
     }
   }
 
-  // Delay any actions for the next t ticks to leave room for graphic transitions.
-  setDelayTimer(t) {
-    this.delayTimer = t;
-  }
-
-  // Pause/resume the game
-  toggleRunningFlag() {
-    this.isRunning = !this.isRunning;
-  }
-
-  executeAction(action) {
-    this.coreState.executeAction();
-  }
-
+  // Add a graphic for when a row is filled.
   rowFillMarker(i) {
     this.fillMarkers.push(new FillMarker(true, i));
   }
 
+  // Add a column graphic for when a row is filled.
   colFillMarker(i) {
     this.fillMarkers.push(new FillMarker(false, i));
   }
 
   updateFillMarkers() {
-    this.fillMarkers.forEach((fillMarker) => {fillMarker.idleUpdate()});
+    this.fillMarkers.forEach((fillMarker) => {
+      fillMarker.idleUpdate();
+    });
     if (this.fillMarkers.length > 0 && this.fillMarkers[0].ttl <= 0) {
       this.fillMarkers.shift();
     }
+  }
+
+  // Single update loop of the GameState; it calls CoreState to update then does follow-up logic based
+  // on graphics and display mode.
+  update() {
+    if (
+      this.isRunning &&
+      this.delayTimer <= 0 &&
+      this.coreState &&
+      !this.coreState.scorekeeper.gameOver
+    ) {
+      // Update core logic
+      this.coreState.update();
+      this.ticks += 1;
+      // Compute graphic props after core update
+      this.unmarkBoard();
+      this.markDropZone();
+      this.updateFillMarkers();
+      idleUpdateBoundarySets(this.coreState.collisionSets);
+      if (this.settingsController.graphicsLevel == Setting.HIGH) {
+        for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
+          this.randomColorSwap();
+        }
+      }
+    } else {
+      if (this.coreState.scorekeeper.gameOver) {
+        this.setMode(Mode.GAME_OVER);
+      }
+      this.delayTimer -= 1;
+    }
+    return this;
   }
 };
 

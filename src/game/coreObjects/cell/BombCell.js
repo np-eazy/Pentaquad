@@ -1,7 +1,7 @@
 import Cell, { CELL_BORDER_OFFSET } from "./Cell";
 import { CELL_TYPE } from "../../rules/Constants";
 
-import { drawRect, drawRectOffset, outlineRect, outlineRectOffset } from "../../../graphics/CanvasPipeline";
+import { drawRect, drawRectOffset, outlineRectOffset } from "../../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
 import { MARKER_COLOR } from "../../../graphics/theme/ColorScheme";

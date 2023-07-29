@@ -9,7 +9,7 @@ import { drawCursor } from "../objects/Cursor";
 import { drawPiece, updatePiece } from "../objects/Piece";
 import { outlineRectOffset } from "../CanvasPipeline";
 import { interpolateColor } from "../utils/Colors";
-import { EMPTY_COLOR, FILLED_COLOR, WHITE } from "../theme/ColorScheme";
+import { FILLED_COLOR, WHITE } from "../theme/ColorScheme";
 import { linInt, sinusoid } from "../utils/Functions";
 import { BOARD_MARGIN, GLOBAL_SIZE } from "../../game/rules/Constants";
 import { Angle } from "../../game/coreState/utils/Direction";
@@ -31,7 +31,6 @@ export const renderBoard = (
 ) => {
   // Draw grid cells
   drawBackground(canvas, BOARD_X0, BOARD_Y0, BOARD_WIDTH, BOARD_HEIGHT);
-  var [xSize, ySize] = [board[0].length, board.length];
   for (var y = BOARD_MARGIN; y < GLOBAL_SIZE - BOARD_MARGIN; y++) {
     for (var x = BOARD_MARGIN; x < GLOBAL_SIZE - BOARD_MARGIN; x++) {
       board[y][x].render(

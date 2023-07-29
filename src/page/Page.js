@@ -1,12 +1,19 @@
 import React from "react";
 import Game from "../components/Game";
-import { EMPTY_COLOR } from "../graphics/theme/ColorScheme";
+import { BLACK, EMPTY_COLOR } from "../graphics/theme/ColorScheme";
 import { TOTAL_WIDTH } from "../graphics/theme/Layout";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { interpolateColor } from "../graphics/utils/Colors";
+import { linInt } from "../graphics/utils/Functions";
 
 const bodyStyle = {
-  backgroundColor: EMPTY_COLOR.getHex(),
+  backgroundColor: (interpolateColor(
+    BLACK,
+    EMPTY_COLOR,
+    0.75,
+    linInt,
+  )).getHex(),
   height: "2000px",
 };
 

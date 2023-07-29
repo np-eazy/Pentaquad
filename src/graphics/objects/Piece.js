@@ -1,5 +1,7 @@
 import { BOARD_MARGIN, CELL_TYPE } from "../../game/rules/Constants";
 
+// Graphic render and updates for this piece; it is fine to have them outside of coreState because
+// the updates don't actually affect coreState in any way.
 export const drawPiece = (canvas, piece, x0, y0, cellWidth, cellHeight) => {
   // Fill in cells from the coreState current piece.
   var [x, y] = [0, 0];
