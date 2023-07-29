@@ -27,7 +27,7 @@ export const renderBoard = (
   board,
   cellWidth,
   cellHeight,
-  { piece, targets, targetProvider, controller, boundarySets }
+  { piece, targets, targetProvider, controller, boundarySets, coreState }
 ) => {
   // Draw grid cells
   drawBackground(canvas, BOARD_X0, BOARD_Y0, BOARD_WIDTH, BOARD_HEIGHT);
@@ -66,6 +66,10 @@ export const renderBoard = (
       boundary.render(canvas, x0, y0, cellWidth);
     }
   }
+
+  coreState.gameState.fillMarkers.forEach((fillMarker) => fillMarker.render(canvas));
+  coreState.gameState.fillMarkers.forEach((fillMarker) => fillMarker.idleUpdate());
+
 };
 
 export const updateBoard = (board, { piece, targets, targetProvider }) => {

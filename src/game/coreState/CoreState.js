@@ -37,7 +37,7 @@ import {
 import { AudioEvents } from "../../audio/AudioEventController";
 import { Setting } from "../control/SettingsController";
 import { initializeBoundarySets, placementUpdateBoundarySets } from "../coreObjects/Boundary";
-import DeadCell from "../coreObjects/cell/DeadCell";
+import { DeadCell } from "../coreObjects/cell/DeadCell";
 
 // The most essential level of state in the game. Each update() call either
 // moves an existing block, or places it and creates a new block after shifting

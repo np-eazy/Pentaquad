@@ -1,3 +1,4 @@
+import { FillMarker } from "../graphics/objects/FillMarker";
 import { BLACK, EMPTY_COLOR } from "../graphics/theme/ColorScheme";
 import {
   QUEUE_INITIAL_OFFSET,
@@ -49,6 +50,7 @@ const GameState = class {
     this.delayTimer = 0;
     this.setMode(Mode.MAIN_MENU);
     this.queueOffset = 0;
+    this.fillMarkers = [];
   }
 
   update() {
@@ -186,7 +188,7 @@ const GameState = class {
           this.coreState.board[y][x].marked = piece.mainCell.type;
           this.coreState.board[y][x].markerAngle = this.coreState.gravity.angle;
         },
-        piece.mainCell.type == CELL_TYPE.DRILL,
+        piece.mainCell.type == CELL_TYPE.DRILL
       );
     }
   }
@@ -230,6 +232,28 @@ const GameState = class {
 
   executeAction(action) {
     this.coreState.executeAction();
+  }
+
+  rowFillMarker(i) {
+    this.fillMarkers.push(new FillMarker(true, i));
+  }
+
+  colFillMarker(i) {
+    this.fillMarkers.push(new FillMarker(false, i));
+  }
+
+  updateFillMarkers() {
+    this.fillMarkers.forEach((fillMarker) => {fillMarker.idleUpdate()});
+    let i = 0, j = 0;
+    // Remove all dead fillMarkers
+    while (i < this.fillMarkers.length) {
+      const val = this.fillMarkers[i];
+      if (this.fillMarkers[i].ttl >= 0) {
+        this.fillMarkers[j++] = val;
+      } 
+      i++;
+    }
+    this.fillMarkersl.slice(0, j - 1);
   }
 };
 

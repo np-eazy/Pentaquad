@@ -33,7 +33,6 @@ export const AudioEvents = {
   LOCK: ["FILL", 0.35, (eventData) => {
     if (eventData.gameState) {
       eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
-      // TODO: Initiate a callback animation in GameState
       eventData.gameState.coreState.currPiece.mainCell.lightUp(WHITE);
     }
 }],
@@ -42,13 +41,22 @@ export const AudioEvents = {
   CLEAR_SINGLE_LINE: ["FILL", 0.35, (eventData) => {
     if (eventData.gameState) {
       eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
-
+      if (eventData.rows.length > 0) {
+        eventData.rows.forEach((row) => eventData.gameState.rowFillMarker(row));
+      } else {
+        eventData.columns.forEach((col) =>  eventData.gameState.colFillMarker(col));
+      }
     };
   }],
   CLEAR_MULTI_LINES: ["FILL", 0.35],
   CLEAR_SINGLE_TARGET: ["FILL", 0.35, (eventData) => {
     if (eventData.gameState) {
       eventData.gameState.setDelayTimer(TRANSITION_DELAY_TICKS);
+      if (eventData.rows.length > 0) {
+        eventData.rows.forEach((row) => eventData.gameState.rowFillMarker(row));
+      } else {
+        eventData.columns.forEach((col) =>  eventData.gameState.colFillMarker(col));
+      }
     };
   }],
   CLEAR_MULTI_TARGET: ["FILL", 0.35],

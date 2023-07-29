@@ -1,7 +1,7 @@
 import Cell from "./Cell";
 import { CELL_TYPE } from "../../rules/Constants";
 
-class DeadCell extends Cell {
+export class DeadCell extends Cell {
   constructor(coreState) {
     super(CELL_TYPE.EMPTY, coreState);
   }
@@ -24,6 +24,3 @@ class DeadCell extends Cell {
   render(canvas, x0, y0, width, height) {
   }
 }
-
-
-export default DeadCell;
