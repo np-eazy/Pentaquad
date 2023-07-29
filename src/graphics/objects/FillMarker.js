@@ -37,8 +37,6 @@ export class FillMarker {
                     WHITE.getHex());
             }
             canvas.globalAlpha = 1;
-        } else {
-            console.log("not deleted")
         }
     }
 

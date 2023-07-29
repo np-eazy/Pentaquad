@@ -66,6 +66,7 @@ const GameState = class {
       // Compute graphic props after core update
       this.unmarkBoard();
       this.markDropZone();
+      this.updateFillMarkers();
       idleUpdateBoundarySets(this.coreState.collisionSets);
       if (this.settingsController.graphicsLevel == Setting.HIGH) {
         for (var i = 0; i < DIFFUSE_ITERATIONS; i++) {
@@ -244,16 +245,10 @@ const GameState = class {
 
   updateFillMarkers() {
     this.fillMarkers.forEach((fillMarker) => {fillMarker.idleUpdate()});
-    let i = 0, j = 0;
-    // Remove all dead fillMarkers
-    while (i < this.fillMarkers.length) {
-      const val = this.fillMarkers[i];
-      if (this.fillMarkers[i].ttl >= 0) {
-        this.fillMarkers[j++] = val;
-      } 
-      i++;
+    console.log(this.fillMarkers.length)
+    if (this.fillMarkers.length > 0 && this.fillMarkers[0].ttl <= 0) {
+      this.fillMarkers.shift();
     }
-    this.fillMarkersl.slice(0, j - 1);
   }
 };
 
