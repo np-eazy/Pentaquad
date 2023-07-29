@@ -2,27 +2,17 @@ import Cell from "./Cell";
 import { CELL_TYPE } from "../../rules/Constants";
 
 import {
-  drawRect,
-  drawRectOffset,
-  outlineRect,
   outlineRectOffset,
 } from "../../../graphics/CanvasPipeline";
 import { interpolateColor } from "../../../graphics/utils/Colors";
 import { linInt } from "../../../graphics/utils/Functions";
-import { EMPTY_COLOR, MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
-import { CELL_BORDER_OFFSET } from "./Cell";
+import { MARKER_COLOR } from "../../../graphics/theme/ColorScheme";
 import { LIGHT_AMPLITUDE } from "../../../graphics/theme/Dynamics";
 import { Setting } from "../../control/SettingsController";
-
-const CLOCK_FREQ = 0.01;
 
 const METER_LEVEL = 1;
 const METER_AMP = 0.5;
 const METER_FREQ = 0.03;
-
-const GHOST_LEVEL = 0.5;
-const GHOST_AMP = 0.1;
-const GHOST_FREQ = 0.1;
 
 // A special type of Cell which can pass through others before being placed.
 class GhostCell extends Cell {
@@ -74,38 +64,6 @@ class GhostCell extends Cell {
           2 * d
         );
       }
-    canvas.globalAlpha = 0.25 * this.meter * 0;
-    drawRect(canvas, x, y, width, height, this.currentColor.getHex());
-    if (this.coreState && this.coreState.settingsController && this.coreState.settingsController.graphicsLevel != Setting.LOW) {
-      drawRectOffset(
-        canvas,
-        x,
-        y,
-        width,
-        height,
-        this.colorSuite.shade2H.getHex(),
-        d
-      );
-      drawRectOffset(
-        canvas,
-        x,
-        y,
-        width,
-        height,
-        this.colorSuite.shade4H.getHex(),
-        2 * d
-      );
-    }
-    outlineRectOffset(
-      canvas,
-      x,
-      y,
-      width,
-      height,
-      borderColor.getHex(),
-      CELL_BORDER_OFFSET
-    );
-    canvas.globalAlpha = 1.0;
   }
 }
 
