@@ -8,7 +8,7 @@ import TowerCell from "./cell/TowerCell";
 import BombIndicator from "./cell/indicator/BombIndicator";
 
 
-import { PRESETS, CELL_TYPE, DEBUG, GLOBAL_SIZE, BOARD_MARGIN } from "../rules/Constants";
+import { PRESETS, CELL_TYPE, DEBUG, GLOBAL_SIZE, BOARD_MARGIN, BOMB } from "../rules/Constants";
 import { BASE_COLORS, FILLED_COLOR, THEME_RED } from "../../graphics/theme/ColorScheme";
 import { randomDxn } from "../coreState/utils/Direction";
 import { randint, getPID } from "../coreState/utils/Functions";
@@ -44,6 +44,7 @@ class Piece {
       this.mainCell = new BombCell(coreState);   
       this.graphicCell = new BombIndicator(coreState);
       this.graphicCell.setBaseColor(THEME_RED);
+      this.preset = BOMB;
     } else if (cellType == CELL_TYPE.DRILL) {
       this.mainCell = new DrillCell(coreState);
     } else if (cellType == CELL_TYPE.TOWER) {

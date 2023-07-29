@@ -26,7 +26,7 @@ export const TARGET_GROWTH_TIMER = 7;
 export const TARGET_SPAWN_MARGIN = 4;
 
 export const NORMAL_CELL_LIFETIME = 8;
-export const BOMB_RADIUS = 2;
+export const BOMB_RADIUS = 1;
 export const ROTATION_ADJUSTMENT_SIZE = 2;
 
 export const CELL_TYPE = {
@@ -142,4 +142,8 @@ export const PRESETS = [
   T2_PIECE, // mirror sym
   U_PIECE, // mirror sym
   X_PIECE, // 90 rot sym
+];
+
+export const BOMB = [
+  [0, 0]
 ];

@@ -126,7 +126,7 @@ export function executeFlip(coreState) {
 export function executeDrop(coreState) {
   if (coreState.currPiece.mainCell.type == CELL_TYPE.TOWER) {
     placeTower(coreState, coreState.currPiece);
-  } else if (coreState.currPiece.mainCell.type != CELL_TYPE.GHOST) {
+  } else if (coreState.currPiece.mainCell.type != CELL_TYPE.GHOST && coreState.currPiece.mainCell.type != CELL_TYPE.BOMB) {
     while (
       !coreState.currPiece.checkCollision(
         coreState.gravity,

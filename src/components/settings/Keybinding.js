@@ -24,6 +24,12 @@ const valueStyle = {
   minWidth: "150px",
 };
 
+const BORDER_COLOR = interpolateColor(
+  MARKER_COLOR,
+  FILLED_COLOR,
+  0.35,
+  linInt
+);
 // Resolves the difference between keycodes in text and normal keycode inputs
 const capsLock = (c) => {
   var code = c.charCodeAt(0);
@@ -105,12 +111,7 @@ export const Keybinding = (props) => {
                 borderStyle: "solid",
                 borderWidth: "1px",
                 fontFamily: "Abel",
-                borderColor: interpolateColor(
-                  MARKER_COLOR,
-                  FILLED_COLOR,
-                  0.35,
-                  linInt
-                ).getHex(),
+                borderColor: BORDER_COLOR.getHex(),
               }}
             />
           </div>
